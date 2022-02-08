@@ -1,0 +1,22 @@
+[
+  {
+  "input": "im",
+  "suggestions": ["I'm", "I am"]
+  },
+  {
+  "input": "ive",
+  "suggestions": ["I've", "I have"]
+  },
+  {
+  "input": "id",
+  "suggestions": ["I'd", "I had"]
+  },
+  {
+  "input": "hed",
+  "suggestions": ["he'd", "he had"]
+  },
+  {
+  "input": "shed",
+  "suggestions": ["she'd", "she had"]
+  }
+]
