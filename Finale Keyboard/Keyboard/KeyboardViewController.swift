@@ -69,6 +69,8 @@ class KeyboardViewController: UIInputViewController {
     var waitForLongPress = Timer()
     var deleteTimer = Timer()
     var cursorMoveTimer = Timer()
+    var leftEdgeTimer: Timer?
+    var rightEdgeTimer: Timer?
     
     var lastTouchPosX = 0.0
     
@@ -246,7 +248,7 @@ class KeyboardViewController: UIInputViewController {
         let shouldPlaceBeforeSpace = char == "\"" || char == ")" ? true : false
         var x = false
         if (shouldPlaceBeforeSpace) {
-            if (KeyboardViewController.isAutoCorrectOn && getLastChar() == " " && !isPunctuation(char: getOneBeforeLastChar())) {
+            if (KeyboardViewController.isAutoCorrectOn && getLastChar() == " ") {
                 self.textDocumentProxy.deleteBackward()
                 x = true
             }
@@ -281,6 +283,7 @@ class KeyboardViewController: UIInputViewController {
     func BackspaceAction () {
         self.textDocumentProxy.deleteBackward()
         MiddleRowReactAnimation()
+        CheckAutoCapitalization()
     }
     
     func LongPressDelete (backspace: Bool) {
@@ -336,9 +339,38 @@ class KeyboardViewController: UIInputViewController {
     func CancelWaitingForLongPress () {
         deleteTimer.invalidate()
         waitForLongPress.invalidate()
+        rightEdgeTimer?.invalidate()
+        rightEdgeTimer = nil
+        leftEdgeTimer?.invalidate()
+        leftEdgeTimer = nil
     }
     
     func CheckMoveCursor (touchLocation: CGPoint) {
+        if touchLocation.x < UIScreen.main.bounds.width * 0.1 {
+            if leftEdgeTimer == nil {
+                leftEdgeTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
+                    self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
+                    self.lastTouchPosX = touchLocation.x
+                }
+                rightEdgeTimer?.invalidate()
+                rightEdgeTimer = nil
+            }
+            return
+        } else if touchLocation.x > UIScreen.main.bounds.width * 0.9 {
+            if (rightEdgeTimer == nil) {
+                rightEdgeTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
+                    self.textDocumentProxy.adjustTextPosition(byCharacterOffset: 1)
+                    self.lastTouchPosX = touchLocation.x
+                }
+                leftEdgeTimer?.invalidate()
+                leftEdgeTimer = nil
+            }
+            return
+        }
+        rightEdgeTimer?.invalidate()
+        rightEdgeTimer = nil
+        leftEdgeTimer?.invalidate()
+        leftEdgeTimer = nil
         if touchLocation.x - lastTouchPosX > 10 {
             self.textDocumentProxy.adjustTextPosition(byCharacterOffset: 1)
             lastTouchPosX = touchLocation.x
@@ -346,6 +378,7 @@ class KeyboardViewController: UIInputViewController {
             self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
             lastTouchPosX = touchLocation.x
         }
+        
     }
     
     func ShiftAction () {
@@ -566,9 +599,9 @@ class KeyboardViewController: UIInputViewController {
                 return
             }
         }
-        
         //Delete Words
         while self.textDocumentProxy.hasText && self.textDocumentProxy.documentContextBeforeInput?.last != " " {
+            if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.last == nil) { break }
             self.textDocumentProxy.deleteBackward()
         }
         if (x >= 0) {

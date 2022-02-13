@@ -35,6 +35,10 @@ struct ContentView: View {
                         isEnabled: isKeyboardEnabled,
                         enabledText: "Keyboard is enabled",
                         disabledText: "Keyboard is disabled")
+                    EnabledListItem(
+                        isEnabled: isFullAccessEnabled,
+                        enabledText: "Full Access is enabled",
+                        disabledText: "Full Access is disabled")
                     ListNavigationButton(action: openSettings) {
                         Label("System settings", systemImage: "gearshape")
                     }

@@ -73,7 +73,7 @@ class KeyboardButton: UIButton {
         if (gesture.state == .began) {
             ShowCallout()
             if action.functionType == .Backspace { viewController?.LongPressDelete(backspace: true) }
-            else if action.actionType == .Character { viewController?.LongPressCharacter(touchLocation: gesture.location(in: self), button: self) }
+            else if action.actionType == .Character { viewController?.LongPressCharacter(touchLocation: gesture.location(in: viewController?.view), button: self) }
             else if action.functionType == .Shift { viewController?.LongPressShift(button: self) }
         } else if (gesture.state != .began && gesture.state != .ended) {
             if (viewController!.toggledAC) {return}
@@ -81,11 +81,11 @@ class KeyboardButton: UIButton {
             if (!KeyboardViewController.isMovingCursor) {
                 EvaluateSwipes(touchLocation: gesture.location(in: self))
             } else {
-                viewController?.CheckMoveCursor(touchLocation: gesture.location(in: self))
+                viewController?.CheckMoveCursor(touchLocation: gesture.location(in: viewController?.view))
             }
         } else if (gesture.state == .ended) {
             viewController?.CancelWaitingForLongPress()
-            if (!registeredSwipe && !viewController!.toggledAC) {
+            if (!registeredSwipe && !viewController!.toggledAC && !KeyboardViewController.isMovingCursor) {
                 viewController?.UseAction(action: action)
                 HideCallout()
             }
@@ -104,20 +104,20 @@ class KeyboardButton: UIButton {
             else if action.functionType == .SymbolsShift || action.functionType == .ExtraSymbolsShift { viewController?.ToggleSymbolsView() }
             HideCallout(swipeDir: 1)
             viewController?.MiddleRowReactAnimation()
-            viewController?.CancelWaitingForLongPress()
+            viewController?.CancelLongPress()
         } else if (touchLocation.x < 0 - frame.size.width * (1-registerSwipeSensitivity)) { //Swipe left
+            viewController?.CancelLongPress()
             registeredSwipe = true
             if action.actionType == .Character { viewController?.Delete(); viewController?.LongPressDelete(backspace: false) }
             else if action.functionType == .Backspace { viewController?.ToggleEmojiView() }
             HideCallout(swipeDir: -1)
             if action.actionType != .Character { viewController?.MiddleRowReactAnimation() }
-            viewController?.CancelWaitingForLongPress()
         } else if (touchLocation.y > frame.size.height + frame.size.height * (1-registerSwipeSensitivity)) { //Swipe down
             registeredSwipe = true
             if action.actionType == .Character { viewController?.SwipeDown() }
             HideCallout()
             viewController?.MiddleRowReactAnimation()
-            viewController?.CancelWaitingForLongPress()
+            viewController?.CancelLongPress()
         } else if (touchLocation.y < 0 - frame.size.height * (1-registerSwipeSensitivity)) { //Swipe up
             registeredSwipe = true
             if action.actionType == .Character { viewController?.SwipeUp() }
@@ -125,7 +125,7 @@ class KeyboardButton: UIButton {
             else if action.functionType == .Backspace { viewController?.ReturnAction() }
             HideCallout()
             viewController?.MiddleRowReactAnimation()
-            viewController?.CancelWaitingForLongPress()
+            viewController?.CancelLongPress()
         }
     }
     

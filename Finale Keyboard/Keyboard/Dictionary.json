@@ -12,11 +12,19 @@
   "suggestions": ["I'd", "I had"]
   },
   {
+  "input": "ill",
+  "suggestions": ["I'll", "I will"]
+  },
+  {
   "input": "hed",
   "suggestions": ["he'd", "he had"]
   },
   {
   "input": "shed",
   "suggestions": ["she'd", "she had"]
+  },
+  {
+  "input": "ы",
+  "suggestions": ["в", "а", "я", "у"]
   }
 ]
