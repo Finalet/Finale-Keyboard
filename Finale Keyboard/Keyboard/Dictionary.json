@@ -26,5 +26,9 @@
   {
   "input": "ы",
   "suggestions": ["в", "а", "я", "у"]
-  }
+  },
+  {
+  "input": "well",
+  "suggestions": ["we'll"]
+  },
 ]

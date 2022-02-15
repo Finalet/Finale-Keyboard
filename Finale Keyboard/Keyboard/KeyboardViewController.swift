@@ -61,6 +61,8 @@ class KeyboardViewController: UIInputViewController {
     var maxSuggestions = 7
     var pickedSuggestionIndex = 0
     
+    var canEditPrevPunctuation = false
+    
     var centerXConstraint = NSLayoutConstraint()
     
     var waitingForSecondTap = false
@@ -260,7 +262,11 @@ class KeyboardViewController: UIInputViewController {
         if (x) { self.textDocumentProxy.insertText(" ") }
     }
     func TypeEmoji (emoji: String) {
+        if (getOneBeforeLastChar() != "" && Character(getOneBeforeLastChar()).isEmoji && getLastChar() == " ") {
+            self.textDocumentProxy.deleteBackward()
+        }
         self.textDocumentProxy.insertText(emoji)
+        self.textDocumentProxy.insertText(" ")
     }
     
     func PerformActionFunction (function: FunctionType) {
@@ -428,10 +434,12 @@ class KeyboardViewController: UIInputViewController {
             } else {
                 self.textDocumentProxy.insertText(" ")
             }
+            canEditPrevPunctuation = false
         } else {
             if (self.textDocumentProxy.documentContextBeforeInput!.count < 2) {
                 ResetSuggestionsLabels()
                 Spacebar()
+                canEditPrevPunctuation = false
                 return
             }
             
@@ -449,6 +457,14 @@ class KeyboardViewController: UIInputViewController {
     }
     func SwipeDown () {
         if !self.textDocumentProxy.hasText { return }
+        
+        if canEditPrevPunctuation {
+            if (pickedPunctuationIndex < punctiationArray.count-1) {
+                pickedPunctuationIndex += 1
+                EditPreviousPunctuation()
+            }
+            return
+        }
         
         if isPunctuation(char: getOneBeforeLastChar()) && isPunctuation(char: getLastChar()) {
             if (pickedPunctuationIndex < punctiationArray.count-1) {
@@ -472,8 +488,17 @@ class KeyboardViewController: UIInputViewController {
         
     }
     func SwipeUp () {
+        print(canEditPrevPunctuation)
         if !self.textDocumentProxy.hasText { return }
        
+        if canEditPrevPunctuation {
+            if (pickedPunctuationIndex > 0) {
+                pickedPunctuationIndex -= 1
+                EditPreviousPunctuation()
+            }
+            return
+        }
+        
         if isPunctuation(char: getOneBeforeLastChar()) && isPunctuation(char: getLastChar()) {
             if (pickedPunctuationIndex > 0) {
                 pickedPunctuationIndex -= 1
@@ -559,6 +584,8 @@ class KeyboardViewController: UIInputViewController {
         UpdateSuggestionsLabelsPunctuation()
         AnimateSuggestionLabels(index: pickedPunctuationIndex)
         CheckAutoCapitalization()
+        
+        canEditPrevPunctuation = true
     }
     
     func getLastWord () -> String {
@@ -612,6 +639,7 @@ class KeyboardViewController: UIInputViewController {
         }
         CheckAutoCapitalization()
         RedrawSuggestionsLabels()
+        canEditPrevPunctuation = false
     }
     func InsertPunctuation (index: Int) {
         pickedPunctuationIndex = index
@@ -622,7 +650,19 @@ class KeyboardViewController: UIInputViewController {
         self.textDocumentProxy.deleteBackward()
         self.textDocumentProxy.insertText(String(punctiationArray[index]) + " ")
         
+        canEditPrevPunctuation = true
+        
         CheckAutoCapitalization()
+    }
+    
+    func EditPreviousPunctuation () {
+        var dis = 0
+        while self.textDocumentProxy.documentContextBeforeInput != "" && !isPunctuation(char: getLastChar()) {
+            self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
+            dis += 1
+        }
+        ReplacePunctiation()
+        self.textDocumentProxy.adjustTextPosition(byCharacterOffset: dis)
     }
     
     func UpdateButtonTitleShift () {
