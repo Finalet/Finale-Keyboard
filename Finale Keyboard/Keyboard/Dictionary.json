@@ -20,6 +20,10 @@
   "suggestions": ["he'd", "he had"]
   },
   {
+  "input": "hes",
+  "suggestions": ["he's", "he has"]
+  },
+  {
   "input": "shed",
   "suggestions": ["she'd", "she had"]
   },
@@ -30,5 +34,9 @@
   {
   "input": "well",
   "suggestions": ["we'll"]
+  },
+  {
+  "input": "wasnt",
+  "suggestions": ["wasn't"]
   },
 ]

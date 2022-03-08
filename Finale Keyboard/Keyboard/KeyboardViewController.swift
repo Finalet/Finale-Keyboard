@@ -488,7 +488,6 @@ class KeyboardViewController: UIInputViewController {
         
     }
     func SwipeUp () {
-        print(canEditPrevPunctuation)
         if !self.textDocumentProxy.hasText { return }
        
         if canEditPrevPunctuation {
@@ -560,7 +559,11 @@ class KeyboardViewController: UIInputViewController {
         if ignoreSpace{ self.textDocumentProxy.deleteBackward() }
         
         if (suggestionsArrays[x].suggestions.count > 1) {
-            for _ in 0...suggestionsArrays[x].suggestions[suggestionsArrays[x].lastPickedSuggestionIndex].count-1 {
+//            for _ in 0...suggestionsArrays[x].suggestions[suggestionsArrays[x].lastPickedSuggestionIndex].count-1 {
+//                self.textDocumentProxy.deleteBackward()
+//            }
+            while self.textDocumentProxy.hasText && self.textDocumentProxy.documentContextBeforeInput?.last != " " {
+                if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.last == nil) { break }
                 self.textDocumentProxy.deleteBackward()
             }
             self.textDocumentProxy.insertText(suggestionsArrays[x].suggestions[pickedSuggestionIndex])
@@ -623,6 +626,7 @@ class KeyboardViewController: UIInputViewController {
                 self.textDocumentProxy.deleteBackward()
                 if self.textDocumentProxy.hasText { self.textDocumentProxy.insertText(" ") }
                 RedrawSuggestionsLabels()
+                canEditPrevPunctuation = false
                 return
             }
         }
@@ -849,7 +853,11 @@ class KeyboardViewController: UIInputViewController {
         if (self.textDocumentProxy.documentContextBeforeInput == nil) { return -1 }
         for i in 0..<suggestionsArrays.count {
             if suggestionsArrays[i].positionIndex == self.textDocumentProxy.documentContextBeforeInput?.endIndex {
-                return i
+                for i1 in 0..<suggestionsArrays[i].suggestions.count {
+                    if suggestionsArrays[i].suggestions[i1] == getLastWord() {
+                        return i
+                    }
+                }
             }
         }
         return -1
