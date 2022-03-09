@@ -68,6 +68,7 @@ class KeyboardViewController: UIInputViewController {
     var waitingForSecondTap = false
     var capsTimer = Timer()
     
+    let longPressDelay = 0.8
     var waitForLongPress = Timer()
     var deleteTimer = Timer()
     var cursorMoveTimer = Timer()
@@ -294,7 +295,7 @@ class KeyboardViewController: UIInputViewController {
     
     func LongPressDelete (backspace: Bool) {
         if (KeyboardViewController.isLongPressing) { return }
-        waitForLongPress = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { (_) in
+        waitForLongPress = Timer.scheduledTimer(withTimeInterval: longPressDelay, repeats: false) { (_) in
             self.deleteTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
                 if backspace { self.BackspaceAction() }
                 else { self.Delete() }
@@ -304,7 +305,7 @@ class KeyboardViewController: UIInputViewController {
     }
     func LongPressCharacter (touchLocation: CGPoint, button: KeyboardButton) {
         if (KeyboardViewController.isLongPressing) { return }
-        waitForLongPress = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { (_) in
+        waitForLongPress = Timer.scheduledTimer(withTimeInterval: longPressDelay, repeats: false) { (_) in
             KeyboardViewController.isMovingCursor = true
             self.lastTouchPosX = touchLocation.x
             button.HideCallout()
@@ -319,7 +320,7 @@ class KeyboardViewController: UIInputViewController {
     }
     func LongPressShift (button: KeyboardButton) {
         if (KeyboardViewController.isLongPressing) { return }
-        waitForLongPress = Timer.scheduledTimer(withTimeInterval: 1, repeats: false) { (_) in
+        waitForLongPress = Timer.scheduledTimer(withTimeInterval: longPressDelay, repeats: false) { (_) in
             KeyboardViewController.isAutoCorrectOn = !KeyboardViewController.isAutoCorrectOn
             button.HideCallout()
             self.toggledAC = true
@@ -826,10 +827,6 @@ class KeyboardViewController: UIInputViewController {
     func RemoveShift () {
         KeyboardViewController.isShift = false
         UpdateButtonTitleShift()
-    }
-    
-    override func textWillChange(_ textInput: UITextInput?) {
-        // The app is about to change the document's contents. Perform any preparation here.
     }
     
     override func textDidChange(_ textInput: UITextInput?) {
