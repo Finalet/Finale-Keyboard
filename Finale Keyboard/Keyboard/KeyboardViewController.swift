@@ -48,6 +48,7 @@ class KeyboardViewController: UIInputViewController {
     static var isLongPressing = false
     static var isAutoCorrectOn = true
     static var currentLocale = KeyboardViewController.Locale.en_US
+    static var enabledLocales = [KeyboardViewController.Locale.en_US, KeyboardViewController.Locale.ru_RU]
     static var currentViewType = ViewType.Characters
     var lastViewType = ViewType.Characters
     
@@ -114,8 +115,19 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func LoadPreferences () {
+        let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
+        let EN_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_en_locale_enabled") as? Bool ?? true
+        let RU_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_ru_locale_enabled") as? Bool ?? false
+        KeyboardViewController.enabledLocales.removeAll()
+        if EN_enabled {KeyboardViewController.enabledLocales.append(KeyboardViewController.Locale.en_US)}
+        if RU_enabled {KeyboardViewController.enabledLocales.append(KeyboardViewController.Locale.ru_RU)}
+        
         KeyboardViewController.isAutoCorrectOn = UserDefaults.standard.value(forKey: ACSavePath) == nil ? true : UserDefaults.standard.bool(forKey: ACSavePath)
         KeyboardViewController.currentLocale = Locale(rawValue: UserDefaults.standard.integer(forKey: localeSavePath)) ?? .en_US
+        
+        if !KeyboardViewController.enabledLocales.contains(KeyboardViewController.currentLocale) {
+            KeyboardViewController.currentLocale = KeyboardViewController.enabledLocales[0]
+        }
     }
     
     func InitSuggestionsArray () {
@@ -887,7 +899,9 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func ToggleLocale () {
-        KeyboardViewController.currentLocale = (KeyboardViewController.currentLocale == .en_US ? .ru_RU : .en_US)
+        let index = ((KeyboardViewController.enabledLocales.firstIndex(of: KeyboardViewController.currentLocale) ?? 0) + 1) % KeyboardViewController.enabledLocales.count
+        KeyboardViewController.currentLocale = KeyboardViewController.enabledLocales[index]
+        
         BuildKeyboardView(viewType: .Characters)
         ResetSuggestions()
         

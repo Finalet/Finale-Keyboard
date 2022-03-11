@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Keyboard
 
 struct ContentView: View {
     
@@ -14,11 +15,14 @@ struct ContentView: View {
     @State var favoriteEmoji = [String](repeating: "", count: 32)
     @State var testText = ""
     
+    @State var EN_enabled = true
+    @State var RU_enabled = false
+    
     var body: some View {
         NavigationView {
             List {
                 Section(header: Text("Try it out")) {
-                    TextField("Typing something here", text: $testText)
+                    TextField("Try typing something here", text: $testText)
                 }
                 Section(header: Text("Preferences")) {
                     ListNavigationLink(destination: FavoriteEmoji(favoriteEmoji: $favoriteEmoji)) {
@@ -27,6 +31,14 @@ struct ContentView: View {
                                 }, icon: {
                                     Image(systemName: "heart")
                                         .foregroundColor(.red)
+                                } )
+                    }
+                    ListNavigationLink(destination: LanguagesSettings(EN_enabled: $EN_enabled, RU_enabled: $RU_enabled)) {
+                        Label(title: {
+                                    Text("Languages")
+                                }, icon: {
+                                    Image(systemName: "globe")
+                                        .foregroundColor(.blue)
                                 } )
                     }
                 }
@@ -43,16 +55,30 @@ struct ContentView: View {
                         Label("System settings", systemImage: "gearshape")
                     }
                 }
+                Section(header: Text("Help")){
+                    ListNavigationLink(destination: TutorialView()) {
+                        Label(title: {
+                                    Text("Gestures tutorial")
+                                }, icon: {
+                                    Image(systemName: "questionmark.circle")
+                                        .foregroundColor(.blue)
+                                } )
+                    }
+                    ListNavigationButton(action: ContactDeveloper) {
+                        Label("Contact developer", systemImage: "message")
+                    }
+                }
             }.navigationTitle("Finale Keyboard")
         }
         .environmentObject(keyboardState)
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear() {
-            LoadArray()
+            LoadEmojiArray()
+            LoadEnabledLocales()
         }
     }
     
-    func LoadArray () {
+    func LoadEmojiArray () {
         let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
         let array = userDefaults?.array(forKey: "FINALE_DEV_APP_favorite_emoji") as? [String]
         if array == nil {
@@ -60,6 +86,12 @@ struct ContentView: View {
         } else {
             favoriteEmoji = array!
         }
+    }
+    func LoadEnabledLocales () {
+        let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
+        
+        EN_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_en_locale_enabled") == nil ? true : userDefaults?.bool(forKey: "FINALE_DEV_APP_en_locale_enabled") ?? true
+        RU_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_ru_locale_enabled") == nil ? false : userDefaults?.bool(forKey: "FINALE_DEV_APP_ru_locale_enabled") ?? true
     }
 }
 
@@ -83,6 +115,12 @@ private extension ContentView {
     func openSettings() {
         guard let url = URL.keyboardSettings else { return }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+    
+    func ContactDeveloper() {
+        if let url = URL(string: "https://twitter.com/grantogany") {
+            UIApplication.shared.open(url)
+        }
     }
 }
 
