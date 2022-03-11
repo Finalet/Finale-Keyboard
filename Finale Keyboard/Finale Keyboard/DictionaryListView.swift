@@ -10,21 +10,31 @@ import SwiftUI
 
 struct DictionaryListView: View {
     @State var userDictionary = [String]()
+    @State private var searchText = ""
     
     let suiteName = "group.finale-keyboard-cache"
     
     var body: some View {
         List {
             Section(footer: Text("Finale can 'learn' new words. Just swipe up after typing an unrecognized word to add it to the dictionary.")) {
-                ForEach(userDictionary, id: \.self) { word in
-                        Text(word)
-                    }
-                    .onDelete(perform: delete)
+                ForEach(searchResults, id: \.self) { word in
+                    Text(word)
+                }
+                .onDelete(perform: delete)
             }
         }
         .navigationTitle("Dictionary")
         .onAppear {
             LoadDictionary()
+        }
+        .searchable(text: $searchText)
+    }
+    
+    var searchResults: [String] {
+        if searchText.isEmpty {
+            return userDictionary
+        } else {
+            return userDictionary.filter { $0.contains(searchText) }
         }
     }
     

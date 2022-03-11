@@ -418,7 +418,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"Finale Keyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = AYPPAXMRMG;
 				ENABLE_PREVIEWS = YES;
@@ -450,7 +450,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"Finale Keyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = AYPPAXMRMG;
 				ENABLE_PREVIEWS = YES;
