@@ -23,6 +23,7 @@ struct TutorialView: View {
                     Image("Symbols").resizable()
                     Image("Languages").resizable()
                     Image("Return").resizable()
+                    Image("Dictionary").resizable()
                 }
                 .tabViewStyle(.page)
                 .indexViewStyle(.page(backgroundDisplayMode: .always))
