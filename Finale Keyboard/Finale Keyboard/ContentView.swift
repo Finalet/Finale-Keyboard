@@ -68,9 +68,9 @@ struct ContentView: View {
                 Section(header: Text("Help")){
                     ListNavigationLink(destination: TutorialView()) {
                         Label(title: {
-                                    Text("Gestures tutorial")
+                                    Text("Gestures guide")
                                 }, icon: {
-                                    Image(systemName: "questionmark.circle")
+                                    Image(systemName: "hand.draw")
                                         .foregroundColor(.blue)
                                 } )
                     }
