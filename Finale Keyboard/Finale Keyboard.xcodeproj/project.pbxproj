@@ -7,11 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3709029627B2F54000213BDD /* Dictionary.json in Resources */ = {isa = PBXBuildFile; fileRef = 3709029527B2F54000213BDD /* Dictionary.json */; };
+		3709029627B2F54000213BDD /* DefaultDictionary.json in Resources */ = {isa = PBXBuildFile; fileRef = 3709029527B2F54000213BDD /* DefaultDictionary.json */; };
 		371F496827ADA92F00686BC7 /* EmojiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F496727ADA92F00686BC7 /* EmojiView.swift */; };
 		371F496A27ADCCD300686BC7 /* emoji.json in Resources */ = {isa = PBXBuildFile; fileRef = 371F496927ADCCD300686BC7 /* emoji.json */; };
 		3720638627AACEC100964120 /* Gilroy-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3720638527AACEB600964120 /* Gilroy-Medium.ttf */; };
 		3720638827AB2CAF00964120 /* Locales.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3720638727AB2CAF00964120 /* Locales.swift */; };
+		37256A7927DB52ED0071180B /* DictionaryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37256A7827DB52ED0071180B /* DictionaryListView.swift */; };
 		3727766D27D8E38D00CC8CD8 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3727766C27D8E38D00CC8CD8 /* TutorialView.swift */; };
 		3743FC5527B1523A0043B2A2 /* KeyboardEnabledState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3743FC5427B1523A0043B2A2 /* KeyboardEnabledState.swift */; };
 		3743FC5727B158AD0043B2A2 /* FavoriteEmoji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3743FC5627B158AD0043B2A2 /* FavoriteEmoji.swift */; };
@@ -52,11 +53,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3709029527B2F54000213BDD /* Dictionary.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Dictionary.json; sourceTree = "<group>"; };
+		3709029527B2F54000213BDD /* DefaultDictionary.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = DefaultDictionary.json; sourceTree = "<group>"; };
 		371F496727ADA92F00686BC7 /* EmojiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiView.swift; sourceTree = "<group>"; };
 		371F496927ADCCD300686BC7 /* emoji.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = emoji.json; sourceTree = "<group>"; };
 		3720638527AACEB600964120 /* Gilroy-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gilroy-Medium.ttf"; sourceTree = "<group>"; };
 		3720638727AB2CAF00964120 /* Locales.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locales.swift; sourceTree = "<group>"; };
+		37256A7827DB52ED0071180B /* DictionaryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryListView.swift; sourceTree = "<group>"; };
 		3727766C27D8E38D00CC8CD8 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		3743FC5427B1523A0043B2A2 /* KeyboardEnabledState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardEnabledState.swift; sourceTree = "<group>"; };
 		3743FC5627B158AD0043B2A2 /* FavoriteEmoji.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteEmoji.swift; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				3743FC5627B158AD0043B2A2 /* FavoriteEmoji.swift */,
 				3727766C27D8E38D00CC8CD8 /* TutorialView.swift */,
 				379E9FA127DA358000B9ECA6 /* LanguagesSettings.swift */,
+				37256A7827DB52ED0071180B /* DictionaryListView.swift */,
 			);
 			path = "Finale Keyboard";
 			sourceTree = "<group>";
@@ -149,7 +152,7 @@
 				371F496727ADA92F00686BC7 /* EmojiView.swift */,
 				371F496927ADCCD300686BC7 /* emoji.json */,
 				375DFB1627AE9E5E00E304ED /* Images.xcassets */,
-				3709029527B2F54000213BDD /* Dictionary.json */,
+				3709029527B2F54000213BDD /* DefaultDictionary.json */,
 			);
 			path = Keyboard;
 			sourceTree = "<group>";
@@ -245,7 +248,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				375DFB1727AE9E5E00E304ED /* Images.xcassets in Resources */,
-				3709029627B2F54000213BDD /* Dictionary.json in Resources */,
+				3709029627B2F54000213BDD /* DefaultDictionary.json in Resources */,
 				371F496A27ADCCD300686BC7 /* emoji.json in Resources */,
 				3720638627AACEC100964120 /* Gilroy-Medium.ttf in Resources */,
 			);
@@ -263,6 +266,7 @@
 				37A0ACF527A8694100578290 /* ContentView.swift in Sources */,
 				3743FC5727B158AD0043B2A2 /* FavoriteEmoji.swift in Sources */,
 				3727766D27D8E38D00CC8CD8 /* TutorialView.swift in Sources */,
+				37256A7927DB52ED0071180B /* DictionaryListView.swift in Sources */,
 				37A0ACF327A8694100578290 /* Finale_KeyboardApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

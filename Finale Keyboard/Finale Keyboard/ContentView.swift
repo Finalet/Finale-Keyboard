@@ -18,6 +18,8 @@ struct ContentView: View {
     @State var EN_enabled = true
     @State var RU_enabled = false
     
+    let suiteName = "group.finale-keyboard-cache"
+    
     var body: some View {
         NavigationView {
             List {
@@ -38,6 +40,14 @@ struct ContentView: View {
                                     Text("Languages")
                                 }, icon: {
                                     Image(systemName: "globe")
+                                        .foregroundColor(.blue)
+                                } )
+                    }
+                    ListNavigationLink(destination: DictionaryListView()) {
+                        Label(title: {
+                                    Text("Dictionary")
+                                }, icon: {
+                                    Image(systemName: "character.book.closed")
                                         .foregroundColor(.blue)
                                 } )
                     }
@@ -79,7 +89,7 @@ struct ContentView: View {
     }
     
     func LoadEmojiArray () {
-        let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
+        let userDefaults = UserDefaults(suiteName: suiteName)
         let array = userDefaults?.array(forKey: "FINALE_DEV_APP_favorite_emoji") as? [String]
         if array == nil {
             favoriteEmoji = [String](repeating: "", count: 32)
@@ -88,7 +98,7 @@ struct ContentView: View {
         }
     }
     func LoadEnabledLocales () {
-        let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
+        let userDefaults = UserDefaults(suiteName: suiteName)
         
         EN_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_en_locale_enabled") == nil ? true : userDefaults?.bool(forKey: "FINALE_DEV_APP_en_locale_enabled") ?? true
         RU_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_ru_locale_enabled") == nil ? false : userDefaults?.bool(forKey: "FINALE_DEV_APP_ru_locale_enabled") ?? true

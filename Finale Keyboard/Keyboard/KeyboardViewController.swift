@@ -80,8 +80,10 @@ class KeyboardViewController: UIInputViewController {
     
     var toggledAC = false
     
-    var lexicon: Dictionary<String, [String]> = [String:[String]]()
+    var defaultDictionary: Dictionary<String, [String]> = [String:[String]]()
+    var userDictionary: [String] = [String]()
     
+    let suiteName = "group.finale-keyboard-cache"
     let ACSavePath = "FINALE_DEV_APP_AC"
     let localeSavePath = "FINALE_DEV_APP_CurrentLocale"
         
@@ -102,20 +104,28 @@ class KeyboardViewController: UIInputViewController {
         requestSupplementaryLexicon(completion: {
             l in
             for i in 0..<l.entries.count {
-                self.lexicon[l.entries[i].userInput] = [l.entries[i].documentText]
+                self.defaultDictionary[l.entries[i].userInput] = [l.entries[i].documentText]
             }
         })
         
-        let data = (try? Data(contentsOf: Bundle.main.url(forResource: "Dictionary", withExtension: "json")!))!
+        let data = (try? Data(contentsOf: Bundle.main.url(forResource: "DefaultDictionary", withExtension: "json")!))!
         let entries = try! JSONDecoder().decode([DictionaryItem].self, from: data)
         
         for i in entries {
-            lexicon[i.input.lowercased()] = i.suggestions
+            defaultDictionary[i.input.lowercased()] = i.suggestions
         }
+        
+        let userDefaults = UserDefaults(suiteName: suiteName)
+        userDictionary = userDefaults?.value(forKey: "FINALE_DEV_APP_userDictionary") as? [String] ?? [String]()
+    }
+    
+    func SaveUserDictionary () {
+        let userDefaults = UserDefaults(suiteName: suiteName)
+        userDefaults?.setValue(userDictionary, forKey: "FINALE_DEV_APP_userDictionary")
     }
     
     func LoadPreferences () {
-        let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
+        let userDefaults = UserDefaults(suiteName: suiteName)
         let EN_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_en_locale_enabled") as? Bool ?? true
         let RU_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_ru_locale_enabled") as? Bool ?? false
         KeyboardViewController.enabledLocales.removeAll()
@@ -442,8 +452,8 @@ class KeyboardViewController: UIInputViewController {
             ResetSuggestionsLabels()
             if (KeyboardViewController.isAutoCorrectOn) {
                 GenerateAutocorrections()
-                pickedSuggestionIndex = 1
-                ReplaceWithSuggestion(ignoreSpace: false, arrayIndex: (nextSuggestionArray-1) % maxSuggestionHistory, instant: true)
+                CheckUserDictionary()
+                ReplaceWithSuggestion(ignoreSpace: false, instant: true)
             } else {
                 self.textDocumentProxy.insertText(" ")
             }
@@ -523,8 +533,37 @@ class KeyboardViewController: UIInputViewController {
             pickedSuggestionIndex -= 1
             ReplaceWithSuggestion(ignoreSpace: true)
             return
+        } else {
+            UseUserDictionary ()
         }
     }
+    
+    func UseUserDictionary () {
+        let x = getCorrectSuggestionArrayIndex()
+        if x < 0 { return }
+        
+        if suggestionsArrays[x].suggestions.count < 2 { return }
+        
+        if userDictionary.contains(suggestionsArrays[x].suggestions[0]) {
+            RemoveFromUserDictionary(word: suggestionsArrays[x].suggestions[0])
+        } else {
+            AddToDictionary(word: suggestionsArrays[x].suggestions[0])
+        }
+    }
+    
+    func AddToDictionary (word: String) {
+        userDictionary.append(word)
+        SaveUserDictionary()
+        ShowNotification(text: "Learned \"" + word + "\"")
+    }
+    func RemoveFromUserDictionary (word: String) {
+        while userDictionary.contains(word) {
+            userDictionary.remove(at: userDictionary.firstIndex(of: word)!)
+        }
+        SaveUserDictionary()
+        ShowNotification(text: "Forgot \"" + word + "\"")
+    }
+    
     func Spacebar () {
         pickedSuggestionIndex = 0
         InsertPunctuation(index: pickedSuggestionIndex)
@@ -546,15 +585,7 @@ class KeyboardViewController: UIInputViewController {
         suggestionsArrays[nextSuggestionArray].positionIndex = self.textDocumentProxy.documentContextBeforeInput!.endIndex
         suggestionsArrays[nextSuggestionArray].lastPickedSuggestionIndex = 0
         
-        if (lexicon[lastWord.lowercased()] != nil) {
-            if lastWord.first!.isUppercase {
-                for i in lexicon[lastWord.lowercased()]! {
-                    suggestionsArrays[nextSuggestionArray].suggestions.append(i.firstUppercased)
-                }
-            } else {
-                suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: lexicon[lastWord.lowercased()]!)
-            }
-        }
+        AppendSuggestionFromDictionary(dict: defaultDictionary, lastWord: lastWord)
         
         if misspelledRange.location != NSNotFound {
             suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: checker.guesses(forWordRange: misspelledRange, in: lastWord, language: "\(KeyboardViewController.currentLocale)") ?? [String]())
@@ -564,7 +595,31 @@ class KeyboardViewController: UIInputViewController {
         nextSuggestionArray = (nextSuggestionArray+1) % maxSuggestionHistory
     }
     
-    func ReplaceWithSuggestion (ignoreSpace: Bool = false, arrayIndex: Int = -1, instant: Bool = false) {
+    func AppendSuggestionFromDictionary (dict: Dictionary<String, [String]>, lastWord: String) {
+        if (dict[lastWord.lowercased()] != nil) {
+            if lastWord.first!.isUppercase {
+                for i in dict[lastWord.lowercased()]! {
+                    suggestionsArrays[nextSuggestionArray].suggestions.append(i.firstUppercased)
+                }
+            } else {
+                suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: dict[lastWord.lowercased()]!)
+            }
+        }
+    }
+    
+    func CheckUserDictionary () {
+        pickedSuggestionIndex = 1
+        let x = getCorrectSuggestionArrayIndex()
+        if x < 0 { return }
+        
+        if suggestionsArrays[x].suggestions.count >= 2 {
+            if userDictionary.contains(suggestionsArrays[x].suggestions[0]) {
+                pickedSuggestionIndex = 0
+            }
+        }
+    }
+    
+    func ReplaceWithSuggestion (ignoreSpace: Bool = false, instant: Bool = false) {
         let x = getCorrectSuggestionArrayIndex()
         
         if x < 0 { return }
@@ -572,9 +627,6 @@ class KeyboardViewController: UIInputViewController {
         if ignoreSpace{ self.textDocumentProxy.deleteBackward() }
         
         if (suggestionsArrays[x].suggestions.count > 1) {
-//            for _ in 0...suggestionsArrays[x].suggestions[suggestionsArrays[x].lastPickedSuggestionIndex].count-1 {
-//                self.textDocumentProxy.deleteBackward()
-//            }
             while self.textDocumentProxy.hasText && self.textDocumentProxy.documentContextBeforeInput?.last != " " {
                 if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.last == nil) { break }
                 self.textDocumentProxy.deleteBackward()
