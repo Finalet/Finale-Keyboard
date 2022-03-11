@@ -270,7 +270,16 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func TypeCharacter (char: String) {
-        let shouldPlaceBeforeSpace = char == "\"" || char == ")" ? true : false
+        var shouldPlaceBeforeSpace = false
+        if char == "\"" {
+            let count = self.textDocumentProxy.documentContextBeforeInput?.filter { $0 == Character(char) }.count ?? 0
+            if count % 2 != 0 {
+                shouldPlaceBeforeSpace = true
+            }
+        } else if char == ")" {
+            shouldPlaceBeforeSpace = true
+        }
+        
         var x = false
         if (shouldPlaceBeforeSpace) {
             if (KeyboardViewController.isAutoCorrectOn && getLastChar() == " ") {
