@@ -28,15 +28,31 @@
   "suggestions": ["she'd", "she had"]
   },
   {
+  "input": "wed",
+  "suggestions": ["we'd", "we had"]
+  },
+  {
+  "input": "well",
+  "suggestions": ["we'll", "we will"]
+  },
+  {
+  "input": "wasnt",
+  "suggestions": ["wasn't", "was not"]
+  },
+  {
+  "input": "whats",
+  "suggestions": ["what's", "what is"]
+  },
+  {
+  "input": "thats",
+  "suggestions": ["that's", "that is"]
+  },
+  {
   "input": "ы",
   "suggestions": ["в", "а", "я", "у"]
   },
   {
-  "input": "well",
-  "suggestions": ["we'll"]
-  },
-  {
-  "input": "wasnt",
-  "suggestions": ["wasn't, was not"]
+  "input": "м",
+  "suggestions": ["и", "с"]
   },
 ]

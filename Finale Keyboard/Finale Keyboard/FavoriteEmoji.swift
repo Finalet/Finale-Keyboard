@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FavoriteEmoji: View {
     @Binding var favoriteEmoji: [String]
+    @FocusState private var focusCell: Int?
         
     var body: some View {
         List {
@@ -16,37 +17,53 @@ struct FavoriteEmoji: View {
                 HStack(alignment: .center, spacing: 5) {
                     ForEach (0..<8) { i in
                         TextField("", text: $favoriteEmoji[i])
-                            .textFieldStyle(EmojiTextField())
+                            .textFieldStyle(EmojiTextFieldStyle())
                             .onTapGesture {
                                 favoriteEmoji[i] = ""
                             }
+                            .onChange(of: favoriteEmoji[i]) { value in
+                                EndEditCell(index: i)
+                            }
+                            .focused($focusCell, equals: i)
                     }
                 }.listRowSeparator(.hidden)
                 HStack(alignment: .center, spacing: 5) {
                     ForEach (8..<16) { i in
                         TextField("", text: $favoriteEmoji[i])
-                            .textFieldStyle(EmojiTextField())
+                            .textFieldStyle(EmojiTextFieldStyle())
                             .onTapGesture {
                                 favoriteEmoji[i] = ""
                             }
+                            .onChange(of: favoriteEmoji[i]) { value in
+                                EndEditCell(index: i)
+                            }
+                            .focused($focusCell, equals: i)
                     }
                 }.listRowSeparator(.hidden)
                 HStack(alignment: .center, spacing: 5) {
                     ForEach (16..<24) { i in
                         TextField("", text: $favoriteEmoji[i])
-                            .textFieldStyle(EmojiTextField())
+                            .textFieldStyle(EmojiTextFieldStyle())
                             .onTapGesture {
                                 favoriteEmoji[i] = ""
                             }
+                            .onChange(of: favoriteEmoji[i]) { value in
+                                EndEditCell(index: i)
+                            }
+                            .focused($focusCell, equals: i)
                     }
                 }.listRowSeparator(.hidden)
                 HStack(alignment: .center, spacing: 5) {
                     ForEach (24..<32) { i in
                         TextField("", text: $favoriteEmoji[i])
-                            .textFieldStyle(EmojiTextField())
+                            .textFieldStyle(EmojiTextFieldStyle())
                             .onTapGesture {
                                 favoriteEmoji[i] = ""
                             }
+                            .onChange(of: favoriteEmoji[i]) { value in
+                                EndEditCell(index: i)
+                            }
+                            .focused($focusCell, equals: i)
                     }
                 }.listRowSeparator(.hidden)
             }
@@ -54,17 +71,8 @@ struct FavoriteEmoji: View {
         .navigationTitle("Favorite Emoji")
         .onTapGesture() {
             UIApplication.shared.endEditing()
+            focusCell = -1
             SaveArray()
-            for i in 0..<favoriteEmoji.count {
-                if favoriteEmoji[i].count > 1 {
-                    favoriteEmoji[i] = String(favoriteEmoji[i].last!)
-                }
-                if (favoriteEmoji[i].count == 1) {
-                    if !Character(favoriteEmoji[i]).isEmoji {
-                        favoriteEmoji[i] = ""
-                    }
-                }
-            }
         }
         .onDisappear() {
             SaveArray()
@@ -74,6 +82,30 @@ struct FavoriteEmoji: View {
     func SaveArray () {
         let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
         userDefaults?.setValue(favoriteEmoji, forKey: "FINALE_DEV_APP_favorite_emoji")
+    }
+    func EndEditCell (index: Int) {
+        if favoriteEmoji[index].count > 1 {
+            if favoriteEmoji[index].last! == " " {
+                favoriteEmoji[index].removeLast()
+            }
+            if favoriteEmoji[index].last!.isEmoji {
+                favoriteEmoji[index] = String(favoriteEmoji[index].last!)
+            } else {
+                favoriteEmoji[index] = String(favoriteEmoji[index].first!)
+            }
+        }
+        if favoriteEmoji[index].count > 0 {
+            if !Character(favoriteEmoji[index]).isEmoji {
+                favoriteEmoji[index] = ""
+            } else {
+                focusCell = index + 1
+                if focusCell ?? 30 >= 30 {
+                    focusCell == -1
+                    UIApplication.shared.endEditing()
+                }
+            }
+        }
+        SaveArray()
     }
     
 }
@@ -97,10 +129,10 @@ extension UIApplication {
     }
 }
 
-struct EmojiTextField: TextFieldStyle {
+struct EmojiTextFieldStyle: TextFieldStyle {
     func _body(configuration: TextField<Self._Label>) -> some View {
         configuration
-            .font(Font.system(size: 32, design: .default))
+            .font(Font.system(size: 30, design: .default))
             .multilineTextAlignment(.center)
             .background(Color(uiColor: .systemGray5))
             .cornerRadius(6)

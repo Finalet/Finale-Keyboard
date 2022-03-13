@@ -47,6 +47,9 @@ class KeyboardViewController: UIInputViewController {
     static var isMovingCursor = false
     static var isLongPressing = false
     static var isAutoCorrectOn = true
+    static var isAutoCorrectGrammarOn = true
+    static var isAutoCapitalizeOn = true
+    
     static var currentLocale = KeyboardViewController.Locale.en_US
     static var enabledLocales = [KeyboardViewController.Locale.en_US, KeyboardViewController.Locale.ru_RU]
     static var currentViewType = ViewType.Characters
@@ -83,10 +86,15 @@ class KeyboardViewController: UIInputViewController {
     var defaultDictionary: Dictionary<String, [String]> = [String:[String]]()
     var userDictionary: [String] = [String]()
     
+    var learningWordsDictionary: Dictionary<String, Int> = [String:Int]()
+    let learningWordsRepeateThreashold = 3
+    var autoLearnWords = true
+    
     let suiteName = "group.finale-keyboard-cache"
-    let ACSavePath = "FINALE_DEV_APP_AC"
+    let ACSavePath = "FINALE_DEV_APP_autocorrectWords"
     let localeSavePath = "FINALE_DEV_APP_CurrentLocale"
         
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Keeping this cauese Apple requires us to
@@ -98,6 +106,10 @@ class KeyboardViewController: UIInputViewController {
         InitSuggestionsArray()
         LoadPreferences()
         InitDictionary()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        SaveLearningWordsDictionary()
     }
     
     func InitDictionary () {
@@ -117,11 +129,19 @@ class KeyboardViewController: UIInputViewController {
         
         let userDefaults = UserDefaults(suiteName: suiteName)
         userDictionary = userDefaults?.value(forKey: "FINALE_DEV_APP_userDictionary") as? [String] ?? [String]()
+        autoLearnWords = userDefaults?.value(forKey: "FINALE_DEV_APP_autoLearnWords") as? Bool ?? true
+        if autoLearnWords {
+            learningWordsDictionary = userDefaults?.value(forKey: "FINALE_DEV_APP_learningWordsDictionary") as?  Dictionary<String, Int> ?? [String:Int]()
+        }
     }
     
     func SaveUserDictionary () {
         let userDefaults = UserDefaults(suiteName: suiteName)
         userDefaults?.setValue(userDictionary, forKey: "FINALE_DEV_APP_userDictionary")
+    }
+    func SaveLearningWordsDictionary () {
+        let userDefaults = UserDefaults(suiteName: suiteName)
+        userDefaults?.setValue(learningWordsDictionary, forKey: "FINALE_DEV_APP_learningWordsDictionary")
     }
     
     func LoadPreferences () {
@@ -132,7 +152,9 @@ class KeyboardViewController: UIInputViewController {
         if EN_enabled {KeyboardViewController.enabledLocales.append(KeyboardViewController.Locale.en_US)}
         if RU_enabled {KeyboardViewController.enabledLocales.append(KeyboardViewController.Locale.ru_RU)}
         
-        KeyboardViewController.isAutoCorrectOn = UserDefaults.standard.value(forKey: ACSavePath) == nil ? true : UserDefaults.standard.bool(forKey: ACSavePath)
+        KeyboardViewController.isAutoCorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectWords") as? Bool ?? true
+        KeyboardViewController.isAutoCorrectGrammarOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectGrammar") as? Bool ?? true
+        KeyboardViewController.isAutoCapitalizeOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocapitalizeWords") as? Bool ?? true
         KeyboardViewController.currentLocale = Locale(rawValue: UserDefaults.standard.integer(forKey: localeSavePath)) ?? .en_US
         
         if !KeyboardViewController.enabledLocales.contains(KeyboardViewController.currentLocale) {
@@ -270,7 +292,16 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func TypeCharacter (char: String) {
-        let shouldPlaceBeforeSpace = char == "\"" || char == ")" ? true : false
+        var shouldPlaceBeforeSpace = false
+        if char == "\"" {
+            let count = self.textDocumentProxy.documentContextBeforeInput?.filter { $0 == Character(char) }.count ?? 0
+            if count % 2 != 0 {
+                shouldPlaceBeforeSpace = true
+            }
+        } else if char == ")" {
+            shouldPlaceBeforeSpace = true
+        }
+        
         var x = false
         if (shouldPlaceBeforeSpace) {
             if (KeyboardViewController.isAutoCorrectOn && getLastChar() == " ") {
@@ -347,7 +378,9 @@ class KeyboardViewController: UIInputViewController {
             button.HideCallout()
             self.toggledAC = true
             self.ShowNotification(text: KeyboardViewController.isAutoCorrectOn ? "Autocorrection on" : "Autocorrection off")
-            UserDefaults.standard.set(KeyboardViewController.isAutoCorrectOn, forKey: self.ACSavePath)
+            
+            let userDefaults = UserDefaults(suiteName: self.suiteName)
+            userDefaults?.setValue(KeyboardViewController.isAutoCorrectOn, forKey: self.ACSavePath)
         }
         KeyboardViewController.isLongPressing = true
     }
@@ -497,18 +530,7 @@ class KeyboardViewController: UIInputViewController {
             return
         }
         
-        let x = getCorrectSuggestionArrayIndex()
-        
-        if x < 0 {
-            return
-        }
-        
-        if pickedSuggestionIndex < suggestionsArrays[x].suggestions.count-1 {
-            pickedSuggestionIndex += 1
-            ReplaceWithSuggestion(ignoreSpace: true)
-            return
-        }
-        
+        EditPreviousWord(upOrDown: -1)
     }
     func SwipeUp () {
         if !self.textDocumentProxy.hasText { return }
@@ -529,13 +551,7 @@ class KeyboardViewController: UIInputViewController {
             return
         }
         
-        if pickedSuggestionIndex > 0 {
-            pickedSuggestionIndex -= 1
-            ReplaceWithSuggestion(ignoreSpace: true)
-            return
-        } else {
-            UseUserDictionary ()
-        }
+        EditPreviousWord(upOrDown: 1)
     }
     
     func UseUserDictionary () {
@@ -544,24 +560,25 @@ class KeyboardViewController: UIInputViewController {
         
         if suggestionsArrays[x].suggestions.count < 2 { return }
         
-        if userDictionary.contains(suggestionsArrays[x].suggestions[0]) {
-            RemoveFromUserDictionary(word: suggestionsArrays[x].suggestions[0])
+        if userDictionary.contains(suggestionsArrays[x].suggestions[0].lowercased()) {
+            ForgetWord(word: suggestionsArrays[x].suggestions[0].lowercased())
         } else {
-            AddToDictionary(word: suggestionsArrays[x].suggestions[0])
+            LearnWord(word: suggestionsArrays[x].suggestions[0].lowercased())
         }
     }
     
-    func AddToDictionary (word: String) {
+    func LearnWord (word: String, showNotification: Bool = true) {
         userDictionary.append(word)
         SaveUserDictionary()
-        ShowNotification(text: "Learned \"" + word + "\"")
+        if showNotification { ShowNotification(text: "Learned \"" + word + "\"") }
+        if learningWordsDictionary[word] != nil { learningWordsDictionary.removeValue(forKey: word) }
     }
-    func RemoveFromUserDictionary (word: String) {
+    func ForgetWord (word: String, showNotification: Bool = true) {
         while userDictionary.contains(word) {
             userDictionary.remove(at: userDictionary.firstIndex(of: word)!)
         }
         SaveUserDictionary()
-        ShowNotification(text: "Forgot \"" + word + "\"")
+        if showNotification { ShowNotification(text: "Forgot \"" + word + "\"") }
     }
     
     func Spacebar () {
@@ -596,6 +613,8 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func AppendSuggestionFromDictionary (dict: Dictionary<String, [String]>, lastWord: String) {
+        if !KeyboardViewController.isAutoCorrectGrammarOn { return }
+        
         if (dict[lastWord.lowercased()] != nil) {
             if lastWord.first!.isUppercase {
                 for i in dict[lastWord.lowercased()]! {
@@ -613,15 +632,14 @@ class KeyboardViewController: UIInputViewController {
         if x < 0 { return }
         
         if suggestionsArrays[x].suggestions.count >= 2 {
-            if userDictionary.contains(suggestionsArrays[x].suggestions[0]) {
+            if userDictionary.contains(suggestionsArrays[x].suggestions[0].lowercased()) {
                 pickedSuggestionIndex = 0
             }
         }
     }
     
-    func ReplaceWithSuggestion (ignoreSpace: Bool = false, instant: Bool = false) {
+    func ReplaceWithSuggestion (ignoreSpace: Bool = false, instant: Bool = false, tryLearnNewWord: Bool = false) {
         let x = getCorrectSuggestionArrayIndex()
-        
         if x < 0 { return }
         
         if ignoreSpace{ self.textDocumentProxy.deleteBackward() }
@@ -632,6 +650,7 @@ class KeyboardViewController: UIInputViewController {
                 self.textDocumentProxy.deleteBackward()
             }
             self.textDocumentProxy.insertText(suggestionsArrays[x].suggestions[pickedSuggestionIndex])
+            if tryLearnNewWord { TryLearnNewWord(word: suggestionsArrays[x].suggestions[pickedSuggestionIndex].lowercased()) }
         } else { pickedSuggestionIndex = 0 }
         
         self.textDocumentProxy.insertText(" ")
@@ -642,6 +661,47 @@ class KeyboardViewController: UIInputViewController {
         UpdateSuggestionsLabels(arrayIndex: x)
         AnimateSuggestionLabels(index: pickedSuggestionIndex, instant: instant)
     }
+    
+    func EditPreviousWord (upOrDown: Int) {
+        var dis = 0
+        while self.textDocumentProxy.documentContextBeforeInput != "" && getLastChar() != " " {
+            self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
+            dis += 1
+        }
+        let x = getCorrectSuggestionArrayIndex()
+        if x >= 0 {
+            if upOrDown == -1 { //down
+                if pickedSuggestionIndex < suggestionsArrays[x].suggestions.count-1 {
+                    pickedSuggestionIndex += 1
+                    ReplaceWithSuggestion(ignoreSpace: true)
+                }
+            } else if upOrDown == 1 { //up
+                if pickedSuggestionIndex > 0 {
+                    pickedSuggestionIndex -= 1
+                    ReplaceWithSuggestion(ignoreSpace: true, tryLearnNewWord: autoLearnWords && pickedSuggestionIndex == 0)
+                } else {
+                    UseUserDictionary ()
+                }
+            }
+        }
+        
+        self.textDocumentProxy.adjustTextPosition(byCharacterOffset: dis)
+    }
+    
+    func TryLearnNewWord (word: String) {
+        if userDictionary.contains(word.lowercased()) { return }
+        
+        if learningWordsDictionary[word] == nil {
+            learningWordsDictionary[word] = 1
+        } else {
+            learningWordsDictionary[word]! += 1
+            if learningWordsDictionary[word]! >= learningWordsRepeateThreashold {
+                learningWordsDictionary.removeValue(forKey: word)
+                LearnWord(word: word, showNotification: false)
+            }
+        }
+    }
+    
     func ReplacePunctiation () {
         for _ in 0...1 {
             self.textDocumentProxy.deleteBackward()
@@ -859,6 +919,8 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func CheckAutoCapitalization () -> Bool{
+        if !KeyboardViewController.isAutoCapitalizeOn { return false }
+        
         if (!self.textDocumentProxy.hasText || self.textDocumentProxy.documentContextBeforeInput == nil) {
             ForceShift()
             return true
