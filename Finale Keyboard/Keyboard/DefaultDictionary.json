@@ -48,6 +48,10 @@
   "suggestions": ["that's", "that is"]
   },
   {
+  "input": "lets",
+  "suggestions": ["let's"]
+  },
+  {
   "input": "ы",
   "suggestions": ["в", "а", "я", "у"]
   },

@@ -15,15 +15,19 @@ struct TutorialView: View {
         GeometryReader { geo in
             VStack (alignment: .leading) {
                 TabView {
-                    Image("Swipe right").resizable()
-                    Image("Swipe right punctuation").resizable()
-                    Image("Swipe up down").resizable()
-                    Image("Swipe left").resizable()
-                    Image("Emoji").resizable()
-                    Image("Symbols").resizable()
-                    Image("Languages").resizable()
-                    Image("Return").resizable()
-                    Image("Learn").resizable()
+                    Group {
+                        Image("Swipe right").resizable()
+                        Image("Swipe right punctuation").resizable()
+                        Image("Swipe up down").resizable()
+                        Image("Swipe left").resizable()
+                        Image("Emoji").resizable()
+                        Image("Symbols").resizable()
+                        Image("Languages").resizable()
+                        Image("Return").resizable()
+                        Image("Learn").resizable()
+                        Image("Move cursor").resizable()
+                    }
+                    Image("Toggle autocorrect").resizable()
                 }
                 .tabViewStyle(.page)
                 .indexViewStyle(.page(backgroundDisplayMode: .always))
