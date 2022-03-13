@@ -47,6 +47,9 @@ class KeyboardViewController: UIInputViewController {
     static var isMovingCursor = false
     static var isLongPressing = false
     static var isAutoCorrectOn = true
+    static var isAutoCorrectGrammarOn = true
+    static var isAutoCapitalizeOn = true
+    
     static var currentLocale = KeyboardViewController.Locale.en_US
     static var enabledLocales = [KeyboardViewController.Locale.en_US, KeyboardViewController.Locale.ru_RU]
     static var currentViewType = ViewType.Characters
@@ -88,7 +91,7 @@ class KeyboardViewController: UIInputViewController {
     var autoLearnWords = true
     
     let suiteName = "group.finale-keyboard-cache"
-    let ACSavePath = "FINALE_DEV_APP_AC"
+    let ACSavePath = "FINALE_DEV_APP_autocorrectWords"
     let localeSavePath = "FINALE_DEV_APP_CurrentLocale"
         
     
@@ -149,7 +152,9 @@ class KeyboardViewController: UIInputViewController {
         if EN_enabled {KeyboardViewController.enabledLocales.append(KeyboardViewController.Locale.en_US)}
         if RU_enabled {KeyboardViewController.enabledLocales.append(KeyboardViewController.Locale.ru_RU)}
         
-        KeyboardViewController.isAutoCorrectOn = UserDefaults.standard.value(forKey: ACSavePath) == nil ? true : UserDefaults.standard.bool(forKey: ACSavePath)
+        KeyboardViewController.isAutoCorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectWords") as? Bool ?? true
+        KeyboardViewController.isAutoCorrectGrammarOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectGrammar") as? Bool ?? true
+        KeyboardViewController.isAutoCapitalizeOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocapitalizeWords") as? Bool ?? true
         KeyboardViewController.currentLocale = Locale(rawValue: UserDefaults.standard.integer(forKey: localeSavePath)) ?? .en_US
         
         if !KeyboardViewController.enabledLocales.contains(KeyboardViewController.currentLocale) {
@@ -373,7 +378,9 @@ class KeyboardViewController: UIInputViewController {
             button.HideCallout()
             self.toggledAC = true
             self.ShowNotification(text: KeyboardViewController.isAutoCorrectOn ? "Autocorrection on" : "Autocorrection off")
-            UserDefaults.standard.set(KeyboardViewController.isAutoCorrectOn, forKey: self.ACSavePath)
+            
+            let userDefaults = UserDefaults(suiteName: self.suiteName)
+            userDefaults?.setValue(KeyboardViewController.isAutoCorrectOn, forKey: self.ACSavePath)
         }
         KeyboardViewController.isLongPressing = true
     }
@@ -606,6 +613,8 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func AppendSuggestionFromDictionary (dict: Dictionary<String, [String]>, lastWord: String) {
+        if !KeyboardViewController.isAutoCorrectGrammarOn { return }
+        
         if (dict[lastWord.lowercased()] != nil) {
             if lastWord.first!.isUppercase {
                 for i in dict[lastWord.lowercased()]! {
@@ -910,6 +919,8 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func CheckAutoCapitalization () -> Bool{
+        if !KeyboardViewController.isAutoCapitalizeOn { return false }
+        
         if (!self.textDocumentProxy.hasText || self.textDocumentProxy.documentContextBeforeInput == nil) {
             ForceShift()
             return true

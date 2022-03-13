@@ -58,7 +58,7 @@ struct DictionaryListView: View {
         if searchText.isEmpty {
             return userDictionary
         } else {
-            return userDictionary.filter { $0.contains(searchText) }
+            return userDictionary.filter { $0.contains(searchText.lowercased()) }
         }
     }
     

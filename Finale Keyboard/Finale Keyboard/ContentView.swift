@@ -29,27 +29,35 @@ struct ContentView: View {
                 Section(header: Text("Preferences")) {
                     ListNavigationLink(destination: FavoriteEmoji(favoriteEmoji: $favoriteEmoji)) {
                         Label(title: {
-                                    Text("Favorite emoji")
-                                }, icon: {
-                                    Image(systemName: "heart")
-                                        .foregroundColor(.red)
-                                } )
+                            Text("Favorite emoji")
+                        }, icon: {
+                            Image(systemName: "heart")
+                                .foregroundColor(.red)
+                        } )
                     }
                     ListNavigationLink(destination: LanguagesSettings(EN_enabled: $EN_enabled, RU_enabled: $RU_enabled)) {
                         Label(title: {
-                                    Text("Languages")
-                                }, icon: {
-                                    Image(systemName: "globe")
-                                        .foregroundColor(.blue)
-                                } )
+                            Text("Languages")
+                        }, icon: {
+                            Image(systemName: "globe")
+                                .foregroundColor(.blue)
+                        } )
                     }
                     ListNavigationLink(destination: DictionaryListView()) {
                         Label(title: {
-                                    Text("Dictionary")
-                                }, icon: {
-                                    Image(systemName: "character.book.closed")
-                                        .foregroundColor(.blue)
-                                } )
+                            Text("Dictionary")
+                        }, icon: {
+                            Image(systemName: "character.book.closed")
+                                .foregroundColor(.blue)
+                        } )
+                    }
+                    ListNavigationLink(destination: PreferencesView()) {
+                        Label(title: {
+                            Text("Preferences")
+                        }, icon: {
+                            Image(systemName: "square.and.pencil")
+                                .foregroundColor(.blue)
+                        } )
                     }
                 }
                 Section(header: Text("Setup"), footer: footerText) {

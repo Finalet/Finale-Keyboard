@@ -28,12 +28,16 @@
   "suggestions": ["she'd", "she had"]
   },
   {
+  "input": "wed",
+  "suggestions": ["we'd", "we had"]
+  },
+  {
   "input": "well",
-  "suggestions": ["we'll"]
+  "suggestions": ["we'll", "we will"]
   },
   {
   "input": "wasnt",
-  "suggestions": ["wasn't, was not"]
+  "suggestions": ["wasn't", "was not"]
   },
   {
   "input": "whats",
