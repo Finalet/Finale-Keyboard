@@ -72,7 +72,7 @@ class KeyboardViewController: UIInputViewController {
     var waitingForSecondTap = false
     var capsTimer = Timer()
     
-    let longPressDelay = 0.8
+    let longPressDelay = 0.7
     var waitForLongPress = Timer()
     var deleteTimer = Timer()
     var cursorMoveTimer = Timer()
@@ -410,7 +410,7 @@ class KeyboardViewController: UIInputViewController {
     func CheckMoveCursor (touchLocation: CGPoint) {
         if touchLocation.x < UIScreen.main.bounds.width * 0.1 {
             if leftEdgeTimer == nil {
-                leftEdgeTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
+                leftEdgeTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { (_) in
                     self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
                     self.lastTouchPosX = touchLocation.x
                 }
@@ -420,7 +420,7 @@ class KeyboardViewController: UIInputViewController {
             return
         } else if touchLocation.x > UIScreen.main.bounds.width * 0.9 {
             if (rightEdgeTimer == nil) {
-                rightEdgeTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
+                rightEdgeTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { (_) in
                     self.textDocumentProxy.adjustTextPosition(byCharacterOffset: 1)
                     self.lastTouchPosX = touchLocation.x
                 }
@@ -433,10 +433,10 @@ class KeyboardViewController: UIInputViewController {
         rightEdgeTimer = nil
         leftEdgeTimer?.invalidate()
         leftEdgeTimer = nil
-        if touchLocation.x - lastTouchPosX > 10 {
+        if touchLocation.x - lastTouchPosX > 5 {
             self.textDocumentProxy.adjustTextPosition(byCharacterOffset: 1)
             lastTouchPosX = touchLocation.x
-        } else if touchLocation.x - lastTouchPosX < -10 {
+        } else if touchLocation.x - lastTouchPosX < -5 {
             self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
             lastTouchPosX = touchLocation.x
         }
