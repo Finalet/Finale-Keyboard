@@ -5,51 +5,59 @@
   },
   {
   "input": "im",
-  "suggestions": ["I'm", "I am"]
+  "suggestions": ["I'm"]
   },
   {
   "input": "ive",
-  "suggestions": ["I've", "I have"]
+  "suggestions": ["I've"]
   },
   {
   "input": "id",
-  "suggestions": ["I'd", "I had"]
+  "suggestions": ["I'd"]
   },
   {
   "input": "ill",
-  "suggestions": ["I'll", "I will"]
+  "suggestions": ["I'll"]
   },
   {
   "input": "hed",
-  "suggestions": ["he'd", "he had"]
+  "suggestions": ["he'd"]
   },
   {
   "input": "hes",
-  "suggestions": ["he's", "he has"]
+  "suggestions": ["he's"]
+  },
+  {
+  "input": "shes",
+  "suggestions": ["she's"]
   },
   {
   "input": "shed",
-  "suggestions": ["she'd", "she had"]
+  "suggestions": ["she'd"]
   },
   {
   "input": "wed",
-  "suggestions": ["we'd", "we had"]
+  "suggestions": ["we'd"]
   },
   {
   "input": "well",
-  "suggestions": ["we'll", "we will"]
+  "suggestions": ["we'll"]
   },
   {
   "input": "wasnt",
-  "suggestions": ["wasn't", "was not"]
+  "suggestions": ["wasn't"]
   },
   {
   "input": "whats",
-  "suggestions": ["what's", "what is"]
+  "suggestions": ["what's"]
   },
   {
   "input": "thats",
-  "suggestions": ["that's", "that is"]
+  "suggestions": ["that's"]
+  },
+  {
+  "input": "youd",
+  "suggestions": ["you'd"]
   },
   {
   "input": "lets",
@@ -58,6 +66,10 @@
   {
   "input": "cant",
   "suggestions": ["can't", "cannot"]
+  },
+  {
+  "input": "cmon",
+  "suggestions": ["c'mon"]
   },
   {
   "input": "ы",
