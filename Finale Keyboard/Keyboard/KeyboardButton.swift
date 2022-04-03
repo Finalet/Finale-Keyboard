@@ -109,7 +109,7 @@ class KeyboardButton: UIButton {
             viewController?.CancelLongPress()
             registeredSwipe = true
             if action.actionType == .Character { viewController?.Delete(); viewController?.LongPressDelete(backspace: false) }
-            else if action.functionType == .Backspace { viewController?.ToggleEmojiView() }
+            else if action.functionType == .Backspace { KeyboardViewController.currentViewType == .SearchEmoji ? viewController?.BackAction() : viewController?.ToggleEmojiView() }
             HideCallout(swipeDir: -1)
             if action.actionType != .Character { viewController?.MiddleRowReactAnimation() }
         } else if (touchLocation.y > frame.size.height + frame.size.height * (1-registerSwipeSensitivity)) { //Swipe down
@@ -122,7 +122,7 @@ class KeyboardButton: UIButton {
             registeredSwipe = true
             if action.actionType == .Character { viewController?.SwipeUp() }
             else if action.functionType == .Shift { viewController?.ToggleLocale() }
-            else if action.functionType == .Backspace { viewController?.ReturnAction() }
+            else if action.functionType == .Backspace { KeyboardViewController.currentViewType == .SearchEmoji ? viewController?.BackAction() : viewController?.ReturnAction() }
             HideCallout()
             viewController?.MiddleRowReactAnimation()
             viewController?.CancelLongPress()
@@ -224,6 +224,8 @@ class KeyboardButton: UIButton {
             return UIImage(systemName: "arrow.up.to.line", withConfiguration: UIImage.SymbolConfiguration(weight: .black))!
         case .Backspace:
             return UIImage(systemName: "delete.left.fill")!
+        case .Back:
+            return UIImage(systemName: "arrow.uturn.left", withConfiguration: UIImage.SymbolConfiguration(weight: .bold))!
         case .none:
             return UIImage(systemName: "exclamationmark.triangle")!
         }

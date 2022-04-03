@@ -33,6 +33,7 @@ class EmojiView: UIView, UIScrollViewDelegate {
     var viewController: KeyboardViewController?
     
     var Favorites = [String](repeating: "", count: 32)
+    var AllEmoji = [Emoji]()
     var SmileysEmotion = [Emoji]()
     var PeopleBody = [Emoji]()
     var AnimalsNature = [Emoji]()
@@ -95,8 +96,8 @@ class EmojiView: UIView, UIScrollViewDelegate {
         button.imageView?.tintColor = .gray
         
         let button1 = UIButton(frame: CGRect(x: 0, y: itemSize*3, width: bottomButtonSize, height: bottomButtonSize))
-        button1.addTarget(self, action: #selector(ReturnToKeyboard), for: .touchUpInside)
-        button1.setImage(UIImage(systemName: "keyboard.fill"), for: .normal)
+        button1.addTarget(self, action: #selector(ToggleSearchEmojiView), for: .touchUpInside)
+        button1.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
         button1.imageView?.tintColor = .gray
                
         self.addSubview(button)
@@ -155,9 +156,9 @@ class EmojiView: UIView, UIScrollViewDelegate {
     
     func InitArrays () {
         let data = (try? Data(contentsOf: Bundle.main.url(forResource: "emoji", withExtension: "json")!))!
-        let emojies = try! JSONDecoder().decode([Emoji].self, from: data)
+        AllEmoji = try! JSONDecoder().decode([Emoji].self, from: data)
         
-        for i in emojies {
+        for i in AllEmoji {
             switch i.category {
             case .SmileysEmotion: SmileysEmotion.append(i)
             case .PeopleBody: PeopleBody.append(i)
@@ -176,12 +177,36 @@ class EmojiView: UIView, UIScrollViewDelegate {
         Favorites = array == nil ? Favorites : userDefaults?.value(forKey: "FINALE_DEV_APP_favorite_emoji") as! [String]
     }
     
+    func getEmojiSearchResults (searchTerm: String) -> String {
+        if searchTerm.isEmpty || searchTerm == " " { return ""}
+        
+        let result: [Emoji]
+        if searchTerm.last == " " {
+            var removeSpace = searchTerm
+            removeSpace.removeLast()
+            result = AllEmoji.filter { $0.description.range(of: "\\b\(removeSpace)\\b", options: [.regularExpression, .caseInsensitive]) != nil }
+        } else {
+            result = AllEmoji.filter { $0.description.contains(searchTerm) }
+        }
+        
+        let sortedResult = result.sorted { $0.description.count < $1.description.count }
+        
+        var output = ""
+        for i in 0..<6 {
+            if sortedResult.count>i { output.append(sortedResult[i].emoji)
+            } else { break }
+        }
+        return output
+    }
+    
     @objc func Backspace () {
         viewController?.BackspaceAction()
     }
-    @objc func ReturnToKeyboard () {
+    @objc func ToggleSearchEmojiView () {
+        if KeyboardViewController.currentViewType == .SearchEmoji { return }
+        viewController?.BuildEmojiSearchView()
         viewController?.ToggleEmojiView()
-        viewController?.RedrawSuggestionsLabels()
+        KeyboardViewController.currentViewType = .SearchEmoji
     }
     @objc func PanGesture (panGesture: UIPanGestureRecognizer) {
         let view = panGesture.view as! UICollectionView
@@ -204,7 +229,7 @@ class EmojiView: UIView, UIScrollViewDelegate {
             if (!beganDismiss) {return}
             let velocity = panGesture.velocity(in: self)
 
-              if velocity.y >= 500 {
+              if velocity.y >= 400 {
                 UIView.animate(withDuration: 0.2) {
                     self.viewController?.ToggleEmojiView()
                 }
@@ -224,6 +249,9 @@ class EmojiView: UIView, UIScrollViewDelegate {
         if scrollView == paginatedView {
             pageControl!.SetCurrentPageColor(index: Int(round(scrollView.contentOffset.x/frame.width)))
             canDismiss = false
+            if scrollView.contentOffset.x/frame.width < -0.15 {
+                ToggleSearchEmojiView()
+            }
         } else {
             scrollView.bounces = (scrollView.contentOffset.y > 10)
         }

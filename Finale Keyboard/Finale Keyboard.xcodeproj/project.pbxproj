@@ -145,14 +145,14 @@
 		37A0AD0527A869BA00578290 /* Keyboard */ = {
 			isa = PBXGroup;
 			children = (
-				3743FC5927B168230043B2A2 /* Keyboard.entitlements */,
 				37A0AD0627A869BA00578290 /* KeyboardViewController.swift */,
-				37A0AD0827A869BA00578290 /* Info.plist */,
 				37A0AD1227A88AAA00578290 /* UIExtensions.swift */,
 				37B5B99927A9751000601AB1 /* KeyboardButton.swift */,
-				3720638527AACEB600964120 /* Gilroy-Medium.ttf */,
 				3720638727AB2CAF00964120 /* Locales.swift */,
 				371F496727ADA92F00686BC7 /* EmojiView.swift */,
+				3743FC5927B168230043B2A2 /* Keyboard.entitlements */,
+				37A0AD0827A869BA00578290 /* Info.plist */,
+				3720638527AACEB600964120 /* Gilroy-Medium.ttf */,
 				371F496927ADCCD300686BC7 /* emoji.json */,
 				375DFB1627AE9E5E00E304ED /* Images.xcassets */,
 				3709029527B2F54000213BDD /* DefaultDictionary.json */,
@@ -422,7 +422,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"Finale Keyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = AYPPAXMRMG;
 				ENABLE_PREVIEWS = YES;
@@ -437,7 +437,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.12;
+				MARKETING_VERSION = 1.13;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Grant151.Finale-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -454,7 +454,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 10;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_ASSET_PATHS = "\"Finale Keyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = AYPPAXMRMG;
 				ENABLE_PREVIEWS = YES;
@@ -469,7 +469,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.12;
+				MARKETING_VERSION = 1.13;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Grant151.Finale-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";

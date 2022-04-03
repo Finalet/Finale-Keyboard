@@ -56,9 +56,9 @@ struct DictionaryListView: View {
     
     var searchResults: [String] {
         if searchText.isEmpty {
-            return userDictionary
+            return userDictionary.sorted()
         } else {
-            return userDictionary.filter { $0.contains(searchText.lowercased()) }
+            return userDictionary.sorted().filter { $0.contains(searchText.lowercased()) }
         }
     }
     

@@ -17,6 +17,9 @@ let middleRowActions_en = [KeyboardViewController.Action(type: .Character, title
 let bottomRowActions_en = [KeyboardViewController.Action(type: .Function, title: "", funcType: .Shift), KeyboardViewController.Action(type: .Character, title: "z"), KeyboardViewController.Action(type: .Character, title: "x"), KeyboardViewController.Action(type: .Character, title: "c"), KeyboardViewController.Action(type: .Character, title: "v"),
                  KeyboardViewController.Action(type: .Character, title: "b"), KeyboardViewController.Action(type: .Character, title: "n"), KeyboardViewController.Action(type: .Character, title: "m"), KeyboardViewController.Action(type: .Function, title: "", funcType: .Backspace)]
 
+let bottomRowActionsEmojiSearch_en = [KeyboardViewController.Action(type: .Function, title: "", funcType: .Back), KeyboardViewController.Action(type: .Character, title: "z"), KeyboardViewController.Action(type: .Character, title: "x"), KeyboardViewController.Action(type: .Character, title: "c"), KeyboardViewController.Action(type: .Character, title: "v"),
+                 KeyboardViewController.Action(type: .Character, title: "b"), KeyboardViewController.Action(type: .Character, title: "n"), KeyboardViewController.Action(type: .Character, title: "m"), KeyboardViewController.Action(type: .Function, title: "", funcType: .Backspace)]
+
 // MARK: ru_RU
 let topRowActions_ru = [KeyboardViewController.Action(type: .Character, title: "й"), KeyboardViewController.Action(type: .Character, title: "ц"), KeyboardViewController.Action(type: .Character, title: "у"),
               KeyboardViewController.Action(type: .Character, title: "к"), KeyboardViewController.Action(type: .Character, title: "е"), KeyboardViewController.Action(type: .Character, title: "н"), KeyboardViewController.Action(type: .Character, title: "г"),
