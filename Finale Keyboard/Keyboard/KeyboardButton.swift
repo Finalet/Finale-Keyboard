@@ -194,7 +194,7 @@ class KeyboardButton: UIButton {
     }
     func HideFunctionCallout () {
         if action.functionType == .Shift {
-            imageView?.tintColor = KeyboardViewController.ShouldCapitalize() ? .systemPrimary : .gray
+            imageView?.tintColor = viewController!.shouldCapitalize ? .systemPrimary : .gray
             if KeyboardViewController.currentViewType == .Characters { setImage(getFunctionActionIcon(function: KeyboardViewController.isCaps ? .Caps : .Shift), for: .normal) }
             else if KeyboardViewController.currentViewType == .Symbols { setImage(getFunctionActionIcon(function: .SymbolsShift), for: .normal) }
             else if KeyboardViewController.currentViewType == .ExtraSymbols { setImage(getFunctionActionIcon(function: .SymbolsShift), for: .normal) }

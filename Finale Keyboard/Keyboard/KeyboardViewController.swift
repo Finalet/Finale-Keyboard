@@ -14,9 +14,11 @@ class KeyboardViewController: UIInputViewController {
     @IBOutlet var nextKeyboardButton: UIButton!
     
     private weak var _heightConstraint: NSLayoutConstraint?
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        
         guard nil == _heightConstraint else { return }
 
         // We must add a subview with an `instrinsicContentSize` that uses autolayout to force the height constraint to be recognized.
@@ -79,7 +81,7 @@ class KeyboardViewController: UIInputViewController {
     var waitingForSecondTap = false
     var capsTimer = Timer()
     
-    let longPressDelay = 0.7
+    let longPressDelay = 0.5
     var waitForLongPress = Timer()
     var deleteTimer = Timer()
     var cursorMoveTimer = Timer()
@@ -106,7 +108,6 @@ class KeyboardViewController: UIInputViewController {
         super.viewDidLoad()
         // Keeping this cauese Apple requires us to
         self.nextKeyboardButton = UIButton(type: .system)
-                
         
         BuildKeyboardView(viewType: .Characters)
         SuggestionsView()
@@ -383,7 +384,7 @@ class KeyboardViewController: UIInputViewController {
             }
         }
         
-        self.textDocumentProxy.insertText(KeyboardViewController.ShouldCapitalize() ? char.capitalized : char)
+        self.textDocumentProxy.insertText(shouldCapitalize ? char.capitalized : char)
         FadeoutSuggestions()
         
         if (x) { self.textDocumentProxy.insertText(" ") }
@@ -554,7 +555,7 @@ class KeyboardViewController: UIInputViewController {
         if !waitingForSecondTap {
             waitingForSecondTap = true
             
-            capsTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { (_) in
+            capsTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
                 self.waitingForSecondTap = false
             }
         } else {
@@ -567,6 +568,7 @@ class KeyboardViewController: UIInputViewController {
         if KeyboardViewController.isCaps {
             KeyboardViewController.isCaps = false
             KeyboardViewController.isShift = false
+            CheckAutoCapitalization()
         } else {
             KeyboardViewController.isShift = !KeyboardViewController.isShift
         }
@@ -921,11 +923,11 @@ class KeyboardViewController: UIInputViewController {
         for button in KeyboardButtons {
             if button.action.functionType == .Shift {
                 if (!button.isCalloutShown()) {
-                    button.imageView?.tintColor = KeyboardViewController.ShouldCapitalize() ? .systemPrimary : .systemGray
+                    button.imageView?.tintColor = shouldCapitalize ? .systemPrimary : .systemGray
                 }
                 continue
             }
-            button.setTitle(KeyboardViewController.ShouldCapitalize() ? button.currentTitle?.capitalized : button.currentTitle?.lowercased(), for: .normal)
+            button.setTitle(shouldCapitalize ? button.currentTitle?.capitalized : button.currentTitle?.lowercased(), for: .normal)
             button.calloutLabel.text = button.titleLabel?.text
         }
     }
@@ -1044,7 +1046,7 @@ class KeyboardViewController: UIInputViewController {
     func CheckAutoCapitalization () -> Bool{
         if !KeyboardViewController.isAutoCapitalizeOn { return false }
         
-        if (!self.textDocumentProxy.hasText || self.textDocumentProxy.documentContextBeforeInput == nil) {
+        if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput == "") {
             ForceShift()
             return true
         }
@@ -1153,7 +1155,7 @@ class KeyboardViewController: UIInputViewController {
         else if KeyboardViewController.currentViewType == .ExtraSymbols { BuildKeyboardView(viewType: .Symbols) }
     }
     
-    static func ShouldCapitalize() -> Bool {
+    var shouldCapitalize: Bool {
         return KeyboardViewController.isShift || KeyboardViewController.isCaps
     }
     
