@@ -207,6 +207,8 @@ class EmojiView: UIView, UIScrollViewDelegate {
         viewController?.BuildEmojiSearchView()
         viewController?.ToggleEmojiView()
         KeyboardViewController.currentViewType = .SearchEmoji
+        
+        HapticFeedback.GestureImpactOccured()
     }
     @objc func PanGesture (panGesture: UIPanGestureRecognizer) {
         let view = panGesture.view as! UICollectionView

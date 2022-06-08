@@ -75,6 +75,8 @@ class KeyboardButton: UIButton {
             if action.functionType == .Backspace { viewController?.LongPressDelete(backspace: true) }
             else if action.actionType == .Character { viewController?.LongPressCharacter(touchLocation: gesture.location(in: viewController?.view), button: self) }
             else if action.functionType == .Shift { viewController?.LongPressShift(button: self) }
+            
+            if action.actionType == .Character { HapticFeedback.TypingImpactOccured() }
         } else if (gesture.state != .began && gesture.state != .ended) {
             if (viewController!.toggledAC) {return}
             
@@ -105,6 +107,8 @@ class KeyboardButton: UIButton {
             HideCallout(swipeDir: 1)
             viewController?.MiddleRowReactAnimation()
             viewController?.CancelLongPress()
+            
+            HapticFeedback.GestureImpactOccured()
         } else if (touchLocation.x < 0 - frame.size.width * (1-registerSwipeSensitivity)) { //Swipe left
             viewController?.CancelLongPress()
             registeredSwipe = true
@@ -112,12 +116,16 @@ class KeyboardButton: UIButton {
             else if action.functionType == .Backspace { KeyboardViewController.currentViewType == .SearchEmoji ? viewController?.BackAction() : viewController?.ToggleEmojiView() }
             HideCallout(swipeDir: -1)
             if action.actionType != .Character { viewController?.MiddleRowReactAnimation() }
+            
+            HapticFeedback.GestureImpactOccured()
         } else if (touchLocation.y > frame.size.height + frame.size.height * (1-registerSwipeSensitivity)) { //Swipe down
             registeredSwipe = true
             if action.actionType == .Character { viewController?.SwipeDown() }
             HideCallout()
             viewController?.MiddleRowReactAnimation()
             viewController?.CancelLongPress()
+            
+            HapticFeedback.GestureImpactOccured()
         } else if (touchLocation.y < 0 - frame.size.height * (1-registerSwipeSensitivity)) { //Swipe up
             registeredSwipe = true
             if action.actionType == .Character { viewController?.SwipeUp() }
@@ -126,7 +134,10 @@ class KeyboardButton: UIButton {
             HideCallout()
             viewController?.MiddleRowReactAnimation()
             viewController?.CancelLongPress()
+            
+            HapticFeedback.GestureImpactOccured()
         }
+        
     }
     
     func ShowCallout () {

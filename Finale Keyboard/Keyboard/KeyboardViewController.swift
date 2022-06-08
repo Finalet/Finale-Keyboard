@@ -58,6 +58,8 @@ class KeyboardViewController: UIInputViewController {
     static var isAutoCorrectOn = true
     static var isAutoCorrectGrammarOn = true
     static var isAutoCapitalizeOn = true
+    static var isTypingHapticEnabled = false
+    static var isGesturesHapticEnabled = false
     
     static var currentLocale = KeyboardViewController.Locale.en_US
     static var enabledLocales = [KeyboardViewController.Locale.en_US, KeyboardViewController.Locale.ru_RU]
@@ -162,6 +164,8 @@ class KeyboardViewController: UIInputViewController {
         KeyboardViewController.isAutoCorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectWords") as? Bool ?? true
         KeyboardViewController.isAutoCorrectGrammarOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectGrammar") as? Bool ?? true
         KeyboardViewController.isAutoCapitalizeOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocapitalizeWords") as? Bool ?? true
+        KeyboardViewController.isTypingHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isTypingHapticEnabled") as? Bool ?? false
+        KeyboardViewController.isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
         KeyboardViewController.currentLocale = Locale(rawValue: UserDefaults.standard.integer(forKey: localeSavePath)) ?? .en_US
         
         if !KeyboardViewController.enabledLocales.contains(KeyboardViewController.currentLocale) {
@@ -395,6 +399,8 @@ class KeyboardViewController: UIInputViewController {
         }
         self.textDocumentProxy.insertText(emoji)
         self.textDocumentProxy.insertText(" ")
+        
+        HapticFeedback.TypingImpactOccured()
     }
     
     func UpdateEmojiSearch () {
@@ -476,6 +482,8 @@ class KeyboardViewController: UIInputViewController {
                 self.middleRowView?.alpha = 0.5
                 self.bottomRowView?.alpha = 0.5
             }
+            
+            HapticFeedback.GestureImpactOccured()
         }
         KeyboardViewController.isLongPressing = true
     }
@@ -489,6 +497,8 @@ class KeyboardViewController: UIInputViewController {
             
             let userDefaults = UserDefaults(suiteName: self.suiteName)
             userDefaults?.setValue(KeyboardViewController.isAutoCorrectOn, forKey: self.ACSavePath)
+            
+            HapticFeedback.GestureImpactOccured()
         }
         KeyboardViewController.isLongPressing = true
     }
@@ -652,7 +662,7 @@ class KeyboardViewController: UIInputViewController {
     func SwipeUp () {
         if KeyboardViewController.currentViewType == .SearchEmoji { return }
         if !self.textDocumentProxy.hasText { return }
-       
+        
         if canEditPrevPunctuation {
             if (pickedPunctuationIndex > 0) {
                 pickedPunctuationIndex -= 1
@@ -858,6 +868,8 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func Delete() {
+        HapticFeedback.GestureImpactOccured()
+        
         if KeyboardViewController.currentViewType == .SearchEmoji {
             emojiSearchBarLabel!.text? = " "
             UpdateEmojiSearch()
