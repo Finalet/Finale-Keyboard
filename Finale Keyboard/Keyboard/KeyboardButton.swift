@@ -54,9 +54,10 @@ class KeyboardButton: UIButton {
     
     func SetupButton () {
         setTitle(action.actionTitle, for: .normal)
-        setTitleColor(.systemPrimary, for: .normal)
+        setTitleColor(.label, for: .normal)
         calloutLabel.text = titleLabel!.text
-        calloutLabel.textColor = titleLabel?.textColor.withAlphaComponent(0)
+        calloutLabel.textColor = titleLabel?.textColor
+        calloutLabel.alpha = 0
         
         if (action.actionType == .Function) {
             setImage(getFunctionActionIcon(function: action.functionType), for: .normal)
@@ -148,7 +149,7 @@ class KeyboardButton: UIButton {
         }
     }
     func ShowCharacterCallout() {
-        calloutLabel.textColor = calloutLabel.textColor.withAlphaComponent(1)
+        calloutLabel.alpha = 1
         setTitleColor(.clear, for: .normal)
         let y = self.frame.height * 0.5
         self.calloutView.backgroundColor = self.mainColor.withAlphaComponent(0.6)
@@ -158,7 +159,7 @@ class KeyboardButton: UIButton {
     }
     func ShowFunctionCallout() {
         calloutView.backgroundColor = self.mainColor.withAlphaComponent(0.6)
-        imageView?.tintColor = .systemPrimary
+        imageView?.tintColor = .label
     }
 
     func HideCharacterCallout(swipeDir: Int) {
@@ -172,8 +173,9 @@ class KeyboardButton: UIButton {
                 self.calloutView.frame.origin.y += y
             }
         } completion: {_ in
-            self.setTitleColor(.systemPrimary, for: .normal)
-            self.calloutLabel.textColor = self.calloutLabel.textColor.withAlphaComponent(0)
+            self.setTitleColor(.label, for: .normal)
+            self.calloutLabel.alpha = 0
+            
             self.calloutImage.tintColor = self.calloutImage.tintColor.withAlphaComponent(0)
             if swipeDir != 0 {
                 self.calloutView.frame.origin.y += y
@@ -205,7 +207,7 @@ class KeyboardButton: UIButton {
     }
     func HideFunctionCallout () {
         if action.functionType == .Shift {
-            imageView?.tintColor = viewController!.shouldCapitalize ? .systemPrimary : .gray
+            imageView?.tintColor = viewController!.shouldCapitalize ? .label : .gray
             if KeyboardViewController.currentViewType == .Characters { setImage(getFunctionActionIcon(function: KeyboardViewController.isCaps ? .Caps : .Shift), for: .normal) }
             else if KeyboardViewController.currentViewType == .Symbols { setImage(getFunctionActionIcon(function: .SymbolsShift), for: .normal) }
             else if KeyboardViewController.currentViewType == .ExtraSymbols { setImage(getFunctionActionIcon(function: .SymbolsShift), for: .normal) }
@@ -240,5 +242,11 @@ class KeyboardButton: UIButton {
         case .none:
             return UIImage(systemName: "exclamationmark.triangle")!
         }
+    }
+    
+    func UpdateColors () {
+        setTitleColor(.label, for: .normal)
+        imageView?.tintColor = .label
+        calloutLabel.textColor = titleLabel?.textColor
     }
 }

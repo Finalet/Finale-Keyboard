@@ -63,7 +63,7 @@ struct DictionaryListView: View {
     }
     
     func delete(at offsets: IndexSet) {
-        userDictionary.remove(atOffsets: offsets)
+        userDictionary.remove(at: userDictionary.firstIndex(of: searchResults[offsets.first!])!)
         SaveUserDictionary()
     }
     

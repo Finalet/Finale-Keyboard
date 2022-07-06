@@ -935,7 +935,7 @@ class KeyboardViewController: UIInputViewController {
         for button in KeyboardButtons {
             if button.action.functionType == .Shift {
                 if (!button.isCalloutShown()) {
-                    button.imageView?.tintColor = shouldCapitalize ? .systemPrimary : .systemGray
+                    button.imageView?.tintColor = shouldCapitalize ? .label : .systemGray
                 }
                 continue
             }
@@ -982,7 +982,7 @@ class KeyboardViewController: UIInputViewController {
         } completion: { [self] _ in
             ResetSuggestionsLabels()
             suggestionLabels[1].text = text
-            suggestionLabels[1].textColor = .systemPrimary
+            suggestionLabels[1].textColor = .label
             UIView.animate(withDuration: 0.3) {
                 self.suggestionLabels[1].alpha = 1
             } completion: { _ in
@@ -1038,7 +1038,7 @@ class KeyboardViewController: UIInputViewController {
     func UpdateSuggestionColor(index: Int) {
         for i in 0..<suggestionLabels.count {
             if index == i {
-                suggestionLabels[i].textColor = .systemPrimary
+                suggestionLabels[i].textColor = .label
                 continue
             }
             suggestionLabels[i].textColor = .gray

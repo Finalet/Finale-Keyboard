@@ -10,7 +10,6 @@ import Foundation
 
 extension UIColor {
     static let clearInteractable = UIColor(red: 1, green: 1, blue: 1, alpha: 0.001)
-    static let systemPrimary = UIView().traitCollection.userInterfaceStyle == .light ? UIColor.black : UIColor.white
 }
 
 extension Dictionary where Value: Equatable {
