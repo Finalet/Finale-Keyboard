@@ -79,4 +79,20 @@
   "input": "м",
   "suggestions": ["и", "с"]
   },
+  {
+  "input": "->",
+  "suggestions": ["→"]
+  },
+  {
+  "input": "<-",
+  "suggestions": ["←"]
+  },
+  {
+  "input": "<->",
+  "suggestions": ["↔"]
+  },
+  {
+  "input": "!=",
+  "suggestions": ["≠"]
+  },
 ]
