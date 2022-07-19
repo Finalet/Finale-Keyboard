@@ -20,11 +20,14 @@ struct ContentView: View {
     
     let suiteName = "group.finale-keyboard-cache"
     
+    @FocusState private var shouldShowKeyboard: Bool
+    
     var body: some View {
         NavigationView {
             List {
                 Section(header: Text("Try it out")) {
                     TextField("Try typing something here", text: $testText)
+                        .focused($shouldShowKeyboard)
                 }
                 Section(header: Text("Preferences")) {
                     ListNavigationLink(destination: FavoriteEmoji(favoriteEmoji: $favoriteEmoji)) {
@@ -85,8 +88,15 @@ struct ContentView: View {
                     ListNavigationButton(action: ContactDeveloper) {
                         Label("Contact developer", systemImage: "message")
                     }
+                    ListNavigationLink(destination: MoreView()) {
+                        Label("More", systemImage: "ellipsis.circle")
+                    }
                 }
-            }.navigationTitle("Finale Keyboard")
+            }
+            .navigationTitle("Finale Keyboard")
+            .simultaneousGesture(DragGesture().onChanged({ _ in
+                shouldShowKeyboard = false
+            }))
         }
         .environmentObject(keyboardState)
         .navigationViewStyle(StackNavigationViewStyle())

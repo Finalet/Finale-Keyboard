@@ -27,6 +27,7 @@
 		37A0AD0727A869BA00578290 /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A0AD0627A869BA00578290 /* KeyboardViewController.swift */; };
 		37A0AD0B27A869BA00578290 /* Keyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 37A0AD0427A869BA00578290 /* Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		37A0AD1327A88AAA00578290 /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A0AD1227A88AAA00578290 /* UIExtensions.swift */; };
+		37AB663E28876ECB00741889 /* MoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37AB663D28876ECB00741889 /* MoreView.swift */; };
 		37B5B99A27A9751000601AB1 /* KeyboardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B5B99927A9751000601AB1 /* KeyboardButton.swift */; };
 /* End PBXBuildFile section */
 
@@ -79,6 +80,7 @@
 		37A0AD0627A869BA00578290 /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		37A0AD0827A869BA00578290 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37A0AD1227A88AAA00578290 /* UIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
+		37AB663D28876ECB00741889 /* MoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreView.swift; sourceTree = "<group>"; };
 		37B5B99927A9751000601AB1 /* KeyboardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -132,6 +134,7 @@
 				379E9FA127DA358000B9ECA6 /* LanguagesSettings.swift */,
 				37256A7827DB52ED0071180B /* DictionaryListView.swift */,
 				374C861927DD74B8003BA47B /* PreferencesView.swift */,
+				37AB663D28876ECB00741889 /* MoreView.swift */,
 			);
 			path = "Finale Keyboard";
 			sourceTree = "<group>";
@@ -274,6 +277,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				379E9FA227DA358000B9ECA6 /* LanguagesSettings.swift in Sources */,
+				37AB663E28876ECB00741889 /* MoreView.swift in Sources */,
 				3743FC5527B1523A0043B2A2 /* KeyboardEnabledState.swift in Sources */,
 				37A0ACF527A8694100578290 /* ContentView.swift in Sources */,
 				3743FC5727B158AD0043B2A2 /* FavoriteEmoji.swift in Sources */,
@@ -432,7 +436,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_ASSET_PATHS = "\"Finale Keyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = AYPPAXMRMG;
 				ENABLE_PREVIEWS = YES;
@@ -447,7 +451,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.15.2;
+				MARKETING_VERSION = 1.15.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Grant151.Finale-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -464,7 +468,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 16;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_ASSET_PATHS = "\"Finale Keyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = AYPPAXMRMG;
 				ENABLE_PREVIEWS = YES;
@@ -479,7 +483,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.15.2;
+				MARKETING_VERSION = 1.15.3;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Grant151.Finale-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
