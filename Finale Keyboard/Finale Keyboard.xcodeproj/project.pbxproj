@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		3709029627B2F54000213BDD /* DefaultDictionary.json in Resources */ = {isa = PBXBuildFile; fileRef = 3709029527B2F54000213BDD /* DefaultDictionary.json */; };
 		371F496827ADA92F00686BC7 /* EmojiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F496727ADA92F00686BC7 /* EmojiView.swift */; };
-		371F496A27ADCCD300686BC7 /* emoji.json in Resources */ = {isa = PBXBuildFile; fileRef = 371F496927ADCCD300686BC7 /* emoji.json */; };
 		3720638627AACEC100964120 /* Gilroy-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3720638527AACEB600964120 /* Gilroy-Medium.ttf */; };
 		3720638827AB2CAF00964120 /* Locales.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3720638727AB2CAF00964120 /* Locales.swift */; };
 		37256A7927DB52ED0071180B /* DictionaryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37256A7827DB52ED0071180B /* DictionaryListView.swift */; };
@@ -29,6 +28,8 @@
 		37A0AD1327A88AAA00578290 /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A0AD1227A88AAA00578290 /* UIExtensions.swift */; };
 		37AB663E28876ECB00741889 /* MoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37AB663D28876ECB00741889 /* MoreView.swift */; };
 		37B5B99A27A9751000601AB1 /* KeyboardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B5B99927A9751000601AB1 /* KeyboardButton.swift */; };
+		37DD00B5288782FB00273BA3 /* Emoji Unicode 14.0.json in Resources */ = {isa = PBXBuildFile; fileRef = 37DD00B4288782FB00273BA3 /* Emoji Unicode 14.0.json */; };
+		37DD00B728878D2C00273BA3 /* Ordered Emoji Unicode 14.0.json in Resources */ = {isa = PBXBuildFile; fileRef = 37DD00B628878D2C00273BA3 /* Ordered Emoji Unicode 14.0.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,7 +59,6 @@
 /* Begin PBXFileReference section */
 		3709029527B2F54000213BDD /* DefaultDictionary.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = DefaultDictionary.json; sourceTree = "<group>"; };
 		371F496727ADA92F00686BC7 /* EmojiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiView.swift; sourceTree = "<group>"; };
-		371F496927ADCCD300686BC7 /* emoji.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = emoji.json; sourceTree = "<group>"; };
 		3720638527AACEB600964120 /* Gilroy-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gilroy-Medium.ttf"; sourceTree = "<group>"; };
 		3720638727AB2CAF00964120 /* Locales.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locales.swift; sourceTree = "<group>"; };
 		37256A7827DB52ED0071180B /* DictionaryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryListView.swift; sourceTree = "<group>"; };
@@ -82,6 +82,8 @@
 		37A0AD1227A88AAA00578290 /* UIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
 		37AB663D28876ECB00741889 /* MoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreView.swift; sourceTree = "<group>"; };
 		37B5B99927A9751000601AB1 /* KeyboardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardButton.swift; sourceTree = "<group>"; };
+		37DD00B4288782FB00273BA3 /* Emoji Unicode 14.0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Emoji Unicode 14.0.json"; sourceTree = "<group>"; };
+		37DD00B628878D2C00273BA3 /* Ordered Emoji Unicode 14.0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Ordered Emoji Unicode 14.0.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -158,7 +160,8 @@
 				3743FC5927B168230043B2A2 /* Keyboard.entitlements */,
 				37A0AD0827A869BA00578290 /* Info.plist */,
 				3720638527AACEB600964120 /* Gilroy-Medium.ttf */,
-				371F496927ADCCD300686BC7 /* emoji.json */,
+				37DD00B4288782FB00273BA3 /* Emoji Unicode 14.0.json */,
+				37DD00B628878D2C00273BA3 /* Ordered Emoji Unicode 14.0.json */,
 				375DFB1627AE9E5E00E304ED /* Images.xcassets */,
 				3709029527B2F54000213BDD /* DefaultDictionary.json */,
 				379865352851176B00A66716 /* HapticFeedback.swift */,
@@ -264,7 +267,8 @@
 			files = (
 				375DFB1727AE9E5E00E304ED /* Images.xcassets in Resources */,
 				3709029627B2F54000213BDD /* DefaultDictionary.json in Resources */,
-				371F496A27ADCCD300686BC7 /* emoji.json in Resources */,
+				37DD00B5288782FB00273BA3 /* Emoji Unicode 14.0.json in Resources */,
+				37DD00B728878D2C00273BA3 /* Ordered Emoji Unicode 14.0.json in Resources */,
 				3720638627AACEC100964120 /* Gilroy-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -436,7 +440,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_ASSET_PATHS = "\"Finale Keyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = AYPPAXMRMG;
 				ENABLE_PREVIEWS = YES;
@@ -468,7 +472,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 17;
+				CURRENT_PROJECT_VERSION = 18;
 				DEVELOPMENT_ASSET_PATHS = "\"Finale Keyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = AYPPAXMRMG;
 				ENABLE_PREVIEWS = YES;

@@ -13,6 +13,10 @@ struct Emoji: Decodable {
     let description: String
     let category: EmojiCategory
 }
+struct Emoji14: Decodable {
+    let name: String
+    let group: String
+}
 
 enum EmojiCategory: String, Decodable {
     case SmileysEmotion = "Smileys & Emotion"
@@ -76,6 +80,7 @@ class EmojiView: UIView, UIScrollViewDelegate {
         
         itemSize = (UIScreen.main.bounds.width-padding*2) / CGFloat(itemsInRow)
         let bottomButtonSize = frame.size.height-itemSize*3
+        let bottomFunctionButtonWidth = bottomButtonSize * 1.2
         
         paginatedView = UIScrollView(frame: CGRect(x: 0, y: 0, width: frame.size.width, height: itemSize*3))
         paginatedView!.backgroundColor = .clearInteractable
@@ -84,21 +89,23 @@ class EmojiView: UIView, UIScrollViewDelegate {
         paginatedView!.contentSize = CGSize(width: frame.size.width*CGFloat(areFavoriteEmpty() ? 9 : 10), height: itemSize*3)
         paginatedView!.showsHorizontalScrollIndicator = false
         
-        pageControl = PageControl(frame: CGRect(x: bottomButtonSize, y: itemSize*3, width: frame.size.width-bottomButtonSize*2, height: bottomButtonSize))
+        pageControl = PageControl(frame: CGRect(x: bottomFunctionButtonWidth, y: itemSize*3, width: frame.size.width-bottomFunctionButtonWidth*2, height: bottomButtonSize))
         pageControl?.emojiView = self
         pageControl?.Setup()
         
         SetupCategoriesView()
         
-        let button = UIButton(frame: CGRect(x: frame.size.width-bottomButtonSize, y: itemSize*3, width: bottomButtonSize, height: bottomButtonSize))
-        button.addTarget(self, action: #selector(Backspace), for: .touchUpInside)
+        let button = UIButton(frame: CGRect(x: frame.size.width-bottomFunctionButtonWidth, y: itemSize*3, width: bottomFunctionButtonWidth, height: bottomButtonSize))
         button.setImage(UIImage(systemName: "delete.left.fill"), for: .normal)
         button.imageView?.tintColor = .gray
+        button.addTarget(self, action: #selector(Backspace), for: .touchUpInside)
+        button.backgroundColor = .clearInteractable
         
-        let button1 = UIButton(frame: CGRect(x: 0, y: itemSize*3, width: bottomButtonSize, height: bottomButtonSize))
-        button1.addTarget(self, action: #selector(ToggleSearchEmojiView), for: .touchUpInside)
+        let button1 = UIButton(frame: CGRect(x: 0, y: itemSize*3, width: bottomFunctionButtonWidth, height: bottomButtonSize))
         button1.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
         button1.imageView?.tintColor = .gray
+        button1.addTarget(self, action: #selector(ToggleSearchEmojiView), for: .touchUpInside)
+        button1.backgroundColor = .clearInteractable
                
         self.addSubview(button)
         self.addSubview(button1)
@@ -155,20 +162,25 @@ class EmojiView: UIView, UIScrollViewDelegate {
     }
     
     func InitArrays () {
-        let data = (try? Data(contentsOf: Bundle.main.url(forResource: "emoji", withExtension: "json")!))!
-        AllEmoji = try! JSONDecoder().decode([Emoji].self, from: data)
+        let emojiData = (try? Data(contentsOf: Bundle.main.url(forResource: "Emoji Unicode 14.0", withExtension: "json")!))!
+        let emojiDict = try! JSONDecoder().decode([String : Emoji14].self, from: emojiData)
+
+        let orderedEmojiData = (try? Data(contentsOf: Bundle.main.url(forResource: "Ordered Emoji Unicode 14.0", withExtension: "json")!))!
+        let orderedEmojies = try! JSONDecoder().decode([String].self, from: orderedEmojiData)
         
-        for i in AllEmoji {
-            switch i.category {
-            case .SmileysEmotion: SmileysEmotion.append(i)
-            case .PeopleBody: PeopleBody.append(i)
-            case .AnimalsNature: AnimalsNature.append(i)
-            case .FoodDrink: FoodDrink.append(i)
-            case .TravelPlaces: TravelPlaces.append(i)
-            case .Activities: Activities.append(i)
-            case .Objects: Objects.append(i)
-            case .Symbols: Symbols.append(i)
-            case .Flags: Flags.append(i)
+        for emoji in orderedEmojies {
+            let newEmoji = Emoji(emoji: emoji, description: emojiDict[emoji]!.name, category: EmojiCategory(rawValue: emojiDict[emoji]!.group)!)
+            AllEmoji.append(newEmoji)
+            switch newEmoji.category {
+            case .SmileysEmotion: SmileysEmotion.append(newEmoji)
+            case .PeopleBody: PeopleBody.append(newEmoji)
+            case .AnimalsNature: AnimalsNature.append(newEmoji)
+            case .FoodDrink: FoodDrink.append(newEmoji)
+            case .TravelPlaces: TravelPlaces.append(newEmoji)
+            case .Activities: Activities.append(newEmoji)
+            case .Objects: Objects.append(newEmoji)
+            case .Symbols: Symbols.append(newEmoji)
+            case .Flags: Flags.append(newEmoji)
             }
         }
         

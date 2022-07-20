@@ -104,7 +104,6 @@ class KeyboardViewController: UIInputViewController {
     let suiteName = "group.finale-keyboard-cache"
     let ACSavePath = "FINALE_DEV_APP_autocorrectWords"
     let localeSavePath = "FINALE_DEV_APP_CurrentLocale"
-        
     
     override func viewDidLoad() {
         super.viewDidLoad()
