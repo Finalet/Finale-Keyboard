@@ -17,6 +17,7 @@ struct MoreView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(height: 40)
+                    .cornerRadius(8)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.gray, lineWidth: 1)
@@ -29,6 +30,7 @@ struct MoreView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(height: 40)
+                    .cornerRadius(8)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.gray, lineWidth: 1)
