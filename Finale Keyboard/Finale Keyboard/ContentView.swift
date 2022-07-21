@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  Finale Keyboard
 //
-//  Created by Grant Oganan on 1/31/22.
+//  Created by Grant Oganyan on 1/31/22.
 //
 
 import SwiftUI
@@ -22,17 +22,19 @@ struct ContentView: View {
     
     @FocusState private var shouldShowKeyboard: Bool
     
+    typealias Localize = Localization.HomeScreen
+    
     var body: some View {
         NavigationView {
             List {
-                Section(header: Text("Try it out")) {
-                    TextField("Try typing something here", text: $testText)
+                Section(header: Text(Localize.inputFieldTitle)) {
+                    TextField(Localize.inputFieldPlaceholder, text: $testText)
                         .focused($shouldShowKeyboard)
                 }
-                Section(header: Text("Preferences")) {
+                Section(header: Text(Localize.preferencesTitle)) {
                     ListNavigationLink(destination: FavoriteEmoji(favoriteEmoji: $favoriteEmoji)) {
                         Label(title: {
-                            Text("Favorite emoji")
+                            Text(Localize.favoriteEmojiRow)
                         }, icon: {
                             Image(systemName: "heart")
                                 .foregroundColor(.red)
@@ -40,7 +42,7 @@ struct ContentView: View {
                     }
                     ListNavigationLink(destination: LanguagesSettings(EN_enabled: $EN_enabled, RU_enabled: $RU_enabled)) {
                         Label(title: {
-                            Text("Languages")
+                            Text(Localize.languagesRow)
                         }, icon: {
                             Image(systemName: "globe")
                                 .foregroundColor(.blue)
@@ -48,7 +50,7 @@ struct ContentView: View {
                     }
                     ListNavigationLink(destination: DictionaryListView()) {
                         Label(title: {
-                            Text("Dictionary")
+                            Text(Localize.dictionaryRow)
                         }, icon: {
                             Image(systemName: "character.book.closed")
                                 .foregroundColor(.blue)
@@ -56,40 +58,40 @@ struct ContentView: View {
                     }
                     ListNavigationLink(destination: PreferencesView()) {
                         Label(title: {
-                            Text("Preferences")
+                            Text(Localize.preferencesRow)
                         }, icon: {
                             Image(systemName: "square.and.pencil")
                                 .foregroundColor(.blue)
                         } )
                     }
                 }
-                Section(header: Text("Setup"), footer: footerText) {
+                Section(header: Text(Localize.setupTitle), footer: footerText) {
                     EnabledListItem(
                         isEnabled: isKeyboardEnabled,
-                        enabledText: "Keyboard is enabled",
-                        disabledText: "Keyboard is disabled")
+                        enabledText: Localize.keyboardEnabledAlert,
+                        disabledText: Localize.keyboardDisabledAlert)
                     EnabledListItem(
                         isEnabled: isFullAccessEnabled,
-                        enabledText: "Full Access is enabled",
-                        disabledText: "Full Access is disabled")
+                        enabledText: Localize.keyboardFullAccessEnabled,
+                        disabledText: Localize.keyboardFullAccessDisabled)
                     ListNavigationButton(action: openSettings) {
-                        Label("System settings", systemImage: "gearshape")
+                        Label(Localize.systemSettingsRow, systemImage: "gearshape")
                     }
                 }
-                Section(header: Text("Help")){
+                Section(header: Text(Localize.helpTitle)){
                     ListNavigationLink(destination: TutorialView()) {
                         Label(title: {
-                                    Text("Gestures guide")
+                            Text(Localize.gesturesGuideRow)
                                 }, icon: {
                                     Image(systemName: "hand.draw")
                                         .foregroundColor(.blue)
                                 } )
                     }
                     ListNavigationButton(action: ContactDeveloper) {
-                        Label("Contact developer", systemImage: "message")
+                        Label(Localize.contactDeveloperRow, systemImage: "message")
                     }
                     ListNavigationLink(destination: MoreView()) {
-                        Label("More", systemImage: "ellipsis.circle")
+                        Label(Localize.moreRow, systemImage: "ellipsis.circle")
                     }
                 }
             }
@@ -126,7 +128,7 @@ struct ContentView: View {
 private extension ContentView {
     
     var footerText: some View {
-        Text("You should enable Finale keyboard under system settings, then select it with 🌐 when typing.")
+        Text(Localize.setupFooter)
     }
 }
 

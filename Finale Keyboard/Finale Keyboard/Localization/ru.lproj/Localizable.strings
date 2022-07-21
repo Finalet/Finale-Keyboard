@@ -1,0 +1,22 @@
+"home_input_field_title" = "Попробуйте";
+"home_input_field_placeholder" = "Напечатайте что-нибудь";
+
+"home_preferences_title" = "Настройки";
+"home_favorite_emoji_row" = "Избранные Эмодзи";
+"home_languages_row" = "Языки";
+"home_dictionary_row" = "Словарь";
+"home_preferences_row" = "Настройки";
+
+"home_setup_title" = "Установки";
+"home_setup_footer" = "Включите Finale Keyboard в системных настройках, а потом переключитесь на нее с помощью 🌐.";
+"home_keyboard_disabled_row" = "Клавиатура отключена";
+"home_keyboard_enabled_row" = "Клавиатура включена";
+"home_keyboard_full_access_disabled_row" = "Полный доступ отключен";
+"home_keyboard_full_access_enabled_row" = "Полный доступ включен";
+"home_system_settings_row" = "Системные настройки";
+
+
+"home_help_title" = "Помощь";
+"home_gestures_guide_row" = "Руководство по жестам";
+"home_contact_developer_row" = "Связаться с разработчиком";
+"home_more_row" = "Дополнительно";

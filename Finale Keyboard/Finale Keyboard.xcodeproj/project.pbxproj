@@ -28,6 +28,8 @@
 		37A0AD1327A88AAA00578290 /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A0AD1227A88AAA00578290 /* UIExtensions.swift */; };
 		37AB663E28876ECB00741889 /* MoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37AB663D28876ECB00741889 /* MoreView.swift */; };
 		37B5B99A27A9751000601AB1 /* KeyboardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B5B99927A9751000601AB1 /* KeyboardButton.swift */; };
+		37CE328B2889FF41002DAD2A /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CE328A2889FF41002DAD2A /* Localization.swift */; };
+		37CE3295288A05E9002DAD2A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 37CE3297288A05E9002DAD2A /* Localizable.strings */; };
 		37DD00B5288782FB00273BA3 /* Emoji Unicode 14.0.json in Resources */ = {isa = PBXBuildFile; fileRef = 37DD00B4288782FB00273BA3 /* Emoji Unicode 14.0.json */; };
 		37DD00B728878D2C00273BA3 /* Ordered Emoji Unicode 14.0.json in Resources */ = {isa = PBXBuildFile; fileRef = 37DD00B628878D2C00273BA3 /* Ordered Emoji Unicode 14.0.json */; };
 /* End PBXBuildFile section */
@@ -82,6 +84,9 @@
 		37A0AD1227A88AAA00578290 /* UIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
 		37AB663D28876ECB00741889 /* MoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreView.swift; sourceTree = "<group>"; };
 		37B5B99927A9751000601AB1 /* KeyboardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardButton.swift; sourceTree = "<group>"; };
+		37CE328A2889FF41002DAD2A /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
+		37CE3298288A05EC002DAD2A /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		37CE329A288A1051002DAD2A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		37DD00B4288782FB00273BA3 /* Emoji Unicode 14.0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Emoji Unicode 14.0.json"; sourceTree = "<group>"; };
 		37DD00B628878D2C00273BA3 /* Ordered Emoji Unicode 14.0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Ordered Emoji Unicode 14.0.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -125,6 +130,7 @@
 		37A0ACF127A8694100578290 /* Finale Keyboard */ = {
 			isa = PBXGroup;
 			children = (
+				37CE32872889FEF8002DAD2A /* Localization */,
 				3743FC5827B168090043B2A2 /* Finale Keyboard.entitlements */,
 				37A0ACF227A8694100578290 /* Finale_KeyboardApp.swift */,
 				37A0ACF427A8694100578290 /* ContentView.swift */,
@@ -167,6 +173,15 @@
 				379865352851176B00A66716 /* HapticFeedback.swift */,
 			);
 			path = Keyboard;
+			sourceTree = "<group>";
+		};
+		37CE32872889FEF8002DAD2A /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+				37CE328A2889FF41002DAD2A /* Localization.swift */,
+				37CE3297288A05E9002DAD2A /* Localizable.strings */,
+			);
+			path = Localization;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -237,6 +252,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 37A0ACE627A8694100578290;
 			packageReferences = (
@@ -257,6 +273,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				37A0ACFA27A8694200578290 /* Preview Assets.xcassets in Resources */,
+				37CE3295288A05E9002DAD2A /* Localizable.strings in Resources */,
 				37A0ACF727A8694200578290 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -281,6 +298,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				379E9FA227DA358000B9ECA6 /* LanguagesSettings.swift in Sources */,
+				37CE328B2889FF41002DAD2A /* Localization.swift in Sources */,
 				37AB663E28876ECB00741889 /* MoreView.swift in Sources */,
 				3743FC5527B1523A0043B2A2 /* KeyboardEnabledState.swift in Sources */,
 				37A0ACF527A8694100578290 /* ContentView.swift in Sources */,
@@ -315,11 +333,24 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		37CE3297288A05E9002DAD2A /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				37CE3298288A05EC002DAD2A /* ru */,
+				37CE329A288A1051002DAD2A /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		37A0ACFB27A8694200578290 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
@@ -381,6 +412,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
