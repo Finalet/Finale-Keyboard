@@ -2,7 +2,7 @@
 //  Finale_KeyboardApp.swift
 //  Finale Keyboard
 //
-//  Created by Grant Oganan on 1/31/22.
+//  Created by Grant Oganyan on 1/31/22.
 //
 
 import SwiftUI
