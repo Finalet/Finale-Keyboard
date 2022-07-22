@@ -2,7 +2,7 @@
 //  FavoriteEmoji.swift
 //  Finale Keyboard
 //
-//  Created by Grant Oganan on 2/7/22.
+//  Created by Grant Oganyan on 2/7/22.
 //
 
 import SwiftUI
