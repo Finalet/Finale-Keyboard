@@ -1,2 +1,2 @@
 # Finale-Keyboard
-Minimalistic iOS keyboard built around gestures.
+Minimalistic iOS keyboard built around gestures
