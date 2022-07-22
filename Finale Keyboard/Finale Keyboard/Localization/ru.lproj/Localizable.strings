@@ -15,8 +15,24 @@
 "home_keyboard_full_access_enabled_row" = "Полный доступ включен";
 "home_system_settings_row" = "Системные настройки";
 
-
 "home_help_title" = "Помощь";
 "home_gestures_guide_row" = "Руководство по жестам";
 "home_contact_developer_row" = "Связаться с разработчиком";
 "home_more_row" = "Дополнительно";
+
+"favorite_emoji_footer" = "Выберите эмодзи, которые будут показаны первыми в эмодзи клавиатуре.";
+
+"languages_title" = "Языки";
+"languages_english" = "Английский";
+"languages_russian" = "Русский";
+
+"dictionary_learn_words_automatically" = "Учить слова автоматически";
+"dictionary_learn_words_automatically_toggle_is_on" = "Выключите, что бы Finale перестал учить новые слова автоматически. При этом, вы сможете добавлять новые слова вручную свайпом вверх.";
+"dictionary_learn_words_automatically_toggle_is_off" = "Включите, что бы Finale начал учить новые слова автоматически. При этом, вы сможете добавлять новые слова вручную свайпом вверх.";
+"dictionary_footer" = "Finale может учить новые слова. Напишите новое слово и свайпните вверх, что бы добавить его в словарь.";
+
+"preferences_autocorrect_words" = "Автокоррекция слов";
+"preferences_autocorrect_grammar" = "Автокоррекция грамматики";
+"preferences_autocapitalize_words" = "Автозаглавные слова";
+"preferences_typing_haptic" = "Тактильная отдача для клавиш";
+"preferences_gestures_haptic" = "Тактильная отдача для жестов";

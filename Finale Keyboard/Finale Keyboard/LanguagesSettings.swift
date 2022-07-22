@@ -16,20 +16,20 @@ struct LanguagesSettings: View {
     
     var body: some View {
         List {
-            Toggle("English", isOn: $EN_enabled)
+            Toggle(Localization.LanguagesScreen.english, isOn: $EN_enabled)
                 .toggleStyle(SwitchToggleStyle(tint: tintColor))
                 .disabled(isOneLanguageOnly && EN_enabled)
                 .onChange(of: EN_enabled) { value in
                     OnChange()
                 }
-            Toggle("Russian", isOn: $RU_enabled)
+            Toggle(Localization.LanguagesScreen.russian, isOn: $RU_enabled)
                 .toggleStyle(SwitchToggleStyle(tint: tintColor))
                 .disabled(isOneLanguageOnly && RU_enabled)
                 .onChange(of: RU_enabled) { value in
                     OnChange()
                 }
         }
-        .navigationTitle("Languages")
+        .navigationTitle(Localization.LanguagesScreen.title)
         .onAppear() {
             CheckLanguages()
         }

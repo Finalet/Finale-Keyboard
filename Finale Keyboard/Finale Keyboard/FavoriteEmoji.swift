@@ -13,7 +13,7 @@ struct FavoriteEmoji: View {
         
     var body: some View {
         List {
-            Section(footer: Text("Pick emoji that are going to show up first in the emoji keyboard.")) {
+            Section(footer: Text(Localization.FavoriteEmojiScreen.footer)) {
                 HStack(alignment: .center, spacing: 5) {
                     ForEach (0..<8) { i in
                         TextField("", text: $favoriteEmoji[i])
@@ -68,7 +68,7 @@ struct FavoriteEmoji: View {
                 }.listRowSeparator(.hidden)
             }
         }
-        .navigationTitle("Favorite Emoji")
+        .navigationTitle(Localization.FavoriteEmojiScreen.title)
         .onTapGesture() {
             UIApplication.shared.endEditing()
             focusCell = -1

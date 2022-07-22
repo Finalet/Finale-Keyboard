@@ -19,39 +19,41 @@ struct PreferencesView: View {
     
     let suiteName = "group.finale-keyboard-cache"
     
+    typealias Localize = Localization.PreferencesScreen
+    
     var body: some View {
         List {
             Section {
-                Toggle("Auto-correct words", isOn: $autocorrectWords)
+                Toggle(Localize.autocorrectWords, isOn: $autocorrectWords)
                 .toggleStyle(SwitchToggleStyle(tint: tintColor))
                 .onChange(of: autocorrectWords) { value in
                     OnChange()
                 }
-                Toggle("Auto-correct grammar", isOn: $autocorrectGrammar)
+                Toggle(Localize.autocorrectGrammar, isOn: $autocorrectGrammar)
                 .toggleStyle(SwitchToggleStyle(tint: tintColor))
                 .onChange(of: autocorrectGrammar) { value in
                     OnChange()
                 }
-                Toggle("Auto-capitalize words", isOn: $autocapitalizeWords)
+                Toggle(Localize.autocapitalizeWords, isOn: $autocapitalizeWords)
                 .toggleStyle(SwitchToggleStyle(tint: tintColor))
                 .onChange(of: autocapitalizeWords) { value in
                     OnChange()
                 }
             }
             Section {
-                Toggle("Typing Haptic Feedback", isOn: $isTypingHapticEnabled)
-                .toggleStyle(SwitchToggleStyle(tint: tintColor))
-                .onChange(of: isTypingHapticEnabled) { value in
-                    OnChange()
-                }
-                Toggle("Gestures Haptic Feedback", isOn: $isGesturesHapticEnabled)
+                Toggle(Localize.gesturesHapticFeedback, isOn: $isGesturesHapticEnabled)
                 .toggleStyle(SwitchToggleStyle(tint: tintColor))
                 .onChange(of: isGesturesHapticEnabled) { value in
                     OnChange()
                 }
+                Toggle(Localize.typingHapticFeedback, isOn: $isTypingHapticEnabled)
+                .toggleStyle(SwitchToggleStyle(tint: tintColor))
+                .onChange(of: isTypingHapticEnabled) { value in
+                    OnChange()
+                }
             }
         }
-        .navigationTitle("Preferences")
+        .navigationTitle(Localize.title)
         .onAppear {
             Load()
         }

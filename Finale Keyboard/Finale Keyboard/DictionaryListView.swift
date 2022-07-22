@@ -20,20 +20,20 @@ struct DictionaryListView: View {
     var body: some View {
         List {
             Section (footer: Text(footerText)) {
-                Toggle("Learn words automatically", isOn: $autoLearnWords)
+                Toggle(Localization.DictionaryScreen.learnWordsAutomatically, isOn: $autoLearnWords)
                     .toggleStyle(SwitchToggleStyle(tint: tintColor))
                     .onChange(of: autoLearnWords) { value in
                         OnChange()
                     }
             }
-            Section(footer: Text("Finale can 'learn' new words. Just swipe up after typing an unrecognized word to add it to the dictionary.")) {
+            Section(footer: Text(Localization.DictionaryScreen.footer)) {
                 ForEach(searchResults, id: \.self) { word in
                     Text(word)
                 }
                 .onDelete(perform: delete)
             }
         }
-        .navigationTitle("Dictionary")
+        .navigationTitle(Localization.DictionaryScreen.title)
         .onAppear {
             Load()
         }
@@ -46,12 +46,7 @@ struct DictionaryListView: View {
     }
     
     var footerText: String {
-        if autoLearnWords {
-            return "Turn off to stop Finale from automatically learning new words. You will still be able to add new words by swiping up."
-        } else {
-            return "Turn on to make Finale automatically learn new words. You will still be able to add new words by swiping up."
-        }
-        
+        return autoLearnWords ? Localization.DictionaryScreen.learnWordsAutomaticallyIsOn : Localization.DictionaryScreen.learnWordsAutomaticallyIsOff
     }
     
     var searchResults: [String] {

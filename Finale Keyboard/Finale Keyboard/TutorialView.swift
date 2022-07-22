@@ -32,7 +32,7 @@ struct TutorialView: View {
                 .tabViewStyle(.page)
                 .indexViewStyle(.page(backgroundDisplayMode: .always))
                 .aspectRatio(CGSize(width: 1, height: 0.99), contentMode: .fit)
-                TextField("Try typing something here", text: $testText)
+                TextField(Localization.GesturesGuideScreen.inputFieldPlaceholder, text: $testText)
                     .padding()
                     .background(Color(UIColor.systemGray5))
             }
