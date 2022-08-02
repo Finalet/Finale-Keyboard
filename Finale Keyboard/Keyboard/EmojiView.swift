@@ -192,19 +192,14 @@ class EmojiView: UIView, UIScrollViewDelegate {
     func getEmojiSearchResults (searchTerm: String) -> String {
         if searchTerm.isEmpty || searchTerm == " " { return ""}
         
-        let result: [Emoji]
-        if searchTerm.last == " " {
-            var removeSpace = searchTerm
-            removeSpace.removeLast()
-            result = AllEmoji.filter { $0.description.range(of: "\\b\(removeSpace)\\b", options: [.regularExpression, .caseInsensitive]) != nil }
-        } else {
-            result = AllEmoji.filter { $0.description.contains(searchTerm) }
-        }
+        var cleanSearchTerm = searchTerm
+        if cleanSearchTerm.last == " " { cleanSearchTerm.removeLast() }
+        let result = AllEmoji.filter { $0.description.localizedCaseInsensitiveContains(cleanSearchTerm) }
         
         let sortedResult = result.sorted { $0.description.count < $1.description.count }
         
         var output = ""
-        for i in 0..<6 {
+        for i in 0..<20 {
             if sortedResult.count>i { output.append(sortedResult[i].emoji)
             } else { break }
         }

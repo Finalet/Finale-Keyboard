@@ -44,7 +44,7 @@ class KeyboardViewController: UIInputViewController {
     var bottomRowView: UIView?
     var emojiView: EmojiView?
     var emojiSearchBarLabel: UILabel?
-    var emojiSearchResultsContainer: UIView?
+    var emojiSearchResultsContainer: UIScrollView?
     var emojiSearchResultsPlaceholder: UILabel?
     var emojiSearchResults: String = ""
     var emojiSearchCarret: UIView?
@@ -242,7 +242,7 @@ class KeyboardViewController: UIInputViewController {
             emojiSearchResultsPlaceholder!.text = "Search Emoji"
             emojiSearchResultsPlaceholder!.textColor = .systemGray
             
-            emojiSearchResultsContainer = UIView(frame: CGRect(x: halfWidth*0.75+padding, y: 0, width: halfWidth*1.25+padding, height: emojiRowHeight))
+            emojiSearchResultsContainer = UIScrollView(frame: CGRect(x: halfWidth*0.75, y: 0, width: rowWidth-halfWidth*0.75+padding, height: emojiRowHeight))
             
             emojiSearchCarret = UIView(frame: CGRect(x: emojiSearchBarLabel!.intrinsicContentSize.width, y: padding, width: 2, height: emojiRowHeight*0.8-padding))
             emojiSearchCarret?.backgroundColor = .systemGray
@@ -410,13 +410,17 @@ class KeyboardViewController: UIInputViewController {
         if emojiSearchBarLabel!.text!.isEmpty || emojiSearchBarLabel!.text! == " " { emojiSearchResultsPlaceholder!.text = "Search Emoji" }
         else { emojiSearchResultsPlaceholder!.text = emojiSearchResults.isEmpty ? "No emoji found" : "" }
         
-        emojiSearchResultsContainer!.subviews.forEach({ $0.removeFromSuperview() })
+        emojiSearchResultsContainer!.subviews.forEach({
+            if $0 is EmojiSearchResultButton { $0.removeFromSuperview() }
+        })
         
         for i in 0..<emojiSearchResults.count {
             let emoji = EmojiSearchResultButton(frame: CGRect(x: CGFloat(i)*emojiSearchResultsContainer!.frame.size.height, y: 0, width: emojiSearchResultsContainer!.frame.size.height, height: emojiSearchResultsContainer!.frame.size.height))
             emoji.Setup(viewController: self, emoji: emojiSearchResults[emojiSearchResults.index(emojiSearchResults.startIndex, offsetBy: i)].description)
             emojiSearchResultsContainer?.addSubview(emoji)
         }
+        emojiSearchResultsContainer?.contentSize = CGSize(width: CGFloat(emojiSearchResults.count)*emojiSearchResultsContainer!.frame.size.height, height: emojiSearchResultsContainer!.frame.height)
+        emojiSearchResultsContainer?.contentOffset = CGPoint.zero
     }
     
     func PerformActionFunction (function: FunctionType) {
@@ -1254,23 +1258,20 @@ class EmojiSearchResultButton: UIView {
         emojiLabel.text = emoji
         emojiLabel.textAlignment = .center
         
-        let touch = UILongPressGestureRecognizer(target: self, action: #selector(RegisterPress))
-        touch.minimumPressDuration = 0
+        let touch = UITapGestureRecognizer(target: self, action: #selector(RegisterPress))
         self.addGestureRecognizer(touch)
         self.addSubview(emojiLabel)
     }
     
     @objc func RegisterPress (gesture: UILongPressGestureRecognizer) {
-        if (gesture.state == .began) {
-            viewController?.TypeEmoji(emoji: emoji!)
+        viewController?.TypeEmoji(emoji: emoji!)
+        UIView.animate(withDuration: 0.05, delay: 0, options: [.allowUserInteraction, .curveEaseOut]) {
+            self.frame.origin.y -= self.frame.size.height*0.3
+            self.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+        } completion: { _ in
             UIView.animate(withDuration: 0.05, delay: 0, options: [.allowUserInteraction, .curveEaseOut]) {
-                self.frame.origin.y -= self.frame.size.height*0.3
-                self.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
-            } completion: { _ in
-                UIView.animate(withDuration: 0.05, delay: 0, options: [.allowUserInteraction, .curveEaseOut]) {
-                    self.transform = CGAffineTransform(scaleX: 1, y: 1)
-                    self.frame.origin.y = 0
-                }
+                self.transform = CGAffineTransform(scaleX: 1, y: 1)
+                self.frame.origin.y = 0
             }
         }
     }
