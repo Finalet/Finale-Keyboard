@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		3709029627B2F54000213BDD /* DefaultDictionary.json in Resources */ = {isa = PBXBuildFile; fileRef = 3709029527B2F54000213BDD /* DefaultDictionary.json */; };
+		370B056A28B3F0EF0062000A /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370B056928B3F0EF0062000A /* Defaults.swift */; };
+		370B056B28B3F1080062000A /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370B056928B3F0EF0062000A /* Defaults.swift */; };
 		371F496827ADA92F00686BC7 /* EmojiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F496727ADA92F00686BC7 /* EmojiView.swift */; };
 		3720638627AACEC100964120 /* Gilroy-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3720638527AACEB600964120 /* Gilroy-Medium.ttf */; };
 		3720638827AB2CAF00964120 /* Locales.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3720638727AB2CAF00964120 /* Locales.swift */; };
@@ -60,6 +62,7 @@
 
 /* Begin PBXFileReference section */
 		3709029527B2F54000213BDD /* DefaultDictionary.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = DefaultDictionary.json; sourceTree = "<group>"; };
+		370B056928B3F0EF0062000A /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		371F496727ADA92F00686BC7 /* EmojiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiView.swift; sourceTree = "<group>"; };
 		3720638527AACEB600964120 /* Gilroy-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gilroy-Medium.ttf"; sourceTree = "<group>"; };
 		3720638727AB2CAF00964120 /* Locales.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locales.swift; sourceTree = "<group>"; };
@@ -163,6 +166,7 @@
 				37B5B99927A9751000601AB1 /* KeyboardButton.swift */,
 				3720638727AB2CAF00964120 /* Locales.swift */,
 				371F496727ADA92F00686BC7 /* EmojiView.swift */,
+				370B056928B3F0EF0062000A /* Defaults.swift */,
 				3743FC5927B168230043B2A2 /* Keyboard.entitlements */,
 				37A0AD0827A869BA00578290 /* Info.plist */,
 				3720638527AACEB600964120 /* Gilroy-Medium.ttf */,
@@ -307,6 +311,7 @@
 				374C861A27DD74B8003BA47B /* PreferencesView.swift in Sources */,
 				37256A7927DB52ED0071180B /* DictionaryListView.swift in Sources */,
 				37A0ACF327A8694100578290 /* Finale_KeyboardApp.swift in Sources */,
+				370B056B28B3F1080062000A /* Defaults.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,6 +321,7 @@
 			files = (
 				37A0AD1327A88AAA00578290 /* UIExtensions.swift in Sources */,
 				371F496827ADA92F00686BC7 /* EmojiView.swift in Sources */,
+				370B056A28B3F0EF0062000A /* Defaults.swift in Sources */,
 				37A0AD0727A869BA00578290 /* KeyboardViewController.swift in Sources */,
 				37B5B99A27A9751000601AB1 /* KeyboardButton.swift in Sources */,
 				3720638827AB2CAF00964120 /* Locales.swift in Sources */,
