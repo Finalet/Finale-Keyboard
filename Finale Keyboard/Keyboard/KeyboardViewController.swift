@@ -154,6 +154,7 @@ class KeyboardViewController: UIInputViewController {
     
     func LoadPreferences () {
         let userDefaults = UserDefaults(suiteName: suiteName)
+        
         let EN_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_en_locale_enabled") as? Bool ?? true
         let RU_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_ru_locale_enabled") as? Bool ?? false
         KeyboardViewController.enabledLocales.removeAll()
@@ -165,6 +166,7 @@ class KeyboardViewController: UIInputViewController {
         KeyboardViewController.isAutoCapitalizeOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocapitalizeWords") as? Bool ?? true
         KeyboardViewController.isTypingHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isTypingHapticEnabled") as? Bool ?? false
         KeyboardViewController.isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
+        punctuationArray = userDefaults?.value(forKey: "FINALE_DEV_APP_punctuationArray") as? [String] ?? punctuationArray
         KeyboardViewController.currentLocale = Locale(rawValue: UserDefaults.standard.integer(forKey: localeSavePath)) ?? .en_US
         
         if !KeyboardViewController.enabledLocales.contains(KeyboardViewController.currentLocale) {
@@ -630,7 +632,7 @@ class KeyboardViewController: UIInputViewController {
             
             var index = 1
             if isPunctuation(char: getOneBeforeLastChar()) {
-                index = punctiationArray.firstIndex(of: getOneBeforeLastChar())!
+                index = punctuationArray.firstIndex(of: getOneBeforeLastChar())!
             } else {
                 ResetSuggestionsLabels()
             }
@@ -645,7 +647,7 @@ class KeyboardViewController: UIInputViewController {
         if !self.textDocumentProxy.hasText { return }
         
         if canEditPrevPunctuation {
-            if (pickedPunctuationIndex < punctiationArray.count-1) {
+            if (pickedPunctuationIndex < punctuationArray.count-1) {
                 pickedPunctuationIndex += 1
                 EditPreviousPunctuation()
             }
@@ -653,7 +655,7 @@ class KeyboardViewController: UIInputViewController {
         }
         
         if isPunctuation(char: getOneBeforeLastChar()) && isPunctuation(char: getLastChar()) {
-            if (pickedPunctuationIndex < punctiationArray.count-1) {
+            if (pickedPunctuationIndex < punctuationArray.count-1) {
                 pickedPunctuationIndex += 1
                 ReplacePunctiation()
             }
@@ -837,7 +839,7 @@ class KeyboardViewController: UIInputViewController {
         for _ in 0...1 {
             self.textDocumentProxy.deleteBackward()
         }
-        self.textDocumentProxy.insertText(punctiationArray[pickedPunctuationIndex])
+        self.textDocumentProxy.insertText(punctuationArray[pickedPunctuationIndex])
         self.textDocumentProxy.insertText(" ")
         
         UpdateSuggestionsLabelsPunctuation()
@@ -917,7 +919,7 @@ class KeyboardViewController: UIInputViewController {
         AnimateSuggestionLabels(index: pickedPunctuationIndex, instant: true)
         
         self.textDocumentProxy.deleteBackward()
-        self.textDocumentProxy.insertText(String(punctiationArray[index]) + " ")
+        self.textDocumentProxy.insertText(String(punctuationArray[index]) + " ")
         
         canEditPrevPunctuation = true
         
@@ -968,7 +970,7 @@ class KeyboardViewController: UIInputViewController {
     
     func RedrawSuggestionsLabels () {
         if isPunctuation(char: getOneBeforeLastChar()) {
-            pickedPunctuationIndex = punctiationArray.firstIndex(of: getOneBeforeLastChar())!
+            pickedPunctuationIndex = punctuationArray.firstIndex(of: getOneBeforeLastChar())!
             UpdateSuggestionsLabelsPunctuation()
             AnimateSuggestionLabels(index: pickedPunctuationIndex, instant: true)
         } else {
@@ -1030,8 +1032,8 @@ class KeyboardViewController: UIInputViewController {
     }
     func UpdateSuggestionsLabelsPunctuation () {
         for i in 0..<suggestionLabels.count {
-            if punctiationArray.count > i {
-                suggestionLabels[i].text = punctiationArray[i]
+            if punctuationArray.count > i {
+                suggestionLabels[i].text = punctuationArray[i]
             } else {
                 suggestionLabels[i].text = ""
             }
@@ -1127,7 +1129,7 @@ class KeyboardViewController: UIInputViewController {
     }
 
     func isPunctuation(char: String) -> Bool {
-        return punctiationArray.contains(char)
+        return punctuationArray.contains(char)
     }
     func isPunctuation (char: String, ignoreCharacters: [String]) -> Bool {
         if ignoreCharacters.contains(char) { return false }
