@@ -60,6 +60,19 @@ struct Localization {
         static var autocapitalizeWords = NSLocalizedString("preferences_autocapitalize_words", value: "Autocapitalize Words", comment: "")
         static var typingHapticFeedback = NSLocalizedString("preferences_typing_haptic", value: "Typing Haptic Feedback", comment: "")
         static var gesturesHapticFeedback = NSLocalizedString("preferences_gestures_haptic", value: "Gestures Haptic Feedback", comment: "")
+        
+        struct Punctuation {
+            static var pageTitle = NSLocalizedString("preferences_punctuation_page_title", value: "Quick Punctuation", comment: "")
+            static var first = NSLocalizedString("preferences_punctuation_first", value: "First", comment: "")
+            static var second = NSLocalizedString("preferences_punctuation_second", value: "Second", comment: "")
+            static var third = NSLocalizedString("preferences_punctuation_third", value: "Third", comment: "")
+            static var fourth = NSLocalizedString("preferences_punctuation_fourth", value: "Fourth", comment: "")
+            static var fifth = NSLocalizedString("preferences_punctuation_fifth", value: "Fifth", comment: "")
+            static var sixth = NSLocalizedString("preferences_punctuation_sixth", value: "Sixth", comment: "")
+            static var seventh = NSLocalizedString("preferences_punctuation_seventh", value: "Seventh", comment: "")
+            
+            static var reset = NSLocalizedString("preferences_punctuation_reset", value: "Reset to Defaults", comment: "")
+        }
     }
     
     struct GesturesGuideScreen {

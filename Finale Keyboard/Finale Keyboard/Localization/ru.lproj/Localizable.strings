@@ -36,3 +36,13 @@
 "preferences_autocapitalize_words" = "Автозаглавные слова";
 "preferences_typing_haptic" = "Тактильная отдача для клавиш";
 "preferences_gestures_haptic" = "Тактильная отдача для жестов";
+
+"preferences_punctuation_page_title" = "Знаки препинания";
+"preferences_punctuation_first" = "Первый";
+"preferences_punctuation_second" = "Второй";
+"preferences_punctuation_third" = "Третий";
+"preferences_punctuation_fourth" = "Четвертый";
+"preferences_punctuation_fifth" = "Пятый";
+"preferences_punctuation_sixth" = "Шестой";
+"preferences_punctuation_seventh" = "Седьмой";
+"preferences_punctuation_reset" = "Восстановить по умолчанию";
