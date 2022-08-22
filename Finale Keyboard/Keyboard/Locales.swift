@@ -56,4 +56,4 @@ let bottomRowExtraSymbols = [KeyboardViewController.Action(type: .Function, titl
                         KeyboardViewController.Action(type: .Character, title: "!"), KeyboardViewController.Action(type: .Character, title: "\'"), KeyboardViewController.Action(type: .Function, title: "", funcType: .Backspace)]
 
 // MARK: Misc
-let punctiationArray: [String] = [" ", ".", ",", "?", "!", ":", ";"]
+var punctuationArray: [String] = [" ", ".", ",", "?", "!", ":", ";"]

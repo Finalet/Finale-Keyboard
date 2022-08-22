@@ -121,7 +121,9 @@ class KeyboardButton: UIButton {
             HapticFeedback.GestureImpactOccured()
         } else if (touchLocation.y > frame.size.height + frame.size.height * (1-registerSwipeSensitivity)) { //Swipe down
             registeredSwipe = true
-            if action.actionType == .Character { viewController?.SwipeDown() }
+            if action.actionType == .Character {
+                if !TypeExtraCharacters() { viewController?.SwipeDown() }
+            }
             HideCallout()
             viewController?.MiddleRowReactAnimation()
             viewController?.CancelLongPress()
@@ -139,6 +141,17 @@ class KeyboardButton: UIButton {
             HapticFeedback.GestureImpactOccured()
         }
         
+    }
+    
+    func TypeExtraCharacters () -> Bool {
+        if action.actionTitle == "е" {
+            viewController?.UseAction(action: .init(type: .Character, title: "ё"))
+            return true
+        } else if action.actionTitle == "ь" {
+            viewController?.UseAction(action: .init(type: .Character, title: "ъ"))
+            return true
+        }
+        return false
     }
     
     func ShowCallout () {
