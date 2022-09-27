@@ -1,48 +1,141 @@
-"home_input_field_title" = "Попробуйте";
-"home_input_field_placeholder" = "Напечатайте что-нибудь";
-
-"home_preferences_title" = "Настройки";
-"home_favorite_emoji_row" = "Избранные Эмодзи";
-"home_languages_row" = "Языки";
-"home_dictionary_row" = "Словарь";
-"home_preferences_row" = "Настройки";
-
-"home_setup_title" = "Установки";
-"home_setup_footer" = "Включите Finale Keyboard в системных настройках, а потом переключитесь на нее с помощью 🌐.";
-"home_keyboard_disabled_row" = "Клавиатура отключена";
-"home_keyboard_enabled_row" = "Клавиатура включена";
-"home_keyboard_full_access_disabled_row" = "Полный доступ отключен";
-"home_keyboard_full_access_enabled_row" = "Полный доступ включен";
-"home_system_settings_row" = "Системные настройки";
-
-"home_help_title" = "Помощь";
-"home_gestures_guide_row" = "Руководство по жестам";
-"home_contact_developer_row" = "Связаться с разработчиком";
-"home_more_row" = "Дополнительно";
-
-"favorite_emoji_footer" = "Выберите эмодзи, которые будут показаны первыми в эмодзи клавиатуре.";
-
-"languages_title" = "Языки";
-"languages_english" = "Английский";
-"languages_russian" = "Русский";
-
-"dictionary_learn_words_automatically" = "Учить слова автоматически";
-"dictionary_learn_words_automatically_toggle_is_on" = "Выключите, что бы Finale перестал учить новые слова автоматически. При этом, вы сможете добавлять новые слова вручную свайпом вверх.";
-"dictionary_learn_words_automatically_toggle_is_off" = "Включите, что бы Finale начал учить новые слова автоматически. При этом, вы сможете добавлять новые слова вручную свайпом вверх.";
+/* No comment provided by engineer. */
 "dictionary_footer" = "Finale может учить новые слова. Напишите новое слово и свайпните вверх, что бы добавить его в словарь.";
 
-"preferences_autocorrect_words" = "Автокоррекция слов";
-"preferences_autocorrect_grammar" = "Автокоррекция грамматики";
+/* No comment provided by engineer. */
+"dictionary_learn_words_automatically" = "Учить слова автоматически";
+
+/* No comment provided by engineer. */
+"dictionary_learn_words_automatically_toggle_is_off" = "Включите, что бы Finale начал учить новые слова автоматически. При этом, вы сможете добавлять новые слова вручную свайпом вверх.";
+
+/* No comment provided by engineer. */
+"dictionary_learn_words_automatically_toggle_is_on" = "Выключите, что бы Finale перестал учить новые слова автоматически. При этом, вы сможете добавлять новые слова вручную свайпом вверх.";
+
+/* No comment provided by engineer. */
+"favorite_emoji_footer" = "Выберите эмодзи, которые будут показаны первыми в эмодзи клавиатуре.";
+
+/* No comment provided by engineer. */
+"home_contact_developer_row" = "Связаться с разработчиком";
+
+/* No comment provided by engineer. */
+"home_dictionary_row" = "Словарь";
+
+/* No comment provided by engineer. */
+"home_favorite_emoji_row" = "Избранные Эмодзи";
+
+/* No comment provided by engineer. */
+"home_gestures_guide_row" = "Руководство по жестам";
+
+/* No comment provided by engineer. */
+"home_help_title" = "Помощь";
+
+/* Placeholder for the input field where users can try the keyboard */
+"home_input_field_placeholder" = "Напечатайте что-нибудь";
+
+/* Short invitation to try the keyboard */
+"home_input_field_title" = "Попробуйте";
+
+/* No comment provided by engineer. */
+"home_keyboard_disabled_row" = "Клавиатура отключена";
+
+/* No comment provided by engineer. */
+"home_keyboard_enabled_row" = "Клавиатура включена";
+
+/* No comment provided by engineer. */
+"home_keyboard_full_access_disabled_row" = "Полный доступ отключен";
+
+/* No comment provided by engineer. */
+"home_keyboard_full_access_enabled_row" = "Полный доступ включен";
+
+/* No comment provided by engineer. */
+"home_languages_row" = "Языки";
+
+/* No comment provided by engineer. */
+"home_more_row" = "Дополнительно";
+
+/* No comment provided by engineer. */
+"home_preferences_row" = "Настройки";
+
+/* No comment provided by engineer. */
+"home_preferences_title" = "Настройки";
+
+/* No comment provided by engineer. */
+"home_setup_footer" = "Включите Finale Keyboard в системных настройках, а потом переключитесь на нее с помощью 🌐.";
+
+/* No comment provided by engineer. */
+"home_setup_title" = "Установки";
+
+/* No comment provided by engineer. */
+"home_system_settings_row" = "Системные настройки";
+
+/* No comment provided by engineer. */
+"languages_english" = "Английский";
+
+/* No comment provided by engineer. */
+"languages_russian" = "Русский";
+
+/* No comment provided by engineer. */
+"languages_title" = "Языки";
+
+/* No comment provided by engineer. */
+"preferences_advanced_clean_words_one_use" = "Удалить слова с 1 исп.";
+
+/* No comment provided by engineer. */
+"preferences_advanced_clean_words_two_use" = "Удалить слова с 2 исп.";
+
+/* No comment provided by engineer. */
+"preferences_advanced_page_title" = "Продвинутое";
+
+/* No comment provided by engineer. */
+"preferences_advanced_section_header" = "Автообучаемый словарь";
+
+/* No comment provided by engineer. */
+"preferences_advanced_total_words" = "Всего слов";
+
+/* No comment provided by engineer. */
+"preferences_advanced_words_one_use" = "Слова 1 использование";
+
+/* No comment provided by engineer. */
+"preferences_advanced_words_two_use" = "Слова 2 использования";
+
+/* No comment provided by engineer. */
 "preferences_autocapitalize_words" = "Автозаглавные слова";
-"preferences_typing_haptic" = "Тактильная отдача для клавиш";
+
+/* No comment provided by engineer. */
+"preferences_autocorrect_grammar" = "Автокоррекция грамматики";
+
+/* No comment provided by engineer. */
+"preferences_autocorrect_words" = "Автокоррекция слов";
+
+/* No comment provided by engineer. */
 "preferences_gestures_haptic" = "Тактильная отдача для жестов";
 
-"preferences_punctuation_page_title" = "Знаки препинания";
-"preferences_punctuation_first" = "Первый";
-"preferences_punctuation_second" = "Второй";
-"preferences_punctuation_third" = "Третий";
-"preferences_punctuation_fourth" = "Четвертый";
+/* No comment provided by engineer. */
 "preferences_punctuation_fifth" = "Пятый";
-"preferences_punctuation_sixth" = "Шестой";
-"preferences_punctuation_seventh" = "Седьмой";
+
+/* No comment provided by engineer. */
+"preferences_punctuation_first" = "Первый";
+
+/* No comment provided by engineer. */
+"preferences_punctuation_fourth" = "Четвертый";
+
+/* No comment provided by engineer. */
+"preferences_punctuation_page_title" = "Знаки препинания";
+
+/* No comment provided by engineer. */
 "preferences_punctuation_reset" = "Восстановить по умолчанию";
+
+/* No comment provided by engineer. */
+"preferences_punctuation_second" = "Второй";
+
+/* No comment provided by engineer. */
+"preferences_punctuation_seventh" = "Седьмой";
+
+/* No comment provided by engineer. */
+"preferences_punctuation_sixth" = "Шестой";
+
+/* No comment provided by engineer. */
+"preferences_punctuation_third" = "Третий";
+
+/* No comment provided by engineer. */
+"preferences_typing_haptic" = "Тактильная отдача для клавиш";
+

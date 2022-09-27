@@ -165,7 +165,8 @@ struct EnabledListItem: View {
             Label(
                 isEnabled ? enabledText : disabledText,
                 systemImage: isEnabled ? "checkmark" : "exclamationmark.triangle")
-        }.foregroundColor(isEnabled ? .green : .orange)
+        }
+        .foregroundColor(isEnabled ? .green : .orange)
     }
 }
 
@@ -196,7 +197,8 @@ public struct ListNavigationButton<Content: View>: View {
                 Spacer()
                 ListDisclosureIndicator()
             }
-        }.buttonStyle(.plain)
+        }
+        .buttonStyle(.plain)
     }
 }
 
@@ -287,7 +289,7 @@ public struct ListItem<Content: View>: View {
         HStack {
             content().padding(.vertical, 5)
         }
-        .frame(minHeight: 45)
+        .frame(minHeight: 30)
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
     }

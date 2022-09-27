@@ -16,7 +16,7 @@ struct MoreView: View {
                 Image("Finale To Do Logo")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(height: 40)
+                    .frame(height: 36)
                     .cornerRadius(8)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
@@ -29,7 +29,7 @@ struct MoreView: View {
                 Image("Finale Habits Logo")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(height: 40)
+                    .frame(height: 36)
                     .cornerRadius(8)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)

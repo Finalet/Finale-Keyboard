@@ -73,6 +73,17 @@ struct Localization {
             
             static var reset = NSLocalizedString("preferences_punctuation_reset", value: "Reset to Defaults", comment: "")
         }
+        
+        struct Advanced {
+            static var pageTitle = NSLocalizedString("preferences_advanced_page_title", value: "Advanced", comment: "")
+            
+            static var sectionHeader = NSLocalizedString("preferences_advanced_section_header", value: "Auto-learn dictionary", comment: "")
+            static var totalWords = NSLocalizedString("preferences_advanced_total_words", value: "Total words", comment: "")
+            static var wordsOneUse = NSLocalizedString("preferences_advanced_words_one_use", value: "Words 1 use", comment: "")
+            static var wordsTwoUse = NSLocalizedString("preferences_advanced_words_two_use", value: "Words 2 use", comment: "")
+            static var cleanWordsOneUse = NSLocalizedString("preferences_advanced_clean_words_one_use", value: "Clean 1 use words", comment: "")
+            static var cleanWordsTwoUse = NSLocalizedString("preferences_advanced_clean_words_two_use", value: "Clean 2 use words", comment: "")
+        }
     }
     
     struct GesturesGuideScreen {
