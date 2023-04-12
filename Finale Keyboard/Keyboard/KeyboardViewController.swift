@@ -2,12 +2,13 @@
 //  KeyboardViewController.swift
 //  Keyboard
 //
-//  Created by Grant Oganan on 1/31/22.
+//  Created by Grant Oganyan on 1/31/22.
 //
 
 import UIKit
 import SwiftUI
 import Foundation
+import ElegantEmojiPicker
 
 class KeyboardViewController: UIInputViewController {
     
@@ -308,8 +309,7 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func BuildEmojiView () {
-        emojiView = EmojiView(frame: CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height))
-        emojiView!.viewController = self
+        emojiView = EmojiView(self, frame: CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height))
         
         self.view.addSubview(emojiView!)
     }
@@ -401,28 +401,41 @@ class KeyboardViewController: UIInputViewController {
         self.textDocumentProxy.insertText(emoji)
         self.textDocumentProxy.insertText(" ")
         
-        HapticFeedback.TypingImpactOccured()
+        HapticFeedback.TypingImpactOccurred()
     }
     
     func UpdateEmojiSearch () {
         emojiSearchCarret!.frame.origin.x = emojiSearchBarLabel!.intrinsicContentSize.width > emojiSearchBarLabel!.frame.width ? emojiSearchBarLabel!.frame.width : emojiSearchBarLabel!.intrinsicContentSize.width
         var searchTerm = emojiSearchBarLabel!.text
         searchTerm?.removeFirst()
-        emojiSearchResults = emojiView!.getEmojiSearchResults(searchTerm: searchTerm!)
-        if emojiSearchBarLabel!.text!.isEmpty || emojiSearchBarLabel!.text! == " " { emojiSearchResultsPlaceholder!.text = "Search Emoji" }
-        else { emojiSearchResultsPlaceholder!.text = emojiSearchResults.isEmpty ? "No emoji found" : "" }
+        guard let searchTerm = searchTerm, let emojiView = emojiView else { return }
         
-        emojiSearchResultsContainer!.subviews.forEach({
-            if $0 is EmojiSearchResultButton { $0.removeFromSuperview() }
-        })
+        emojiSearchResults = ""
         
-        for i in 0..<emojiSearchResults.count {
-            let emoji = EmojiSearchResultButton(frame: CGRect(x: CGFloat(i)*emojiSearchResultsContainer!.frame.size.height, y: 0, width: emojiSearchResultsContainer!.frame.size.height, height: emojiSearchResultsContainer!.frame.size.height))
-            emoji.Setup(viewController: self, emoji: emojiSearchResults[emojiSearchResults.index(emojiSearchResults.startIndex, offsetBy: i)].description)
-            emojiSearchResultsContainer?.addSubview(emoji)
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self = self else { return }
+            
+            ElegantEmojiPicker.getSearchResults(searchTerm, fromAvailable: emojiView.emojiSections).forEach {
+                if self.emojiSearchResults.count < 20 { self.emojiSearchResults.append($0.emoji) }
+            }
+            
+            DispatchQueue.main.async {
+                if self.emojiSearchBarLabel!.text!.isEmpty || self.emojiSearchBarLabel!.text! == " " { self.emojiSearchResultsPlaceholder!.text = "Search Emoji" }
+                else { self.emojiSearchResultsPlaceholder!.text = self.emojiSearchResults.isEmpty ? "No emoji found" : "" }
+                
+                self.emojiSearchResultsContainer!.subviews.forEach({
+                    if $0 is EmojiSearchResultButton { $0.removeFromSuperview() }
+                })
+                
+                for i in 0..<self.emojiSearchResults.count {
+                    let emoji = EmojiSearchResultButton(frame: CGRect(x: CGFloat(i)*self.emojiSearchResultsContainer!.frame.size.height, y: 0, width: self.emojiSearchResultsContainer!.frame.size.height, height: self.emojiSearchResultsContainer!.frame.size.height))
+                    emoji.Setup(viewController: self, emoji: self.emojiSearchResults[self.emojiSearchResults.index(self.emojiSearchResults.startIndex, offsetBy: i)].description)
+                    self.emojiSearchResultsContainer?.addSubview(emoji)
+                }
+                self.emojiSearchResultsContainer?.contentSize = CGSize(width: CGFloat(self.emojiSearchResults.count)*self.emojiSearchResultsContainer!.frame.size.height, height: self.emojiSearchResultsContainer!.frame.height)
+                self.emojiSearchResultsContainer?.contentOffset = CGPoint.zero
+            }
         }
-        emojiSearchResultsContainer?.contentSize = CGSize(width: CGFloat(emojiSearchResults.count)*emojiSearchResultsContainer!.frame.size.height, height: emojiSearchResultsContainer!.frame.height)
-        emojiSearchResultsContainer?.contentOffset = CGPoint.zero
     }
     
     func PerformActionFunction (function: FunctionType) {
@@ -488,7 +501,7 @@ class KeyboardViewController: UIInputViewController {
                 self.bottomRowView?.alpha = 0.5
             }
             
-            HapticFeedback.GestureImpactOccured()
+            HapticFeedback.GestureImpactOccurred()
         }
         KeyboardViewController.isLongPressing = true
     }
@@ -503,7 +516,7 @@ class KeyboardViewController: UIInputViewController {
             let userDefaults = UserDefaults(suiteName: self.suiteName)
             userDefaults?.setValue(KeyboardViewController.isAutoCorrectOn, forKey: self.ACSavePath)
             
-            HapticFeedback.GestureImpactOccured()
+            HapticFeedback.GestureImpactOccurred()
         }
         KeyboardViewController.isLongPressing = true
     }
@@ -873,7 +886,7 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func Delete() {
-        HapticFeedback.GestureImpactOccured()
+        HapticFeedback.GestureImpactOccurred()
         
         if KeyboardViewController.currentViewType == .SearchEmoji {
             emojiSearchBarLabel!.text? = " "

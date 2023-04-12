@@ -15,6 +15,7 @@
 		3720638827AB2CAF00964120 /* Locales.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3720638727AB2CAF00964120 /* Locales.swift */; };
 		37256A7927DB52ED0071180B /* DictionaryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37256A7827DB52ED0071180B /* DictionaryListView.swift */; };
 		3727766D27D8E38D00CC8CD8 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3727766C27D8E38D00CC8CD8 /* TutorialView.swift */; };
+		373D195529E647B700DC6DEF /* ElegantEmojiPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 373D195429E647B700DC6DEF /* ElegantEmojiPicker */; };
 		3743FC5527B1523A0043B2A2 /* KeyboardEnabledState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3743FC5427B1523A0043B2A2 /* KeyboardEnabledState.swift */; };
 		3743FC5727B158AD0043B2A2 /* FavoriteEmoji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3743FC5627B158AD0043B2A2 /* FavoriteEmoji.swift */; };
 		374C861A27DD74B8003BA47B /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374C861927DD74B8003BA47B /* PreferencesView.swift */; };
@@ -32,8 +33,6 @@
 		37B5B99A27A9751000601AB1 /* KeyboardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B5B99927A9751000601AB1 /* KeyboardButton.swift */; };
 		37CE328B2889FF41002DAD2A /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CE328A2889FF41002DAD2A /* Localization.swift */; };
 		37CE3295288A05E9002DAD2A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 37CE3297288A05E9002DAD2A /* Localizable.strings */; };
-		37DD00B5288782FB00273BA3 /* Emoji Unicode 14.0.json in Resources */ = {isa = PBXBuildFile; fileRef = 37DD00B4288782FB00273BA3 /* Emoji Unicode 14.0.json */; };
-		37DD00B728878D2C00273BA3 /* Ordered Emoji Unicode 14.0.json in Resources */ = {isa = PBXBuildFile; fileRef = 37DD00B628878D2C00273BA3 /* Ordered Emoji Unicode 14.0.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -90,8 +89,6 @@
 		37CE328A2889FF41002DAD2A /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		37CE3298288A05EC002DAD2A /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		37CE329A288A1051002DAD2A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		37DD00B4288782FB00273BA3 /* Emoji Unicode 14.0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Emoji Unicode 14.0.json"; sourceTree = "<group>"; };
-		37DD00B628878D2C00273BA3 /* Ordered Emoji Unicode 14.0.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "Ordered Emoji Unicode 14.0.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +103,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				373D195529E647B700DC6DEF /* ElegantEmojiPicker in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -162,19 +160,17 @@
 			isa = PBXGroup;
 			children = (
 				37A0AD0627A869BA00578290 /* KeyboardViewController.swift */,
-				37A0AD1227A88AAA00578290 /* UIExtensions.swift */,
-				37B5B99927A9751000601AB1 /* KeyboardButton.swift */,
-				3720638727AB2CAF00964120 /* Locales.swift */,
 				371F496727ADA92F00686BC7 /* EmojiView.swift */,
+				37B5B99927A9751000601AB1 /* KeyboardButton.swift */,
+				37A0AD1227A88AAA00578290 /* UIExtensions.swift */,
+				3720638727AB2CAF00964120 /* Locales.swift */,
 				370B056928B3F0EF0062000A /* Defaults.swift */,
+				379865352851176B00A66716 /* HapticFeedback.swift */,
 				3743FC5927B168230043B2A2 /* Keyboard.entitlements */,
 				37A0AD0827A869BA00578290 /* Info.plist */,
 				3720638527AACEB600964120 /* Gilroy-Medium.ttf */,
-				37DD00B4288782FB00273BA3 /* Emoji Unicode 14.0.json */,
-				37DD00B628878D2C00273BA3 /* Ordered Emoji Unicode 14.0.json */,
 				375DFB1627AE9E5E00E304ED /* Images.xcassets */,
 				3709029527B2F54000213BDD /* DefaultDictionary.json */,
-				379865352851176B00A66716 /* HapticFeedback.swift */,
 			);
 			path = Keyboard;
 			sourceTree = "<group>";
@@ -226,6 +222,7 @@
 			);
 			name = Keyboard;
 			packageProductDependencies = (
+				373D195429E647B700DC6DEF /* ElegantEmojiPicker */,
 			);
 			productName = Keyboard;
 			productReference = 37A0AD0427A869BA00578290 /* Keyboard.appex */;
@@ -260,6 +257,7 @@
 			);
 			mainGroup = 37A0ACE627A8694100578290;
 			packageReferences = (
+				373D195029E6474100DC6DEF /* XCRemoteSwiftPackageReference "Elegant-Emoji-Picker" */,
 			);
 			productRefGroup = 37A0ACF027A8694100578290 /* Products */;
 			projectDirPath = "";
@@ -288,8 +286,6 @@
 			files = (
 				375DFB1727AE9E5E00E304ED /* Images.xcassets in Resources */,
 				3709029627B2F54000213BDD /* DefaultDictionary.json in Resources */,
-				37DD00B5288782FB00273BA3 /* Emoji Unicode 14.0.json in Resources */,
-				37DD00B728878D2C00273BA3 /* Ordered Emoji Unicode 14.0.json in Resources */,
 				3720638627AACEC100964120 /* Gilroy-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -478,7 +474,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_ASSET_PATHS = "\"Finale Keyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = AYPPAXMRMG;
 				ENABLE_PREVIEWS = YES;
@@ -493,7 +489,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.17.1;
+				MARKETING_VERSION = 1.17.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Grant151.Finale-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -510,7 +506,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 24;
 				DEVELOPMENT_ASSET_PATHS = "\"Finale Keyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = AYPPAXMRMG;
 				ENABLE_PREVIEWS = YES;
@@ -525,7 +521,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.17.1;
+				MARKETING_VERSION = 1.17.2;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Grant151.Finale-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -620,6 +616,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		373D195029E6474100DC6DEF /* XCRemoteSwiftPackageReference "Elegant-Emoji-Picker" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Finalet/Elegant-Emoji-Picker";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		373D195429E647B700DC6DEF /* ElegantEmojiPicker */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 373D195029E6474100DC6DEF /* XCRemoteSwiftPackageReference "Elegant-Emoji-Picker" */;
+			productName = ElegantEmojiPicker;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 37A0ACE727A8694100578290 /* Project object */;
 }

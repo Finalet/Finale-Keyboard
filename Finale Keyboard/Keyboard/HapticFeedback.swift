@@ -13,7 +13,7 @@ class HapticFeedback {
     static var typingDelay = 0.05
     static var gestureDelay = 0.1
     
-    static func TypingImpactOccured() {
+    static func TypingImpactOccurred() {
         if !KeyboardViewController.isTypingHapticEnabled { return }
         
         if Date().timeIntervalSinceReferenceDate - lastImpactTime > typingDelay {
@@ -22,7 +22,7 @@ class HapticFeedback {
         }
     }
     
-    static func GestureImpactOccured() {
+    static func GestureImpactOccurred() {
         if !KeyboardViewController.isGesturesHapticEnabled { return }
         
         if Date().timeIntervalSinceReferenceDate - lastImpactTime > gestureDelay {
