@@ -11,9 +11,6 @@ import Foundation
 import ElegantEmojiPicker
 
 class FinaleKeyboard: UIInputViewController {
-    
-    @IBOutlet var nextKeyboardButton: UIButton!
-    
     private weak var _heightConstraint: NSLayoutConstraint?
     
     override func viewWillAppear(_ animated: Bool) {
@@ -34,6 +31,8 @@ class FinaleKeyboard: UIInputViewController {
         CheckAutoCapitalization()
     }
     
+    static var instance: FinaleKeyboard!
+    
     let buttonHeight: CGFloat = 60.0
     let buttonHeightEmojiSearch: CGFloat = 50.0
     
@@ -42,7 +41,8 @@ class FinaleKeyboard: UIInputViewController {
     var middleRowView = UIView()
     var bottomRowView = UIView()
     
-    var emojiView: EmojiView?
+    var emojiView = EmojiView()
+    
     var emojiSearchBarLabel: UILabel?
     var emojiSearchResultsContainer: UIScrollView?
     var emojiSearchResultsPlaceholder: UILabel?
@@ -107,14 +107,17 @@ class FinaleKeyboard: UIInputViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Keeping this cause Apple requires us to
-        self.nextKeyboardButton = UIButton(type: .system)
-        
+        FinaleKeyboard.instance = self
         BuildKeyboardView(viewType: .Characters)
+        BuildEmojiView()
         SuggestionsView()
         InitSuggestionsArray()
         LoadPreferences()
         InitDictionary()
+        
+        FinaleKeyboard.instance.topRowView.alpha = 0
+        FinaleKeyboard.instance.middleRowView.alpha = 0
+        FinaleKeyboard.instance.bottomRowView.alpha = 0
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -217,7 +220,7 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func PopulateRow(action: Action, row: UIView) {
-        let button = KeyboardButton(action: action, self)
+        let button = KeyboardButton(action: action)
         let prevButton: UIView? = row.subviews.last
         let leading: LayoutAnchor = prevButton == nil ? .leading(0) : .leadingToTrailing(prevButton!, 0)
         row.addSubview(button, anchors: [.top(0), .bottom(0), leading])
@@ -296,29 +299,20 @@ class FinaleKeyboard: UIInputViewController {
         return label
     }
     
-    func BuildEmojiSearchView() {
-        BuildKeyboardView(viewType: .SearchEmoji)
-    }
-    
     func BuildEmojiView () {
-        emojiView = EmojiView(self, frame: CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height))
-        
-        self.view.addSubview(emojiView!)
+        self.view.addSubview(emojiView, anchors: LayoutAnchor.fullFrame)
     }
     
     func ToggleEmojiView () {
         if FinaleKeyboard.currentViewType != .Emoji && FinaleKeyboard.currentViewType != .SearchEmoji {
-            if emojiView == nil {
-                BuildEmojiView()
-            }
-            emojiView?.ResetView()
+            emojiView.ResetView()
             ResetSuggestionsLabels()
             UIView.animate(withDuration: 0.4) {
                 self.topRowView.frame.origin.y -= self.view.frame.height
                 self.middleRowView.frame.origin.y -= self.view.frame.height
                 self.bottomRowView.frame.origin.y -= self.view.frame.height
 
-                self.emojiView?.frame.origin.y -= self.view.frame.height
+                self.emojiView.frame.origin.y -= self.view.frame.height
             }
             lastViewType = FinaleKeyboard.currentViewType
             FinaleKeyboard.currentViewType = .Emoji
@@ -328,13 +322,13 @@ class FinaleKeyboard: UIInputViewController {
                     self.topRowView.frame.origin.y = 0
                     self.middleRowView.frame.origin.y = self.buttonHeight
                     self.bottomRowView.frame.origin.y = self.buttonHeight * 2
-                    self.emojiView?.frame.origin.y = self.view.frame.height
+                    self.emojiView.frame.origin.y = self.view.frame.height
                 } else {
                     self.emojiSearchRow?.frame.origin.y = 0
                     self.topRowView.frame.origin.y = 0 + self.view.frame.height - self.buttonHeightEmojiSearch*3
                     self.middleRowView.frame.origin.y = self.buttonHeightEmojiSearch + self.view.frame.height - self.buttonHeightEmojiSearch*3
                     self.bottomRowView.frame.origin.y = self.buttonHeightEmojiSearch * 2 + self.view.frame.height - self.buttonHeightEmojiSearch*3
-                    self.emojiView?.frame.origin.y = self.view.frame.height
+                    self.emojiView.frame.origin.y = self.view.frame.height
                 }
             }
             if FinaleKeyboard.currentViewType != .SearchEmoji {
@@ -400,14 +394,14 @@ class FinaleKeyboard: UIInputViewController {
         emojiSearchCarret!.frame.origin.x = emojiSearchBarLabel!.intrinsicContentSize.width > emojiSearchBarLabel!.frame.width ? emojiSearchBarLabel!.frame.width : emojiSearchBarLabel!.intrinsicContentSize.width
         var searchTerm = emojiSearchBarLabel!.text
         searchTerm?.removeFirst()
-        guard let searchTerm = searchTerm, let emojiView = emojiView else { return }
+        guard let searchTerm = searchTerm else { return }
         
         emojiSearchResults = ""
         
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
             
-            ElegantEmojiPicker.getSearchResults(searchTerm, fromAvailable: emojiView.emojiSections).forEach {
+            ElegantEmojiPicker.getSearchResults(searchTerm, fromAvailable: self.emojiView.emojiSections).forEach {
                 if self.emojiSearchResults.count < 20 { self.emojiSearchResults.append($0.emoji) }
             }
             

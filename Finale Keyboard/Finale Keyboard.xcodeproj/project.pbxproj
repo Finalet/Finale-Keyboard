@@ -114,14 +114,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3791F23229E77F1C005F39B4 /* New Group */ = {
-			isa = PBXGroup;
-			children = (
-				3791F23329E77F22005F39B4 /* Source */,
-			);
-			path = "New Group";
-			sourceTree = "<group>";
-		};
 		3791F23329E77F22005F39B4 /* Source */ = {
 			isa = PBXGroup;
 			children = (
@@ -202,7 +194,7 @@
 		37A0AD0527A869BA00578290 /* Keyboard */ = {
 			isa = PBXGroup;
 			children = (
-				3791F23229E77F1C005F39B4 /* New Group */,
+				3791F23329E77F22005F39B4 /* Source */,
 				37A0AD0627A869BA00578290 /* FinaleKeyboard.swift */,
 				3743FC5927B168230043B2A2 /* Keyboard.entitlements */,
 				37A0AD0827A869BA00578290 /* Info.plist */,

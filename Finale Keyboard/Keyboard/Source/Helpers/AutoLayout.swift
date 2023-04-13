@@ -190,3 +190,54 @@ extension NSLayoutConstraint {
         }
     }
 }
+
+extension UIScrollView {
+    
+    enum ScrollDirection {
+        case Vertical
+        case Horizontal
+    }
+    
+    func setupContentContainer (scrollDirection: ScrollDirection = .Vertical) -> UIView {
+        let contentContainer = UIView()
+        contentContainer.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(contentContainer)
+        
+        NSLayoutConstraint.activate ([
+            contentContainer.leadingAnchor.constraint(equalTo: self.contentLayoutGuide.leadingAnchor),
+            contentContainer.trailingAnchor.constraint(equalTo: self.contentLayoutGuide.trailingAnchor),
+            contentContainer.topAnchor.constraint(equalTo: self.contentLayoutGuide.topAnchor),
+            contentContainer.bottomAnchor.constraint(equalTo: self.contentLayoutGuide.bottomAnchor),
+        ])
+        
+        if scrollDirection == .Vertical {
+            NSLayoutConstraint.activate ([
+                contentContainer.leadingAnchor.constraint(equalTo: self.frameLayoutGuide.leadingAnchor),
+                contentContainer.trailingAnchor.constraint(equalTo: self.frameLayoutGuide.trailingAnchor),
+            ])
+        } else if scrollDirection == .Horizontal {
+            NSLayoutConstraint.activate ([
+                contentContainer.topAnchor.constraint(equalTo: self.frameLayoutGuide.topAnchor),
+                contentContainer.bottomAnchor.constraint(equalTo: self.frameLayoutGuide.bottomAnchor),
+            ])
+        }
+
+        return contentContainer
+    }
+    
+}
+
+
+extension UIView {
+    
+    func DebugSubviews (excluseSelf: Bool = false, parentColor: UIColor = .blue, color: UIColor = .red) {
+        for view in self.subviews { view.DebugSubviews(parentColor: color) }
+        if !excluseSelf { self.Debug(color: parentColor) }
+    }
+    
+    func Debug(color: UIColor = .red) {
+        self.layer.borderWidth = 1
+        self.layer.borderColor = color.cgColor
+    }
+    
+}
