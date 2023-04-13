@@ -21,13 +21,6 @@ class EmojiView: UIView, UIScrollViewDelegate {
     var paginatedView = UIScrollView()
     var pageControl = PageControl()
     
-    var originalPosition: CGFloat?
-    var originalKeyboardPosition: CGFloat?
-    var currentPositionTouched: CGPoint?
-    
-    var canDismiss = true
-    var beganDismiss = false
-    
     init () {
         self.emojiSections = ElegantEmojiPicker.getDefaultEmojiSections()
         super.init(frame: .zero)
@@ -107,47 +100,37 @@ class EmojiView: UIView, UIScrollViewDelegate {
         
         HapticFeedback.GestureImpactOccurred()
     }
+    
+    var originalOffset = 0.0
     @objc func PanGesture (panGesture: UIPanGestureRecognizer) {
         let view = panGesture.view as! UICollectionView
-        if view.contentOffset.y > 0 || !canDismiss  {return}
+        if view.contentOffset.y > 0  {return}
         
         let translation = panGesture.translation(in: self)
         
         if panGesture.state == .began {
-            originalPosition = self.frame.origin.y
-            originalKeyboardPosition = FinaleKeyboard.instance.topRowView.frame.origin.y
-            currentPositionTouched = panGesture.location(in: self)
-            beganDismiss = true
+            originalOffset = FinaleKeyboard.instance.topRowTopConstraint!.constant
         } else if panGesture.state == .changed {
-            if (!beganDismiss) {return}
-            self.frame.origin.y = translation.y
-            FinaleKeyboard.instance.topRowView.frame.origin.y = translation.y - FinaleKeyboard.instance.buttonHeight*3
-            FinaleKeyboard.instance.middleRowView.frame.origin.y = translation.y - FinaleKeyboard.instance.buttonHeight*2
-            FinaleKeyboard.instance.bottomRowView.frame.origin.y = translation.y - FinaleKeyboard.instance.buttonHeight
+            FinaleKeyboard.instance.topRowTopConstraint?.constant = originalOffset + translation.y
+            FinaleKeyboard.instance.bottomRowBottomConstraint?.constant = originalOffset + translation.y
         } else if panGesture.state == .ended {
-            if (!beganDismiss) {return}
             let velocity = panGesture.velocity(in: self)
 
-              if velocity.y >= 400 {
+            if velocity.y >= 400 {
+                FinaleKeyboard.instance.ToggleEmojiView()
+            } else {
+                FinaleKeyboard.instance.topRowTopConstraint?.constant = originalOffset
+                FinaleKeyboard.instance.bottomRowBottomConstraint?.constant = originalOffset
                 UIView.animate(withDuration: 0.2) {
-                    FinaleKeyboard.instance.ToggleEmojiView()
+                    FinaleKeyboard.instance.view.layoutIfNeeded()
                 }
-              } else {
-                UIView.animate(withDuration: 0.2) {
-                    self.frame.origin.y = self.originalPosition!
-                    FinaleKeyboard.instance.topRowView.frame.origin.y = self.originalKeyboardPosition!
-                    FinaleKeyboard.instance.middleRowView.frame.origin.y = self.originalKeyboardPosition! - FinaleKeyboard.instance.buttonHeight
-                    FinaleKeyboard.instance.bottomRowView.frame.origin.y = self.originalKeyboardPosition! - FinaleKeyboard.instance.buttonHeight*2
-                }
-              }
-            beganDismiss = false
+            }
         }
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView == paginatedView {
             pageControl.SetHighlightPosition(scrollView.contentOffset.x / scrollView.frame.width)
-            canDismiss = false
             if scrollView.contentOffset.x/frame.width < -0.15 {
                 ToggleSearchEmojiView()
             }
@@ -156,16 +139,8 @@ class EmojiView: UIView, UIScrollViewDelegate {
         }
     }
     
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        canDismiss = true
-    }
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        canDismiss = true
-    }
-    
     func ScrollToPage(_ page: Int) {
         paginatedView.scrollRectToVisible(CGRect(origin: CGPoint(x: paginatedView.frame.size.width * CGFloat(page), y: 0), size: paginatedView.frame.size), animated: true)
-        canDismiss = true
     }
     
     func ResetView () {

@@ -40,6 +40,8 @@ class FinaleKeyboard: UIInputViewController {
     var topRowView = UIView()
     var middleRowView = UIView()
     var bottomRowView = UIView()
+    var topRowTopConstraint: NSLayoutConstraint?
+    var bottomRowBottomConstraint: NSLayoutConstraint?
     
     var emojiView = EmojiView()
     
@@ -114,10 +116,6 @@ class FinaleKeyboard: UIInputViewController {
         InitSuggestionsArray()
         LoadPreferences()
         InitDictionary()
-        
-        FinaleKeyboard.instance.topRowView.alpha = 0
-        FinaleKeyboard.instance.middleRowView.alpha = 0
-        FinaleKeyboard.instance.bottomRowView.alpha = 0
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -203,11 +201,17 @@ class FinaleKeyboard: UIInputViewController {
         allButtons.removeAll()
         
         topRowView.backgroundColor = .clear
-        self.view.addSubview(topRowView, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .top(0)])
+        self.view.addSubview(topRowView, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0)])
+        topRowTopConstraint = topRowView.topAnchor.constraint(equalTo: self.view.topAnchor)
+        topRowTopConstraint?.isActive = true
+        
         middleRowView.backgroundColor = .gray.withAlphaComponent(0.5)
         self.view.addSubview(middleRowView, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .topToBottom(topRowView, 0), .heightToHeight(topRowView, 0)])
+        
         bottomRowView.backgroundColor = .clear
-        self.view.addSubview(bottomRowView, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .topToBottom(middleRowView, 0), .heightToHeight(middleRowView, 0), .bottom(0)])
+        self.view.addSubview(bottomRowView, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .topToBottom(middleRowView, 0), .heightToHeight(middleRowView, 0)])
+        bottomRowBottomConstraint = bottomRowView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        bottomRowBottomConstraint?.isActive = true
         
         topRow.forEach { PopulateRow(action: $0, row: topRowView) }
         if let last = topRowView.subviews.last { last.trailingAnchor.constraint(equalTo: topRowView.trailingAnchor).isActive = true }
@@ -300,37 +304,43 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func BuildEmojiView () {
-        self.view.addSubview(emojiView, anchors: LayoutAnchor.fullFrame)
+        self.view.addSubview(emojiView, anchors: [.topToBottom(bottomRowView, 0), .leading(0), .trailing(0), .heightToHeight(self.view, 0)])
     }
     
     func ToggleEmojiView () {
         if FinaleKeyboard.currentViewType != .Emoji && FinaleKeyboard.currentViewType != .SearchEmoji {
             emojiView.ResetView()
             ResetSuggestionsLabels()
-            UIView.animate(withDuration: 0.4) {
-                self.topRowView.frame.origin.y -= self.view.frame.height
-                self.middleRowView.frame.origin.y -= self.view.frame.height
-                self.bottomRowView.frame.origin.y -= self.view.frame.height
-
-                self.emojiView.frame.origin.y -= self.view.frame.height
-            }
+            topRowTopConstraint?.constant = -self.view.frame.height
+            bottomRowBottomConstraint?.constant = -self.view.frame.height
             lastViewType = FinaleKeyboard.currentViewType
             FinaleKeyboard.currentViewType = .Emoji
-        } else {
-            UIView.animate(withDuration: 0.4) {
-                if FinaleKeyboard.currentViewType != .SearchEmoji {
-                    self.topRowView.frame.origin.y = 0
-                    self.middleRowView.frame.origin.y = self.buttonHeight
-                    self.bottomRowView.frame.origin.y = self.buttonHeight * 2
-                    self.emojiView.frame.origin.y = self.view.frame.height
-                } else {
-                    self.emojiSearchRow?.frame.origin.y = 0
-                    self.topRowView.frame.origin.y = 0 + self.view.frame.height - self.buttonHeightEmojiSearch*3
-                    self.middleRowView.frame.origin.y = self.buttonHeightEmojiSearch + self.view.frame.height - self.buttonHeightEmojiSearch*3
-                    self.bottomRowView.frame.origin.y = self.buttonHeightEmojiSearch * 2 + self.view.frame.height - self.buttonHeightEmojiSearch*3
-                    self.emojiView.frame.origin.y = self.view.frame.height
-                }
+            UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.4, options: .curveEaseIn) {
+                self.view.layoutIfNeeded()
             }
+        } else {
+            if FinaleKeyboard.currentViewType != .SearchEmoji {
+                topRowTopConstraint?.constant = 0
+                bottomRowBottomConstraint?.constant = 0
+                UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
+                    self.view.layoutIfNeeded()
+                }
+            } else {
+            }
+//            UIView.animate(withDuration: 0.4) {
+//                if FinaleKeyboard.currentViewType != .SearchEmoji {
+//                    self.topRowView.frame.origin.y = 0
+//                    self.middleRowView.frame.origin.y = self.buttonHeight
+//                    self.bottomRowView.frame.origin.y = self.buttonHeight * 2
+//                    self.emojiView.frame.origin.y = self.view.frame.height
+//                } else {
+//                    self.emojiSearchRow?.frame.origin.y = 0
+//                    self.topRowView.frame.origin.y = 0 + self.view.frame.height - self.buttonHeightEmojiSearch*3
+//                    self.middleRowView.frame.origin.y = self.buttonHeightEmojiSearch + self.view.frame.height - self.buttonHeightEmojiSearch*3
+//                    self.bottomRowView.frame.origin.y = self.buttonHeightEmojiSearch * 2 + self.view.frame.height - self.buttonHeightEmojiSearch*3
+//                    self.emojiView.frame.origin.y = self.view.frame.height
+//                }
+//            }
             if FinaleKeyboard.currentViewType != .SearchEmoji {
                 FinaleKeyboard.currentViewType = lastViewType
                 RedrawSuggestionsLabels()
