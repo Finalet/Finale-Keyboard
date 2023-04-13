@@ -2,7 +2,7 @@
 //  HapticFeedback.swift
 //  Keyboard
 //
-//  Created by Grant Oganan on 6/8/22.
+//  Created by Grant Oganyan on 6/8/22.
 //
 
 import Foundation
@@ -14,7 +14,7 @@ class HapticFeedback {
     static var gestureDelay = 0.1
     
     static func TypingImpactOccurred() {
-        if !KeyboardViewController.isTypingHapticEnabled { return }
+        if !FinaleKeyboard.isTypingHapticEnabled { return }
         
         if Date().timeIntervalSinceReferenceDate - lastImpactTime > typingDelay {
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -23,7 +23,7 @@ class HapticFeedback {
     }
     
     static func GestureImpactOccurred() {
-        if !KeyboardViewController.isGesturesHapticEnabled { return }
+        if !FinaleKeyboard.isGesturesHapticEnabled { return }
         
         if Date().timeIntervalSinceReferenceDate - lastImpactTime > gestureDelay {
             UIImpactFeedbackGenerator(style: .light).impactOccurred()

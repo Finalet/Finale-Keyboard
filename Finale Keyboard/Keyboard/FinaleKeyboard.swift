@@ -10,12 +10,11 @@ import SwiftUI
 import Foundation
 import ElegantEmojiPicker
 
-class KeyboardViewController: UIInputViewController {
+class FinaleKeyboard: UIInputViewController {
     
     @IBOutlet var nextKeyboardButton: UIButton!
     
     private weak var _heightConstraint: NSLayoutConstraint?
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -26,23 +25,23 @@ class KeyboardViewController: UIInputViewController {
         
         let emptyView = UILabel(frame: .zero)
         emptyView.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(emptyView);
+        view.addSubview(emptyView)
 
-        let heightConstraint = NSLayoutConstraint(item: view, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 0.0, constant: keyboardHeight)
-        heightConstraint.priority = .required - 1
-        view.addConstraint(heightConstraint)
-        _heightConstraint = heightConstraint
+        _heightConstraint = view.heightAnchor.constraint(equalToConstant: buttonHeight*3)
+        _heightConstraint?.priority = .required - 1
+        _heightConstraint?.isActive = true
         
         CheckAutoCapitalization()
     }
     
-    let keyboardHeight: CGFloat = UIScreen.main.bounds.height/4.7
-    let buttonHeight: CGFloat = (UIScreen.main.bounds.height/4.7)/3
-    let buttonHeightEmojiSearch: CGFloat = 0.85 * (UIScreen.main.bounds.height/4.7)/3
+    let buttonHeight: CGFloat = 60.0
+    let buttonHeightEmojiSearch: CGFloat = 50.0
+    
     var emojiSearchRow: UIView?
-    var topRowView: UIView?
-    var middleRowView: UIView?
-    var bottomRowView: UIView?
+    var topRowView = UIView()
+    var middleRowView = UIView()
+    var bottomRowView = UIView()
+    
     var emojiView: EmojiView?
     var emojiSearchBarLabel: UILabel?
     var emojiSearchResultsContainer: UIScrollView?
@@ -50,7 +49,7 @@ class KeyboardViewController: UIInputViewController {
     var emojiSearchResults: String = ""
     var emojiSearchCarret: UIView?
     
-    var KeyboardButtons = [KeyboardButton]()
+    var allButtons = [KeyboardButton]()
     
     static var isShift = false
     static var isCaps = false
@@ -62,8 +61,8 @@ class KeyboardViewController: UIInputViewController {
     static var isTypingHapticEnabled = false
     static var isGesturesHapticEnabled = false
     
-    static var currentLocale = KeyboardViewController.Locale.en_US
-    static var enabledLocales = [KeyboardViewController.Locale.en_US, KeyboardViewController.Locale.ru_RU]
+    static var currentLocale = Locale.en_US
+    static var enabledLocales = [Locale.en_US, Locale.ru_RU]
     static var currentViewType = ViewType.Characters
     var lastViewType = ViewType.Characters
     
@@ -108,7 +107,7 @@ class KeyboardViewController: UIInputViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Keeping this cauese Apple requires us to
+        // Keeping this cause Apple requires us to
         self.nextKeyboardButton = UIButton(type: .system)
         
         BuildKeyboardView(viewType: .Characters)
@@ -158,20 +157,20 @@ class KeyboardViewController: UIInputViewController {
         
         let EN_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_en_locale_enabled") as? Bool ?? true
         let RU_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_ru_locale_enabled") as? Bool ?? false
-        KeyboardViewController.enabledLocales.removeAll()
-        if EN_enabled {KeyboardViewController.enabledLocales.append(KeyboardViewController.Locale.en_US)}
-        if RU_enabled {KeyboardViewController.enabledLocales.append(KeyboardViewController.Locale.ru_RU)}
+        FinaleKeyboard.enabledLocales.removeAll()
+        if EN_enabled { FinaleKeyboard.enabledLocales.append(Locale.en_US) }
+        if RU_enabled { FinaleKeyboard.enabledLocales.append(Locale.ru_RU) }
         
-        KeyboardViewController.isAutoCorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectWords") as? Bool ?? true
-        KeyboardViewController.isAutoCorrectGrammarOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectGrammar") as? Bool ?? true
-        KeyboardViewController.isAutoCapitalizeOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocapitalizeWords") as? Bool ?? true
-        KeyboardViewController.isTypingHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isTypingHapticEnabled") as? Bool ?? false
-        KeyboardViewController.isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
+        FinaleKeyboard.isAutoCorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectWords") as? Bool ?? true
+        FinaleKeyboard.isAutoCorrectGrammarOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectGrammar") as? Bool ?? true
+        FinaleKeyboard.isAutoCapitalizeOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocapitalizeWords") as? Bool ?? true
+        FinaleKeyboard.isTypingHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isTypingHapticEnabled") as? Bool ?? false
+        FinaleKeyboard.isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
         punctuationArray = userDefaults?.value(forKey: "FINALE_DEV_APP_punctuationArray") as? [String] ?? Defaults.defaultPunctuation
-        KeyboardViewController.currentLocale = Locale(rawValue: UserDefaults.standard.integer(forKey: localeSavePath)) ?? .en_US
+        FinaleKeyboard.currentLocale = Locale(rawValue: UserDefaults.standard.integer(forKey: localeSavePath)) ?? .en_US
         
-        if !KeyboardViewController.enabledLocales.contains(KeyboardViewController.currentLocale) {
-            KeyboardViewController.currentLocale = KeyboardViewController.enabledLocales[0]
+        if !FinaleKeyboard.enabledLocales.contains(FinaleKeyboard.currentLocale) {
+            FinaleKeyboard.currentLocale = FinaleKeyboard.enabledLocales[0]
         }
     }
     
@@ -182,7 +181,7 @@ class KeyboardViewController: UIInputViewController {
     }
     func BuildKeyboardView (viewType: ViewType) {
         if viewType == .Characters {
-            BuildKeyboardView(topRow: KeyboardViewController.currentLocale == .en_US ? topRowActions_en : topRowActions_ru, middleRow: KeyboardViewController.currentLocale == .en_US ? middleRowActions_en : middleRowActions_ru, bottomRow: KeyboardViewController.currentLocale == .en_US ? bottomRowActions_en : bottomRowActions_ru)
+            BuildKeyboardViewAutoLayout(topRow: FinaleKeyboard.currentLocale == .en_US ? topRowActions_en : topRowActions_ru, middleRow: FinaleKeyboard.currentLocale == .en_US ? middleRowActions_en : middleRowActions_ru, bottomRow: FinaleKeyboard.currentLocale == .en_US ? bottomRowActions_en : bottomRowActions_ru)
             CheckAutoCapitalization()
         } else if viewType == .Symbols {
             BuildKeyboardView(topRow: topRowSymbols, middleRow: middleRowSymbols, bottomRow: bottomRowSymbols)
@@ -191,92 +190,85 @@ class KeyboardViewController: UIInputViewController {
         } else if viewType == .SearchEmoji {
             BuildKeyboardView(topRow: topRowActions_en, middleRow: middleRowActions_en, bottomRow: bottomRowActionsEmojiSearch_en, emojiSearch: true)
         }
-        KeyboardViewController.currentViewType = viewType
+        FinaleKeyboard.currentViewType = viewType
+    }
+    
+    func BuildKeyboardViewAutoLayout (topRow: [Action], middleRow: [Action], bottomRow: [Action], emojiSearch: Bool = false) {
+        emojiSearchRow?.removeFromSuperview()
+        
+        allButtons.forEach{ $0.removeFromSuperview() }
+        allButtons.removeAll()
+        
+        topRowView.backgroundColor = .clear
+        self.view.addSubview(topRowView, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .top(0)])
+        middleRowView.backgroundColor = .gray.withAlphaComponent(0.5)
+        self.view.addSubview(middleRowView, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .topToBottom(topRowView, 0), .heightToHeight(topRowView, 0)])
+        bottomRowView.backgroundColor = .clear
+        self.view.addSubview(bottomRowView, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .topToBottom(middleRowView, 0), .heightToHeight(middleRowView, 0), .bottom(0)])
+        
+        topRow.forEach { PopulateRow(action: $0, row: topRowView) }
+        if let last = topRowView.subviews.last { last.trailingAnchor.constraint(equalTo: topRowView.trailingAnchor).isActive = true }
+        
+        middleRow.forEach { PopulateRow(action: $0, row: middleRowView) }
+        if let last = middleRowView.subviews.last { last.trailingAnchor.constraint(equalTo: middleRowView.trailingAnchor).isActive = true }
+        
+        bottomRow.forEach { PopulateRow(action: $0, row: bottomRowView) }
+        if let last = bottomRowView.subviews.last { last.trailingAnchor.constraint(equalTo: bottomRowView.trailingAnchor).isActive = true }
+    }
+    
+    func PopulateRow(action: Action, row: UIView) {
+        let button = KeyboardButton(action: action, self)
+        let prevButton: UIView? = row.subviews.last
+        let leading: LayoutAnchor = prevButton == nil ? .leading(0) : .leadingToTrailing(prevButton!, 0)
+        row.addSubview(button, anchors: [.top(0), .bottom(0), leading])
+        if prevButton != nil { button.widthAnchor.constraint(equalTo: prevButton!.widthAnchor).isActive = true }
+        allButtons.append(button)
     }
     
     func BuildKeyboardView (topRow: [Action], middleRow: [Action], bottomRow: [Action], emojiSearch: Bool = false) {
-        let height: CGFloat
-        if !emojiSearch { height = buttonHeight } else { height = buttonHeightEmojiSearch }
-        
-        emojiSearchRow?.removeFromSuperview()
-        topRowView?.removeFromSuperview()
-        middleRowView?.removeFromSuperview()
-        bottomRowView?.removeFromSuperview()
-        KeyboardButtons.removeAll()
-        
-        topRowView = UIView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: height))
-        topRowView!.backgroundColor = .clear
-        middleRowView = UIView(frame: CGRect(x: 0, y: height, width: UIScreen.main.bounds.width, height: height))
-        middleRowView!.backgroundColor = .gray.withAlphaComponent(0.5)
-        bottomRowView = UIView(frame: CGRect(x: 0, y: 2*height, width: UIScreen.main.bounds.width, height: height))
-        bottomRowView!.backgroundColor = .clear
-        for i in 0..<topRow.count {
-            let buttonWidth: CGFloat = UIScreen.main.bounds.width / CGFloat(topRow.count)
-            DrawAction(action: topRow[i], frame: CGRect(x: CGFloat(i)*buttonWidth, y: 0, width: buttonWidth, height: height), subView: topRowView!)
-        }
-        for i in 0..<middleRow.count {
-            let buttonWidth: CGFloat = UIScreen.main.bounds.width / CGFloat(middleRow.count)
-            DrawAction(action: middleRow[i], frame: CGRect(x: CGFloat(i)*buttonWidth, y: 0, width: buttonWidth, height: height), subView: middleRowView!)
-        }
-        for i in 0..<bottomRow.count {
-            let buttonWidth: CGFloat = UIScreen.main.bounds.width / CGFloat(bottomRow.count)
-            DrawAction(action: bottomRow[i], frame: CGRect(x: CGFloat(i)*buttonWidth, y: 0, width: buttonWidth, height: height), subView: bottomRowView!)
-        }
-        
-        if emojiSearch {
-            self.topRowView?.frame.origin.y -= self.view.frame.height
-            self.middleRowView?.frame.origin.y -= self.view.frame.height
-            self.bottomRowView?.frame.origin.y -= self.view.frame.height
-            
-            let padding = 8.0
-            let rowWidth = UIScreen.main.bounds.width-padding*2
-            let halfWidth = rowWidth*0.5-padding
-            let emojiRowHeight = self.view.frame.height-height*2.8
-            
-            emojiSearchRow = UIView(frame: CGRect(x: padding, y: 0, width: rowWidth, height: emojiRowHeight))
-            emojiSearchRow?.backgroundColor = .clear
-            
-            emojiSearchBarLabel = UILabel(frame: CGRect(x: 0, y: padding*0.5, width: halfWidth*0.75, height: emojiRowHeight-padding))
-            emojiSearchBarLabel!.text = " "
-            emojiSearchBarLabel!.layer.cornerRadius = 8
-            emojiSearchBarLabel!.layer.backgroundColor = UIColor.systemGray2.withAlphaComponent(0.3).cgColor
-            
-            emojiSearchResultsPlaceholder = UILabel(frame: CGRect(x: halfWidth*0.75+padding, y: 0, width: halfWidth*1.25+padding, height: emojiRowHeight))
-            emojiSearchResultsPlaceholder!.text = "Search Emoji"
-            emojiSearchResultsPlaceholder!.textColor = .systemGray
-            
-            emojiSearchResultsContainer = UIScrollView(frame: CGRect(x: halfWidth*0.75, y: 0, width: rowWidth-halfWidth*0.75+padding, height: emojiRowHeight))
-            
-            emojiSearchCarret = UIView(frame: CGRect(x: emojiSearchBarLabel!.intrinsicContentSize.width, y: padding, width: 2, height: emojiRowHeight*0.8-padding))
-            emojiSearchCarret?.backgroundColor = .systemGray
-            emojiSearchCarret?.layer.cornerRadius = 1
-            UIView.animate(withDuration: 0.6, delay: 0, options: [.repeat, .autoreverse]) {
-                self.emojiSearchCarret?.alpha = 0
-            }
-            
-            
-            self.emojiSearchRow?.frame.origin.y -= self.view.frame.height
-            emojiSearchRow?.addSubview(emojiSearchResultsContainer!)
-            emojiSearchRow?.addSubview(emojiSearchBarLabel!)
-            emojiSearchRow?.addSubview(emojiSearchResultsPlaceholder!)
-            emojiSearchRow?.addSubview(emojiSearchCarret!)
-            
-            self.view.addSubview(emojiSearchRow!)
-        }
-        
-        self.view.addSubview(topRowView!)
-        self.view.addSubview(middleRowView!)
-        self.view.addSubview(bottomRowView!)
-    }
-    
-    func DrawAction(action: Action, frame: CGRect, subView: UIView) {
-        let button = KeyboardButton(frame: frame)
-        button.action = action
-        button.viewController = self
-        button.SetupButton()
-        subView.addSubview(button)
-        subView.bringSubviewToFront(button)
-        KeyboardButtons.append(button)
+//
+//        DRAW ACTIONS HERE
+//
+//        if emojiSearch {
+//            self.topRowView?.frame.origin.y -= self.view.frame.height
+//            self.middleRowView?.frame.origin.y -= self.view.frame.height
+//            self.bottomRowView?.frame.origin.y -= self.view.frame.height
+//
+//            let padding = 8.0
+//            let rowWidth = UIScreen.main.bounds.width-padding*2
+//            let halfWidth = rowWidth*0.5-padding
+//            let emojiRowHeight = self.view.frame.height-height*2.8
+//
+//            emojiSearchRow = UIView(frame: CGRect(x: padding, y: 0, width: rowWidth, height: emojiRowHeight))
+//            emojiSearchRow?.backgroundColor = .clear
+//
+//            emojiSearchBarLabel = UILabel(frame: CGRect(x: 0, y: padding*0.5, width: halfWidth*0.75, height: emojiRowHeight-padding))
+//            emojiSearchBarLabel!.text = " "
+//            emojiSearchBarLabel!.layer.cornerRadius = 8
+//            emojiSearchBarLabel!.layer.backgroundColor = UIColor.systemGray2.withAlphaComponent(0.3).cgColor
+//
+//            emojiSearchResultsPlaceholder = UILabel(frame: CGRect(x: halfWidth*0.75+padding, y: 0, width: halfWidth*1.25+padding, height: emojiRowHeight))
+//            emojiSearchResultsPlaceholder!.text = "Search Emoji"
+//            emojiSearchResultsPlaceholder!.textColor = .systemGray
+//
+//            emojiSearchResultsContainer = UIScrollView(frame: CGRect(x: halfWidth*0.75, y: 0, width: rowWidth-halfWidth*0.75+padding, height: emojiRowHeight))
+//
+//            emojiSearchCarret = UIView(frame: CGRect(x: emojiSearchBarLabel!.intrinsicContentSize.width, y: padding, width: 2, height: emojiRowHeight*0.8-padding))
+//            emojiSearchCarret?.backgroundColor = .systemGray
+//            emojiSearchCarret?.layer.cornerRadius = 1
+//            UIView.animate(withDuration: 0.6, delay: 0, options: [.repeat, .autoreverse]) {
+//                self.emojiSearchCarret?.alpha = 0
+//            }
+//
+//
+//            self.emojiSearchRow?.frame.origin.y -= self.view.frame.height
+//            emojiSearchRow?.addSubview(emojiSearchResultsContainer!)
+//            emojiSearchRow?.addSubview(emojiSearchBarLabel!)
+//            emojiSearchRow?.addSubview(emojiSearchResultsPlaceholder!)
+//            emojiSearchRow?.addSubview(emojiSearchCarret!)
+//
+//            self.view.addSubview(emojiSearchRow!)
+//        }
     }
     
     func SuggestionsView () {
@@ -315,38 +307,38 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func ToggleEmojiView () {
-        if KeyboardViewController.currentViewType != .Emoji && KeyboardViewController.currentViewType != .SearchEmoji {
+        if FinaleKeyboard.currentViewType != .Emoji && FinaleKeyboard.currentViewType != .SearchEmoji {
             if emojiView == nil {
                 BuildEmojiView()
             }
             emojiView?.ResetView()
             ResetSuggestionsLabels()
             UIView.animate(withDuration: 0.4) {
-                self.topRowView?.frame.origin.y -= self.view.frame.height
-                self.middleRowView?.frame.origin.y -= self.view.frame.height
-                self.bottomRowView?.frame.origin.y -= self.view.frame.height
+                self.topRowView.frame.origin.y -= self.view.frame.height
+                self.middleRowView.frame.origin.y -= self.view.frame.height
+                self.bottomRowView.frame.origin.y -= self.view.frame.height
 
                 self.emojiView?.frame.origin.y -= self.view.frame.height
             }
-            lastViewType = KeyboardViewController.currentViewType
-            KeyboardViewController.currentViewType = .Emoji
+            lastViewType = FinaleKeyboard.currentViewType
+            FinaleKeyboard.currentViewType = .Emoji
         } else {
             UIView.animate(withDuration: 0.4) {
-                if KeyboardViewController.currentViewType != .SearchEmoji {
-                    self.topRowView?.frame.origin.y = 0
-                    self.middleRowView?.frame.origin.y = self.buttonHeight
-                    self.bottomRowView?.frame.origin.y = self.buttonHeight * 2
+                if FinaleKeyboard.currentViewType != .SearchEmoji {
+                    self.topRowView.frame.origin.y = 0
+                    self.middleRowView.frame.origin.y = self.buttonHeight
+                    self.bottomRowView.frame.origin.y = self.buttonHeight * 2
                     self.emojiView?.frame.origin.y = self.view.frame.height
                 } else {
                     self.emojiSearchRow?.frame.origin.y = 0
-                    self.topRowView?.frame.origin.y = 0 + self.view.frame.height - self.buttonHeightEmojiSearch*3
-                    self.middleRowView?.frame.origin.y = self.buttonHeightEmojiSearch + self.view.frame.height - self.buttonHeightEmojiSearch*3
-                    self.bottomRowView?.frame.origin.y = self.buttonHeightEmojiSearch * 2 + self.view.frame.height - self.buttonHeightEmojiSearch*3
+                    self.topRowView.frame.origin.y = 0 + self.view.frame.height - self.buttonHeightEmojiSearch*3
+                    self.middleRowView.frame.origin.y = self.buttonHeightEmojiSearch + self.view.frame.height - self.buttonHeightEmojiSearch*3
+                    self.bottomRowView.frame.origin.y = self.buttonHeightEmojiSearch * 2 + self.view.frame.height - self.buttonHeightEmojiSearch*3
                     self.emojiView?.frame.origin.y = self.view.frame.height
                 }
             }
-            if KeyboardViewController.currentViewType != .SearchEmoji {
-                KeyboardViewController.currentViewType = lastViewType
+            if FinaleKeyboard.currentViewType != .SearchEmoji {
+                FinaleKeyboard.currentViewType = lastViewType
                 RedrawSuggestionsLabels()
             }
         }
@@ -359,13 +351,13 @@ class KeyboardViewController: UIInputViewController {
         }
         
         if action.functionType != .Shift && !CheckAutoCapitalization() {
-            KeyboardViewController.isShift = false
+            FinaleKeyboard.isShift = false
             UpdateButtonTitleShift()
         }
     }
     
     func TypeCharacter (char: String) {
-        if KeyboardViewController.currentViewType == .SearchEmoji {
+        if FinaleKeyboard.currentViewType == .SearchEmoji {
             emojiSearchBarLabel!.text?.append(char)
             UpdateEmojiSearch()
             return
@@ -383,7 +375,7 @@ class KeyboardViewController: UIInputViewController {
         
         var x = false
         if (shouldPlaceBeforeSpace) {
-            if (KeyboardViewController.isAutoCorrectOn && getLastChar() == " ") {
+            if (FinaleKeyboard.isAutoCorrectOn && getLastChar() == " ") {
                 self.textDocumentProxy.deleteBackward()
                 x = true
             }
@@ -458,14 +450,14 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func BackAction() {
-        if KeyboardViewController.currentViewType == .SearchEmoji {
+        if FinaleKeyboard.currentViewType == .SearchEmoji {
             BuildKeyboardView(viewType: .Characters)
             RedrawSuggestionsLabels()
         }
     }
     
     func BackspaceAction () {
-        if KeyboardViewController.currentViewType == .SearchEmoji {
+        if FinaleKeyboard.currentViewType == .SearchEmoji {
             if emojiSearchBarLabel!.text!.count <= 1 { return }
             emojiSearchBarLabel!.text?.removeLast()
             UpdateEmojiSearch()
@@ -479,58 +471,58 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func LongPressDelete (backspace: Bool) {
-        if (KeyboardViewController.isLongPressing) { return }
+        if (FinaleKeyboard.isLongPressing) { return }
         waitForLongPress = Timer.scheduledTimer(withTimeInterval: longPressDelay, repeats: false) { (_) in
             self.deleteTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
                 if backspace { self.BackspaceAction() }
                 else { self.Delete() }
             }
         }
-        KeyboardViewController.isLongPressing = true
+        FinaleKeyboard.isLongPressing = true
     }
     func LongPressCharacter (touchLocation: CGPoint, button: KeyboardButton) {
-        if (KeyboardViewController.isLongPressing) { return }
+        if (FinaleKeyboard.isLongPressing) { return }
         waitForLongPress = Timer.scheduledTimer(withTimeInterval: longPressDelay, repeats: false) { (_) in
-            KeyboardViewController.isMovingCursor = true
+            FinaleKeyboard.isMovingCursor = true
             self.lastTouchPosX = touchLocation.x
             button.HideCallout()
             
             UIView.animate (withDuration: 0.3) {
-                self.topRowView?.alpha = 0.5
-                self.middleRowView?.alpha = 0.5
-                self.bottomRowView?.alpha = 0.5
+                self.topRowView.alpha = 0.5
+                self.middleRowView.alpha = 0.5
+                self.bottomRowView.alpha = 0.5
             }
             
             HapticFeedback.GestureImpactOccurred()
         }
-        KeyboardViewController.isLongPressing = true
+        FinaleKeyboard.isLongPressing = true
     }
     func LongPressShift (button: KeyboardButton) {
-        if (KeyboardViewController.isLongPressing) { return }
+        if (FinaleKeyboard.isLongPressing) { return }
         waitForLongPress = Timer.scheduledTimer(withTimeInterval: longPressDelay, repeats: false) { (_) in
-            KeyboardViewController.isAutoCorrectOn = !KeyboardViewController.isAutoCorrectOn
+            FinaleKeyboard.isAutoCorrectOn = !FinaleKeyboard.isAutoCorrectOn
             button.HideCallout()
             self.toggledAC = true
-            self.ShowNotification(text: KeyboardViewController.isAutoCorrectOn ? "Autocorrection on" : "Autocorrection off")
+            self.ShowNotification(text: FinaleKeyboard.isAutoCorrectOn ? "Autocorrection on" : "Autocorrection off")
             
             let userDefaults = UserDefaults(suiteName: self.suiteName)
-            userDefaults?.setValue(KeyboardViewController.isAutoCorrectOn, forKey: self.ACSavePath)
+            userDefaults?.setValue(FinaleKeyboard.isAutoCorrectOn, forKey: self.ACSavePath)
             
             HapticFeedback.GestureImpactOccurred()
         }
-        KeyboardViewController.isLongPressing = true
+        FinaleKeyboard.isLongPressing = true
     }
     func CancelLongPress () {
-        KeyboardViewController.isLongPressing = false
+        FinaleKeyboard.isLongPressing = false
         toggledAC = false
         CancelWaitingForLongPress()
         
-        if (KeyboardViewController.isMovingCursor) {
-            KeyboardViewController.isMovingCursor = false
+        if (FinaleKeyboard.isMovingCursor) {
+            FinaleKeyboard.isMovingCursor = false
             UIView.animate (withDuration: 0.3) {
-                self.topRowView?.alpha = 1
-                self.middleRowView?.alpha = 1
-                self.bottomRowView?.alpha = 1
+                self.topRowView.alpha = 1
+                self.middleRowView.alpha = 1
+                self.bottomRowView.alpha = 1
             }
         }
     }
@@ -593,18 +585,18 @@ class KeyboardViewController: UIInputViewController {
             return
         }
         
-        if KeyboardViewController.isCaps {
-            KeyboardViewController.isCaps = false
-            KeyboardViewController.isShift = false
+        if FinaleKeyboard.isCaps {
+            FinaleKeyboard.isCaps = false
+            FinaleKeyboard.isShift = false
             CheckAutoCapitalization()
         } else {
-            KeyboardViewController.isShift = !KeyboardViewController.isShift
+            FinaleKeyboard.isShift = !FinaleKeyboard.isShift
         }
         UpdateButtonTitleShift()
     }
     func CapsAction (){
-        KeyboardViewController.isShift = false
-        KeyboardViewController.isCaps = true
+        FinaleKeyboard.isShift = false
+        FinaleKeyboard.isCaps = true
         UpdateButtonTitleShift()
     }
     func ReturnAction () {
@@ -614,7 +606,7 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func SwipeRight () {
-        if KeyboardViewController.currentViewType == .SearchEmoji {
+        if FinaleKeyboard.currentViewType == .SearchEmoji {
             emojiSearchBarLabel!.text?.append(" ")
             UpdateEmojiSearch()
             return
@@ -627,7 +619,7 @@ class KeyboardViewController: UIInputViewController {
             InsertPunctuation(index: pickedPunctuationIndex)
         } else if self.textDocumentProxy.documentContextBeforeInput?.last != " " {
             ResetSuggestionsLabels()
-            if (KeyboardViewController.isAutoCorrectOn) {
+            if (FinaleKeyboard.isAutoCorrectOn) {
                 GenerateAutocorrections()
                 CheckUserDictionary()
                 ReplaceWithSuggestion(ignoreSpace: false, instant: true)
@@ -653,10 +645,10 @@ class KeyboardViewController: UIInputViewController {
             InsertPunctuation(index: index)
         }
         CheckAutoCapitalization()
-        if KeyboardViewController.currentViewType != .Characters { BuildKeyboardView(viewType: .Characters) }
+        if FinaleKeyboard.currentViewType != .Characters { BuildKeyboardView(viewType: .Characters) }
     }
     func SwipeDown () {
-        if KeyboardViewController.currentViewType == .SearchEmoji { return }
+        if FinaleKeyboard.currentViewType == .SearchEmoji { return }
         if !self.textDocumentProxy.hasText { return }
         
         if canEditPrevPunctuation {
@@ -678,7 +670,7 @@ class KeyboardViewController: UIInputViewController {
         EditPreviousWord(upOrDown: -1)
     }
     func SwipeUp () {
-        if KeyboardViewController.currentViewType == .SearchEmoji { return }
+        if FinaleKeyboard.currentViewType == .SearchEmoji { return }
         if !self.textDocumentProxy.hasText { return }
         
         if canEditPrevPunctuation {
@@ -737,7 +729,7 @@ class KeyboardViewController: UIInputViewController {
         
         let lastWord = getLastWord()
         let checker = UITextChecker()
-        let misspelledRange = checker.rangeOfMisspelledWord(in: lastWord, range: NSMakeRange(0, lastWord.count), startingAt: 0, wrap: true, language: "\(KeyboardViewController.currentLocale)")
+        let misspelledRange = checker.rangeOfMisspelledWord(in: lastWord, range: NSMakeRange(0, lastWord.count), startingAt: 0, wrap: true, language: "\(FinaleKeyboard.currentLocale)")
        
         if (suggestionsArrays[nextSuggestionArray].suggestions.count != 0) {
             suggestionsArrays[nextSuggestionArray].suggestions.removeAll()
@@ -751,7 +743,7 @@ class KeyboardViewController: UIInputViewController {
         AppendSuggestionFromDictionary(dict: defaultDictionary, lastWord: lastWord)
         
         if misspelledRange.location != NSNotFound {
-            suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: checker.guesses(forWordRange: misspelledRange, in: lastWord, language: "\(KeyboardViewController.currentLocale)") ?? [String]())
+            suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: checker.guesses(forWordRange: misspelledRange, in: lastWord, language: "\(FinaleKeyboard.currentLocale)") ?? [String]())
             while suggestionsArrays[nextSuggestionArray].suggestions.count > maxSuggestions { suggestionsArrays[nextSuggestionArray].suggestions.removeLast() }
         }
         
@@ -759,7 +751,7 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func AppendSuggestionFromDictionary (dict: Dictionary<String, [String]>, lastWord: String) {
-        if !KeyboardViewController.isAutoCorrectGrammarOn { return }
+        if !FinaleKeyboard.isAutoCorrectGrammarOn { return }
         
         if (dict[lastWord.lowercased()] != nil) {
             if lastWord.first!.isUppercase {
@@ -888,7 +880,7 @@ class KeyboardViewController: UIInputViewController {
     func Delete() {
         HapticFeedback.GestureImpactOccurred()
         
-        if KeyboardViewController.currentViewType == .SearchEmoji {
+        if FinaleKeyboard.currentViewType == .SearchEmoji {
             emojiSearchBarLabel!.text? = " "
             UpdateEmojiSearch()
             MiddleRowReactAnimation()
@@ -950,15 +942,14 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func UpdateButtonTitleShift () {
-        for button in KeyboardButtons {
+        for button in allButtons {
             if button.action.functionType == .Shift {
                 if (!button.isCalloutShown()) {
-                    button.imageView?.tintColor = shouldCapitalize ? .label : .systemGray
+                    button.iconView.tintColor = shouldCapitalize ? .label : .systemGray
                 }
                 continue
             }
-            button.setTitle(shouldCapitalize ? button.currentTitle?.capitalized : button.currentTitle?.lowercased(), for: .normal)
-            button.calloutLabel.text = button.titleLabel?.text
+            button.titleLabel.text = shouldCapitalize ? button.titleLabel.text!.capitalized : button.titleLabel.text!.lowercased()
         }
     }
     
@@ -1073,8 +1064,9 @@ class KeyboardViewController: UIInputViewController {
         }
     }
     
-    func CheckAutoCapitalization () -> Bool{
-        if !KeyboardViewController.isAutoCapitalizeOn { return false }
+    @discardableResult
+    func CheckAutoCapitalization () -> Bool {
+        if !FinaleKeyboard.isAutoCapitalizeOn { return false }
         
         if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput == "") {
             ForceShift()
@@ -1102,11 +1094,11 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func ForceShift () {
-        KeyboardViewController.isShift = true
+        FinaleKeyboard.isShift = true
         UpdateButtonTitleShift()
     }
     func RemoveShift () {
-        KeyboardViewController.isShift = false
+        FinaleKeyboard.isShift = false
         UpdateButtonTitleShift()
     }
     
@@ -1118,10 +1110,10 @@ class KeyboardViewController: UIInputViewController {
     
     func MiddleRowReactAnimation () {
         UIView.animate(withDuration: 0.17, delay: 0, options: .allowUserInteraction) {
-            self.middleRowView!.backgroundColor = self.middleRowView!.backgroundColor?.withAlphaComponent(0.57)
+            self.middleRowView.backgroundColor = self.middleRowView.backgroundColor?.withAlphaComponent(0.57)
         } completion: { _ in
             UIView.animate(withDuration: 0.17, delay: 0, options: .allowUserInteraction) {
-                self.middleRowView!.backgroundColor = self.middleRowView!.backgroundColor?.withAlphaComponent(0.5)
+                self.middleRowView.backgroundColor = self.middleRowView.backgroundColor?.withAlphaComponent(0.5)
             }
         }
         
@@ -1168,25 +1160,25 @@ class KeyboardViewController: UIInputViewController {
     }
     
     func ToggleLocale () {
-        let index = ((KeyboardViewController.enabledLocales.firstIndex(of: KeyboardViewController.currentLocale) ?? 0) + 1) % KeyboardViewController.enabledLocales.count
-        KeyboardViewController.currentLocale = KeyboardViewController.enabledLocales[index]
+        let index = ((FinaleKeyboard.enabledLocales.firstIndex(of: FinaleKeyboard.currentLocale) ?? 0) + 1) % FinaleKeyboard.enabledLocales.count
+        FinaleKeyboard.currentLocale = FinaleKeyboard.enabledLocales[index]
         
         BuildKeyboardView(viewType: .Characters)
         ResetSuggestions()
         
-        UserDefaults.standard.set(KeyboardViewController.currentLocale.rawValue, forKey: self.localeSavePath)
+        UserDefaults.standard.set(FinaleKeyboard.currentLocale.rawValue, forKey: self.localeSavePath)
     }
     func ToggleSymbolsView () {
-        if KeyboardViewController.currentViewType == .Characters { BuildKeyboardView(viewType: .Symbols); KeyboardViewController.isShift = false; KeyboardViewController.isCaps = false }
-        else if KeyboardViewController.currentViewType == .Symbols || KeyboardViewController.currentViewType == .ExtraSymbols { BuildKeyboardView(viewType: .Characters) }
+        if FinaleKeyboard.currentViewType == .Characters { BuildKeyboardView(viewType: .Symbols); FinaleKeyboard.isShift = false; FinaleKeyboard.isCaps = false }
+        else if FinaleKeyboard.currentViewType == .Symbols || FinaleKeyboard.currentViewType == .ExtraSymbols { BuildKeyboardView(viewType: .Characters) }
     }
     func ToggleExtraSymbolsView () {
-        if KeyboardViewController.currentViewType == .Symbols { BuildKeyboardView(viewType: .ExtraSymbols) }
-        else if KeyboardViewController.currentViewType == .ExtraSymbols { BuildKeyboardView(viewType: .Symbols) }
+        if FinaleKeyboard.currentViewType == .Symbols { BuildKeyboardView(viewType: .ExtraSymbols) }
+        else if FinaleKeyboard.currentViewType == .ExtraSymbols { BuildKeyboardView(viewType: .Symbols) }
     }
     
     var shouldCapitalize: Bool {
-        return KeyboardViewController.isShift || KeyboardViewController.isCaps
+        return FinaleKeyboard.isShift || FinaleKeyboard.isCaps
     }
     
     struct SuggestionsArray {
@@ -1205,55 +1197,24 @@ class KeyboardViewController: UIInputViewController {
             self.lastPickedSuggestionIndex = 1
         }
     }
+}
+
+struct Action {
+    var actionType: ActionType
+    var actionTitle: String
+    var functionType: FunctionType
     
-    public struct Action {
-        var actionType: ActionType
-        var actionTitle: String
-        var functionType: FunctionType
-        
-        init(type: ActionType, title: String, funcType: FunctionType = .none) {
-            self.actionType = type
-            self.actionTitle = title
-            self.functionType = funcType
-        }
-    }
-    
-    enum ActionType {
-        case Character
-        case Function
-    }
-    
-    enum FunctionType {
-        case Shift
-        case SymbolsShift
-        case ExtraSymbolsShift
-        case Backspace
-        case Caps
-        case Back
-        case none
-    }
-    
-    enum ViewType {
-        case Characters
-        case Symbols
-        case ExtraSymbols
-        case Emoji
-        case SearchEmoji
-    }
-    
-    enum Locale: Int {
-        case en_US
-        case ru_RU
-    }
-    struct DictionaryItem: Decodable {
-        let input: String
-        let suggestions: [String]
+    init(type: ActionType, title: String, funcType: FunctionType = .none) {
+        self.actionType = type
+        self.actionTitle = title
+        self.functionType = funcType
     }
 }
 
 class EmojiSearchResultButton: UIView {
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
-    var viewController: KeyboardViewController?
+    var viewController: FinaleKeyboard?
     var emoji: String?
     
     override init(frame: CGRect) {
@@ -1261,11 +1222,7 @@ class EmojiSearchResultButton: UIView {
         backgroundColor = .clear
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func Setup(viewController: KeyboardViewController, emoji: String) {
+    func Setup(viewController: FinaleKeyboard, emoji: String) {
         self.viewController = viewController
         self.emoji = emoji
         

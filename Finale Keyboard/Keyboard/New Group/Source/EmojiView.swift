@@ -12,7 +12,7 @@ import ElegantEmojiPicker
 class EmojiView: UIView, UIScrollViewDelegate {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
-    var viewController: KeyboardViewController
+    var viewController: FinaleKeyboard
     
     var emojiSections: [EmojiSection]
     
@@ -33,7 +33,7 @@ class EmojiView: UIView, UIScrollViewDelegate {
     var canDismiss = true
     var beganDismiss = false
     
-    init (_ viewController: KeyboardViewController, frame: CGRect) {
+    init (_ viewController: FinaleKeyboard, frame: CGRect) {
         self.viewController = viewController
         self.emojiSections = ElegantEmojiPicker.getDefaultEmojiSections()
         super.init(frame: frame)
@@ -119,10 +119,10 @@ class EmojiView: UIView, UIScrollViewDelegate {
         viewController.BackspaceAction()
     }
     @objc func ToggleSearchEmojiView () {
-        if KeyboardViewController.currentViewType == .SearchEmoji { return }
+        if FinaleKeyboard.currentViewType == .SearchEmoji { return }
         viewController.BuildEmojiSearchView()
         viewController.ToggleEmojiView()
-        KeyboardViewController.currentViewType = .SearchEmoji
+        FinaleKeyboard.currentViewType = .SearchEmoji
         
         HapticFeedback.GestureImpactOccurred()
     }
@@ -134,15 +134,15 @@ class EmojiView: UIView, UIScrollViewDelegate {
         
         if panGesture.state == .began {
             originalPosition = self.frame.origin.y
-            originalKeyboardPosition = viewController.topRowView?.frame.origin.y
+            originalKeyboardPosition = viewController.topRowView.frame.origin.y
             currentPositionTouched = panGesture.location(in: self)
             beganDismiss = true
         } else if panGesture.state == .changed {
             if (!beganDismiss) {return}
             self.frame.origin.y = translation.y
-            viewController.topRowView?.frame.origin.y = translation.y - viewController.buttonHeight*3
-            viewController.middleRowView?.frame.origin.y = translation.y - viewController.buttonHeight*2
-            viewController.bottomRowView?.frame.origin.y = translation.y - viewController.buttonHeight
+            viewController.topRowView.frame.origin.y = translation.y - viewController.buttonHeight*3
+            viewController.middleRowView.frame.origin.y = translation.y - viewController.buttonHeight*2
+            viewController.bottomRowView.frame.origin.y = translation.y - viewController.buttonHeight
         } else if panGesture.state == .ended {
             if (!beganDismiss) {return}
             let velocity = panGesture.velocity(in: self)
@@ -154,9 +154,9 @@ class EmojiView: UIView, UIScrollViewDelegate {
               } else {
                 UIView.animate(withDuration: 0.2) {
                     self.frame.origin.y = self.originalPosition!
-                    self.viewController.topRowView?.frame.origin.y = self.originalKeyboardPosition!
-                    self.viewController.middleRowView?.frame.origin.y = self.originalKeyboardPosition! - self.viewController.buttonHeight
-                    self.viewController.bottomRowView?.frame.origin.y = self.originalKeyboardPosition! - self.viewController.buttonHeight*2
+                    self.viewController.topRowView.frame.origin.y = self.originalKeyboardPosition!
+                    self.viewController.middleRowView.frame.origin.y = self.originalKeyboardPosition! - self.viewController.buttonHeight
+                    self.viewController.bottomRowView.frame.origin.y = self.originalKeyboardPosition! - self.viewController.buttonHeight*2
                 }
               }
             beganDismiss = false
@@ -231,7 +231,7 @@ extension EmojiView: UICollectionViewDelegate {
 class EmojiCell: UICollectionViewCell {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
-    weak var viewController: KeyboardViewController?
+    weak var viewController: FinaleKeyboard?
     var emoji: Emoji?
     
     var label: UILabel?
@@ -242,7 +242,7 @@ class EmojiCell: UICollectionViewCell {
         backgroundColor = .clear
     }
     
-    func Setup (emoji: Emoji, viewController: KeyboardViewController) {
+    func Setup (emoji: Emoji, viewController: FinaleKeyboard) {
         self.viewController = viewController
         self.emoji = emoji
         
