@@ -89,6 +89,7 @@ class FinaleKeyboard: UIInputViewController {
     var lastTouchPosX = 0.0
     
     var punctuationArray: [String] = []
+    var shortcuts: [String:String] = [:]
     var defaultDictionary: Dictionary<String, [String]> = [String:[String]]()
     var userDictionary: [String] = []
     
@@ -161,7 +162,8 @@ class FinaleKeyboard: UIInputViewController {
         FinaleKeyboard.isAutoCapitalizeOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocapitalizeWords") as? Bool ?? true
         FinaleKeyboard.isTypingHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isTypingHapticEnabled") as? Bool ?? false
         FinaleKeyboard.isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
-        punctuationArray = userDefaults?.value(forKey: "FINALE_DEV_APP_punctuationArray") as? [String] ?? Defaults.defaultPunctuation
+        punctuationArray = userDefaults?.value(forKey: "FINALE_DEV_APP_punctuationArray") as? [String] ?? Defaults.punctuation
+        shortcuts = userDefaults?.value(forKey: "FINALE_DEV_APP_shortcuts") as? [String : String] ?? Defaults.shortcuts
         FinaleKeyboard.currentLocale = Locale(rawValue: UserDefaults.standard.integer(forKey: localeSavePath)) ?? .en_US
         
         if !FinaleKeyboard.enabledLocales.contains(FinaleKeyboard.currentLocale) {
@@ -373,8 +375,6 @@ class FinaleKeyboard: UIInputViewController {
         }
         self.textDocumentProxy.insertText(emoji)
         self.textDocumentProxy.insertText(" ")
-        
-        HapticFeedback.TypingImpactOccurred()
     }
     
     func BackAction() {

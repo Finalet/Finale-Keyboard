@@ -9,11 +9,10 @@ import Foundation
 
 class Defaults {
     
-    static let defaultPunctuation = [" ", ".", ",", "?", "!", ":", ";"]
+    static let punctuation = [" ", ".", ",", "?", "!", ":", ";"]
     
-    static let secondaryCharacters: [Character : String] = [
+    static let shortcuts: [String : String] = [
         "е" : "ё",
         "ь" : "ъ",
-        "p" : "🤬"
     ]
 }

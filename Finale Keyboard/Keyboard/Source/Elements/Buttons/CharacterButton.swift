@@ -72,7 +72,7 @@ class CharacterButton: KeyboardButton {
         } else if direction == .Up {
             FinaleKeyboard.instance.SwipeUp()
         } else if direction == .Down {
-            if !TypeExtraCharacters() { FinaleKeyboard.instance.SwipeDown() }
+            if !TypeShortcut() { FinaleKeyboard.instance.SwipeDown() }
         }
     }
     
@@ -82,7 +82,7 @@ class CharacterButton: KeyboardButton {
             FinaleKeyboard.instance.MiddleRowReactAnimation()
             HapticFeedback.GestureImpactOccurred()
         } else if direction == .Down {
-            TypeExtraCharacters()
+            TypeShortcut()
         }
     }
     
@@ -124,12 +124,33 @@ class CharacterButton: KeyboardButton {
     }
     
     @discardableResult
-    func TypeExtraCharacters () -> Bool {
-        if let secondaryChar = Defaults.secondaryCharacters[character] {
+    func TypeShortcut () -> Bool {
+        if let secondaryChar = FinaleKeyboard.instance.shortcuts[String(character)] {
             if secondaryChar.isEmoji { FinaleKeyboard.instance.TypeEmoji(emoji: secondaryChar) }
             else { FinaleKeyboard.instance.TypeCharacter(secondaryChar) }
+            AnimateShortcutCallout(title: secondaryChar)
+            HapticFeedback.TypingImpactOccurred()
             return true
         }
         return false
+    }
+    
+    func AnimateShortcutCallout (title: String) {
+        let width = title.size(withAttributes: [.font:titleLabel.font!]).width
+        
+        let label = UILabel(frame: CGRect(x: 0.5*(self.frame.width-width), y: 0, width: width, height: self.frame.height))
+        label.text = title
+        label.font = titleLabel.font
+        label.textAlignment = .center
+        label.textColor = .label
+        self.addSubview(label)
+        UIView.animate(withDuration: 0.25, delay: 0.25) {
+            label.alpha = 0
+        }
+        UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut) {
+            label.frame.origin.y -= self.frame.height*0.7
+        } completion: { _ in
+            label.removeFromSuperview()
+        }
     }
 }

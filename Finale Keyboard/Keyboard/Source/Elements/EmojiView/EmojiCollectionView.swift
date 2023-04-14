@@ -120,6 +120,7 @@ class EmojiCell: UICollectionViewCell {
         guard let emoji = emoji else { return }
         
         FinaleKeyboard.instance.TypeEmoji(emoji: emoji.emoji)
+        HapticFeedback.TypingImpactOccurred()
         UIView.animate(withDuration: 0.05, delay: 0, options: [.allowUserInteraction, .curveEaseOut]) {
             self.label.frame.origin.y -= self.label.frame.size.height*0.3
             self.label.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
