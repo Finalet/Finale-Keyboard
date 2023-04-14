@@ -34,9 +34,9 @@ class FinaleKeyboard: UIInputViewController {
     static var instance: FinaleKeyboard!
     
     static let buttonHeight: CGFloat = 60.0
-    let buttonHeightEmojiSearch: CGFloat = 50.0
+    let emojiRowHeight = 38.0
     
-    var emojiSearchRow: UIView?
+    var emojiSearchRow: EmojiSearchRow?
     var topRowView = UIView()
     var middleRowView = UIView()
     var bottomRowView = UIView()
@@ -44,12 +44,6 @@ class FinaleKeyboard: UIInputViewController {
     var bottomRowBottomConstraint: NSLayoutConstraint?
     
     var emojiView = EmojiView()
-    
-    var emojiSearchBarLabel: UILabel?
-    var emojiSearchResultsContainer: UIScrollView?
-    var emojiSearchResultsPlaceholder: UILabel?
-    var emojiSearchResults: String = ""
-    var emojiSearchCarret: UIView?
     
     var allButtons = [KeyboardButton]()
     
@@ -182,19 +176,17 @@ class FinaleKeyboard: UIInputViewController {
     }
     func BuildKeyboardView (viewType: ViewType) {
         if viewType == .Characters {
-            BuildKeyboardViewAutoLayout(topRow: FinaleKeyboard.currentLocale == .en_US ? topRowActions_en : topRowActions_ru, middleRow: FinaleKeyboard.currentLocale == .en_US ? middleRowActions_en : middleRowActions_ru, bottomRow: FinaleKeyboard.currentLocale == .en_US ? bottomRowActions_en : bottomRowActions_ru)
+            BuildKeyboardView(topRow: FinaleKeyboard.currentLocale == .en_US ? topRowActions_en : topRowActions_ru, middleRow: FinaleKeyboard.currentLocale == .en_US ? middleRowActions_en : middleRowActions_ru, bottomRow: FinaleKeyboard.currentLocale == .en_US ? bottomRowActions_en : bottomRowActions_ru)
             CheckAutoCapitalization()
         } else if viewType == .Symbols {
             BuildKeyboardView(topRow: topRowSymbols, middleRow: middleRowSymbols, bottomRow: bottomRowSymbols)
         } else if viewType == .ExtraSymbols {
             BuildKeyboardView(topRow: topRowExtraSymbols, middleRow: middleRowExtraSymbols, bottomRow: bottomRowExtraSymbols)
-        } else if viewType == .SearchEmoji {
-            BuildKeyboardView(topRow: topRowActions_en, middleRow: middleRowActions_en, bottomRow: bottomRowActionsEmojiSearch_en, emojiSearch: true)
         }
         FinaleKeyboard.currentViewType = viewType
     }
     
-    func BuildKeyboardViewAutoLayout (topRow: [Action], middleRow: [Action], bottomRow: [Action], emojiSearch: Bool = false) {
+    func BuildKeyboardView (topRow: [Action], middleRow: [Action], bottomRow: [Action]) {
         emojiSearchRow?.removeFromSuperview()
         
         allButtons.forEach{ $0.removeFromSuperview() }
@@ -232,51 +224,13 @@ class FinaleKeyboard: UIInputViewController {
         allButtons.append(button)
     }
     
-    func BuildKeyboardView (topRow: [Action], middleRow: [Action], bottomRow: [Action], emojiSearch: Bool = false) {
-//
-//        DRAW ACTIONS HERE
-//
-//        if emojiSearch {
-//            self.topRowView?.frame.origin.y -= self.view.frame.height
-//            self.middleRowView?.frame.origin.y -= self.view.frame.height
-//            self.bottomRowView?.frame.origin.y -= self.view.frame.height
-//
-//            let padding = 8.0
-//            let rowWidth = UIScreen.main.bounds.width-padding*2
-//            let halfWidth = rowWidth*0.5-padding
-//            let emojiRowHeight = self.view.frame.height-height*2.8
-//
-//            emojiSearchRow = UIView(frame: CGRect(x: padding, y: 0, width: rowWidth, height: emojiRowHeight))
-//            emojiSearchRow?.backgroundColor = .clear
-//
-//            emojiSearchBarLabel = UILabel(frame: CGRect(x: 0, y: padding*0.5, width: halfWidth*0.75, height: emojiRowHeight-padding))
-//            emojiSearchBarLabel!.text = " "
-//            emojiSearchBarLabel!.layer.cornerRadius = 8
-//            emojiSearchBarLabel!.layer.backgroundColor = UIColor.systemGray2.withAlphaComponent(0.3).cgColor
-//
-//            emojiSearchResultsPlaceholder = UILabel(frame: CGRect(x: halfWidth*0.75+padding, y: 0, width: halfWidth*1.25+padding, height: emojiRowHeight))
-//            emojiSearchResultsPlaceholder!.text = "Search Emoji"
-//            emojiSearchResultsPlaceholder!.textColor = .systemGray
-//
-//            emojiSearchResultsContainer = UIScrollView(frame: CGRect(x: halfWidth*0.75, y: 0, width: rowWidth-halfWidth*0.75+padding, height: emojiRowHeight))
-//
-//            emojiSearchCarret = UIView(frame: CGRect(x: emojiSearchBarLabel!.intrinsicContentSize.width, y: padding, width: 2, height: emojiRowHeight*0.8-padding))
-//            emojiSearchCarret?.backgroundColor = .systemGray
-//            emojiSearchCarret?.layer.cornerRadius = 1
-//            UIView.animate(withDuration: 0.6, delay: 0, options: [.repeat, .autoreverse]) {
-//                self.emojiSearchCarret?.alpha = 0
-//            }
-//
-//
-//            self.emojiSearchRow?.frame.origin.y -= self.view.frame.height
-//            emojiSearchRow?.addSubview(emojiSearchResultsContainer!)
-//            emojiSearchRow?.addSubview(emojiSearchBarLabel!)
-//            emojiSearchRow?.addSubview(emojiSearchResultsPlaceholder!)
-//            emojiSearchRow?.addSubview(emojiSearchCarret!)
-//
-//            self.view.addSubview(emojiSearchRow!)
-//        }
+    func AddSearchEmojiField () {
+        emojiSearchRow?.removeFromSuperview()
+        emojiSearchRow = EmojiSearchRow()
+        
+        self.view.addSubview(emojiSearchRow!, anchors: [.leading(0), .trailing(0), .bottomToTop(topRowView, 0), .height(emojiRowHeight)])
     }
+    
     
     func SuggestionsView () {
         for _ in 0...maxSuggestions-1 {
@@ -319,33 +273,26 @@ class FinaleKeyboard: UIInputViewController {
                 self.view.layoutIfNeeded()
             }
         } else {
-            if FinaleKeyboard.currentViewType != .SearchEmoji {
-                topRowTopConstraint?.constant = 0
-                bottomRowBottomConstraint?.constant = 0
-                UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
-                    self.view.layoutIfNeeded()
-                }
-            } else {
+            topRowTopConstraint?.constant = emojiSearchRow == nil ? 0 : emojiRowHeight
+            bottomRowBottomConstraint?.constant = 0
+            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
+                self.view.layoutIfNeeded()
             }
-//            UIView.animate(withDuration: 0.4) {
-//                if FinaleKeyboard.currentViewType != .SearchEmoji {
-//                    self.topRowView.frame.origin.y = 0
-//                    self.middleRowView.frame.origin.y = self.buttonHeight
-//                    self.bottomRowView.frame.origin.y = self.buttonHeight * 2
-//                    self.emojiView.frame.origin.y = self.view.frame.height
-//                } else {
-//                    self.emojiSearchRow?.frame.origin.y = 0
-//                    self.topRowView.frame.origin.y = 0 + self.view.frame.height - self.buttonHeightEmojiSearch*3
-//                    self.middleRowView.frame.origin.y = self.buttonHeightEmojiSearch + self.view.frame.height - self.buttonHeightEmojiSearch*3
-//                    self.bottomRowView.frame.origin.y = self.buttonHeightEmojiSearch * 2 + self.view.frame.height - self.buttonHeightEmojiSearch*3
-//                    self.emojiView.frame.origin.y = self.view.frame.height
-//                }
-//            }
             if FinaleKeyboard.currentViewType != .SearchEmoji {
                 FinaleKeyboard.currentViewType = lastViewType
                 RedrawSuggestionsLabels()
             }
         }
+    }
+    
+    func ToggleSearchEmojiView () {
+        if FinaleKeyboard.currentViewType == .SearchEmoji { return }
+        FinaleKeyboard.currentViewType = .SearchEmoji
+        
+        AddSearchEmojiField()
+        ToggleEmojiView()
+        
+        HapticFeedback.GestureImpactOccurred()
     }
     
     func UseAction (action: Action) {
@@ -361,9 +308,8 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func TypeCharacter (char: String) {
-        if FinaleKeyboard.currentViewType == .SearchEmoji {
-            emojiSearchBarLabel!.text?.append(char)
-            UpdateEmojiSearch()
+        if let emojiSearchRow = emojiSearchRow {
+            emojiSearchRow.TypeChar(char: char)
             return
         }
         
@@ -400,40 +346,6 @@ class FinaleKeyboard: UIInputViewController {
         HapticFeedback.TypingImpactOccurred()
     }
     
-    func UpdateEmojiSearch () {
-        emojiSearchCarret!.frame.origin.x = emojiSearchBarLabel!.intrinsicContentSize.width > emojiSearchBarLabel!.frame.width ? emojiSearchBarLabel!.frame.width : emojiSearchBarLabel!.intrinsicContentSize.width
-        var searchTerm = emojiSearchBarLabel!.text
-        searchTerm?.removeFirst()
-        guard let searchTerm = searchTerm else { return }
-        
-        emojiSearchResults = ""
-        
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            guard let self = self else { return }
-            
-            ElegantEmojiPicker.getSearchResults(searchTerm, fromAvailable: self.emojiView.emojiSections).forEach {
-                if self.emojiSearchResults.count < 20 { self.emojiSearchResults.append($0.emoji) }
-            }
-            
-            DispatchQueue.main.async {
-                if self.emojiSearchBarLabel!.text!.isEmpty || self.emojiSearchBarLabel!.text! == " " { self.emojiSearchResultsPlaceholder!.text = "Search Emoji" }
-                else { self.emojiSearchResultsPlaceholder!.text = self.emojiSearchResults.isEmpty ? "No emoji found" : "" }
-                
-                self.emojiSearchResultsContainer!.subviews.forEach({
-                    if $0 is EmojiSearchResultButton { $0.removeFromSuperview() }
-                })
-                
-                for i in 0..<self.emojiSearchResults.count {
-                    let emoji = EmojiSearchResultButton(frame: CGRect(x: CGFloat(i)*self.emojiSearchResultsContainer!.frame.size.height, y: 0, width: self.emojiSearchResultsContainer!.frame.size.height, height: self.emojiSearchResultsContainer!.frame.size.height))
-                    emoji.Setup(viewController: self, emoji: self.emojiSearchResults[self.emojiSearchResults.index(self.emojiSearchResults.startIndex, offsetBy: i)].description)
-                    self.emojiSearchResultsContainer?.addSubview(emoji)
-                }
-                self.emojiSearchResultsContainer?.contentSize = CGSize(width: CGFloat(self.emojiSearchResults.count)*self.emojiSearchResultsContainer!.frame.size.height, height: self.emojiSearchResultsContainer!.frame.height)
-                self.emojiSearchResultsContainer?.contentOffset = CGPoint.zero
-            }
-        }
-    }
-    
     func PerformActionFunction (function: FunctionType) {
         switch function {
         case .Shift:
@@ -461,11 +373,8 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func BackspaceAction () {
-        if FinaleKeyboard.currentViewType == .SearchEmoji {
-            if emojiSearchBarLabel!.text!.count <= 1 { return }
-            emojiSearchBarLabel!.text?.removeLast()
-            UpdateEmojiSearch()
-            MiddleRowReactAnimation()
+        if let emojiSearchRow = emojiSearchRow {
+            emojiSearchRow.BackspaceAction()
             return
         }
         
@@ -610,12 +519,10 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func SwipeRight () {
-        if FinaleKeyboard.currentViewType == .SearchEmoji {
-            emojiSearchBarLabel!.text?.append(" ")
-            UpdateEmojiSearch()
+        if let emojiSearchRow = emojiSearchRow {
+            emojiSearchRow.SwipeRight()
             return
         }
-        
         
         if self.textDocumentProxy.documentContextBeforeInput == nil {
             ResetSuggestionsLabels()
@@ -884,10 +791,8 @@ class FinaleKeyboard: UIInputViewController {
     func Delete() {
         HapticFeedback.GestureImpactOccurred()
         
-        if FinaleKeyboard.currentViewType == .SearchEmoji {
-            emojiSearchBarLabel!.text? = " "
-            UpdateEmojiSearch()
-            MiddleRowReactAnimation()
+        if let emojiSearchRow = emojiSearchRow {
+            emojiSearchRow.Delete()
             return
         }
         
@@ -1214,43 +1119,5 @@ struct Action {
         self.actionType = type
         self.actionTitle = title
         self.functionType = funcType
-    }
-}
-
-class EmojiSearchResultButton: UIView {
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-    
-    var viewController: FinaleKeyboard?
-    var emoji: String?
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        backgroundColor = .clear
-    }
-    
-    func Setup(viewController: FinaleKeyboard, emoji: String) {
-        self.viewController = viewController
-        self.emoji = emoji
-        
-        let emojiLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
-        emojiLabel.text = emoji
-        emojiLabel.textAlignment = .center
-        
-        let touch = UITapGestureRecognizer(target: self, action: #selector(RegisterPress))
-        self.addGestureRecognizer(touch)
-        self.addSubview(emojiLabel)
-    }
-    
-    @objc func RegisterPress (gesture: UILongPressGestureRecognizer) {
-        viewController?.TypeEmoji(emoji: emoji!)
-        UIView.animate(withDuration: 0.05, delay: 0, options: [.allowUserInteraction, .curveEaseOut]) {
-            self.frame.origin.y -= self.frame.size.height*0.3
-            self.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
-        } completion: { _ in
-            UIView.animate(withDuration: 0.05, delay: 0, options: [.allowUserInteraction, .curveEaseOut]) {
-                self.transform = CGAffineTransform(scaleX: 1, y: 1)
-                self.frame.origin.y = 0
-            }
-        }
     }
 }

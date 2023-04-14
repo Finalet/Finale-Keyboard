@@ -89,11 +89,6 @@ class PageControl: UIView {
         FinaleKeyboard.instance.BackspaceAction()
     }
     @objc func ToggleSearchEmojiView () {
-        if FinaleKeyboard.currentViewType == .SearchEmoji { return }
-        FinaleKeyboard.instance.BuildKeyboardView(viewType: .SearchEmoji)
-        FinaleKeyboard.instance.ToggleEmojiView()
-        FinaleKeyboard.currentViewType = .SearchEmoji
-        
-        HapticFeedback.GestureImpactOccurred()
+        FinaleKeyboard.instance.ToggleSearchEmojiView()
     }
 }

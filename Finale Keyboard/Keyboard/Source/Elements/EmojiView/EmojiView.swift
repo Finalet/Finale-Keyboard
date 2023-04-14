@@ -84,7 +84,7 @@ class EmojiView: UIView, UIScrollViewDelegate, UICollectionViewDelegate, UIColle
         canDismiss = false
         pageControl.SetHighlightPosition(scrollView.contentOffset.x / scrollView.frame.width)
         if scrollView.contentOffset.x/frame.width < -0.15 {
-//            ToggleSearchEmojiView()
+            FinaleKeyboard.instance.ToggleSearchEmojiView()
         }
     }
     

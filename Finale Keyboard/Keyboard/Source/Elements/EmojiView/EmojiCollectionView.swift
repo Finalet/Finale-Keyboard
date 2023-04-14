@@ -105,6 +105,7 @@ class EmojiCell: UICollectionViewCell {
         
         label.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
         label.font = label.font.withSize(32)
+        label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         addSubview(label)
     }

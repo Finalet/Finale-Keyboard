@@ -54,7 +54,7 @@ class KeyboardButton: UIView {
         iconView.image = action.functionType.icon
         iconView.tintColor = .systemGray
         iconView.contentMode = .scaleAspectFit
-        self.addSubview(iconView, anchors: [.widthMultiplier(1), .heightMultiplier(0.33), .centerY(0), .centerX(0)])
+        self.addSubview(iconView, anchors: [.widthMultiplier(1), .widthMultiplier(0.5), .centerY(0), .centerX(0)])
         
         let touch = UILongPressGestureRecognizer(target: self, action: #selector(RegisterPress))
         touch.minimumPressDuration = 0
