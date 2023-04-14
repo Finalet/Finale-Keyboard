@@ -80,11 +80,13 @@ class EmojiView: UIView, UIScrollViewDelegate, UICollectionViewDelegate, UIColle
         }
     }
     
+    var toggleOnce = false
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         canDismiss = false
         pageControl.SetHighlightPosition(scrollView.contentOffset.x / scrollView.frame.width)
-        if scrollView.contentOffset.x/frame.width < -0.15 {
+        if scrollView.contentOffset.x/frame.width < -0.15 && !toggleOnce {
             FinaleKeyboard.instance.ToggleSearchEmojiView()
+            toggleOnce = true
         }
     }
     
@@ -107,5 +109,6 @@ class EmojiView: UIView, UIScrollViewDelegate, UICollectionViewDelegate, UIColle
             ($0 as? EmojiCollectionCell)?.collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredHorizontally, animated: false)
         }
         canDismiss = true
+        toggleOnce = false
     }
 }

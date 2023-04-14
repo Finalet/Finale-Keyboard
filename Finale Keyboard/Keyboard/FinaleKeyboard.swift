@@ -194,6 +194,7 @@ class FinaleKeyboard: UIInputViewController {
         
         topRowView.backgroundColor = .clear
         self.view.addSubview(topRowView, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0)])
+        topRowTopConstraint?.isActive = false
         topRowTopConstraint = topRowView.topAnchor.constraint(equalTo: self.view.topAnchor)
         topRowTopConstraint?.isActive = true
         
@@ -202,6 +203,7 @@ class FinaleKeyboard: UIInputViewController {
         
         bottomRowView.backgroundColor = .clear
         self.view.addSubview(bottomRowView, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .topToBottom(middleRowView, 0), .heightToHeight(middleRowView, 0)])
+        bottomRowBottomConstraint?.isActive = false
         bottomRowBottomConstraint = bottomRowView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
         bottomRowBottomConstraint?.isActive = true
         
@@ -223,14 +225,6 @@ class FinaleKeyboard: UIInputViewController {
         if prevButton != nil { button.widthAnchor.constraint(equalTo: prevButton!.widthAnchor).isActive = true }
         allButtons.append(button)
     }
-    
-    func AddSearchEmojiField () {
-        emojiSearchRow?.removeFromSuperview()
-        emojiSearchRow = EmojiSearchRow()
-        
-        self.view.addSubview(emojiSearchRow!, anchors: [.leading(0), .trailing(0), .bottomToTop(topRowView, 0), .height(emojiRowHeight)])
-    }
-    
     
     func SuggestionsView () {
         for _ in 0...maxSuggestions-1 {
@@ -261,37 +255,53 @@ class FinaleKeyboard: UIInputViewController {
         self.view.addSubview(emojiView, anchors: [.topToBottom(bottomRowView, 0), .leading(0), .trailing(0), .heightToHeight(self.view, 0)])
     }
     
-    func ToggleEmojiView () {
-        if FinaleKeyboard.currentViewType != .Emoji && FinaleKeyboard.currentViewType != .SearchEmoji {
-            emojiView.ResetView()
-            ResetSuggestionsLabels()
-            topRowTopConstraint?.constant = -self.view.frame.height
-            bottomRowBottomConstraint?.constant = -self.view.frame.height
-            lastViewType = FinaleKeyboard.currentViewType
-            FinaleKeyboard.currentViewType = .Emoji
-            UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.4, options: .curveEaseIn) {
-                self.view.layoutIfNeeded()
-            }
-        } else {
-            topRowTopConstraint?.constant = emojiSearchRow == nil ? 0 : emojiRowHeight
-            bottomRowBottomConstraint?.constant = 0
-            UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
-                self.view.layoutIfNeeded()
-            }
-            if FinaleKeyboard.currentViewType != .SearchEmoji {
-                FinaleKeyboard.currentViewType = lastViewType
-                RedrawSuggestionsLabels()
-            }
+    func OpenEmoji () {
+        emojiView.ResetView()
+        ResetSuggestionsLabels()
+        topRowTopConstraint?.constant = -self.view.frame.height
+        bottomRowBottomConstraint?.constant = -self.view.frame.height
+        lastViewType = FinaleKeyboard.currentViewType
+        FinaleKeyboard.currentViewType = .Emoji
+        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.4, options: .curveEaseIn) {
+            self.view.layoutIfNeeded()
+        }
+    }
+    
+    func CloseEmoji () {
+        topRowTopConstraint?.constant = emojiSearchRow == nil ? 0 : emojiRowHeight
+        bottomRowBottomConstraint?.constant = 0
+        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
+            self.view.layoutIfNeeded()
+        }
+        if FinaleKeyboard.currentViewType != .SearchEmoji {
+            FinaleKeyboard.currentViewType = lastViewType
+            RedrawSuggestionsLabels()
         }
     }
     
     func ToggleSearchEmojiView () {
-        if FinaleKeyboard.currentViewType == .SearchEmoji { return }
-        FinaleKeyboard.currentViewType = .SearchEmoji
+        if FinaleKeyboard.currentViewType != .SearchEmoji {
+            if FinaleKeyboard.currentLocale != .en_US {
+                ToggleLocale()
+                topRowTopConstraint?.constant = -self.view.frame.height
+                bottomRowBottomConstraint?.constant = -self.view.frame.height
+                self.view.layoutIfNeeded()
+            }
+            FinaleKeyboard.currentViewType = .SearchEmoji
+            
+            emojiSearchRow?.removeFromSuperview()
+            emojiSearchRow = EmojiSearchRow()
+            
+            self.view.addSubview(emojiSearchRow!, anchors: [.leading(0), .trailing(0), .bottomToTop(topRowView, 0), .height(emojiRowHeight)])
+            
+        } else {
+            emojiSearchRow?.removeFromSuperview()
+            emojiSearchRow = nil
+            
+            FinaleKeyboard.currentViewType = .Characters
+        }
         
-        AddSearchEmojiField()
-        ToggleEmojiView()
-        
+        CloseEmoji()
         HapticFeedback.GestureImpactOccurred()
     }
     
@@ -367,7 +377,7 @@ class FinaleKeyboard: UIInputViewController {
     
     func BackAction() {
         if FinaleKeyboard.currentViewType == .SearchEmoji {
-            BuildKeyboardView(viewType: .Characters)
+            ToggleSearchEmojiView()
             RedrawSuggestionsLabels()
         }
     }

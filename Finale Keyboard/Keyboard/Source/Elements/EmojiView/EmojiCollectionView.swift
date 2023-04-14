@@ -53,7 +53,7 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
             let velocity = panGesture.velocity(in: self)
 
             if velocity.y >= 400 {
-                FinaleKeyboard.instance.ToggleEmojiView()
+                FinaleKeyboard.instance.CloseEmoji()
             } else {
                 FinaleKeyboard.instance.topRowTopConstraint?.constant = originalOffset
                 FinaleKeyboard.instance.bottomRowBottomConstraint?.constant = originalOffset

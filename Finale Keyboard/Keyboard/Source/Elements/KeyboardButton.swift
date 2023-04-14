@@ -105,7 +105,7 @@ class KeyboardButton: UIView {
             FinaleKeyboard.instance.CancelLongPress()
             registeredSwipe = true
             if action.actionType == .Character { FinaleKeyboard.instance.Delete(); FinaleKeyboard.instance.LongPressDelete(backspace: false) }
-            else if action.functionType == .Backspace { FinaleKeyboard.currentViewType == .SearchEmoji ? FinaleKeyboard.instance.BackAction() : FinaleKeyboard.instance.ToggleEmojiView() }
+            else if action.functionType == .Backspace { FinaleKeyboard.currentViewType == .SearchEmoji ? FinaleKeyboard.instance.BackAction() : FinaleKeyboard.instance.OpenEmoji() }
             HideCallout(swipeDir: .Left)
             if action.actionType != .Character { FinaleKeyboard.instance.MiddleRowReactAnimation() }
             
