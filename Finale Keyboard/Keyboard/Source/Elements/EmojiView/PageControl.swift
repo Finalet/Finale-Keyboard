@@ -16,28 +16,45 @@ class PageControl: UIView {
     
     var emojiView: EmojiView?
     
+    let height = 30.0
+    
     func Setup (_ emojiView: EmojiView) {
         self.emojiView = emojiView
         
-        highlighter.backgroundColor = .lightGray
+        self.heightAnchor.constraint(equalToConstant: height).isActive = true
+        
+        let leadingButton = UIButton()
+        leadingButton.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
+        leadingButton.imageView?.tintColor = .systemGray
+        leadingButton.addTarget(self, action: #selector(ToggleSearchEmojiView), for: .touchUpInside)
+        leadingButton.backgroundColor = .clearInteractable
+        self.addSubview(leadingButton, anchors: [.leading(0), .top(0), .aspectRatio(widthToHeight: 1), .bottom(0)])
+        
+        let trailingButton = UIButton()
+        trailingButton.setImage(UIImage(systemName: "delete.left.fill"), for: .normal)
+        trailingButton.imageView?.tintColor = .systemGray
+        trailingButton.addTarget(self, action: #selector(Backspace), for: .touchUpInside)
+        trailingButton.backgroundColor = .clearInteractable
+        self.addSubview(trailingButton, anchors: [.trailing(0), .top(0), .aspectRatio(widthToHeight: 1), .bottom(0)])
+        
+        highlighter.backgroundColor = .systemGray3
         self.addSubview(highlighter, anchors: [.top(0), .bottom(0), .aspectRatio(widthToHeight: 1)])
         highlighterLeadingConstraint = highlighter.centerXAnchor.constraint(equalTo: self.leadingAnchor)
         highlighterLeadingConstraint?.isActive = true
         
         for section in emojiView.emojiSections {
             let button = UIButton()
+            button.backgroundColor = .clearInteractable
             button.setImage(section.icon?.withRenderingMode(.alwaysTemplate), for: .normal)
-            button.tintColor = .darkGray
+            button.tintColor = .systemGray
             button.addTarget(self, action: #selector(ButtonPress), for: .touchUpInside)
             button.tag = buttons.count
-            let prevButton: UIView? = buttons.last
-            let leading: LayoutAnchor = prevButton == nil ? .leading(0) : .leadingToTrailing(prevButton!, 0)
-            self.addSubview(button, anchors: [.top(0), .bottom(0), leading])
-            if prevButton != nil { button.widthAnchor.constraint(equalTo: prevButton!.widthAnchor).isActive = true }
+            self.addSubview(button, anchors: [.top(0), .bottom(0), .leadingToTrailing(buttons.last ?? leadingButton, 0)])
+            if buttons.count > 0 { button.widthAnchor.constraint(equalTo: buttons[0].widthAnchor).isActive = true }
             
             buttons.append(button)
         }
-        if let last = buttons.last { last.trailingAnchor.constraint(equalTo: self.trailingAnchor).isActive = true }
+        if let last = buttons.last { last.trailingAnchor.constraint(equalTo: trailingButton.leadingAnchor).isActive = true }
         
         SetHighlightPosition(0)
     }
@@ -66,5 +83,17 @@ class PageControl: UIView {
     
     @objc func ButtonPress (sender: UIButton) {
         emojiView?.ScrollToPage(sender.tag)
+    }
+    
+    @objc func Backspace () {
+        FinaleKeyboard.instance.BackspaceAction()
+    }
+    @objc func ToggleSearchEmojiView () {
+        if FinaleKeyboard.currentViewType == .SearchEmoji { return }
+        FinaleKeyboard.instance.BuildKeyboardView(viewType: .SearchEmoji)
+        FinaleKeyboard.instance.ToggleEmojiView()
+        FinaleKeyboard.currentViewType = .SearchEmoji
+        
+        HapticFeedback.GestureImpactOccurred()
     }
 }

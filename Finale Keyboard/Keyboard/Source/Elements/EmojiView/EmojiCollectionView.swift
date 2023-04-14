@@ -24,6 +24,7 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
+        collectionView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 5, right: 0)
         collectionView.register(EmojiCell.self, forCellWithReuseIdentifier: "emojiCell")
         self.addSubview(collectionView, anchors: LayoutAnchor.fullFrame)
         
@@ -83,6 +84,10 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
         }
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        (collectionView.cellForItem(at: indexPath) as? EmojiCell)?.TypeEmoji()
     }
 }
 

@@ -11,11 +11,10 @@ import ElegantEmojiPicker
 
 class EmojiView: UIView, UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-    
-    let toolbarHeight = 30.0
-    
+       
     var emojiSections: [EmojiSection]
     
+    let containerView = UIView()
     var masterCollection: UICollectionView!
     var pageControl = PageControl()
     
@@ -27,22 +26,10 @@ class EmojiView: UIView, UIScrollViewDelegate, UICollectionViewDelegate, UIColle
         
         LoadFavoriteEmoji()
         
-        let leadingButton = UIButton()
-        leadingButton.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
-        leadingButton.imageView?.tintColor = .gray
-        leadingButton.addTarget(self, action: #selector(ToggleSearchEmojiView), for: .touchUpInside)
-        leadingButton.backgroundColor = .clearInteractable
-        self.addSubview(leadingButton, anchors: [.safeAreaLeading(0), .height(toolbarHeight), .aspectRatio(widthToHeight: 1), .bottom(0)])
-        
-        let trailingButton = UIButton()
-        trailingButton.setImage(UIImage(systemName: "delete.left.fill"), for: .normal)
-        trailingButton.imageView?.tintColor = .gray
-        trailingButton.addTarget(self, action: #selector(Backspace), for: .touchUpInside)
-        trailingButton.backgroundColor = .clearInteractable
-        self.addSubview(trailingButton, anchors: [.safeAreaTrailing(0), .height(toolbarHeight), .aspectRatio(widthToHeight: 1), .bottom(0)])
-        
         pageControl.Setup(self)
-        self.addSubview(pageControl, anchors: [.bottom(0), .leadingToTrailing(leadingButton, 0), .height(toolbarHeight), .trailingToLeading(trailingButton, 0)])
+        self.addSubview(pageControl, anchors: [.bottom(0), .safeAreaLeading(0), .safeAreaTrailing(0)])
+        
+        self.addSubview(containerView, anchors: [.bottomToTop(pageControl, 0), .top(0), .safeAreaLeading(0), .safeAreaTrailing(0)])
         
         masterCollection = UICollectionView(frame: .zero, collectionViewLayout: MasterFlowLayout())
         masterCollection.isPagingEnabled = true
@@ -51,9 +38,18 @@ class EmojiView: UIView, UIScrollViewDelegate, UICollectionViewDelegate, UIColle
         masterCollection.delegate = self
         masterCollection.showsHorizontalScrollIndicator = false
         masterCollection.register(EmojiCollectionCell.self, forCellWithReuseIdentifier: "EmojiCollectionCell")
-        self.addSubview(masterCollection, anchors: [.bottomToTop(pageControl, 0), .top(0), .safeAreaLeading(0), .safeAreaTrailing(0)])
+        containerView.addSubview(masterCollection, anchors: LayoutAnchor.fullFrame)
         
-        canDismiss = true
+        let fadeGradient = CAGradientLayer()
+        fadeGradient.colors = [UIColor.black.cgColor, UIColor.clear.cgColor]
+        fadeGradient.startPoint = CGPoint(x: 0, y: 0.9)
+        fadeGradient.endPoint = CGPoint(x: 0, y: 1)
+        containerView.layer.mask = fadeGradient
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        containerView.layer.mask?.frame = containerView.bounds
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -84,23 +80,11 @@ class EmojiView: UIView, UIScrollViewDelegate, UICollectionViewDelegate, UIColle
         }
     }
     
-    @objc func Backspace () {
-        FinaleKeyboard.instance.BackspaceAction()
-    }
-    @objc func ToggleSearchEmojiView () {
-        if FinaleKeyboard.currentViewType == .SearchEmoji { return }
-        FinaleKeyboard.instance.BuildKeyboardView(viewType: .SearchEmoji)
-        FinaleKeyboard.instance.ToggleEmojiView()
-        FinaleKeyboard.currentViewType = .SearchEmoji
-        
-        HapticFeedback.GestureImpactOccurred()
-    }
-    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         canDismiss = false
         pageControl.SetHighlightPosition(scrollView.contentOffset.x / scrollView.frame.width)
         if scrollView.contentOffset.x/frame.width < -0.15 {
-            ToggleSearchEmojiView()
+//            ToggleSearchEmojiView()
         }
     }
     
