@@ -50,13 +50,13 @@ class CharacterButton: KeyboardButton {
     override func OnTapBegin(_ sender: UILongPressGestureRecognizer) {}
     
     override func OnTapChanged(_ sender: UILongPressGestureRecognizer) {
-        if didLongPressSucceed {
+        if didLongPress {
             FinaleKeyboard.instance.MoveCursor(touchLocation: sender.location(in: FinaleKeyboard.instance.view))
         }
     }
     
     override func OnTapEnded(_ sender: UILongPressGestureRecognizer) {
-        if didLongPressSucceed {
+        if didLongPress {
             FinaleKeyboard.instance.EndMoveCursor()
             return
         }
@@ -76,7 +76,17 @@ class CharacterButton: KeyboardButton {
         }
     }
     
-    override func OnLongPressSuccess(_ sender: UILongPressGestureRecognizer) {
+    override func OnSwipeHoldRepeating(direction: KeyboardButton.SwipeDirection) {
+        if direction == .Left {
+            FinaleKeyboard.instance.Delete()
+            FinaleKeyboard.instance.MiddleRowReactAnimation()
+            HapticFeedback.GestureImpactOccurred()
+        } else if direction == .Down {
+            TypeExtraCharacters()
+        }
+    }
+    
+    override func OnLongPress(_ sender: UILongPressGestureRecognizer) {
         FinaleKeyboard.instance.StartMoveCursor(touchLocation: sender.location(in: FinaleKeyboard.instance.view))
         self.HideCallout()
     }
@@ -113,6 +123,7 @@ class CharacterButton: KeyboardButton {
         titleLabel.text = inOn ? titleLabel.text?.capitalized : titleLabel.text?.lowercased()
     }
     
+    @discardableResult
     func TypeExtraCharacters () -> Bool {
         if let secondaryChar = Defaults.secondaryCharacters[character] {
             if secondaryChar.isEmoji { FinaleKeyboard.instance.TypeEmoji(emoji: secondaryChar) }

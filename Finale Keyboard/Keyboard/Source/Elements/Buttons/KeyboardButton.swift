@@ -19,7 +19,8 @@ class KeyboardButton: UIView {
     let longPressDelay = 0.5
     let longPressRepeatInterval = 0.1
     
-    var didLongPressSucceed = false
+    var didLongPress = false
+    var didHoldSwipe = false
     
     init() {
         super.init(frame: .zero)
@@ -36,8 +37,8 @@ class KeyboardButton: UIView {
             ShowCallout()
             OnTapBegin(sender)
             longPressTimer = Timer.scheduledTimer(withTimeInterval: longPressDelay, repeats: false) { _ in
-                self.didLongPressSucceed = true
-                self.OnLongPressSuccess(sender)
+                self.didLongPress = true
+                self.OnLongPress(sender)
                 self.longPressRepeatTimer = Timer.scheduledTimer(withTimeInterval: self.longPressRepeatInterval, repeats: true) { _ in
                     self.OnLongPressRepeating(sender)
                 }
@@ -53,7 +54,7 @@ class KeyboardButton: UIView {
             registeredSwipe = false
         } else {
             OnTapChanged(sender)
-            if !didLongPressSucceed {
+            if !didLongPress {
                 EvaluateSwipe(touchLocation: sender.location(in: self))
             }
         }
@@ -80,10 +81,17 @@ class KeyboardButton: UIView {
         CancelLongPress()
         HideCallout(direction: direction)
         OnSwipe(direction: direction)
+        
+        longPressTimer = Timer.scheduledTimer(withTimeInterval: longPressDelay, repeats: false) { _ in
+            self.didHoldSwipe = true
+            self.longPressRepeatTimer = Timer.scheduledTimer(withTimeInterval: self.longPressRepeatInterval, repeats: true) { _ in
+                self.OnSwipeHoldRepeating(direction: direction)
+            }
+        }
     }
     
     private func CancelLongPress () {
-        didLongPressSucceed = false
+        didLongPress = false
         longPressTimer?.invalidate()
         longPressRepeatTimer?.invalidate()
     }
@@ -94,8 +102,10 @@ class KeyboardButton: UIView {
     
     func OnSwipe (direction: SwipeDirection) {}
     
-    func OnLongPressSuccess (_ sender: UILongPressGestureRecognizer) {}
+    func OnLongPress (_ sender: UILongPressGestureRecognizer) {}
     func OnLongPressRepeating (_ sender: UILongPressGestureRecognizer) {}
+    
+    func OnSwipeHoldRepeating (direction: SwipeDirection) {}
     
     func ShowCallout () {}
     func HideCallout (direction: SwipeDirection? = nil) {}

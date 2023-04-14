@@ -42,13 +42,13 @@ class FunctionButton: KeyboardButton {
     override func OnTapChanged(_ sender: UILongPressGestureRecognizer) {}
     
     override func OnTapEnded(_ sender: UILongPressGestureRecognizer) {
-        if didLongPressSucceed { return }
+        if didLongPress { return }
         
         function.TapAction()
         FinaleKeyboard.instance.MiddleRowReactAnimation()
     }
     
-    override func OnLongPressSuccess (_ sender: UILongPressGestureRecognizer) {
+    override func OnLongPress(_ sender: UILongPressGestureRecognizer) {
         function.LongPressAction()
         if !self.function.isLongPressRepeatable { HideCallout() }
         FinaleKeyboard.instance.MiddleRowReactAnimation()
@@ -56,7 +56,7 @@ class FunctionButton: KeyboardButton {
     
     override func OnLongPressRepeating(_ sender: UILongPressGestureRecognizer) {
         if self.function.isLongPressRepeatable {
-            OnLongPressSuccess(sender)
+            OnLongPress(sender)
         }
     }
     

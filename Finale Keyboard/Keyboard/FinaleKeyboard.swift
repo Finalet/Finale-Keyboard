@@ -338,18 +338,6 @@ class FinaleKeyboard: UIInputViewController {
         HapticFeedback.GestureImpactOccurred()
     }
     
-//    func UseAction (action: Action) {
-//        switch action.actionType {
-//        case .Character: TypeCharacter(char: action.actionTitle)
-//        case .Function: PerformActionFunction(function: action.functionType)
-//        }
-        
-//        if action.functionType != .Shift && !CheckAutoCapitalization() {
-//            FinaleKeyboard.isShift = false
-//            UpdateButtonTitleShift()
-//        }
-//    }
-    
     func TypeCharacter (_ character: String) {
         if let emojiSearchRow = emojiSearchRow {
             emojiSearchRow.TypeChar(character)
