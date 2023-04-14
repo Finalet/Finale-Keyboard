@@ -55,8 +55,6 @@ class FinaleKeyboard: UIInputViewController {
     
     static var isShift = false
     static var isCaps = false
-    static var isMovingCursor = false
-    static var isLongPressing = false
     static var isAutoCorrectOn = true
     static var isAutoCorrectGrammarOn = true
     static var isAutoCapitalizeOn = true
@@ -85,16 +83,11 @@ class FinaleKeyboard: UIInputViewController {
     var waitingForSecondTap = false
     var capsTimer = Timer()
     
-    let longPressDelay = 0.5
-    var waitForLongPress = Timer()
-    var deleteTimer = Timer()
     var cursorMoveTimer = Timer()
     var leftEdgeTimer: Timer?
     var rightEdgeTimer: Timer?
     
     var lastTouchPosX = 0.0
-    
-    var toggledAC = false
     
     var punctuationArray: [String] = []
     var defaultDictionary: Dictionary<String, [String]> = [String:[String]]()
@@ -408,69 +401,54 @@ class FinaleKeyboard: UIInputViewController {
         CheckAutoCapitalization()
     }
     
-    func LongPressDelete (backspace: Bool) {
-        if (FinaleKeyboard.isLongPressing) { return }
-        waitForLongPress = Timer.scheduledTimer(withTimeInterval: longPressDelay, repeats: false) { (_) in
-            self.deleteTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (_) in
-                if backspace { self.BackspaceAction() }
-                else { self.Delete() }
-            }
-        }
-        FinaleKeyboard.isLongPressing = true
-    }
-    func LongPressCharacter (_ sender: KeyboardButton, touchLocation: CGPoint) {
-        if (FinaleKeyboard.isLongPressing) { return }
-        waitForLongPress = Timer.scheduledTimer(withTimeInterval: longPressDelay, repeats: false) { (_) in
-            FinaleKeyboard.isMovingCursor = true
-            self.lastTouchPosX = touchLocation.x
-            sender.HideCallout()
-            
-            UIView.animate (withDuration: 0.3) {
-                self.topRowView.alpha = 0.5
-                self.middleRowView.alpha = 0.5
-                self.bottomRowView.alpha = 0.5
-            }
-            
-            HapticFeedback.GestureImpactOccurred()
-        }
-        FinaleKeyboard.isLongPressing = true
-    }
-    func LongPressShift (button: KeyboardButton) {
-        if (FinaleKeyboard.isLongPressing) { return }
-        waitForLongPress = Timer.scheduledTimer(withTimeInterval: longPressDelay, repeats: false) { (_) in
-            FinaleKeyboard.isAutoCorrectOn = !FinaleKeyboard.isAutoCorrectOn
-            button.HideCallout()
-            self.toggledAC = true
-            self.ShowNotification(text: FinaleKeyboard.isAutoCorrectOn ? "Autocorrection on" : "Autocorrection off")
-            
-            let userDefaults = UserDefaults(suiteName: self.suiteName)
-            userDefaults?.setValue(FinaleKeyboard.isAutoCorrectOn, forKey: self.ACSavePath)
-            
-            HapticFeedback.GestureImpactOccurred()
-        }
-        FinaleKeyboard.isLongPressing = true
-    }
-    func CancelLongPress () {
-        FinaleKeyboard.isLongPressing = false
-        toggledAC = false
-        CancelWaitingForLongPress()
+    func ToggleAutoCorrect () {
+        FinaleKeyboard.isAutoCorrectOn = !FinaleKeyboard.isAutoCorrectOn
+        self.ShowNotification(text: FinaleKeyboard.isAutoCorrectOn ? "Autocorrection on" : "Autocorrection off")
         
-        if (FinaleKeyboard.isMovingCursor) {
-            FinaleKeyboard.isMovingCursor = false
-            UIView.animate (withDuration: 0.3) {
-                self.topRowView.alpha = 1
-                self.middleRowView.alpha = 1
-                self.bottomRowView.alpha = 1
-            }
-        }
+        let userDefaults = UserDefaults(suiteName: self.suiteName)
+        userDefaults?.setValue(FinaleKeyboard.isAutoCorrectOn, forKey: self.ACSavePath)
+        
+        HapticFeedback.GestureImpactOccurred()
     }
-    func CancelWaitingForLongPress () {
-        deleteTimer.invalidate()
-        waitForLongPress.invalidate()
-        rightEdgeTimer?.invalidate()
-        rightEdgeTimer = nil
-        leftEdgeTimer?.invalidate()
-        leftEdgeTimer = nil
+//    func CancelLongPress () {
+//        FinaleKeyboard.isLongPressing = false
+//        toggledAC = false
+//        CancelWaitingForLongPress()
+//
+//        if (FinaleKeyboard.isMovingCursor) {
+//            FinaleKeyboard.isMovingCursor = false
+//            UIView.animate (withDuration: 0.3) {
+//                self.topRowView.alpha = 1
+//                self.middleRowView.alpha = 1
+//                self.bottomRowView.alpha = 1
+//            }
+//        }
+//    }
+//    func CancelWaitingForLongPress () {
+//        rightEdgeTimer?.invalidate()
+//        rightEdgeTimer = nil
+//        leftEdgeTimer?.invalidate()
+//        leftEdgeTimer = nil
+//    }
+    
+    func StartMoveCursor (touchLocation: CGPoint) {
+        self.lastTouchPosX = touchLocation.x
+        
+        UIView.animate (withDuration: 0.3) {
+            self.topRowView.alpha = 0.5
+            self.middleRowView.alpha = 0.5
+            self.bottomRowView.alpha = 0.5
+        }
+        
+        HapticFeedback.GestureImpactOccurred()
+    }
+    
+    func EndMoveCursor () {
+        UIView.animate (withDuration: 0.3) {
+            self.topRowView.alpha = 1
+            self.middleRowView.alpha = 1
+            self.bottomRowView.alpha = 1
+        }
     }
     
     func MoveCursor (touchLocation: CGPoint) {

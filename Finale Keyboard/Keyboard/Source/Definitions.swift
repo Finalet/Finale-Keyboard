@@ -34,8 +34,23 @@ enum Function {
         case .SymbolsShift: FinaleKeyboard.instance.ToggleExtraSymbolsView()
         case .ExtraSymbolsShift: FinaleKeyboard.instance.ToggleExtraSymbolsView()
         case .Caps: FinaleKeyboard.instance.CapsAction()
-        case .Backspace: FinaleKeyboard.instance.BackAction()
+        case .Backspace: FinaleKeyboard.instance.BackspaceAction()
         case .Back: FinaleKeyboard.instance.BackAction()
+        }
+    }
+    
+    func LongPressAction () {
+        switch self {
+        case .Shift: FinaleKeyboard.instance.ToggleAutoCorrect()
+        case .Backspace: FinaleKeyboard.instance.BackspaceAction()
+        default: return
+        }
+    }
+    
+    var isLongPressRepeatable: Bool {
+        switch self {
+        case .Backspace: return true
+        default: return false
         }
     }
     

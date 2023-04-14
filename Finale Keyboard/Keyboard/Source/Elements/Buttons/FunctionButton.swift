@@ -31,13 +31,31 @@ class FunctionButton: KeyboardButton {
         self.addSubview(iconView, anchors: [.widthMultiplier(1), .widthMultiplier(0.6), .centerY(0), .centerX(0)])
     }
     
-    override func OnTapBegin(_ sender: UILongPressGestureRecognizer) {
-        if function == .Backspace { FinaleKeyboard.instance.LongPressDelete(backspace: true) }
-        else if function == .Shift { FinaleKeyboard.instance.LongPressShift(button: self) }
+    override func OnTapBegin(_ sender: UILongPressGestureRecognizer) {}
+    
+    override func OnTapChanged(_ sender: UILongPressGestureRecognizer) {
+        if didLongPressSucceed { return }
+        
+        EvaluateSwipe(touchLocation: sender.location(in: self))
     }
     
     override func OnTapEnded(_ sender: UILongPressGestureRecognizer) {
+        if didLongPressSucceed { return }
+        
         function.TapAction()
+        FinaleKeyboard.instance.MiddleRowReactAnimation()
+    }
+    
+    override func OnLongPressSuccess (_ sender: UILongPressGestureRecognizer) {
+        function.LongPressAction()
+        if !self.function.isLongPressRepeatable { HideCallout() }
+        FinaleKeyboard.instance.MiddleRowReactAnimation()
+    }
+    
+    override func OnLongPressRepeating(_ sender: UILongPressGestureRecognizer) {
+        if self.function.isLongPressRepeatable {
+            OnLongPressSuccess(sender)
+        }
     }
     
     override func OnSwipe(direction: KeyboardButton.SwipeDirection) {
@@ -60,7 +78,7 @@ class FunctionButton: KeyboardButton {
             else if FinaleKeyboard.currentViewType == .ExtraSymbols { iconView.image = Function.ExtraSymbolsShift.icon }
         }
         
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3) { [self] in
+        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .allowUserInteraction) { [self] in
             calloutView.alpha = 0
             iconView.tintColor = function == .Shift ? (FinaleKeyboard.instance.shouldCapitalize ? .label : .gray) : .gray
         }

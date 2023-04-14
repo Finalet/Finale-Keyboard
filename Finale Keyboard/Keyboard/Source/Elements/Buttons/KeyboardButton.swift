@@ -14,6 +14,13 @@ class KeyboardButton: UIView {
     var registerSwipeSensitivity = 0.5
     var registeredSwipe = false
     
+    var longPressTimer: Timer?
+    var longPressRepeatTimer: Timer?
+    let longPressDelay = 0.5
+    let longPressRepeatInterval = 0.1
+    
+    var didLongPressSucceed = false
+    
     init() {
         super.init(frame: .zero)
         
@@ -28,22 +35,24 @@ class KeyboardButton: UIView {
         if sender.state == .began {
             ShowCallout()
             OnTapBegin(sender)
+            longPressTimer = Timer.scheduledTimer(withTimeInterval: longPressDelay, repeats: false) { _ in
+                self.didLongPressSucceed = true
+                self.OnLongPressSuccess(sender)
+                self.longPressRepeatTimer = Timer.scheduledTimer(withTimeInterval: self.longPressRepeatInterval, repeats: true) { _ in
+                    self.OnLongPressRepeating(sender)
+                }
+            }
         } else if sender.state == .ended {
-            if !registeredSwipe && !FinaleKeyboard.instance.toggledAC && !FinaleKeyboard.isMovingCursor {
+            if !registeredSwipe {
                 OnTapEnded(sender)
                 HideCallout()
             }
-            FinaleKeyboard.instance.CancelLongPress()
+            
+            CancelLongPress()
             
             registeredSwipe = false
         } else {
-            if FinaleKeyboard.instance.toggledAC { return }
-            
-            if FinaleKeyboard.isMovingCursor {
-                FinaleKeyboard.instance.MoveCursor(touchLocation: sender.location(in: FinaleKeyboard.instance.view))
-            } else {
-                EvaluateSwipe(touchLocation: sender.location(in: self))
-            }
+            OnTapChanged(sender)
         }
     }
     
@@ -64,16 +73,26 @@ class KeyboardButton: UIView {
     private func RegisterSwipe (direction: SwipeDirection) {
         registeredSwipe = true
         FinaleKeyboard.instance.MiddleRowReactAnimation()
-        FinaleKeyboard.instance.CancelLongPress()
         HapticFeedback.GestureImpactOccurred()
+        CancelLongPress()
         HideCallout(direction: direction)
         OnSwipe(direction: direction)
     }
     
+    private func CancelLongPress () {
+        didLongPressSucceed = false
+        longPressTimer?.invalidate()
+        longPressRepeatTimer?.invalidate()
+    }
+    
     func OnTapBegin (_ sender: UILongPressGestureRecognizer) {}
+    func OnTapChanged (_ sender: UILongPressGestureRecognizer) {}
     func OnTapEnded (_ sender: UILongPressGestureRecognizer) {}
     
     func OnSwipe (direction: SwipeDirection) {}
+    
+    func OnLongPressSuccess (_ sender: UILongPressGestureRecognizer) {}
+    func OnLongPressRepeating (_ sender: UILongPressGestureRecognizer) {}
     
     func ShowCallout () {}
     func HideCallout (direction: SwipeDirection? = nil) {}

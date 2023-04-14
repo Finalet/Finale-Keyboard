@@ -45,11 +45,22 @@ class CharacterButton: KeyboardButton {
         titleYConstraint?.isActive = true
     }
     
-    override func OnTapBegin(_ sender: UILongPressGestureRecognizer) {
-        FinaleKeyboard.instance.LongPressCharacter(self, touchLocation: sender.location(in: FinaleKeyboard.instance.view)) 
+    override func OnTapBegin(_ sender: UILongPressGestureRecognizer) {}
+    
+    override func OnTapChanged(_ sender: UILongPressGestureRecognizer) {
+        if didLongPressSucceed {
+            FinaleKeyboard.instance.MoveCursor(touchLocation: sender.location(in: FinaleKeyboard.instance.view))
+        } else {
+            EvaluateSwipe(touchLocation: sender.location(in: self))
+        }
     }
     
     override func OnTapEnded(_ sender: UILongPressGestureRecognizer) {
+        if didLongPressSucceed {
+            FinaleKeyboard.instance.EndMoveCursor()
+            return
+        }
+        
         FinaleKeyboard.instance.TypeCharacter(String(character))
     }
     
@@ -58,12 +69,16 @@ class CharacterButton: KeyboardButton {
             FinaleKeyboard.instance.SwipeRight()
         } else if direction == .Left {
             FinaleKeyboard.instance.Delete()
-            FinaleKeyboard.instance.LongPressDelete(backspace: false)
         } else if direction == .Up {
             FinaleKeyboard.instance.SwipeUp()
         } else if direction == .Down {
             if !TypeExtraCharacters() { FinaleKeyboard.instance.SwipeDown() }
         }
+    }
+    
+    override func OnLongPressSuccess(_ sender: UILongPressGestureRecognizer) {
+        FinaleKeyboard.instance.StartMoveCursor(touchLocation: sender.location(in: FinaleKeyboard.instance.view))
+        self.HideCallout()
     }
     
     override func ShowCallout() {
