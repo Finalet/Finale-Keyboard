@@ -33,7 +33,7 @@ class CharacterButton: KeyboardButton {
         calloutYConstraint?.isActive = true
         calloutXConstraint = calloutView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         calloutXConstraint?.isActive = true
-        calloutWidthConstraint = calloutView.widthAnchor.constraint(equalTo: self.widthAnchor)
+        calloutWidthConstraint = calloutView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1.05)
         calloutWidthConstraint?.isActive = true
         
         titleLabel.font = UIFont(name: "Gilroy-Medium", size: 20)
@@ -108,12 +108,12 @@ class CharacterButton: KeyboardButton {
         
         if let direction = direction, direction == .Left || direction == .Right {
             calloutXConstraint?.constant = self.frame.width*0.7*(direction == .Left ? -1 : 1)
-            calloutWidthConstraint?.constant = self.frame.width*1
+            calloutWidthConstraint?.constant = self.frame.width
         } else {
             calloutYConstraint?.constant = 0
         }
         
-        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .allowUserInteraction) { [self] in
+        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .allowUserInteraction) { [self] in
             calloutView.alpha = 0
             self.layoutIfNeeded()
         }

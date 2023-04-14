@@ -205,7 +205,7 @@ class FinaleKeyboard: UIInputViewController {
         bottomRowBottomConstraint?.isActive = true
     }
     
-    func BuildKeyboardView (viewType: ViewType) {
+    func BuildKeyboardView (viewType: ViewType, updateViewType: Bool = true) {
         if viewType == .Characters {
             BuildKeyboardView(topRow: FinaleKeyboard.currentLocale.topRow, middleRow: FinaleKeyboard.currentLocale.middleRow, bottomRow: FinaleKeyboard.currentLocale.bottomRow)
             leadingBottomButton.ChangeFunction(new: FinaleKeyboard.isCaps ? .Caps : .Shift)
@@ -220,7 +220,7 @@ class FinaleKeyboard: UIInputViewController {
             leadingBottomButton.ChangeFunction(new: .ExtraSymbolsShift)
             trailingBottomButton.ChangeFunction(new: .Backspace)
         }
-        FinaleKeyboard.currentViewType = viewType
+        if updateViewType { FinaleKeyboard.currentViewType = viewType }
     }
     
     func BuildKeyboardView (topRow: [Character], middleRow: [Character], bottomRow: [Character]) {
@@ -325,12 +325,6 @@ class FinaleKeyboard: UIInputViewController {
     
     func ToggleSearchEmojiView () {
         if FinaleKeyboard.currentViewType != .SearchEmoji {
-            if FinaleKeyboard.currentLocale != .en_US {
-                ToggleLocale()
-                topRowTopConstraint?.constant = -self.view.frame.height
-                bottomRowBottomConstraint?.constant = -self.view.frame.height
-                self.view.layoutIfNeeded()
-            }
             FinaleKeyboard.currentViewType = .SearchEmoji
             
             emojiSearchRow?.removeFromSuperview()
@@ -1051,7 +1045,7 @@ class FinaleKeyboard: UIInputViewController {
         let index = ((FinaleKeyboard.enabledLocales.firstIndex(of: FinaleKeyboard.currentLocale) ?? 0) + 1) % FinaleKeyboard.enabledLocales.count
         FinaleKeyboard.currentLocale = FinaleKeyboard.enabledLocales[index]
         
-        BuildKeyboardView(viewType: .Characters)
+        BuildKeyboardView(viewType: .Characters, updateViewType: false)
         ResetSuggestions()
         
         UserDefaults.standard.set(FinaleKeyboard.currentLocale.rawValue, forKey: self.localeSavePath)
