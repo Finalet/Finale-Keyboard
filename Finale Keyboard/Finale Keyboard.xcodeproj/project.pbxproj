@@ -29,6 +29,7 @@
 		37991F3029E9963C00900BC9 /* CharacterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37991F2F29E9963C00900BC9 /* CharacterButton.swift */; };
 		37991F3229E9964400900BC9 /* FunctionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37991F3129E9964400900BC9 /* FunctionButton.swift */; };
 		37991F3529E999B300900BC9 /* KeyboardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37991F3429E999B300900BC9 /* KeyboardButton.swift */; };
+		37991F3729E9E7CD00900BC9 /* SkinToneSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37991F3629E9E7CD00900BC9 /* SkinToneSelector.swift */; };
 		379E9FA227DA358000B9ECA6 /* LanguagesSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 379E9FA127DA358000B9ECA6 /* LanguagesSettings.swift */; };
 		37A0ACF327A8694100578290 /* Finale_KeyboardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A0ACF227A8694100578290 /* Finale_KeyboardApp.swift */; };
 		37A0ACF527A8694100578290 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A0ACF427A8694100578290 /* ContentView.swift */; };
@@ -89,6 +90,7 @@
 		37991F2F29E9963C00900BC9 /* CharacterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterButton.swift; sourceTree = "<group>"; };
 		37991F3129E9964400900BC9 /* FunctionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionButton.swift; sourceTree = "<group>"; };
 		37991F3429E999B300900BC9 /* KeyboardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardButton.swift; sourceTree = "<group>"; };
+		37991F3629E9E7CD00900BC9 /* SkinToneSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkinToneSelector.swift; sourceTree = "<group>"; };
 		379E9FA127DA358000B9ECA6 /* LanguagesSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguagesSettings.swift; sourceTree = "<group>"; };
 		37A0ACEF27A8694100578290 /* Finale Keyboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Finale Keyboard.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		37A0ACF227A8694100578290 /* Finale_KeyboardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Finale_KeyboardApp.swift; sourceTree = "<group>"; };
@@ -130,6 +132,7 @@
 				371F496727ADA92F00686BC7 /* EmojiView.swift */,
 				375A62CC29E8E7D6007E6065 /* EmojiCollectionView.swift */,
 				375A62CE29E8E80F007E6065 /* PageControl.swift */,
+				37991F3629E9E7CD00900BC9 /* SkinToneSelector.swift */,
 			);
 			path = EmojiView;
 			sourceTree = "<group>";
@@ -378,6 +381,7 @@
 			files = (
 				37991F3529E999B300900BC9 /* KeyboardButton.swift in Sources */,
 				37A0AD1327A88AAA00578290 /* UIExtensions.swift in Sources */,
+				37991F3729E9E7CD00900BC9 /* SkinToneSelector.swift in Sources */,
 				3791F23129E77F17005F39B4 /* Definitions.swift in Sources */,
 				371F496827ADA92F00686BC7 /* EmojiView.swift in Sources */,
 				375A62CD29E8E7D6007E6065 /* EmojiCollectionView.swift in Sources */,
@@ -542,7 +546,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_ASSET_PATHS = "\"Finale Keyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = AYPPAXMRMG;
 				ENABLE_PREVIEWS = YES;
@@ -559,9 +563,12 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.17.2;
+				MARKETING_VERSION = 1.18.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Grant151.Finale-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -576,7 +583,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 25;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_ASSET_PATHS = "\"Finale Keyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = AYPPAXMRMG;
 				ENABLE_PREVIEWS = YES;
@@ -593,10 +600,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.17.2;
+				MARKETING_VERSION = 1.18.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Grant151.Finale-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

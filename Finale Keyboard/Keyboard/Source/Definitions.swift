@@ -103,7 +103,7 @@ enum Locale: Int {
     var bottomRow: [Character] {
         switch self {
         case .en_US: return ["z", "x", "c", "v", "b", "n", "m"]
-        case .ru_RU: return ["ч", "с", "м", "и", "т", "ь", "б", "ю"]
+        case .ru_RU: return ["я", "ч", "с", "м", "и", "т", "ь", "б", "ю"]
         }
     }
 }

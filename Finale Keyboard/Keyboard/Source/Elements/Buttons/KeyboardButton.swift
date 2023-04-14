@@ -16,7 +16,7 @@ class KeyboardButton: UIView {
     
     var longPressTimer: Timer?
     var longPressRepeatTimer: Timer?
-    let longPressDelay = 0.5
+    let longPressDelay = 0.3
     let longPressRepeatInterval = 0.1
     
     var didLongPress = false

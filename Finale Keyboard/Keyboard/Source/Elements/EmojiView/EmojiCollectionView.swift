@@ -15,6 +15,9 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
     let collectionView: UICollectionView
     var emojiSection: EmojiSection?
     
+    var skinToneSelector: SkinToneSelector?
+    var currentSkinToneEmojiIndexPath: IndexPath?
+    
     override init(frame: CGRect) {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: EightItemsFlowLayout())
         super.init(frame: frame)
@@ -31,6 +34,11 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
         let pan = UIPanGestureRecognizer(target: self, action: #selector(PanGesture))
         pan.delegate = self
         collectionView.addGestureRecognizer(pan)
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(LongPress))
+        longPress.minimumPressDuration = 0.3
+        longPress.delegate = self
+        collectionView.addGestureRecognizer(longPress)
     }
     
     func Setup(_ emojiSection: EmojiSection) {
@@ -49,6 +57,7 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
         if panGesture.state == .changed {
             FinaleKeyboard.instance.topRowTopConstraint?.constant = originalOffset + translation.y
             FinaleKeyboard.instance.bottomRowBottomConstraint?.constant = originalOffset + translation.y
+            HideEmojiPicker()
         } else if panGesture.state == .ended {
             let velocity = panGesture.velocity(in: self)
 
@@ -64,8 +73,36 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
         }
     }
     
+    @objc func LongPress (_ sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            let pos = sender.location(in: collectionView)
+            if let indexPath = collectionView.indexPathForItem(at: pos), let cell = collectionView.cellForItem(at: indexPath) as? EmojiCell, let emoji = cell.emoji, emoji.supportsSkinTones {
+                ShowEmojiPicker(emoji: emoji, cell: cell)
+                currentSkinToneEmojiIndexPath = indexPath
+            }
+        }
+    }
+    
+    func ShowEmojiPicker (emoji: Emoji, cell: EmojiCell) {
+        skinToneSelector?.removeFromSuperview()
+        skinToneSelector = SkinToneSelector(emoji, fontSize: cell.label.font.pointSize*0.6, collectionView: self, emojiCell: cell)
+        skinToneSelector?.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(skinToneSelector!)
+        skinToneSelector?.topAnchor.constraint(greaterThanOrEqualTo: FinaleKeyboard.instance.view.topAnchor, constant: 8).isActive = true
+        skinToneSelector?.leadingAnchor.constraint(greaterThanOrEqualTo: FinaleKeyboard.instance.view.leadingAnchor, constant: 8).isActive = true
+        skinToneSelector?.trailingAnchor.constraint(lessThanOrEqualTo: FinaleKeyboard.instance.view.trailingAnchor, constant: -8).isActive = true
+        skinToneSelector?.leadingAnchor.constraint(lessThanOrEqualTo: cell.leadingAnchor).isActive = true
+        skinToneSelector?.bottomAnchor.constraint(greaterThanOrEqualTo: cell.topAnchor).isActive = true
+    }
+    
+    func HideEmojiPicker () {
+        skinToneSelector?.Disappear()
+        skinToneSelector = nil
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         scrollView.bounces = (scrollView.contentOffset.y > 10)
+        HideEmojiPicker ()
     }
     
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
@@ -87,6 +124,13 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if skinToneSelector != nil {
+            if currentSkinToneEmojiIndexPath != indexPath {
+                HideEmojiPicker()
+            }
+            return
+        }
+        
         (collectionView.cellForItem(at: indexPath) as? EmojiCell)?.TypeEmoji()
     }
 }

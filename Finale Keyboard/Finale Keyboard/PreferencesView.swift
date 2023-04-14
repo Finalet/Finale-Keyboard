@@ -220,6 +220,7 @@ struct PreferencesShortcutsView: View {
         array.forEach {
             if $0.key == "" || $0.value == "" {
                 dict.removeValue(forKey: $0.key)
+                return
             }
             
             dict[$0.key] = $0.value

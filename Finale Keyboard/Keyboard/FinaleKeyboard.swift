@@ -31,6 +31,15 @@ class FinaleKeyboard: UIInputViewController {
         CheckAutoCapitalization()
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        if UIScreen.main.bounds.width < UIScreen.main.bounds.height {
+            _heightConstraint?.constant = FinaleKeyboard.buttonHeight*3
+        } else {
+            _heightConstraint?.constant = FinaleKeyboard.buttonHeight*2
+        }
+    }
+    
     static var instance: FinaleKeyboard!
     
     static let buttonHeight: CGFloat = 60.0

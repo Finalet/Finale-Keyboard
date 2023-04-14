@@ -88,6 +88,9 @@ class EmojiView: UIView, UIScrollViewDelegate, UICollectionViewDelegate, UIColle
             FinaleKeyboard.instance.ToggleSearchEmojiView()
             toggleOnce = true
         }
+        masterCollection.visibleCells.forEach {
+            ($0 as? EmojiCollectionCell)?.HideEmojiPicker()
+        }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
