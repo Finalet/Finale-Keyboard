@@ -78,8 +78,8 @@ class EmojiSearchRow: UIView, UICollectionViewDataSource, UICollectionViewDelega
         containerView.layer.mask?.frame = containerView.bounds
     }
     
-    func TypeChar(char: String) {
-        searchLabel.text?.append(char)
+    func TypeChar(_ character: String) {
+        searchLabel.text?.append(character)
         UpdateEmojiSearch()
     }
     

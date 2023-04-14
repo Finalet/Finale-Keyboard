@@ -11,4 +11,9 @@ class Defaults {
     
     static let defaultPunctuation = [" ", ".", ",", "?", "!", ":", ";"]
     
+    static let secondaryCharacters: [Character : String] = [
+        "е" : "ё",
+        "ь" : "ъ",
+        "p" : "🤬"
+    ]
 }

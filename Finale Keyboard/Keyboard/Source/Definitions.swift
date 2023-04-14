@@ -8,19 +8,14 @@
 import Foundation
 import UIKit
 
-enum ActionType {
-    case Character
-    case Function
-}
 
-enum FunctionType {
+enum Function {
     case Shift
     case SymbolsShift
     case ExtraSymbolsShift
     case Backspace
     case Caps
     case Back
-    case none
     
     var icon: UIImage? {
         switch self {
@@ -30,9 +25,39 @@ enum FunctionType {
         case .Caps: return UIImage(systemName: "arrow.up.to.line", withConfiguration: UIImage.SymbolConfiguration(weight: .black))
         case .Backspace: return UIImage(systemName: "delete.left.fill")
         case .Back: return UIImage(systemName: "arrow.uturn.left", withConfiguration: UIImage.SymbolConfiguration(weight: .bold))
-        case .none: return nil
         }
     }
+    
+    func TapAction () {
+        switch self {
+        case .Shift: FinaleKeyboard.instance.ShiftAction()
+        case .SymbolsShift: FinaleKeyboard.instance.ToggleExtraSymbolsView()
+        case .ExtraSymbolsShift: FinaleKeyboard.instance.ToggleExtraSymbolsView()
+        case .Caps: FinaleKeyboard.instance.CapsAction()
+        case .Backspace: FinaleKeyboard.instance.BackAction()
+        case .Back: FinaleKeyboard.instance.BackAction()
+        }
+    }
+    
+    func SwipeRight () {
+        if self == .Shift || self == .SymbolsShift || self == .ExtraSymbolsShift {
+            FinaleKeyboard.instance.ToggleSymbolsView()
+        }
+    }
+    func SwipeLeft () {
+        if self == .Backspace {
+            FinaleKeyboard.currentViewType == .SearchEmoji ? FinaleKeyboard.instance.BackAction() : FinaleKeyboard.instance.OpenEmoji()
+        }
+    }
+    func SwipeUp () {
+        if self == .Shift {
+            FinaleKeyboard.instance.ToggleLocale()
+        } else if self == .Backspace {
+            FinaleKeyboard.currentViewType == .SearchEmoji ? FinaleKeyboard.instance.BackAction() : FinaleKeyboard.instance.ReturnAction()
+        }
+    }
+    
+    func SwipeDown () {}
 }
 
 enum ViewType {
@@ -46,6 +71,25 @@ enum ViewType {
 enum Locale: Int {
     case en_US
     case ru_RU
+    
+    var topRow: [Character] {
+        switch self {
+        case .en_US: return ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"]
+        case .ru_RU: return ["й", "ц", "у" , "к", "е", "н", "г", "ш", "щ", "з", "х"]
+        }
+    }
+    var middleRow: [Character] {
+        switch self {
+        case .en_US: return ["a", "s", "d", "f",  "g", "h", "j", "k", "l"]
+        case .ru_RU: return ["ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э"]
+        }
+    }
+    var bottomRow: [Character] {
+        switch self {
+        case .en_US: return ["z", "x", "c", "v", "b", "n", "m"]
+        case .ru_RU: return ["ч", "с", "м", "и", "т", "ь", "б", "ю"]
+        }
+    }
 }
 struct DictionaryItem: Decodable {
     let input: String

@@ -26,6 +26,9 @@
 		3791F22F29E7750E005F39B4 /* AutoLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3791F22E29E7750E005F39B4 /* AutoLayout.swift */; };
 		3791F23129E77F17005F39B4 /* Definitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3791F23029E77F17005F39B4 /* Definitions.swift */; };
 		379865362851176B00A66716 /* HapticFeedback.swift in Sources */ = {isa = PBXBuildFile; fileRef = 379865352851176B00A66716 /* HapticFeedback.swift */; };
+		37991F3029E9963C00900BC9 /* CharacterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37991F2F29E9963C00900BC9 /* CharacterButton.swift */; };
+		37991F3229E9964400900BC9 /* FunctionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37991F3129E9964400900BC9 /* FunctionButton.swift */; };
+		37991F3529E999B300900BC9 /* KeyboardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37991F3429E999B300900BC9 /* KeyboardButton.swift */; };
 		379E9FA227DA358000B9ECA6 /* LanguagesSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 379E9FA127DA358000B9ECA6 /* LanguagesSettings.swift */; };
 		37A0ACF327A8694100578290 /* Finale_KeyboardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A0ACF227A8694100578290 /* Finale_KeyboardApp.swift */; };
 		37A0ACF527A8694100578290 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A0ACF427A8694100578290 /* ContentView.swift */; };
@@ -35,7 +38,6 @@
 		37A0AD0B27A869BA00578290 /* Keyboard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 37A0AD0427A869BA00578290 /* Keyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		37A0AD1327A88AAA00578290 /* UIExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37A0AD1227A88AAA00578290 /* UIExtensions.swift */; };
 		37AB663E28876ECB00741889 /* MoreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37AB663D28876ECB00741889 /* MoreView.swift */; };
-		37B5B99A27A9751000601AB1 /* KeyboardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37B5B99927A9751000601AB1 /* KeyboardButton.swift */; };
 		37CE328B2889FF41002DAD2A /* Localization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37CE328A2889FF41002DAD2A /* Localization.swift */; };
 		37CE3295288A05E9002DAD2A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 37CE3297288A05E9002DAD2A /* Localizable.strings */; };
 /* End PBXBuildFile section */
@@ -84,6 +86,9 @@
 		3791F22E29E7750E005F39B4 /* AutoLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoLayout.swift; sourceTree = "<group>"; };
 		3791F23029E77F17005F39B4 /* Definitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Definitions.swift; sourceTree = "<group>"; };
 		379865352851176B00A66716 /* HapticFeedback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticFeedback.swift; sourceTree = "<group>"; };
+		37991F2F29E9963C00900BC9 /* CharacterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharacterButton.swift; sourceTree = "<group>"; };
+		37991F3129E9964400900BC9 /* FunctionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunctionButton.swift; sourceTree = "<group>"; };
+		37991F3429E999B300900BC9 /* KeyboardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardButton.swift; sourceTree = "<group>"; };
 		379E9FA127DA358000B9ECA6 /* LanguagesSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguagesSettings.swift; sourceTree = "<group>"; };
 		37A0ACEF27A8694100578290 /* Finale Keyboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Finale Keyboard.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		37A0ACF227A8694100578290 /* Finale_KeyboardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Finale_KeyboardApp.swift; sourceTree = "<group>"; };
@@ -95,7 +100,6 @@
 		37A0AD0827A869BA00578290 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		37A0AD1227A88AAA00578290 /* UIExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIExtensions.swift; sourceTree = "<group>"; };
 		37AB663D28876ECB00741889 /* MoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreView.swift; sourceTree = "<group>"; };
-		37B5B99927A9751000601AB1 /* KeyboardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardButton.swift; sourceTree = "<group>"; };
 		37CE328A2889FF41002DAD2A /* Localization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Localization.swift; sourceTree = "<group>"; };
 		37CE3298288A05EC002DAD2A /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		37CE329A288A1051002DAD2A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -144,8 +148,8 @@
 		3791F23429E77F70005F39B4 /* Elements */ = {
 			isa = PBXGroup;
 			children = (
+				37991F3329E9964700900BC9 /* Buttons */,
 				375A62CB29E8E7BF007E6065 /* EmojiView */,
-				37B5B99927A9751000601AB1 /* KeyboardButton.swift */,
 				375A62D029E8F3E4007E6065 /* EmojiSearchRow.swift */,
 			);
 			path = Elements;
@@ -160,6 +164,16 @@
 				3791F22E29E7750E005F39B4 /* AutoLayout.swift */,
 			);
 			path = Helpers;
+			sourceTree = "<group>";
+		};
+		37991F3329E9964700900BC9 /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				37991F3429E999B300900BC9 /* KeyboardButton.swift */,
+				37991F2F29E9963C00900BC9 /* CharacterButton.swift */,
+				37991F3129E9964400900BC9 /* FunctionButton.swift */,
+			);
+			path = Buttons;
 			sourceTree = "<group>";
 		};
 		37A0ACE627A8694100578290 = {
@@ -362,14 +376,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37991F3529E999B300900BC9 /* KeyboardButton.swift in Sources */,
 				37A0AD1327A88AAA00578290 /* UIExtensions.swift in Sources */,
 				3791F23129E77F17005F39B4 /* Definitions.swift in Sources */,
 				371F496827ADA92F00686BC7 /* EmojiView.swift in Sources */,
 				375A62CD29E8E7D6007E6065 /* EmojiCollectionView.swift in Sources */,
+				37991F3029E9963C00900BC9 /* CharacterButton.swift in Sources */,
 				3791F22F29E7750E005F39B4 /* AutoLayout.swift in Sources */,
 				370B056A28B3F0EF0062000A /* Defaults.swift in Sources */,
 				37A0AD0727A869BA00578290 /* FinaleKeyboard.swift in Sources */,
-				37B5B99A27A9751000601AB1 /* KeyboardButton.swift in Sources */,
+				37991F3229E9964400900BC9 /* FunctionButton.swift in Sources */,
 				375A62CF29E8E80F007E6065 /* PageControl.swift in Sources */,
 				375A62D129E8F3E4007E6065 /* EmojiSearchRow.swift in Sources */,
 				3720638827AB2CAF00964120 /* Locales.swift in Sources */,

@@ -45,7 +45,13 @@ class FinaleKeyboard: UIInputViewController {
     
     var emojiView = EmojiView()
     
-    var allButtons = [KeyboardButton]()
+    var characterButtons = [CharacterButton]()
+    var leadingBottomButton: FunctionButton = FunctionButton(.Shift)
+    var trailingBottomButton: FunctionButton = FunctionButton(.Backspace)
+    var leadingBottomButtonTrailingConstraint: NSLayoutConstraint?
+    var leadingBottomButtonWidthConstraint: NSLayoutConstraint?
+    var trailingBottomButtonLeadingConstraint: NSLayoutConstraint?
+    var trailingBottomButtonWidthConstraint: NSLayoutConstraint?
     
     static var isShift = false
     static var isCaps = false
@@ -90,8 +96,9 @@ class FinaleKeyboard: UIInputViewController {
     
     var toggledAC = false
     
+    var punctuationArray: [String] = []
     var defaultDictionary: Dictionary<String, [String]> = [String:[String]]()
-    var userDictionary: [String] = [String]()
+    var userDictionary: [String] = []
     
     var learningWordsDictionary: Dictionary<String, Int> = [String:Int]()
     let learningWordsRepeateThreashold = 3
@@ -104,6 +111,7 @@ class FinaleKeyboard: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         FinaleKeyboard.instance = self
+        InitRows()
         BuildKeyboardView(viewType: .Characters)
         BuildEmojiView()
         SuggestionsView()
@@ -174,24 +182,8 @@ class FinaleKeyboard: UIInputViewController {
             suggestionsArrays.append(SuggestionsArray(suggestions: [String](), lastPickedSuggestionIndex: 1, positionIndex: String().startIndex))
         }
     }
-    func BuildKeyboardView (viewType: ViewType) {
-        if viewType == .Characters {
-            BuildKeyboardView(topRow: FinaleKeyboard.currentLocale == .en_US ? topRowActions_en : topRowActions_ru, middleRow: FinaleKeyboard.currentLocale == .en_US ? middleRowActions_en : middleRowActions_ru, bottomRow: FinaleKeyboard.currentLocale == .en_US ? bottomRowActions_en : bottomRowActions_ru)
-            CheckAutoCapitalization()
-        } else if viewType == .Symbols {
-            BuildKeyboardView(topRow: topRowSymbols, middleRow: middleRowSymbols, bottomRow: bottomRowSymbols)
-        } else if viewType == .ExtraSymbols {
-            BuildKeyboardView(topRow: topRowExtraSymbols, middleRow: middleRowExtraSymbols, bottomRow: bottomRowExtraSymbols)
-        }
-        FinaleKeyboard.currentViewType = viewType
-    }
     
-    func BuildKeyboardView (topRow: [Action], middleRow: [Action], bottomRow: [Action]) {
-        emojiSearchRow?.removeFromSuperview()
-        
-        allButtons.forEach{ $0.removeFromSuperview() }
-        allButtons.removeAll()
-        
+    func InitRows () {
         topRowView.backgroundColor = .clear
         self.view.addSubview(topRowView, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0)])
         topRowTopConstraint?.isActive = false
@@ -201,29 +193,72 @@ class FinaleKeyboard: UIInputViewController {
         middleRowView.backgroundColor = .gray.withAlphaComponent(0.5)
         self.view.addSubview(middleRowView, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .topToBottom(topRowView, 0), .heightToHeight(topRowView, 0)])
         
+        bottomRowView.addSubview(leadingBottomButton, anchors: [.leading(0), .top(0), .bottom(0)])
+        bottomRowView.addSubview(trailingBottomButton, anchors: [.trailing(0), .top(0), .bottom(0)])
         bottomRowView.backgroundColor = .clear
         self.view.addSubview(bottomRowView, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .topToBottom(middleRowView, 0), .heightToHeight(middleRowView, 0)])
         bottomRowBottomConstraint?.isActive = false
         bottomRowBottomConstraint = bottomRowView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
         bottomRowBottomConstraint?.isActive = true
-        
-        topRow.forEach { PopulateRow(action: $0, row: topRowView) }
-        if let last = topRowView.subviews.last { last.trailingAnchor.constraint(equalTo: topRowView.trailingAnchor).isActive = true }
-        
-        middleRow.forEach { PopulateRow(action: $0, row: middleRowView) }
-        if let last = middleRowView.subviews.last { last.trailingAnchor.constraint(equalTo: middleRowView.trailingAnchor).isActive = true }
-        
-        bottomRow.forEach { PopulateRow(action: $0, row: bottomRowView) }
-        if let last = bottomRowView.subviews.last { last.trailingAnchor.constraint(equalTo: bottomRowView.trailingAnchor).isActive = true }
     }
     
-    func PopulateRow(action: Action, row: UIView) {
-        let button = KeyboardButton(action: action)
-        let prevButton: UIView? = row.subviews.last
-        let leading: LayoutAnchor = prevButton == nil ? .leading(0) : .leadingToTrailing(prevButton!, 0)
-        row.addSubview(button, anchors: [.top(0), .bottom(0), leading])
-        if prevButton != nil { button.widthAnchor.constraint(equalTo: prevButton!.widthAnchor).isActive = true }
-        allButtons.append(button)
+    func BuildKeyboardView (viewType: ViewType) {
+        if viewType == .Characters {
+            BuildKeyboardView(topRow: FinaleKeyboard.currentLocale.topRow, middleRow: FinaleKeyboard.currentLocale.middleRow, bottomRow: FinaleKeyboard.currentLocale.bottomRow)
+            CheckAutoCapitalization()
+        } else if viewType == .Symbols {
+            BuildKeyboardView(topRow: Symbols.Symbols.topRow, middleRow: Symbols.Symbols.middleRow, bottomRow: Symbols.Symbols.bottomRow)
+        } else if viewType == .ExtraSymbols {
+            BuildKeyboardView(topRow: Symbols.ExtraSymbols.topRow, middleRow: Symbols.ExtraSymbols.middleRow, bottomRow: Symbols.ExtraSymbols.bottomRow)
+        }
+        FinaleKeyboard.currentViewType = viewType
+    }
+    
+    func BuildKeyboardView (topRow: [Character], middleRow: [Character], bottomRow: [Character]) {
+        characterButtons.forEach{ $0.removeFromSuperview() }
+        characterButtons.removeAll()
+                
+        topRow.forEach { CreateCharacterButton($0, row: topRowView) }
+        if let first = topRowView.subviews.first { first.leadingAnchor.constraint(equalTo: topRowView.leadingAnchor).isActive = true }
+        if let last = topRowView.subviews.last { last.trailingAnchor.constraint(equalTo: topRowView.trailingAnchor).isActive = true }
+        
+        middleRow.forEach { CreateCharacterButton($0, row: middleRowView) }
+        if let first = middleRowView.subviews.first { first.leadingAnchor.constraint(equalTo: middleRowView.leadingAnchor).isActive = true }
+        if let last = middleRowView.subviews.last { last.trailingAnchor.constraint(equalTo: middleRowView.trailingAnchor).isActive = true }
+
+        let first = CreateCharacterButton(bottomRow.first!, row: bottomRowView)
+        for i in 1..<(bottomRow.count-1) { CreateCharacterButton(bottomRow[i], row: bottomRowView) }
+        let last = CreateCharacterButton(bottomRow.last!, row: bottomRowView)
+
+        leadingBottomButtonTrailingConstraint?.isActive = false
+        leadingBottomButtonTrailingConstraint = leadingBottomButton.trailingAnchor.constraint(equalTo: first.leadingAnchor)
+        leadingBottomButtonTrailingConstraint?.isActive = true
+
+        leadingBottomButtonWidthConstraint?.isActive = false
+        leadingBottomButtonWidthConstraint = leadingBottomButton.widthAnchor.constraint(equalTo: first.widthAnchor)
+        leadingBottomButtonWidthConstraint?.isActive = true
+
+        trailingBottomButtonLeadingConstraint?.isActive = false
+        trailingBottomButtonLeadingConstraint = trailingBottomButton.leadingAnchor.constraint(equalTo: last.trailingAnchor)
+        trailingBottomButtonLeadingConstraint?.isActive = true
+
+        trailingBottomButtonWidthConstraint?.isActive = false
+        trailingBottomButtonWidthConstraint = trailingBottomButton.widthAnchor.constraint(equalTo: last.widthAnchor)
+        trailingBottomButtonWidthConstraint?.isActive = true
+    }
+    
+    @discardableResult
+    func CreateCharacterButton(_ character: Character, row: UIView) -> UIView {
+        let button = CharacterButton(character)
+        let prevButton = row.subviews.last as? CharacterButton
+        row.addSubview(button, anchors: [.top(0), .bottom(0)])
+        if let prevButton = prevButton {
+            button.widthAnchor.constraint(equalTo: prevButton.widthAnchor).isActive = true
+            button.leadingAnchor.constraint(equalTo: prevButton.trailingAnchor).isActive = true
+        }
+        characterButtons.append(button)
+        
+        return button
     }
     
     func SuggestionsView () {
@@ -305,31 +340,31 @@ class FinaleKeyboard: UIInputViewController {
         HapticFeedback.GestureImpactOccurred()
     }
     
-    func UseAction (action: Action) {
-        switch action.actionType {
-        case .Character: TypeCharacter(char: action.actionTitle)
-        case .Function: PerformActionFunction(function: action.functionType)
-        }
+//    func UseAction (action: Action) {
+//        switch action.actionType {
+//        case .Character: TypeCharacter(char: action.actionTitle)
+//        case .Function: PerformActionFunction(function: action.functionType)
+//        }
         
-        if action.functionType != .Shift && !CheckAutoCapitalization() {
-            FinaleKeyboard.isShift = false
-            UpdateButtonTitleShift()
-        }
-    }
+//        if action.functionType != .Shift && !CheckAutoCapitalization() {
+//            FinaleKeyboard.isShift = false
+//            UpdateButtonTitleShift()
+//        }
+//    }
     
-    func TypeCharacter (char: String) {
+    func TypeCharacter (_ character: String) {
         if let emojiSearchRow = emojiSearchRow {
-            emojiSearchRow.TypeChar(char: char)
+            emojiSearchRow.TypeChar(character)
             return
         }
         
         var shouldPlaceBeforeSpace = false
-        if char == "\"" {
-            let count = self.textDocumentProxy.documentContextBeforeInput?.filter { $0 == Character(char) }.count ?? 0
+        if character == "\"" {
+            let count = self.textDocumentProxy.documentContextBeforeInput?.filter { $0 == Character(character) }.count ?? 0
             if count % 2 != 0 {
                 shouldPlaceBeforeSpace = true
             }
-        } else if char == ")" {
+        } else if character == ")" {
             shouldPlaceBeforeSpace = true
         }
         
@@ -341,7 +376,7 @@ class FinaleKeyboard: UIInputViewController {
             }
         }
         
-        self.textDocumentProxy.insertText(shouldCapitalize ? char.capitalized : char)
+        self.textDocumentProxy.insertText(shouldCapitalize ? character.capitalized : character)
         FadeoutSuggestions()
         
         if (x) { self.textDocumentProxy.insertText(" ") }
@@ -354,25 +389,6 @@ class FinaleKeyboard: UIInputViewController {
         self.textDocumentProxy.insertText(" ")
         
         HapticFeedback.TypingImpactOccurred()
-    }
-    
-    func PerformActionFunction (function: FunctionType) {
-        switch function {
-        case .Shift:
-            ShiftAction()
-        case .SymbolsShift:
-            ToggleExtraSymbolsView()
-        case .ExtraSymbolsShift:
-            ToggleExtraSymbolsView()
-        case .Caps:
-            CapsAction()
-        case .Backspace:
-            BackspaceAction()
-        case .Back:
-            BackAction()
-        case .none:
-            print("none")
-        }
     }
     
     func BackAction() {
@@ -389,7 +405,6 @@ class FinaleKeyboard: UIInputViewController {
         }
         
         self.textDocumentProxy.deleteBackward()
-        MiddleRowReactAnimation()
         CheckAutoCapitalization()
     }
     
@@ -403,12 +418,12 @@ class FinaleKeyboard: UIInputViewController {
         }
         FinaleKeyboard.isLongPressing = true
     }
-    func LongPressCharacter (touchLocation: CGPoint, button: KeyboardButton) {
+    func LongPressCharacter (_ sender: KeyboardButton, touchLocation: CGPoint) {
         if (FinaleKeyboard.isLongPressing) { return }
         waitForLongPress = Timer.scheduledTimer(withTimeInterval: longPressDelay, repeats: false) { (_) in
             FinaleKeyboard.isMovingCursor = true
             self.lastTouchPosX = touchLocation.x
-            button.HideCallout()
+            sender.HideCallout()
             
             UIView.animate (withDuration: 0.3) {
                 self.topRowView.alpha = 0.5
@@ -458,7 +473,7 @@ class FinaleKeyboard: UIInputViewController {
         leftEdgeTimer = nil
     }
     
-    func CheckMoveCursor (touchLocation: CGPoint) {
+    func MoveCursor (touchLocation: CGPoint) {
         if touchLocation.x < UIScreen.main.bounds.width * 0.1 {
             if leftEdgeTimer == nil {
                 leftEdgeTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { (_) in
@@ -809,8 +824,6 @@ class FinaleKeyboard: UIInputViewController {
         let x = getCorrectSuggestionArrayIndex()
         self.textDocumentProxy.deleteBackward()
         
-        MiddleRowReactAnimation()
-        
         //DeletePunctuation
         if let lastChar = self.textDocumentProxy.documentContextBeforeInput?.last {
             if isPunctuation(char: String(lastChar)) {
@@ -861,15 +874,15 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func UpdateButtonTitleShift () {
-        for button in allButtons {
-            if button.action.functionType == .Shift {
-                if (!button.isCalloutShown()) {
-                    button.iconView.tintColor = shouldCapitalize ? .label : .systemGray
-                }
-                continue
-            }
-            button.titleLabel.text = shouldCapitalize ? button.titleLabel.text!.capitalized : button.titleLabel.text!.lowercased()
-        }
+//        for button in characterButtons {
+//            if button.action.functionType == .Shift {
+//                if (!button.isCalloutShown()) {
+//                    button.iconView.tintColor = shouldCapitalize ? .label : .systemGray
+//                }
+//                continue
+//            }
+//            button.titleLabel.text = shouldCapitalize ? button.titleLabel.text!.capitalized : button.titleLabel.text!.lowercased()
+//        }
     }
     
     func ResetSuggestions () {
@@ -1117,17 +1130,5 @@ class FinaleKeyboard: UIInputViewController {
             self.suggestions.removeAll()
             self.lastPickedSuggestionIndex = 1
         }
-    }
-}
-
-struct Action {
-    var actionType: ActionType
-    var actionTitle: String
-    var functionType: FunctionType
-    
-    init(type: ActionType, title: String, funcType: FunctionType = .none) {
-        self.actionType = type
-        self.actionTitle = title
-        self.functionType = funcType
     }
 }
