@@ -14,7 +14,7 @@ class FunctionButton: KeyboardButton {
     let calloutView = UIView()
     let iconView = UIImageView()
     
-    let function: Function
+    var function: Function
     
     init(_ function: Function) {
         self.function = function
@@ -25,19 +25,21 @@ class FunctionButton: KeyboardButton {
         calloutView.alpha = 0
         self.addSubview(calloutView, anchors: [.heightMultiplier(0.8), .centerX(0), .centerY(0), .widthMultiplier(1)])
         
-        iconView.image = function.icon
         iconView.tintColor = .systemGray
         iconView.contentMode = .scaleAspectFit
         self.addSubview(iconView, anchors: [.widthMultiplier(1), .widthMultiplier(0.6), .centerY(0), .centerX(0)])
+        
+        ChangeFunction(new: function)
+    }
+    
+    func ChangeFunction(new: Function) {
+        self.function = new
+        iconView.image = function.icon
     }
     
     override func OnTapBegin(_ sender: UILongPressGestureRecognizer) {}
     
-    override func OnTapChanged(_ sender: UILongPressGestureRecognizer) {
-        if didLongPressSucceed { return }
-        
-        EvaluateSwipe(touchLocation: sender.location(in: self))
-    }
+    override func OnTapChanged(_ sender: UILongPressGestureRecognizer) {}
     
     override func OnTapEnded(_ sender: UILongPressGestureRecognizer) {
         if didLongPressSucceed { return }
@@ -71,16 +73,12 @@ class FunctionButton: KeyboardButton {
     }
     
     override func HideCallout(direction: KeyboardButton.SwipeDirection? = nil) {
-        if function == .Shift {
-            iconView.tintColor = FinaleKeyboard.instance.shouldCapitalize ? .label : .gray
-            if FinaleKeyboard.currentViewType == .Characters { iconView.image = FinaleKeyboard.isCaps ? Function.Caps.icon : Function.Shift.icon }
-            else if FinaleKeyboard.currentViewType == .Symbols { iconView.image = Function.SymbolsShift.icon }
-            else if FinaleKeyboard.currentViewType == .ExtraSymbols { iconView.image = Function.ExtraSymbolsShift.icon }
-        }
-        
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .allowUserInteraction) { [self] in
+      UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .allowUserInteraction) { [self] in
             calloutView.alpha = 0
-            iconView.tintColor = function == .Shift ? (FinaleKeyboard.instance.shouldCapitalize ? .label : .gray) : .gray
         }
+    }
+    
+    func ToggleHighlight (_ isOn: Bool) {
+        iconView.tintColor = isOn ? .label : .gray
     }
 }

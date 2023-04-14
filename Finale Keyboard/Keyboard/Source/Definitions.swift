@@ -33,7 +33,7 @@ enum Function {
         case .Shift: FinaleKeyboard.instance.ShiftAction()
         case .SymbolsShift: FinaleKeyboard.instance.ToggleExtraSymbolsView()
         case .ExtraSymbolsShift: FinaleKeyboard.instance.ToggleExtraSymbolsView()
-        case .Caps: FinaleKeyboard.instance.CapsAction()
+        case .Caps: FinaleKeyboard.instance.ShiftAction()
         case .Backspace: FinaleKeyboard.instance.BackspaceAction()
         case .Back: FinaleKeyboard.instance.BackAction()
         }
@@ -42,6 +42,7 @@ enum Function {
     func LongPressAction () {
         switch self {
         case .Shift: FinaleKeyboard.instance.ToggleAutoCorrect()
+        case .Caps: FinaleKeyboard.instance.ToggleAutoCorrect()
         case .Backspace: FinaleKeyboard.instance.BackspaceAction()
         default: return
         }
@@ -55,7 +56,7 @@ enum Function {
     }
     
     func SwipeRight () {
-        if self == .Shift || self == .SymbolsShift || self == .ExtraSymbolsShift {
+        if self == .Shift || self == .SymbolsShift || self == .ExtraSymbolsShift || self == .Caps {
             FinaleKeyboard.instance.ToggleSymbolsView()
         }
     }
@@ -65,7 +66,7 @@ enum Function {
         }
     }
     func SwipeUp () {
-        if self == .Shift {
+        if self == .Shift || self == .Caps {
             FinaleKeyboard.instance.ToggleLocale()
         } else if self == .Backspace {
             FinaleKeyboard.currentViewType == .SearchEmoji ? FinaleKeyboard.instance.BackAction() : FinaleKeyboard.instance.ReturnAction()

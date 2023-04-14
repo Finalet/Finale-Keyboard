@@ -43,6 +43,8 @@ class CharacterButton: KeyboardButton {
         self.addSubview(titleLabel, anchors: [.leading(0), .trailing(0), .centerX(0)])
         titleYConstraint = titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor)
         titleYConstraint?.isActive = true
+        
+        ToggleCapitalization(FinaleKeyboard.instance.shouldCapitalize)
     }
     
     override func OnTapBegin(_ sender: UILongPressGestureRecognizer) {}
@@ -50,8 +52,6 @@ class CharacterButton: KeyboardButton {
     override func OnTapChanged(_ sender: UILongPressGestureRecognizer) {
         if didLongPressSucceed {
             FinaleKeyboard.instance.MoveCursor(touchLocation: sender.location(in: FinaleKeyboard.instance.view))
-        } else {
-            EvaluateSwipe(touchLocation: sender.location(in: self))
         }
     }
     
@@ -107,6 +107,10 @@ class CharacterButton: KeyboardButton {
             calloutView.alpha = 0
             self.layoutIfNeeded()
         }
+    }
+    
+    func ToggleCapitalization (_ inOn: Bool) {
+        titleLabel.text = inOn ? titleLabel.text?.capitalized : titleLabel.text?.lowercased()
     }
     
     func TypeExtraCharacters () -> Bool {

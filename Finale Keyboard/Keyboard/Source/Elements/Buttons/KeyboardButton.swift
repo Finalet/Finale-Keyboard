@@ -53,6 +53,9 @@ class KeyboardButton: UIView {
             registeredSwipe = false
         } else {
             OnTapChanged(sender)
+            if !didLongPressSucceed {
+                EvaluateSwipe(touchLocation: sender.location(in: self))
+            }
         }
     }
     

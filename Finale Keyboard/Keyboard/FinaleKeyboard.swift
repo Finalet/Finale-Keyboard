@@ -80,8 +80,7 @@ class FinaleKeyboard: UIInputViewController {
     
     var centerXConstraint = NSLayoutConstraint()
     
-    var waitingForSecondTap = false
-    var capsTimer = Timer()
+    var capsTimer: Timer?
     
     var cursorMoveTimer = Timer()
     var leftEdgeTimer: Timer?
@@ -198,11 +197,17 @@ class FinaleKeyboard: UIInputViewController {
     func BuildKeyboardView (viewType: ViewType) {
         if viewType == .Characters {
             BuildKeyboardView(topRow: FinaleKeyboard.currentLocale.topRow, middleRow: FinaleKeyboard.currentLocale.middleRow, bottomRow: FinaleKeyboard.currentLocale.bottomRow)
+            leadingBottomButton.ChangeFunction(new: FinaleKeyboard.isCaps ? .Caps : .Shift)
+            trailingBottomButton.ChangeFunction(new: .Backspace)
             CheckAutoCapitalization()
         } else if viewType == .Symbols {
             BuildKeyboardView(topRow: Symbols.Symbols.topRow, middleRow: Symbols.Symbols.middleRow, bottomRow: Symbols.Symbols.bottomRow)
+            leadingBottomButton.ChangeFunction(new: .SymbolsShift)
+            trailingBottomButton.ChangeFunction(new: .Backspace)
         } else if viewType == .ExtraSymbols {
             BuildKeyboardView(topRow: Symbols.ExtraSymbols.topRow, middleRow: Symbols.ExtraSymbols.middleRow, bottomRow: Symbols.ExtraSymbols.bottomRow)
+            leadingBottomButton.ChangeFunction(new: .ExtraSymbolsShift)
+            trailingBottomButton.ChangeFunction(new: .Backspace)
         }
         FinaleKeyboard.currentViewType = viewType
     }
@@ -410,26 +415,6 @@ class FinaleKeyboard: UIInputViewController {
         
         HapticFeedback.GestureImpactOccurred()
     }
-//    func CancelLongPress () {
-//        FinaleKeyboard.isLongPressing = false
-//        toggledAC = false
-//        CancelWaitingForLongPress()
-//
-//        if (FinaleKeyboard.isMovingCursor) {
-//            FinaleKeyboard.isMovingCursor = false
-//            UIView.animate (withDuration: 0.3) {
-//                self.topRowView.alpha = 1
-//                self.middleRowView.alpha = 1
-//                self.bottomRowView.alpha = 1
-//            }
-//        }
-//    }
-//    func CancelWaitingForLongPress () {
-//        rightEdgeTimer?.invalidate()
-//        rightEdgeTimer = nil
-//        leftEdgeTimer?.invalidate()
-//        leftEdgeTimer = nil
-//    }
     
     func StartMoveCursor (touchLocation: CGPoint) {
         self.lastTouchPosX = touchLocation.x
@@ -488,32 +473,31 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func ShiftAction () {
-        if !waitingForSecondTap {
-            waitingForSecondTap = true
-            
-            capsTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { (_) in
-                self.waitingForSecondTap = false
-            }
-        } else {
+        if capsTimer != nil {
+            capsTimer?.invalidate()
+            capsTimer = nil
             CapsAction()
-            waitingForSecondTap = false
-            capsTimer.invalidate()
-            return
+        } else {
+            capsTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { _ in
+                self.capsTimer = nil
+            }
+            
+            if FinaleKeyboard.isCaps {
+                FinaleKeyboard.isCaps = false
+                FinaleKeyboard.isShift = false
+                leadingBottomButton.ChangeFunction(new: .Shift)
+            } else {
+                FinaleKeyboard.isShift.toggle()
+            }
         }
         
-        if FinaleKeyboard.isCaps {
-            FinaleKeyboard.isCaps = false
-            FinaleKeyboard.isShift = false
-            CheckAutoCapitalization()
-        } else {
-            FinaleKeyboard.isShift = !FinaleKeyboard.isShift
-        }
-        UpdateButtonTitleShift()
+        UpdateButtonsTitles()
     }
     func CapsAction (){
         FinaleKeyboard.isShift = false
         FinaleKeyboard.isCaps = true
-        UpdateButtonTitleShift()
+        leadingBottomButton.ChangeFunction(new: .Caps)
+        UpdateButtonsTitles()
     }
     func ReturnAction () {
         self.textDocumentProxy.insertText("\n")
@@ -851,16 +835,11 @@ class FinaleKeyboard: UIInputViewController {
         self.textDocumentProxy.adjustTextPosition(byCharacterOffset: dis)
     }
     
-    func UpdateButtonTitleShift () {
-//        for button in characterButtons {
-//            if button.action.functionType == .Shift {
-//                if (!button.isCalloutShown()) {
-//                    button.iconView.tintColor = shouldCapitalize ? .label : .systemGray
-//                }
-//                continue
-//            }
-//            button.titleLabel.text = shouldCapitalize ? button.titleLabel.text!.capitalized : button.titleLabel.text!.lowercased()
-//        }
+    func UpdateButtonsTitles () {
+        characterButtons.forEach { $0.ToggleCapitalization(shouldCapitalize) }
+        if leadingBottomButton.function == .Shift || leadingBottomButton.function == .Caps {
+            leadingBottomButton.ToggleHighlight(shouldCapitalize)
+        }
     }
     
     func ResetSuggestions () {
@@ -1007,11 +986,11 @@ class FinaleKeyboard: UIInputViewController {
     
     func ForceShift () {
         FinaleKeyboard.isShift = true
-        UpdateButtonTitleShift()
+        UpdateButtonsTitles()
     }
     func RemoveShift () {
         FinaleKeyboard.isShift = false
-        UpdateButtonTitleShift()
+        UpdateButtonsTitles()
     }
     
     override func textDidChange(_ textInput: UITextInput?) {
@@ -1081,7 +1060,7 @@ class FinaleKeyboard: UIInputViewController {
         UserDefaults.standard.set(FinaleKeyboard.currentLocale.rawValue, forKey: self.localeSavePath)
     }
     func ToggleSymbolsView () {
-        if FinaleKeyboard.currentViewType == .Characters { BuildKeyboardView(viewType: .Symbols); FinaleKeyboard.isShift = false; FinaleKeyboard.isCaps = false }
+        if FinaleKeyboard.currentViewType == .Characters { BuildKeyboardView(viewType: .Symbols) }
         else if FinaleKeyboard.currentViewType == .Symbols || FinaleKeyboard.currentViewType == .ExtraSymbols { BuildKeyboardView(viewType: .Characters) }
     }
     func ToggleExtraSymbolsView () {
