@@ -24,7 +24,7 @@ class FinaleKeyboard: UIInputViewController {
         emptyView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(emptyView)
 
-        _heightConstraint = view.heightAnchor.constraint(equalToConstant: buttonHeight*3)
+        _heightConstraint = view.heightAnchor.constraint(equalToConstant: FinaleKeyboard.buttonHeight*3)
         _heightConstraint?.priority = .required - 1
         _heightConstraint?.isActive = true
         
@@ -33,7 +33,7 @@ class FinaleKeyboard: UIInputViewController {
     
     static var instance: FinaleKeyboard!
     
-    let buttonHeight: CGFloat = 60.0
+    static let buttonHeight: CGFloat = 60.0
     let buttonHeightEmojiSearch: CGFloat = 50.0
     
     var emojiSearchRow: UIView?
@@ -297,7 +297,7 @@ class FinaleKeyboard: UIInputViewController {
         label.font = UIFont(name: "Gilroy-Medium", size: 11)
         
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.heightAnchor.constraint(equalToConstant: buttonHeight * 0.4).isActive = true
+        label.heightAnchor.constraint(equalToConstant: FinaleKeyboard.buttonHeight * 0.4).isActive = true
         
         view.addSubview(label)
         return label
@@ -1031,6 +1031,8 @@ class FinaleKeyboard: UIInputViewController {
         UpdateSuggestionColor(index: pickedSuggestionIndex)
     }
     func AnimateSuggestionLabels (index: Int, instant: Bool = false) {
+        guard self.suggestionLabels.indices.contains(index) else { return }
+        
         self.view.layoutIfNeeded()
         let deltaX = self.suggestionLabels[index].frame.origin.x + self.suggestionLabels[index].frame.width*0.5 - UIScreen.main.bounds.width*0.5
         centerXConstraint.constant -= deltaX

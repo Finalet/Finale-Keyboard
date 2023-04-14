@@ -182,7 +182,7 @@ class KeyboardButton: UIView {
             calloutYConstraint?.constant = 0
         }
         
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .allowUserInteraction) { [self] in
+        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .allowUserInteraction) { [self] in
             calloutView.alpha = 0
             self.layoutIfNeeded()
         }

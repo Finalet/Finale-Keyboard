@@ -24,53 +24,59 @@ class EmojiView: UIView, UIScrollViewDelegate {
     init () {
         self.emojiSections = ElegantEmojiPicker.getDefaultEmojiSections()
         super.init(frame: .zero)
-        
+
         LoadFavoriteEmoji()
-        
+
         let leadingButton = UIButton()
         leadingButton.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
         leadingButton.imageView?.tintColor = .gray
         leadingButton.addTarget(self, action: #selector(ToggleSearchEmojiView), for: .touchUpInside)
         leadingButton.backgroundColor = .clearInteractable
         self.addSubview(leadingButton, anchors: [.safeAreaLeading(0), .height(toolbarHeight), .aspectRatio(widthToHeight: 1), .bottom(0)])
-        
+
         let trailingButton = UIButton()
         trailingButton.setImage(UIImage(systemName: "delete.left.fill"), for: .normal)
         trailingButton.imageView?.tintColor = .gray
         trailingButton.addTarget(self, action: #selector(Backspace), for: .touchUpInside)
         trailingButton.backgroundColor = .clearInteractable
         self.addSubview(trailingButton, anchors: [.safeAreaTrailing(0), .height(toolbarHeight), .aspectRatio(widthToHeight: 1), .bottom(0)])
-        
+
         pageControl.Setup(self)
         self.addSubview(pageControl, anchors: [.bottom(0), .leadingToTrailing(leadingButton, 0), .height(toolbarHeight), .trailingToLeading(trailingButton, 0)])
-        
+
         paginatedView.backgroundColor = .clearInteractable
         paginatedView.isPagingEnabled = true
         paginatedView.delegate = self
         paginatedView.showsHorizontalScrollIndicator = false
         self.addSubview(paginatedView, anchors: [.bottomToTop(pageControl, 0), .top(0), .safeAreaLeading(0), .safeAreaTrailing(0)])
         let scrollContent = paginatedView.setupContentContainer(scrollDirection: .Horizontal)
-        
-        for _ in emojiSections {
+
+        for _ in 0..<emojiSections.count {
             let collectionView = UICollectionView(frame: .zero, collectionViewLayout: EightItemsFlowLayout())
             collectionView.backgroundColor = .clear
             collectionView.dataSource = self
             collectionView.delegate = self
             collectionView.register(EmojiCell.self, forCellWithReuseIdentifier: "emojiCell")
-                    
+
             let pan = UIPanGestureRecognizer(target: self, action: #selector(PanGesture))
             pan.delegate = self
             collectionView.addGestureRecognizer(pan)
-            
-            let prevCollectionView: UIView? = scrollContent.subviews.last
-            let leading: LayoutAnchor = prevCollectionView == nil ? .leading(0) : .leadingToTrailing(prevCollectionView!, 0)
-            scrollContent.addSubview(collectionView, anchors: [.top(0), .bottom(0), leading])
-            if prevCollectionView != nil { collectionView.widthAnchor.constraint(equalTo: prevCollectionView!.widthAnchor).isActive = true }
-            else { collectionView.widthAnchor.constraint(equalTo: paginatedView.frameLayoutGuide.widthAnchor).isActive = true }
-            
+            scrollContent.addSubview(collectionView)
+            collectionView.DebugSubviews()
+
             collectionViews.append(collectionView)
         }
         if let last = scrollContent.subviews.last { last.trailingAnchor.constraint(equalTo: scrollContent.trailingAnchor).isActive = true }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        let width = self.safeAreaLayoutGuide.layoutFrame.width
+        let height = FinaleKeyboard.buttonHeight*3 - toolbarHeight
+        for i in 0..<collectionViews.count {
+            collectionViews[i].frame = CGRect(x: CGFloat(i)*width, y: 0.0, width: width, height: height)
+        }
     }
     
     func LoadFavoriteEmoji () {
@@ -190,24 +196,23 @@ class EmojiCell: UICollectionViewCell {
     
     var emoji: Emoji?
     
-    var label: UILabel?
+    var label = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         backgroundColor = .clear
+        
+        label.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
+        label.font = label.font.withSize(32)
+        label.textAlignment = .center
+        addSubview(label)
     }
     
     func Setup (emoji: Emoji) {
         self.emoji = emoji
         
-        label = UILabel(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
-        label?.backgroundColor = .clear
-        label?.text = emoji.emoji
-        label?.font = label!.font.withSize(32)
-        label?.textAlignment = .center
-        
-        addSubview(label!)
+        label.text = emoji.emoji
     }
     
     func TypeEmoji () {
@@ -215,20 +220,13 @@ class EmojiCell: UICollectionViewCell {
         
         FinaleKeyboard.instance.TypeEmoji(emoji: emoji.emoji)
         UIView.animate(withDuration: 0.05, delay: 0, options: [.allowUserInteraction, .curveEaseOut]) {
-            self.label?.frame.origin.y -= self.label!.frame.size.height*0.3
-            self.label?.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+            self.label.frame.origin.y -= self.label.frame.size.height*0.3
+            self.label.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
         } completion: { _ in
             UIView.animate(withDuration: 0.05, delay: 0, options: [.allowUserInteraction, .curveEaseOut]) {
-                self.label?.transform = CGAffineTransform(scaleX: 1, y: 1)
-                self.label?.frame.origin.y = 0
+                self.label.transform = CGAffineTransform(scaleX: 1, y: 1)
+                self.label.frame.origin.y = 0
             }
-        }
-    }
-    
-    override func prepareForReuse () {
-        super.prepareForReuse()
-        for view in subviews{
-            view.removeFromSuperview()
         }
     }
 }
