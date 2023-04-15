@@ -46,17 +46,23 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
         collectionView.reloadData()
     }
     
+    var startPosY = 0.0
     @objc func PanGesture (panGesture: UIPanGestureRecognizer) {
         let view = panGesture.view as! UICollectionView
         let translation = panGesture.translation(in: self)
         
-        if view.contentOffset.y > 0 || translation.y < 0 || !FinaleKeyboard.instance.emojiView.canDismiss {return}
+        if panGesture.state == .began {
+            startPosY = view.contentOffset.y
+        }
         
-        let originalOffset = -FinaleKeyboard.instance.view.frame.height
+        if view.contentOffset.y > 0 || translation.y < 0 || !FinaleKeyboard.instance.emojiView.canDismiss {
+            ResetPan()
+            return
+        }
         
         if panGesture.state == .changed {
-            FinaleKeyboard.instance.topRowTopConstraint?.constant = originalOffset + translation.y
-            FinaleKeyboard.instance.bottomRowBottomConstraint?.constant = originalOffset + translation.y
+            FinaleKeyboard.instance.topRowTopConstraint?.constant = -FinaleKeyboard.instance.view.frame.height + translation.y - startPosY
+            FinaleKeyboard.instance.bottomRowBottomConstraint?.constant = -FinaleKeyboard.instance.view.frame.height + translation.y - startPosY
             HideEmojiPicker()
         } else if panGesture.state == .ended {
             let velocity = panGesture.velocity(in: self)
@@ -64,12 +70,20 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
             if velocity.y >= 400 {
                 FinaleKeyboard.instance.CloseEmoji()
             } else {
-                FinaleKeyboard.instance.topRowTopConstraint?.constant = originalOffset
-                FinaleKeyboard.instance.bottomRowBottomConstraint?.constant = originalOffset
-                UIView.animate(withDuration: 0.2) {
-                    FinaleKeyboard.instance.view.layoutIfNeeded()
-                }
+                ResetPan()
             }
+        }
+    }
+    
+    func ResetPan () {
+        let offset = -FinaleKeyboard.instance.view.frame.height
+        if FinaleKeyboard.currentViewType != .Emoji { return }
+        if FinaleKeyboard.instance.topRowTopConstraint?.constant == offset && FinaleKeyboard.instance.bottomRowBottomConstraint?.constant == offset { return }
+        
+        FinaleKeyboard.instance.topRowTopConstraint?.constant = -FinaleKeyboard.instance.view.frame.height
+        FinaleKeyboard.instance.bottomRowBottomConstraint?.constant = -FinaleKeyboard.instance.view.frame.height
+        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
+            FinaleKeyboard.instance.view.layoutIfNeeded()
         }
     }
     

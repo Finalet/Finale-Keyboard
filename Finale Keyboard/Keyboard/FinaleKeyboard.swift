@@ -330,7 +330,7 @@ class FinaleKeyboard: UIInputViewController {
             emojiSearchRow?.removeFromSuperview()
             emojiSearchRow = EmojiSearchRow()
             
-            self.view.addSubview(emojiSearchRow!, anchors: [.leading(0), .trailing(0), .bottomToTop(topRowView, 0), .height(emojiRowHeight)])
+            self.view.addSubview(emojiSearchRow!, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .bottomToTop(topRowView, 0), .height(emojiRowHeight)])
             
         } else {
             emojiSearchRow?.removeFromSuperview()
