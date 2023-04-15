@@ -7,18 +7,48 @@
 
 import Foundation
 
-class Symbols {
+enum Locale: Int {
+    case en_US
+    case ru_RU
     
-    struct Symbols {
-        static let topRow: [Character] = ["1", "2","3", "4", "5", "6", "7", "8", "9", "0"]
-        static let middleRow: [Character] = ["-", ":", ";", "(", ")", "$", "&", "@", "\""]
-        static let bottomRow: [Character] = [".", ",", "?", "!", "\'"]
+    var topRow: [String] {
+        switch self {
+        case .en_US: return ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"]
+        case .ru_RU: return ["й", "ц", "у" , "к", "е", "н", "г", "ш", "щ", "з", "х"]
+        }
+    }
+    var middleRow: [String] {
+        switch self {
+        case .en_US: return ["a", "s", "d", "f",  "g", "h", "j", "k", "l"]
+        case .ru_RU: return ["ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э"]
+        }
+    }
+    var bottomRow: [String] {
+        switch self {
+        case .en_US: return ["z", "x", "c", "v", "b", "n", "m"]
+        case .ru_RU: return ["я", "ч", "с", "м", "и", "т", "ь", "б", "ю"]
+        }
     }
     
-    struct ExtraSymbols {
-        static let topRow: [Character] = ["[", "]", "{", "}", "#", "%", "^", "*", "+", "="]
-        static let middleRow: [Character] = ["_", "\\", "|", "~", "<", ">", "₽", "€", "£", "•"]
-        static let bottomRow: [Character] = [".", ",", "?", "!", "\'"]
+    static func getLocale(forString: String) -> Locale? {
+        if en_US.topRow.contains(forString) || en_US.middleRow.contains(forString) || en_US.bottomRow.contains(forString) { return .en_US }
+        if ru_RU.topRow.contains(forString) || ru_RU.middleRow.contains(forString) || ru_RU.bottomRow.contains(forString) { return .ru_RU }
+        
+        return nil
     }
 }
 
+class Symbols {
+    
+    struct Symbols {
+        static let topRow: [String] = ["1", "2","3", "4", "5", "6", "7", "8", "9", "0"]
+        static let middleRow: [String] = ["-", ":", ";", "(", ")", "$", "&", "@", "\""]
+        static let bottomRow: [String] = [".", ",", "?", "!", "\'"]
+    }
+    
+    struct ExtraSymbols {
+        static let topRow: [String] = ["[", "]", "{", "}", "#", "%", "^", "*", "+", "="]
+        static let middleRow: [String] = ["_", "\\", "|", "~", "<", ">", "₽", "€", "£", "•"]
+        static let bottomRow: [String] = [".", ",", "?", "!", "\'"]
+    }
+}

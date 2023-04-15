@@ -57,10 +57,6 @@ struct PreferencesView: View {
                     Text(Localize.Punctuation.pageTitle)
                 }
                 .frame(height: 30)
-                ListNavigationLink(destination: PreferencesShortcutsView()) {
-                    Text("Shortcuts")
-                }
-                .frame(height: 30)
             }
             Section {
                 ListNavigationLink(destination: AdvancedView()) {
@@ -152,89 +148,6 @@ struct PreferencesPunctuationView: View {
     func Save() {
         let userDefaults = UserDefaults(suiteName: suiteName)
         userDefaults?.setValue(punctuationArray, forKey: "FINALE_DEV_APP_punctuationArray")
-    }
-}
-
-struct PreferencesShortcutsView: View {
-//    typealias Localize = Localization.PreferencesScreen.Punctuation
-    
-    @State var array = [Shortcut]()
-    
-    let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
-    
-    var body: some View {
-        Form {
-            Section (footer: Text("Swipe down on a selected key to type a corresponding shortcut.")) {
-                ForEach(0..<array.count, id: \.self) { i in
-                    HStack {
-                        TextField("Key", text: $array[i].key)
-                            .textInputAutocapitalization(.never)
-                        Spacer()
-                        Image(systemName: "arrow.right")
-                            .aspectRatio(contentMode: .fit)
-                            .foregroundColor(.gray)
-                        Spacer()
-                        TextField("Shortcut", text: $array[i].value)
-                            .multilineTextAlignment(.trailing)
-                    }
-                }
-                .onDelete(perform: delete)
-                Button {
-                    withAnimation {
-                        array.append(Shortcut(key: "", value: ""))
-                    }
-                } label: {
-                    Label("Add shortcut", systemImage: "plus")
-                }
-            }
-        }
-        .navigationTitle("Shortcuts")
-        .onAppear {
-            Load()
-        }
-        .onChange(of: array) { newVal in
-            for i in 0..<array.count {
-                if array[i].key.count > 1 {
-                    array[i].key.removeLast()
-                }
-                while let first = array[i].value.first, first == " " {
-                    array[i].value.removeFirst()
-                }
-                while let last = array[i].value.last, last == " " {
-                    array[i].value.removeLast()
-                }
-                array[i].key = array[i].key.lowercased()
-            }
-            Save()
-        }
-    }
-    
-    func Load () {
-        for (key, value) in userDefaults?.value(forKey: "FINALE_DEV_APP_shortcuts") as? [String:String] ?? Defaults.shortcuts {
-            array.append(Shortcut(key: key, value: value))
-        }
-        array = array.sorted { $0.key < $1.key }
-    }
-    func Save() {
-        var dict = [String : String]()
-        array.forEach {
-            if $0.key == "" || $0.value == "" {
-                dict.removeValue(forKey: $0.key)
-                return
-            }
-            
-            dict[$0.key] = $0.value
-        }
-        userDefaults?.setValue(dict, forKey: "FINALE_DEV_APP_shortcuts")
-    }
-    
-    func delete(at offsets: IndexSet) {
-        array.remove(atOffsets: offsets)
-    }
-    
-    struct Shortcut: Equatable {
-        var key: String
-        var value: String
     }
 }
 

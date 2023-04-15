@@ -223,7 +223,7 @@ class FinaleKeyboard: UIInputViewController {
         if updateViewType { FinaleKeyboard.currentViewType = viewType }
     }
     
-    func BuildKeyboardView (topRow: [Character], middleRow: [Character], bottomRow: [Character]) {
+    func BuildKeyboardView (topRow: [String], middleRow: [String], bottomRow: [String]) {
         characterButtons.forEach{ $0.removeFromSuperview() }
         characterButtons.removeAll()
                 
@@ -257,7 +257,7 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     @discardableResult
-    func CreateCharacterButton(_ character: Character, row: UIView) -> UIView {
+    func CreateCharacterButton(_ character: String, row: UIView) -> UIView {
         let button = CharacterButton(character)
         let prevButton = row.subviews.last as? CharacterButton
         row.addSubview(button, anchors: [.top(0), .bottom(0)])
@@ -371,6 +371,8 @@ class FinaleKeyboard: UIInputViewController {
         FadeoutSuggestions()
         
         if (x) { self.textDocumentProxy.insertText(" ") }
+        
+        CheckAutoCapitalization()
     }
     func TypeEmoji (emoji: String) {
         if (getOneBeforeLastChar() != "" && Character(getOneBeforeLastChar()).isEmoji && getLastChar() == " ") {
@@ -986,7 +988,7 @@ class FinaleKeyboard: UIInputViewController {
     
     override func textDidChange(_ textInput: UITextInput?) {
         // The app has just changed the document's contents, the document context has been updated.
-        CheckAutoCapitalization()
+//        CheckAutoCapitalization()
         if (!self.textDocumentProxy.hasText) { RedrawSuggestionsLabels() }
     }
     

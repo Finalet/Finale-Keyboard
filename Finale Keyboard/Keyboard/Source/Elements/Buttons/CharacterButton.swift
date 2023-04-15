@@ -19,9 +19,9 @@ class CharacterButton: KeyboardButton {
     var calloutWidthConstraint: NSLayoutConstraint?
     var calloutXConstraint: NSLayoutConstraint?
     
-    let character: Character
+    let character: String
     
-    init(_ character: Character) {
+    init(_ character: String) {
         self.character = character
         super.init()
         
@@ -61,7 +61,7 @@ class CharacterButton: KeyboardButton {
             return
         }
         
-        FinaleKeyboard.instance.TypeCharacter(String(character))
+        FinaleKeyboard.instance.TypeCharacter(character)
     }
     
     override func OnSwipe(direction: KeyboardButton.SwipeDirection) {

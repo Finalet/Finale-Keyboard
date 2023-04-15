@@ -84,29 +84,6 @@ enum ViewType {
     case SearchEmoji
 }
 
-enum Locale: Int {
-    case en_US
-    case ru_RU
-    
-    var topRow: [Character] {
-        switch self {
-        case .en_US: return ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"]
-        case .ru_RU: return ["й", "ц", "у" , "к", "е", "н", "г", "ш", "щ", "з", "х"]
-        }
-    }
-    var middleRow: [Character] {
-        switch self {
-        case .en_US: return ["a", "s", "d", "f",  "g", "h", "j", "k", "l"]
-        case .ru_RU: return ["ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э"]
-        }
-    }
-    var bottomRow: [Character] {
-        switch self {
-        case .en_US: return ["z", "x", "c", "v", "b", "n", "m"]
-        case .ru_RU: return ["я", "ч", "с", "м", "и", "т", "ь", "б", "ю"]
-        }
-    }
-}
 struct DictionaryItem: Decodable {
     let input: String
     let suggestions: [String]

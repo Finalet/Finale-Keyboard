@@ -22,6 +22,8 @@
 		375A62CD29E8E7D6007E6065 /* EmojiCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375A62CC29E8E7D6007E6065 /* EmojiCollectionView.swift */; };
 		375A62CF29E8E80F007E6065 /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375A62CE29E8E80F007E6065 /* PageControl.swift */; };
 		375A62D129E8F3E4007E6065 /* EmojiSearchRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375A62D029E8F3E4007E6065 /* EmojiSearchRow.swift */; };
+		375D074B29EA3D2100EA2980 /* ShortcutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375D074A29EA3D2100EA2980 /* ShortcutsView.swift */; };
+		375D075029EA400B00EA2980 /* Locales.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3720638727AB2CAF00964120 /* Locales.swift */; };
 		375DFB1727AE9E5E00E304ED /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 375DFB1627AE9E5E00E304ED /* Images.xcassets */; };
 		3791F22F29E7750E005F39B4 /* AutoLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3791F22E29E7750E005F39B4 /* AutoLayout.swift */; };
 		3791F23129E77F17005F39B4 /* Definitions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3791F23029E77F17005F39B4 /* Definitions.swift */; };
@@ -83,6 +85,7 @@
 		375A62CC29E8E7D6007E6065 /* EmojiCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCollectionView.swift; sourceTree = "<group>"; };
 		375A62CE29E8E80F007E6065 /* PageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageControl.swift; sourceTree = "<group>"; };
 		375A62D029E8F3E4007E6065 /* EmojiSearchRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiSearchRow.swift; sourceTree = "<group>"; };
+		375D074A29EA3D2100EA2980 /* ShortcutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsView.swift; sourceTree = "<group>"; };
 		375DFB1627AE9E5E00E304ED /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		3791F22E29E7750E005F39B4 /* AutoLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AutoLayout.swift; sourceTree = "<group>"; };
 		3791F23029E77F17005F39B4 /* Definitions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Definitions.swift; sourceTree = "<group>"; };
@@ -213,6 +216,7 @@
 				37256A7827DB52ED0071180B /* DictionaryListView.swift */,
 				374C861927DD74B8003BA47B /* PreferencesView.swift */,
 				37AB663D28876ECB00741889 /* MoreView.swift */,
+				375D074A29EA3D2100EA2980 /* ShortcutsView.swift */,
 			);
 			path = "Finale Keyboard";
 			sourceTree = "<group>";
@@ -366,9 +370,11 @@
 				37AB663E28876ECB00741889 /* MoreView.swift in Sources */,
 				3743FC5527B1523A0043B2A2 /* KeyboardEnabledState.swift in Sources */,
 				37A0ACF527A8694100578290 /* ContentView.swift in Sources */,
+				375D075029EA400B00EA2980 /* Locales.swift in Sources */,
 				3743FC5727B158AD0043B2A2 /* FavoriteEmoji.swift in Sources */,
 				3727766D27D8E38D00CC8CD8 /* TutorialView.swift in Sources */,
 				374C861A27DD74B8003BA47B /* PreferencesView.swift in Sources */,
+				375D074B29EA3D2100EA2980 /* ShortcutsView.swift in Sources */,
 				37256A7927DB52ED0071180B /* DictionaryListView.swift in Sources */,
 				37A0ACF327A8694100578290 /* Finale_KeyboardApp.swift in Sources */,
 				370B056B28B3F1080062000A /* Defaults.swift in Sources */,
@@ -546,7 +552,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_ASSET_PATHS = "\"Finale Keyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = AYPPAXMRMG;
 				ENABLE_PREVIEWS = YES;
@@ -583,7 +589,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 26;
+				CURRENT_PROJECT_VERSION = 28;
 				DEVELOPMENT_ASSET_PATHS = "\"Finale Keyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = AYPPAXMRMG;
 				ENABLE_PREVIEWS = YES;
