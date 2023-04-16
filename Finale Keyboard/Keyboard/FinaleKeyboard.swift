@@ -106,9 +106,7 @@ class FinaleKeyboard: UIInputViewController {
     let learningWordsRepeateThreashold = 3
     var autoLearnWords = true
     
-    let suiteName = "group.finale-keyboard-cache"
-    let ACSavePath = "FINALE_DEV_APP_autocorrectWords"
-    let localeSavePath = "FINALE_DEV_APP_CurrentLocale"
+    let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -140,7 +138,6 @@ class FinaleKeyboard: UIInputViewController {
             }
         })
         
-        let userDefaults = UserDefaults(suiteName: suiteName)
         userDictionary = userDefaults?.value(forKey: "FINALE_DEV_APP_userDictionary") as? [String] ?? [String]()
         autoLearnWords = userDefaults?.value(forKey: "FINALE_DEV_APP_autoLearnWords") as? Bool ?? true
         if autoLearnWords {
@@ -149,17 +146,13 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func SaveUserDictionary () {
-        let userDefaults = UserDefaults(suiteName: suiteName)
         userDefaults?.setValue(userDictionary, forKey: "FINALE_DEV_APP_userDictionary")
     }
     func SaveLearningWordsDictionary () {
-        let userDefaults = UserDefaults(suiteName: suiteName)
         userDefaults?.setValue(learningWordsDictionary, forKey: "FINALE_DEV_APP_learningWordsDictionary")
     }
     
     func LoadPreferences () {
-        let userDefaults = UserDefaults(suiteName: suiteName)
-        
         let EN_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_en_locale_enabled") as? Bool ?? true
         let RU_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_ru_locale_enabled") as? Bool ?? false
         FinaleKeyboard.enabledLocales.removeAll()
@@ -173,7 +166,7 @@ class FinaleKeyboard: UIInputViewController {
         FinaleKeyboard.isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
         punctuationArray = userDefaults?.value(forKey: "FINALE_DEV_APP_punctuationArray") as? [String] ?? Defaults.punctuation
         shortcuts = userDefaults?.value(forKey: "FINALE_DEV_APP_shortcuts") as? [String : String] ?? Defaults.shortcuts
-        FinaleKeyboard.currentLocale = Locale(rawValue: UserDefaults.standard.integer(forKey: localeSavePath)) ?? .en_US
+        FinaleKeyboard.currentLocale = Locale(rawValue: UserDefaults.standard.integer(forKey: "FINALE_DEV_APP_CurrentLocale")) ?? .en_US
         
         if !FinaleKeyboard.enabledLocales.contains(FinaleKeyboard.currentLocale) {
             FinaleKeyboard.currentLocale = FinaleKeyboard.enabledLocales[0]
@@ -411,11 +404,10 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func ToggleAutoCorrect () {
-        FinaleKeyboard.isAutoCorrectOn = !FinaleKeyboard.isAutoCorrectOn
-        self.ShowNotification(text: FinaleKeyboard.isAutoCorrectOn ? "Autocorrection on" : "Autocorrection off")
+        FinaleKeyboard.isAutoCorrectOn.toggle()
+        userDefaults?.setValue(FinaleKeyboard.isAutoCorrectOn, forKey: "FINALE_DEV_APP_autocorrectWords")
         
-        let userDefaults = UserDefaults(suiteName: self.suiteName)
-        userDefaults?.setValue(FinaleKeyboard.isAutoCorrectOn, forKey: self.ACSavePath)
+        self.ShowNotification(text: FinaleKeyboard.isAutoCorrectOn ? "Autocorrection on" : "Autocorrection off")
         
         HapticFeedback.GestureImpactOccurred()
     }
@@ -704,7 +696,7 @@ class FinaleKeyboard: UIInputViewController {
     
     func EditPreviousWord (upOrDown: Int) {
         var dis = 0
-        while self.textDocumentProxy.documentContextBeforeInput != "" && getLastChar() != " " {
+        while self.textDocumentProxy.documentContextBeforeInput != "" && self.textDocumentProxy.documentContextBeforeInput != nil && getLastChar() != " " {
             self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
             dis += 1
         }
@@ -925,7 +917,7 @@ class FinaleKeyboard: UIInputViewController {
         self.view.layoutIfNeeded()
         let deltaX = self.suggestionLabels[index].frame.origin.x + self.suggestionLabels[index].frame.width*0.5 - UIScreen.main.bounds.width*0.5
         centerXConstraint.constant -= deltaX
-        UIView.animate(withDuration: instant ? 0 : 0.25, delay: 0, options: .curveEaseOut) {
+        UIView.animate(withDuration: instant ? 0 : 0.5, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
             self.view.layoutIfNeeded()
         }
     }
@@ -1061,7 +1053,7 @@ class FinaleKeyboard: UIInputViewController {
         BuildKeyboardView(viewType: .Characters, updateViewType: false)
         ResetSuggestions()
         
-        UserDefaults.standard.set(FinaleKeyboard.currentLocale.rawValue, forKey: self.localeSavePath)
+        UserDefaults.standard.set(FinaleKeyboard.currentLocale.rawValue, forKey: "FINALE_DEV_APP_CurrentLocale")
     }
     func ToggleSymbolsView () {
         if FinaleKeyboard.currentViewType == .Characters { BuildKeyboardView(viewType: .Symbols) }

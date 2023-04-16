@@ -35,7 +35,7 @@ class EmojiSearchRow: UIView, UICollectionViewDataSource, UICollectionViewDelega
         searchLabel.text = " "
         searchLabel.layer.masksToBounds = true
         searchLabel.layer.cornerRadius = 6
-        searchLabel.backgroundColor = .systemGray4
+        searchLabel.backgroundColor = .systemGray2.withAlphaComponent(0.25)
         self.addSubview(searchLabel, anchors: [.top(padding), .leading(padding), .bottom(0), .widthMultiplier(0.25)])
         
         resultsPlaceholder.text = searchPlaceholderText
