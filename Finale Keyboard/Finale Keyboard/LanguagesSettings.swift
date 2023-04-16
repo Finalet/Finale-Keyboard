@@ -2,7 +2,7 @@
 //  LanguagesSettings.swift
 //  Finale Keyboard
 //
-//  Created by Grant Oganan on 3/10/22.
+//  Created by Grant Oganyan on 3/10/22.
 //
 import SwiftUI
 

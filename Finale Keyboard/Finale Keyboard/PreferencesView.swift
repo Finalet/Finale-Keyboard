@@ -95,7 +95,7 @@ struct PreferencesPunctuationView: View {
     typealias Localize = Localization.PreferencesScreen.Punctuation
     let suiteName = "group.finale-keyboard-cache"
     
-    @State var punctuationArray = Defaults.defaultPunctuation
+    @State var punctuationArray = Defaults.punctuation
     
     let punctuationOptions = [".", ",", "?", "!", ":", ";", "-", "@", "*", "\"", "/", "\\", "|", "(", ")", "[", "]", "{", "}"]
     
@@ -138,12 +138,12 @@ struct PreferencesPunctuationView: View {
     }
     
     func Reset() {
-        punctuationArray = Defaults.defaultPunctuation
+        punctuationArray = Defaults.punctuation
     }
     
     func Load () {
         let userDefaults = UserDefaults(suiteName: suiteName)
-        punctuationArray = userDefaults?.value(forKey: "FINALE_DEV_APP_punctuationArray") as? [String] ?? Defaults.defaultPunctuation
+        punctuationArray = userDefaults?.value(forKey: "FINALE_DEV_APP_punctuationArray") as? [String] ?? Defaults.punctuation
     }
     func Save() {
         let userDefaults = UserDefaults(suiteName: suiteName)

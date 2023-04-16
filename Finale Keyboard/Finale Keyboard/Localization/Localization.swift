@@ -2,7 +2,7 @@
 //  Localization.swift
 //  Finale Keyboard
 //
-//  Created by Grant Oganan on 7/21/22.
+//  Created by Grant Oganyan on 7/21/22.
 //
 
 import Foundation
@@ -16,6 +16,7 @@ struct Localization {
         
         static var preferencesTitle = NSLocalizedString("home_preferences_title", value: "Preferences", comment: "")
         static var favoriteEmojiRow = NSLocalizedString("home_favorite_emoji_row", value: "Favorite Emoji", comment: "")
+        static var shortcutsRow = NSLocalizedString("home_shortcuts_row", value: "Shortcuts", comment: "")
         static var languagesRow = NSLocalizedString("home_languages_row", value: "Languages", comment: "")
         static var dictionaryRow = NSLocalizedString("home_dictionary_row", value: "Dictionary", comment: "")
         static var preferencesRow = NSLocalizedString("home_preferences_row", value: "Preferences", comment: "")
@@ -37,6 +38,18 @@ struct Localization {
     struct FavoriteEmojiScreen {
         static var title = HomeScreen.favoriteEmojiRow
         static var footer = NSLocalizedString("favorite_emoji_footer", value: "Pick emoji that are going to show up first in the emoji keyboard.", comment: "")
+    }
+    
+    struct Shortcuts {
+        static var title = HomeScreen.shortcutsRow
+        static var headerTitle = NSLocalizedString("shortcuts_header_title", value: "Swipe down on a key to trigger its shortcut", comment: "")
+        static var headerDescription = NSLocalizedString("shortcuts_header_description", value: "Shortcuts override the regular swipe-down gesture, so leave some empty keys convenience.", comment: "")
+        
+        static var symbols = NSLocalizedString("shortcuts_symbols", value: "Symbols", comment: "")
+        static var extraSymbols = NSLocalizedString("shortcuts_extra_symbols", value: "Extra Symbols", comment: "")
+        
+        static var restoreDefaults = NSLocalizedString("shortcuts_restore_defaults", value: "Restore Defaults", comment: "")
+        static var populateEmoji = NSLocalizedString("shortcuts_populate_emoji", value: "Populate Emoji", comment: "")
     }
     
     struct LanguagesScreen {
