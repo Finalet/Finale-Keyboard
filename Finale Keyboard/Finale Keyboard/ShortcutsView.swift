@@ -20,39 +20,41 @@ struct ShortcutsView: View {
     
     @State var tryText: String = ""
     
+    typealias Loc = Localization.Shortcuts
+    
     var body: some View {
         ScrollView {
             VStack (spacing: 36) {
                 Header()
                 
                 if EN_enabled {
-                    KeyboardView(locale: .en_US, title: "ENGLISH", restoreDefaults: $restoreDefaults, populateEmoji: $populateEmoji)
+                    KeyboardView(locale: .en_US, title: Localization.LanguagesScreen.english.uppercased(), restoreDefaults: $restoreDefaults, populateEmoji: $populateEmoji)
                 }
                 
                 if RU_enabled {
-                    KeyboardView(locale: .ru_RU, title: "RUSSIAN", restoreDefaults: $restoreDefaults, populateEmoji: $populateEmoji)
+                    KeyboardView(locale: .ru_RU, title: Localization.LanguagesScreen.russian.uppercased(), restoreDefaults: $restoreDefaults, populateEmoji: $populateEmoji)
                 }
                 
-                KeyboardView(symbols: true, title: "SYMBOLS", restoreDefaults: $restoreDefaults, populateEmoji: $populateEmoji)
-                KeyboardView(title: "EXTRA SYMBOLS", restoreDefaults: $restoreDefaults, populateEmoji: $populateEmoji)
+                KeyboardView(symbols: true, title: Loc.symbols.uppercased(), restoreDefaults: $restoreDefaults, populateEmoji: $populateEmoji)
+                KeyboardView(title: Loc.extraSymbols.uppercased(), restoreDefaults: $restoreDefaults, populateEmoji: $populateEmoji)
                 
                 Spacer()
             }
             .padding()
         }
-        .navigationTitle("Shortcuts")
+        .navigationTitle(Loc.title)
         .toolbar {
             Menu {
                 Button {
                     RestoreDefaults()
                 } label: {
-                    Label("Restore Defaults", systemImage: "arrow.counterclockwise")
+                    Label(Loc.restoreDefaults, systemImage: "arrow.counterclockwise")
                 }
                 
                 Button {
                     PopulateEmoji()
                 } label: {
-                    Label("Populate Emoji", systemImage: "heart")
+                    Label(Loc.populateEmoji, systemImage: "heart")
                 }
             } label: {
                 Image(systemName: "ellipsis")
@@ -93,13 +95,13 @@ struct ShortcutsView: View {
                         .foregroundColor(.blue)
                     VStack (spacing: 5) {
                         HStack {
-                            Text("Swipe down on a key to trigger its shortcut")
+                            Text(Loc.headerTitle)
                                 .font(.footnote)
                             
                             Spacer()
                         }
                         HStack {
-                            Text("Shortcuts override the regular swipe-down gesture, so leave some empty keys convenience!")
+                            Text(Loc.headerDescription)
                                 .font(.caption2)
                                 .foregroundColor(.gray)
                             Spacer()
@@ -109,7 +111,7 @@ struct ShortcutsView: View {
                 Rectangle()
                     .frame(height: 2)
                     .foregroundColor(Color(UIColor.systemGray3))
-                TextField("Try it out", text: $tryText)
+                TextField(Localization.HomeScreen.inputFieldPlaceholder, text: $tryText)
                     .font(.subheadline)
             }
             .padding()
@@ -249,6 +251,8 @@ struct ShortcutsView: View {
         }
         
         func PopulateFavoriteEmoji () {
+            if locale == nil { return }
+            
             let favoriteEmoji = userDefaults?.array(forKey: "FINALE_DEV_APP_favorite_emoji") as? [String] ?? [String](repeating: "", count: 32)
             if favoriteEmoji.count < 32 { return }
             

@@ -65,6 +65,9 @@
 "home_setup_title" = "Установки";
 
 /* No comment provided by engineer. */
+"home_shortcuts_row" = "Ярлыки";
+
+/* No comment provided by engineer. */
 "home_system_settings_row" = "Системные настройки";
 
 /* No comment provided by engineer. */
@@ -138,4 +141,22 @@
 
 /* No comment provided by engineer. */
 "preferences_typing_haptic" = "Тактильная отдача для клавиш";
+
+/* No comment provided by engineer. */
+"shortcuts_extra_symbols" = "Больше символов";
+
+/* No comment provided by engineer. */
+"shortcuts_header_description" = "Ярлыки заменяют стандартный свайп вниз, поэтому для удобства оставьте немного свободных клавиш.";
+
+/* No comment provided by engineer. */
+"shortcuts_header_title" = "Свайпните вниз по клавише, что бы активировать ее ярлык";
+
+/* No comment provided by engineer. */
+"shortcuts_populate_emoji" = "Заполнить эмодзи";
+
+/* No comment provided by engineer. */
+"shortcuts_restore_defaults" = "Значения по умолчанию";
+
+/* No comment provided by engineer. */
+"shortcuts_symbols" = "Символы";
 

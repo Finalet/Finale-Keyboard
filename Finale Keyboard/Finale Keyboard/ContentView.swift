@@ -42,7 +42,7 @@ struct ContentView: View {
                     }
                     ListNavigationLink(destination: ShortcutsView(EN_enabled: $EN_enabled, RU_enabled: $RU_enabled)) {
                         Label(title: {
-                            Text("Shortcuts")
+                            Text(Localize.shortcutsRow)
                         }, icon: {
                             Image(systemName: "keyboard")
                                 .foregroundColor(.blue)
