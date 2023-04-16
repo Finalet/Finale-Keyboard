@@ -84,7 +84,7 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
     
     func ShowEmojiPicker (emoji: Emoji, cell: EmojiCell) {
         skinToneSelector?.removeFromSuperview()
-        skinToneSelector = SkinToneSelector(emoji, fontSize: cell.label.font.pointSize*0.6, collectionView: self, emojiCell: cell)
+        skinToneSelector = SkinToneSelector(emoji.duplicate(nil), fontSize: cell.label.font.pointSize*0.6, collectionView: self, emojiCell: cell)
         skinToneSelector?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(skinToneSelector!)
         skinToneSelector?.topAnchor.constraint(greaterThanOrEqualTo: FinaleKeyboard.instance.view.topAnchor, constant: 8).isActive = true
@@ -161,10 +161,15 @@ class EmojiCell: UICollectionViewCell {
         self.addGestureRecognizer(longPress)
     }
     
-    func Setup (emoji: Emoji, collectionView: EmojiCollectionCell? = nil) {
+    func Setup (emoji: Emoji, collectionView: EmojiCollectionCell) {
         self.emoji = emoji
         self.collectionView = collectionView
         
+        label.text = emoji.emoji
+    }
+    
+    func Setup(emoji: Emoji) {
+        self.emoji = emoji
         label.text = emoji.emoji
     }
     

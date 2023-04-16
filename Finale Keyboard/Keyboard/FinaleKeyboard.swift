@@ -120,8 +120,10 @@ class FinaleKeyboard: UIInputViewController {
         InitDictionary()
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         SaveLearningWordsDictionary()
+        ReleaseMemory()
     }
     
     func InitDictionary () {
@@ -849,9 +851,9 @@ class FinaleKeyboard: UIInputViewController {
         ResetSuggestionsLabels()
     }
     func ResetSuggestionsLabels () {
-        for i in suggestionLabels {
-            i.text = ""
-            i.textColor = .gray
+        suggestionLabels.forEach {
+            $0.text = ""
+            $0.textColor = .gray
         }
         centerXConstraint.constant = 0
         self.view.layoutIfNeeded()
@@ -1066,6 +1068,41 @@ class FinaleKeyboard: UIInputViewController {
     
     var shouldCapitalize: Bool {
         return FinaleKeyboard.isShift || FinaleKeyboard.isCaps
+    }
+    
+    func ReleaseMemory () {
+        FinaleKeyboard.instance = nil
+        
+        suggestionsArrays.removeAll()
+
+        suggestionLabels.forEach { $0.removeFromSuperview() }
+        suggestionLabels.removeAll()
+
+        characterButtons.forEach { $0.removeFromSuperview() }
+        characterButtons.removeAll()
+
+        emojiSearchRow?.removeFromSuperview()
+        emojiSearchRow = nil
+        topRowView.removeFromSuperview()
+        middleRowView.removeFromSuperview()
+        bottomRowView.removeFromSuperview()
+        leadingBottomButton.removeFromSuperview()
+        trailingBottomButton.removeFromSuperview()
+        
+        emojiView.pageControl.removeFromSuperview()
+        emojiView.emojiSections.removeAll()
+        (emojiView.masterCollection.visibleCells as? [EmojiCollectionCell])?.forEach {
+            $0.emojiSection = nil
+            $0.collectionView.removeFromSuperview()
+        }
+        emojiView.masterCollection.removeFromSuperview()
+        emojiView.removeFromSuperview()
+
+        punctuationArray = []
+        shortcuts = [:]
+        defaultDictionary = [:]
+        userDictionary = []
+        learningWordsDictionary = [:]
     }
     
     struct SuggestionsArray {
