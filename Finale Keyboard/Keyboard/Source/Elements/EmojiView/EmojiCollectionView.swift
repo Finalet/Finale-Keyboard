@@ -34,11 +34,6 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
         let pan = UIPanGestureRecognizer(target: self, action: #selector(PanGesture))
         pan.delegate = self
         collectionView.addGestureRecognizer(pan)
-        
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(LongPress))
-        longPress.minimumPressDuration = 0.3
-        longPress.delegate = self
-        collectionView.addGestureRecognizer(longPress)
     }
     
     func Setup(_ emojiSection: EmojiSection) {
@@ -87,16 +82,6 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
         }
     }
     
-    @objc func LongPress (_ sender: UILongPressGestureRecognizer) {
-        if sender.state == .began {
-            let pos = sender.location(in: collectionView)
-            if let indexPath = collectionView.indexPathForItem(at: pos), let cell = collectionView.cellForItem(at: indexPath) as? EmojiCell, let emoji = cell.emoji, emoji.supportsSkinTones {
-                ShowEmojiPicker(emoji: emoji, cell: cell)
-                currentSkinToneEmojiIndexPath = indexPath
-            }
-        }
-    }
-    
     func ShowEmojiPicker (emoji: Emoji, cell: EmojiCell) {
         skinToneSelector?.removeFromSuperview()
         skinToneSelector = SkinToneSelector(emoji, fontSize: cell.label.font.pointSize*0.6, collectionView: self, emojiCell: cell)
@@ -107,6 +92,8 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
         skinToneSelector?.trailingAnchor.constraint(lessThanOrEqualTo: FinaleKeyboard.instance.view.trailingAnchor, constant: -8).isActive = true
         skinToneSelector?.leadingAnchor.constraint(lessThanOrEqualTo: cell.leadingAnchor).isActive = true
         skinToneSelector?.bottomAnchor.constraint(greaterThanOrEqualTo: cell.topAnchor).isActive = true
+        
+        currentSkinToneEmojiIndexPath = collectionView.indexPath(for: cell)
     }
     
     func HideEmojiPicker () {
@@ -131,7 +118,7 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "emojiCell", for: indexPath) as! EmojiCell
         
         if let emoji = emojiSection?.emojis[indexPath.row] {
-            cell.Setup(emoji: emoji)
+            cell.Setup(emoji: emoji, collectionView: self)
         }
         
         return cell
@@ -153,6 +140,7 @@ class EmojiCell: UICollectionViewCell {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
     var emoji: Emoji?
+    var collectionView: EmojiCollectionCell?
     
     var label = UILabel()
     
@@ -166,10 +154,16 @@ class EmojiCell: UICollectionViewCell {
         label.adjustsFontSizeToFitWidth = true
         label.textAlignment = .center
         addSubview(label)
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(LongPress))
+        longPress.minimumPressDuration = 0.3
+        longPress.cancelsTouchesInView = false
+        self.addGestureRecognizer(longPress)
     }
     
-    func Setup (emoji: Emoji) {
+    func Setup (emoji: Emoji, collectionView: EmojiCollectionCell? = nil) {
         self.emoji = emoji
+        self.collectionView = collectionView
         
         label.text = emoji.emoji
     }
@@ -186,6 +180,14 @@ class EmojiCell: UICollectionViewCell {
             UIView.animate(withDuration: 0.05, delay: 0, options: [.allowUserInteraction, .curveEaseOut]) {
                 self.label.transform = CGAffineTransform(scaleX: 1, y: 1)
                 self.label.frame.origin.y = 0
+            }
+        }
+    }
+    
+    @objc func LongPress (_ sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            if let emoji = emoji, emoji.supportsSkinTones {
+                collectionView?.ShowEmojiPicker(emoji: emoji, cell: self)
             }
         }
     }

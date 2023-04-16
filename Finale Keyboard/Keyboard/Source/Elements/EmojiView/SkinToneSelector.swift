@@ -74,8 +74,7 @@ class SkinToneSelector: UIView {
             }
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + Double(self.subviews.count-1)*0.05 + 0.2) {
-            self.collectionView.skinToneSelector?.removeFromSuperview()
-            self.collectionView.skinToneSelector = nil
+            self.removeFromSuperview()
         }
     }
     
