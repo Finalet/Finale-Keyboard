@@ -306,11 +306,16 @@ class FinaleKeyboard: UIInputViewController {
         }
     }
     
-    func CloseEmoji () {
-        topRowTopConstraint?.constant = emojiSearchRow == nil ? 0 : emojiRowHeight
+    func CloseEmoji (hideEmojiSearchRow: Bool = false) {
+        topRowTopConstraint?.constant = (emojiSearchRow == nil || hideEmojiSearchRow) ? 0 : emojiRowHeight
         bottomRowBottomConstraint?.constant = 0
         UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
             self.view.layoutIfNeeded()
+        } completion: { _ in
+            if hideEmojiSearchRow {
+                self.emojiSearchRow?.removeFromSuperview()
+                self.emojiSearchRow = nil
+            }
         }
         if FinaleKeyboard.currentViewType != .SearchEmoji {
             FinaleKeyboard.currentViewType = lastViewType
@@ -319,6 +324,7 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func ToggleSearchEmojiView () {
+        var hideEmojiSearchRow = false
         if FinaleKeyboard.currentViewType != .SearchEmoji {
             FinaleKeyboard.currentViewType = .SearchEmoji
             
@@ -328,13 +334,12 @@ class FinaleKeyboard: UIInputViewController {
             self.view.addSubview(emojiSearchRow!, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .bottomToTop(topRowView, 0), .height(emojiRowHeight)])
             
         } else {
-            emojiSearchRow?.removeFromSuperview()
-            emojiSearchRow = nil
+            hideEmojiSearchRow = true
             
             FinaleKeyboard.currentViewType = .Characters
         }
         
-        CloseEmoji()
+        CloseEmoji(hideEmojiSearchRow: hideEmojiSearchRow)
         HapticFeedback.GestureImpactOccurred()
     }
     

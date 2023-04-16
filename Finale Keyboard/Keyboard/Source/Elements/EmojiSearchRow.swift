@@ -111,13 +111,16 @@ class EmojiSearchRow: UIView, UICollectionViewDataSource, UICollectionViewDelega
         DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             guard let self = self else { return }
 
-            self.searchResults = ElegantEmojiPicker.getSearchResults(searchTerm, fromAvailable: FinaleKeyboard.instance.emojiView.emojiSections).suffix(20)
+            self.searchResults = Array(ElegantEmojiPicker.getSearchResults(searchTerm, fromAvailable: FinaleKeyboard.instance.emojiView.emojiSections).prefix(20))
 
             DispatchQueue.main.async {
                 if self.searchLabel.text!.isEmpty || self.searchLabel.text! == " " { self.resultsPlaceholder.text = self.searchPlaceholderText }
                 else { self.resultsPlaceholder.text = self.searchResults.count == 0 ? self.searchNoEmojiText  : "" }
 
                 self.collectionView.reloadData()
+                if self.collectionView.numberOfItems(inSection: 0) > 0 {
+                    self.collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredHorizontally, animated: true)
+                }
             }
         }
     }
