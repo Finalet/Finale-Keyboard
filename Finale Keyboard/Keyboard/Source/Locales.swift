@@ -29,13 +29,6 @@ enum Locale: Int {
         case .ru_RU: return ["я", "ч", "с", "м", "и", "т", "ь", "б", "ю"]
         }
     }
-    
-    static func getLocale(forString: String) -> Locale? {
-        if en_US.topRow.contains(forString) || en_US.middleRow.contains(forString) || en_US.bottomRow.contains(forString) { return .en_US }
-        if ru_RU.topRow.contains(forString) || ru_RU.middleRow.contains(forString) || ru_RU.bottomRow.contains(forString) { return .ru_RU }
-        
-        return nil
-    }
 }
 
 class Symbols {

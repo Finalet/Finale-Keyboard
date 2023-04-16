@@ -399,6 +399,17 @@ class FinaleKeyboard: UIInputViewController {
         CheckAutoCapitalization()
     }
     
+    func ShowShortcutPreviews () {
+        characterButtons.forEach {
+            $0.ShowShortcutPreview()
+        }
+    }
+    func HideShortcutPreviews () {
+        characterButtons.forEach {
+            $0.HideShortcutPreview()
+        }
+    }
+    
     func ToggleAutoCorrect () {
         FinaleKeyboard.isAutoCorrectOn = !FinaleKeyboard.isAutoCorrectOn
         self.ShowNotification(text: FinaleKeyboard.isAutoCorrectOn ? "Autocorrection on" : "Autocorrection off")
@@ -988,7 +999,7 @@ class FinaleKeyboard: UIInputViewController {
     
     override func textDidChange(_ textInput: UITextInput?) {
         // The app has just changed the document's contents, the document context has been updated.
-//        CheckAutoCapitalization()
+        CheckAutoCapitalization()
         if (!self.textDocumentProxy.hasText) { RedrawSuggestionsLabels() }
     }
     

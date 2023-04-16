@@ -43,15 +43,15 @@ enum Function {
         switch self {
         case .Shift: FinaleKeyboard.instance.ToggleAutoCorrect()
         case .Caps: FinaleKeyboard.instance.ToggleAutoCorrect()
-        case .Backspace: FinaleKeyboard.instance.BackspaceAction()
+        case .Backspace: FinaleKeyboard.instance.ShowShortcutPreviews()
         default: return
         }
     }
     
-    var isLongPressRepeatable: Bool {
+    func LongPressEndedAction () {
         switch self {
-        case .Backspace: return true
-        default: return false
+        case .Backspace: FinaleKeyboard.instance.HideShortcutPreviews()
+        default: return
         }
     }
     

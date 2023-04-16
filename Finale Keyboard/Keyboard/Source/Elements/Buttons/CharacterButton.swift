@@ -14,6 +14,8 @@ class CharacterButton: KeyboardButton {
     let titleLabel = UILabel()
     var titleYConstraint: NSLayoutConstraint?
     
+    var shortcutPreviewLabel: UILabel?
+    
     let calloutView = UIView()
     var calloutYConstraint: NSLayoutConstraint?
     var calloutWidthConstraint: NSLayoutConstraint?
@@ -123,12 +125,40 @@ class CharacterButton: KeyboardButton {
         titleLabel.text = inOn ? titleLabel.text?.capitalized : titleLabel.text?.lowercased()
     }
     
+    func ShowShortcutPreview () {
+        if let shortcut = FinaleKeyboard.instance.shortcuts[String(character)] {
+            shortcutPreviewLabel = UILabel()
+            shortcutPreviewLabel?.text = shortcut
+            shortcutPreviewLabel?.font = titleLabel.font.withSize(titleLabel.font.pointSize * (shortcut.isEmoji ? 1 : 0.8))
+            shortcutPreviewLabel?.textAlignment = .center
+            shortcutPreviewLabel?.alpha = 0
+            shortcutPreviewLabel?.layer.shadowOffset = .zero
+            shortcutPreviewLabel?.layer.shadowOpacity = 0.3
+            shortcutPreviewLabel?.layer.shadowRadius = 5
+            self.addSubview(shortcutPreviewLabel!, anchors: LayoutAnchor.fullFrame)
+        }
+        UIView.animate(withDuration: 0.25) { [self] in
+            titleLabel.alpha = 0.5
+            shortcutPreviewLabel?.alpha = 1
+        }
+    }
+    
+    func HideShortcutPreview () {
+        UIView.animate(withDuration: 0.25) { [self] in
+            titleLabel.alpha = 1
+            shortcutPreviewLabel?.alpha = 0
+        } completion: { [self] _ in
+            shortcutPreviewLabel?.removeFromSuperview()
+            shortcutPreviewLabel = nil
+        }
+    }
+    
     @discardableResult
     func TypeShortcut () -> Bool {
-        if let secondaryChar = FinaleKeyboard.instance.shortcuts[String(character)] {
-            if secondaryChar.isEmoji { FinaleKeyboard.instance.TypeEmoji(emoji: secondaryChar) }
-            else { FinaleKeyboard.instance.TypeCharacter(secondaryChar) }
-            AnimateShortcutCallout(title: secondaryChar)
+        if let shortcut = FinaleKeyboard.instance.shortcuts[String(character)] {
+            if shortcut.isEmoji { FinaleKeyboard.instance.TypeEmoji(emoji: shortcut) }
+            else { FinaleKeyboard.instance.TypeCharacter(shortcut) }
+            AnimateShortcutCallout(title: shortcut)
             HapticFeedback.TypingImpactOccurred()
             return true
         }
@@ -140,7 +170,7 @@ class CharacterButton: KeyboardButton {
         
         let label = UILabel(frame: CGRect(x: 0.5*(self.frame.width-width), y: 0, width: width, height: self.frame.height))
         label.text = title
-        label.font = titleLabel.font
+        label.font = titleLabel.font.withSize(titleLabel.font.pointSize * (title.isEmoji ? 1 : 0.8))
         label.textAlignment = .center
         label.textColor = .label
         self.addSubview(label)

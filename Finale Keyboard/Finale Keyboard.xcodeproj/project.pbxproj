@@ -147,6 +147,7 @@
 				3791F23429E77F70005F39B4 /* Elements */,
 				370B056928B3F0EF0062000A /* Defaults.swift */,
 				3791F23029E77F17005F39B4 /* Definitions.swift */,
+				3720638727AB2CAF00964120 /* Locales.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -164,7 +165,6 @@
 		3791F23529E77F7B005F39B4 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				3720638727AB2CAF00964120 /* Locales.swift */,
 				379865352851176B00A66716 /* HapticFeedback.swift */,
 				37A0AD1227A88AAA00578290 /* UIExtensions.swift */,
 				3791F22E29E7750E005F39B4 /* AutoLayout.swift */,

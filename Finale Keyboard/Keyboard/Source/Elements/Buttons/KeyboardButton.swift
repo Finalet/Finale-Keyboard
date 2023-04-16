@@ -45,8 +45,8 @@ class KeyboardButton: UIView {
             }
         } else if sender.state == .ended {
             if !registeredSwipe {
-                OnTapEnded(sender)
                 HideCallout()
+                OnTapEnded(sender)
             }
             
             CancelLongPress()
