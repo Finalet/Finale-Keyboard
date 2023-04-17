@@ -35,7 +35,7 @@ class Symbols {
     
     struct Symbols {
         static let topRow: [String] = ["1", "2","3", "4", "5", "6", "7", "8", "9", "0"]
-        static let middleRow: [String] = ["-", ":", ";", "(", ")", "$", "&", "@", "\""]
+        static let middleRow: [String] = ["-", "/" ,":", ";", "(", ")", "$", "&", "@", "\""]
         static let bottomRow: [String] = [".", ",", "?", "!", "\'"]
     }
     
