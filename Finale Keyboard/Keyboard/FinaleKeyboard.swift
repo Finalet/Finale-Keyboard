@@ -629,8 +629,10 @@ class FinaleKeyboard: UIInputViewController {
         if (!self.textDocumentProxy.hasText) { return }
         
         let lastWord = getLastWord()
+        let isCaps = lastWord.uppercased() == lastWord
+        
         let checker = UITextChecker()
-        let misspelledRange = checker.rangeOfMisspelledWord(in: lastWord, range: NSMakeRange(0, lastWord.count), startingAt: 0, wrap: true, language: "\(FinaleKeyboard.currentLocale)")
+        let misspelledRange = checker.rangeOfMisspelledWord(in: !isCaps ? lastWord : lastWord.lowercased(), range: NSMakeRange(0, lastWord.count), startingAt: 0, wrap: true, language: "\(FinaleKeyboard.currentLocale)")
        
         if (suggestionsArrays[nextSuggestionArray].suggestions.count != 0) {
             suggestionsArrays[nextSuggestionArray].suggestions.removeAll()
@@ -684,11 +686,14 @@ class FinaleKeyboard: UIInputViewController {
         if ignoreSpace{ self.textDocumentProxy.deleteBackward() }
         
         if (suggestionsArrays[x].suggestions.count > 1) {
+            var originalInput = ""
             while self.textDocumentProxy.hasText && self.textDocumentProxy.documentContextBeforeInput?.last != " " {
                 if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.last == nil) { break }
+                originalInput.insert(self.textDocumentProxy.documentContextBeforeInput?.last ?? Character(""), at: originalInput.startIndex)
                 self.textDocumentProxy.deleteBackward()
             }
-            self.textDocumentProxy.insertText(suggestionsArrays[x].suggestions[pickedSuggestionIndex])
+            let isCaps = originalInput.uppercased() == originalInput
+            self.textDocumentProxy.insertText(!isCaps ? suggestionsArrays[x].suggestions[pickedSuggestionIndex] : suggestionsArrays[x].suggestions[pickedSuggestionIndex].uppercased())
             if tryLearnNewWord { TryLearnNewWord(word: suggestionsArrays[x].suggestions[pickedSuggestionIndex].lowercased()) }
         } else { pickedSuggestionIndex = 0 }
         

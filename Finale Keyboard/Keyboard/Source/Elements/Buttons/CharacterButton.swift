@@ -63,7 +63,7 @@ class CharacterButton: KeyboardButton {
             return
         }
         
-        FinaleKeyboard.instance.TypeCharacter(character)
+        TypeCharacter()
     }
     
     override func OnSwipe(direction: KeyboardButton.SwipeDirection) {
@@ -85,6 +85,9 @@ class CharacterButton: KeyboardButton {
             HapticFeedback.GestureImpactOccurred()
         } else if direction == .Down {
             TypeShortcut()
+        } else if direction == .Up {
+            TypeCharacter(withDownCallout: true)
+            HapticFeedback.TypingImpactOccurred()
         }
     }
     
@@ -165,7 +168,12 @@ class CharacterButton: KeyboardButton {
         return false
     }
     
-    func AnimateShortcutCallout (title: String) {
+    func TypeCharacter (withDownCallout: Bool = false) {
+        FinaleKeyboard.instance.TypeCharacter(character)
+        if withDownCallout { AnimateShortcutCallout(title: character, direction: .Down) }
+    }
+    
+    func AnimateShortcutCallout (title: String, direction: SwipeDirection = .Up) {
         let width = title.size(withAttributes: [.font:titleLabel.font!]).width
         
         let label = UILabel(frame: CGRect(x: 0.5*(self.frame.width-width), y: 0, width: width, height: self.frame.height))
@@ -178,7 +186,7 @@ class CharacterButton: KeyboardButton {
             label.alpha = 0
         }
         UIView.animate(withDuration: 0.5, delay: 0, options: .curveEaseOut) {
-            label.frame.origin.y -= self.frame.height*0.7
+            label.frame.origin.y = (direction == .Up ? -1 : 1) * self.frame.height*0.7
         } completion: { _ in
             label.removeFromSuperview()
         }
