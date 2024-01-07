@@ -8,8 +8,11 @@
 import Foundation
 import UIKit
 
-class KeyboardButton: UIView {
+class KeyboardButton: NoClipTouchUIView {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
+    let touchZone: UIView = UIView()
+    var touchZoneConstraints: [NSLayoutConstraint] = []
     
     var registerSwipeSensitivity = 0.5
     var registeredSwipe = false
@@ -25,11 +28,22 @@ class KeyboardButton: UIView {
     init() {
         super.init(frame: .zero)
         
-        self.backgroundColor = .clearInteractable
-        
         let touch = UILongPressGestureRecognizer(target: self, action: #selector(Touch))
         touch.minimumPressDuration = 0
-        self.addGestureRecognizer(touch)
+        touchZone.addGestureRecognizer(touch)
+        
+        self.clipsToBounds = false
+        touchZone.Debug()
+        touchZone.backgroundColor = .clearInteractable
+        touchZone.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(touchZone)
+        touchZoneConstraints.append(contentsOf: [
+            touchZone.topAnchor.constraint(equalTo: self.topAnchor),
+            touchZone.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            touchZone.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            touchZone.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+        ])
+        NSLayoutConstraint.activate(touchZoneConstraints)
     }
     
     @objc func Touch (_ sender: UILongPressGestureRecognizer) {
@@ -94,6 +108,13 @@ class KeyboardButton: UIView {
         didLongPress = false
         longPressTimer?.invalidate()
         longPressRepeatTimer?.invalidate()
+    }
+    
+    func ScaleTouchZone(to: CGFloat) {
+        let scaleBy = self.frame.size.width * (to - 1)
+        touchZoneConstraints.forEach { constraint in
+            constraint.constant = constraint.firstAnchor == touchZone.trailingAnchor || constraint.firstAnchor == touchZone.bottomAnchor ? scaleBy : -scaleBy
+        }
     }
     
     func OnTapBegin (_ sender: UILongPressGestureRecognizer) {}

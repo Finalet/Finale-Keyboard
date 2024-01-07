@@ -46,15 +46,15 @@ class FinaleKeyboard: UIInputViewController {
     let emojiRowHeight = 38.0
     
     var emojiSearchRow: EmojiSearchRow?
-    var topRowView = UIView()
-    var middleRowView = UIView()
-    var bottomRowView = UIView()
+    var topRowView = NoClipTouchUIView()
+    var middleRowView = NoClipTouchUIView()
+    var bottomRowView = NoClipTouchUIView()
     var topRowTopConstraint: NSLayoutConstraint?
     var bottomRowBottomConstraint: NSLayoutConstraint?
     
     var emojiView = EmojiView()
     
-    var characterButtons = [CharacterButton]()
+    var characterButtons: Dictionary<String, CharacterButton> = [String:CharacterButton]()
     var leadingBottomButton: FunctionButton = FunctionButton(.Shift)
     var trailingBottomButton: FunctionButton = FunctionButton(.Backspace)
     var leadingBottomButtonTrailingConstraint: NSLayoutConstraint?
@@ -219,7 +219,7 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func BuildKeyboardView (topRow: [String], middleRow: [String], bottomRow: [String]) {
-        characterButtons.forEach{ $0.removeFromSuperview() }
+        characterButtons.forEach{ $0.value.removeFromSuperview() }
         characterButtons.removeAll()
                 
         topRow.forEach { CreateCharacterButton($0, row: topRowView) }
@@ -260,7 +260,7 @@ class FinaleKeyboard: UIInputViewController {
             button.widthAnchor.constraint(equalTo: prevButton.widthAnchor).isActive = true
             button.leadingAnchor.constraint(equalTo: prevButton.trailingAnchor).isActive = true
         }
-        characterButtons.append(button)
+        characterButtons[character] = button
         
         return button
     }
@@ -401,12 +401,12 @@ class FinaleKeyboard: UIInputViewController {
     
     func ShowShortcutPreviews () {
         characterButtons.forEach {
-            $0.ShowShortcutPreview()
+            $0.value.ShowShortcutPreview()
         }
     }
     func HideShortcutPreviews () {
         characterButtons.forEach {
-            $0.HideShortcutPreview()
+            $0.value.HideShortcutPreview()
         }
     }
     
@@ -844,7 +844,7 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func UpdateButtonsTitles () {
-        characterButtons.forEach { $0.ToggleCapitalization(shouldCapitalize) }
+        characterButtons.forEach { $0.value.ToggleCapitalization(shouldCapitalize) }
         if leadingBottomButton.function == .Shift || leadingBottomButton.function == .Caps {
             leadingBottomButton.ToggleHighlight(shouldCapitalize)
         }
@@ -1088,7 +1088,7 @@ class FinaleKeyboard: UIInputViewController {
         suggestionLabels.forEach { $0.removeFromSuperview() }
         suggestionLabels.removeAll()
 
-        characterButtons.forEach { $0.removeFromSuperview() }
+        characterButtons.forEach { $0.value.removeFromSuperview() }
         characterButtons.removeAll()
 
         emojiSearchRow?.removeFromSuperview()
