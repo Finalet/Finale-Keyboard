@@ -56,8 +56,8 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
         }
         
         if panGesture.state == .changed {
-            FinaleKeyboard.instance.topRowTopConstraint?.constant = -FinaleKeyboard.instance.view.frame.height + translation.y - startPosY
-            FinaleKeyboard.instance.bottomRowBottomConstraint?.constant = -FinaleKeyboard.instance.view.frame.height + translation.y - startPosY
+            FinaleKeyboard.instance.keysViewTopConstraint?.constant = -FinaleKeyboard.instance.view.frame.height + translation.y - startPosY
+            FinaleKeyboard.instance.keysViewBottomConstraint?.constant = -FinaleKeyboard.instance.view.frame.height + translation.y - startPosY
             HideEmojiPicker()
         } else if panGesture.state == .ended {
             let velocity = panGesture.velocity(in: self)
@@ -73,10 +73,10 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
     func ResetPan () {
         let offset = -FinaleKeyboard.instance.view.frame.height
         if FinaleKeyboard.currentViewType != .Emoji { return }
-        if FinaleKeyboard.instance.topRowTopConstraint?.constant == offset && FinaleKeyboard.instance.bottomRowBottomConstraint?.constant == offset { return }
+        if FinaleKeyboard.instance.keysViewTopConstraint?.constant == offset && FinaleKeyboard.instance.keysViewBottomConstraint?.constant == offset { return }
         
-        FinaleKeyboard.instance.topRowTopConstraint?.constant = -FinaleKeyboard.instance.view.frame.height
-        FinaleKeyboard.instance.bottomRowBottomConstraint?.constant = -FinaleKeyboard.instance.view.frame.height
+        FinaleKeyboard.instance.keysViewTopConstraint?.constant = -FinaleKeyboard.instance.view.frame.height
+        FinaleKeyboard.instance.keysViewBottomConstraint?.constant = -FinaleKeyboard.instance.view.frame.height
         UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
             FinaleKeyboard.instance.view.layoutIfNeeded()
         }

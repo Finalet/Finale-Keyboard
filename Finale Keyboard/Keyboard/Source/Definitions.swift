@@ -88,3 +88,9 @@ struct DictionaryItem: Decodable {
     let input: String
     let suggestions: [String]
 }
+
+enum KeyboardRow {
+    case Top
+    case Middle
+    case Bottom
+}
