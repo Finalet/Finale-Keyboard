@@ -44,6 +44,11 @@
 		37CE3295288A05E9002DAD2A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 37CE3297288A05E9002DAD2A /* Localizable.strings */; };
 		37D686732B4B3CA600833DCA /* NoClipTouchUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D686722B4B3CA600833DCA /* NoClipTouchUIView.swift */; };
 		37D686752B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D686742B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift */; };
+		37D686872B4B65C300833DCA /* english-30000-n3-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D686822B4B65C200833DCA /* english-30000-n3-probabilities.json */; };
+		37D686882B4B65C300833DCA /* english-30000-n1-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D686832B4B65C300833DCA /* english-30000-n1-probabilities.json */; };
+		37D686892B4B65C300833DCA /* english-30000-n4-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D686842B4B65C300833DCA /* english-30000-n4-probabilities.json */; };
+		37D6868A2B4B65C300833DCA /* english-30000-n2-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D686852B4B65C300833DCA /* english-30000-n2-probabilities.json */; };
+		37D6868B2B4B65C300833DCA /* english-30000-n5-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D686862B4B65C300833DCA /* english-30000-n5-probabilities.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -110,6 +115,11 @@
 		37CE329A288A1051002DAD2A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		37D686722B4B3CA600833DCA /* NoClipTouchUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoClipTouchUIView.swift; sourceTree = "<group>"; };
 		37D686742B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FinaleKeyboard+DynamicTouchZones.swift"; sourceTree = "<group>"; };
+		37D686822B4B65C200833DCA /* english-30000-n3-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n3-probabilities.json"; sourceTree = "<group>"; };
+		37D686832B4B65C300833DCA /* english-30000-n1-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n1-probabilities.json"; sourceTree = "<group>"; };
+		37D686842B4B65C300833DCA /* english-30000-n4-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n4-probabilities.json"; sourceTree = "<group>"; };
+		37D686852B4B65C300833DCA /* english-30000-n2-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n2-probabilities.json"; sourceTree = "<group>"; };
+		37D686862B4B65C300833DCA /* english-30000-n5-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n5-probabilities.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -236,6 +246,7 @@
 		37A0AD0527A869BA00578290 /* Keyboard */ = {
 			isa = PBXGroup;
 			children = (
+				37D686762B4B639300833DCA /* NGrams */,
 				3791F23329E77F22005F39B4 /* Source */,
 				37A0AD0627A869BA00578290 /* FinaleKeyboard.swift */,
 				37A0AD0827A869BA00578290 /* Info.plist */,
@@ -253,6 +264,26 @@
 				37CE3297288A05E9002DAD2A /* Localizable.strings */,
 			);
 			path = Localization;
+			sourceTree = "<group>";
+		};
+		37D686762B4B639300833DCA /* NGrams */ = {
+			isa = PBXGroup;
+			children = (
+				37D686812B4B63E800833DCA /* English */,
+			);
+			path = NGrams;
+			sourceTree = "<group>";
+		};
+		37D686812B4B63E800833DCA /* English */ = {
+			isa = PBXGroup;
+			children = (
+				37D686832B4B65C300833DCA /* english-30000-n1-probabilities.json */,
+				37D686852B4B65C300833DCA /* english-30000-n2-probabilities.json */,
+				37D686822B4B65C200833DCA /* english-30000-n3-probabilities.json */,
+				37D686842B4B65C300833DCA /* english-30000-n4-probabilities.json */,
+				37D686862B4B65C300833DCA /* english-30000-n5-probabilities.json */,
+			);
+			path = English;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -355,8 +386,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37D686892B4B65C300833DCA /* english-30000-n4-probabilities.json in Resources */,
+				37D6868B2B4B65C300833DCA /* english-30000-n5-probabilities.json in Resources */,
 				3709029627B2F54000213BDD /* DefaultDictionary.json in Resources */,
 				3720638627AACEC100964120 /* Gilroy-Medium.ttf in Resources */,
+				37D686872B4B65C300833DCA /* english-30000-n3-probabilities.json in Resources */,
+				37D6868A2B4B65C300833DCA /* english-30000-n2-probabilities.json in Resources */,
+				37D686882B4B65C300833DCA /* english-30000-n1-probabilities.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

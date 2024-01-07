@@ -33,8 +33,7 @@ class KeyboardButton: NoClipTouchUIView {
         touchZone.addGestureRecognizer(touch)
         
         self.clipsToBounds = false
-        touchZone.Debug()
-        touchZone.backgroundColor = UIColor(red: .random(in: 0...1), green: .random(in: 0...1), blue: .random(in: 0...1), alpha: 1)
+        touchZone.backgroundColor = .clearInteractable
         touchZone.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(touchZone)
         touchZoneConstraints.append(contentsOf: [

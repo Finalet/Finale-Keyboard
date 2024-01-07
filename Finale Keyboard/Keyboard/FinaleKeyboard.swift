@@ -101,6 +101,11 @@ class FinaleKeyboard: UIInputViewController {
     let learningWordsRepeateThreashold = 3
     var autoLearnWords = true
     
+    // Dynamic tap zones
+    let maxDynamicTapZoneScale = 0.4
+    let maxDynamicTapZonePredictions = 5
+    var ngrams: [Dictionary<String, [CharacterProbability]>] = []
+    
     let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
     
     override func viewDidLoad() {
@@ -113,6 +118,7 @@ class FinaleKeyboard: UIInputViewController {
         InitSuggestionsArray()
         LoadPreferences()
         InitDictionary()
+        LoadNgrams()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -374,8 +380,7 @@ class FinaleKeyboard: UIInputViewController {
         if (x) { self.textDocumentProxy.insertText(" ") }
         
         CheckAutoCapitalization()
-        
-        ScaleCharacterKey(key: character, by: 0.65)
+        ProcessDynamicTapZones()
     }
     func TypeEmoji (emoji: String) {
         if (getOneBeforeLastChar() != "" && Character(getOneBeforeLastChar()).isEmoji && getLastChar() == " ") {
@@ -1055,6 +1060,11 @@ class FinaleKeyboard: UIInputViewController {
         if (self.textDocumentProxy.documentContextBeforeInput!.count < 3) { return "" }
         let text: String = self.textDocumentProxy.documentContextBeforeInput!
         return String(text[text.index(text.endIndex, offsetBy: -3)])
+    }
+    func getStringBeforeCursor(length: Int) -> String? {
+        if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput == "") { return nil }
+        let text: String = self.textDocumentProxy.documentContextBeforeInput!
+        return String(text[text.index(text.endIndex, offsetBy: -min(length, text.count))..<text.endIndex])
     }
     
     func ToggleLocale () {
