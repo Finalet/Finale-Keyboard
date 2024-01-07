@@ -34,7 +34,7 @@ class KeyboardButton: NoClipTouchUIView {
         
         self.clipsToBounds = false
         touchZone.Debug()
-        touchZone.backgroundColor = .clearInteractable
+        touchZone.backgroundColor = UIColor(red: .random(in: 0...1), green: .random(in: 0...1), blue: .random(in: 0...1), alpha: 1)
         touchZone.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(touchZone)
         touchZoneConstraints.append(contentsOf: [
@@ -110,8 +110,8 @@ class KeyboardButton: NoClipTouchUIView {
         longPressRepeatTimer?.invalidate()
     }
     
-    func ScaleTouchZone(to: CGFloat) {
-        let scaleBy = self.frame.size.width * (to - 1)
+    func ScaleTouchZone(by: CGFloat) {
+        let scaleBy = self.frame.size.width * by
         touchZoneConstraints.forEach { constraint in
             constraint.constant = constraint.firstAnchor == touchZone.trailingAnchor || constraint.firstAnchor == touchZone.bottomAnchor ? scaleBy : -scaleBy
         }

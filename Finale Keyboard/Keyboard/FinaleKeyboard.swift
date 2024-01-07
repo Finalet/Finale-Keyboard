@@ -373,6 +373,8 @@ class FinaleKeyboard: UIInputViewController {
         if (x) { self.textDocumentProxy.insertText(" ") }
         
         CheckAutoCapitalization()
+        
+        ScaleCharacterKey(key: character, by: 0.65)
     }
     func TypeEmoji (emoji: String) {
         if (getOneBeforeLastChar() != "" && Character(getOneBeforeLastChar()).isEmoji && getLastChar() == " ") {
