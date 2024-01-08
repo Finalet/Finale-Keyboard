@@ -104,8 +104,8 @@ class FinaleKeyboard: UIInputViewController {
     // Dynamic tap zones
     let maxDynamicTapZoneScale = 0.4
     let maxDynamicTapZonePredictions = 5
-    let minNgram = 1
-    let maxNgram = 5
+    let minNgram = 2
+    let maxNgram = 4
     var ngramsEnglish: [Dictionary<String, [CharacterProbability]>] = []
     var ngramsRussian: [Dictionary<String, [CharacterProbability]>] = []
     
@@ -1128,6 +1128,8 @@ class FinaleKeyboard: UIInputViewController {
         defaultDictionary = [:]
         userDictionary = []
         learningWordsDictionary = [:]
+        ngramsEnglish = [[:]]
+        ngramsRussian = [[:]]
     }
     
     struct SuggestionsArray {

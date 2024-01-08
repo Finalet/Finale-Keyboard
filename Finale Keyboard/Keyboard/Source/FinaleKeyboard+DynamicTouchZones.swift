@@ -11,14 +11,31 @@ import UIKit
 extension FinaleKeyboard {
     
     func LoadNgrams () {
-        for n in minNgram...maxNgram {
-            let dataEn = (try? Data(contentsOf: Bundle.main.url(forResource: "english-30000-n\(n)-probabilities", withExtension: "json")!))!
-            let entriesEn = try! JSONDecoder().decode([String:[CharacterProbability]].self, from: dataEn)
-            ngramsEnglish.append(entriesEn)
+        let startTime = Date()
+        
+        ngramsEnglish = [[:]]
+        ngramsRussian = [[:]]
+        
+        DispatchQueue.global(qos: .default).async {
+            var eng: [Dictionary<String, [CharacterProbability]>] = []
+            var rus: [Dictionary<String, [CharacterProbability]>] = []
+
+            for n in self.minNgram...self.maxNgram {
+                let dataEn = (try? Data(contentsOf: Bundle.main.url(forResource: "english-30000-n\(n)-probabilities", withExtension: "json")!))!
+                let entriesEn = try! JSONDecoder().decode([String:[CharacterProbability]].self, from: dataEn)
+                eng.append(entriesEn)
+
+                let dataRu = (try? Data(contentsOf: Bundle.main.url(forResource: "russian-50000-n\(n)-probabilities", withExtension: "json")!))!
+                let entriesRu = try! JSONDecoder().decode([String:[CharacterProbability]].self, from: dataRu)
+                rus.append(entriesRu)
+            }
+
+            self.ngramsEnglish = eng
+            self.ngramsRussian = rus
+
+            let endTime = Date()
             
-            let dataRu = (try? Data(contentsOf: Bundle.main.url(forResource: "russian-50000-n\(n)-probabilities", withExtension: "json")!))!
-            let entriesRu = try! JSONDecoder().decode([String:[CharacterProbability]].self, from: dataRu)
-            ngramsRussian.append(entriesRu)
+            print("Loading ngrams took \(endTime.timeIntervalSinceReferenceDate - startTime.timeIntervalSinceReferenceDate) seconds." )
         }
     }
     
@@ -27,8 +44,9 @@ extension FinaleKeyboard {
         
         if let lastNSubstring = getStringBeforeCursor(length: maxNgram), let lastSubstring = lastNSubstring.split(separator: " ").last {
             let lastString = String(lastSubstring).lowercased()
+            if lastString.count < minNgram { return }
             
-            if let arrayOfProbabilities = (FinaleKeyboard.currentLocale == .en_US ? ngramsEnglish[lastString.count - 1] : ngramsRussian[lastString.count - 1])[lastString] {
+            if let arrayOfProbabilities = (FinaleKeyboard.currentLocale == .en_US ? ngramsEnglish[lastString.count - minNgram] : ngramsRussian[lastString.count - minNgram])[lastString] {
                 let slice = Array(arrayOfProbabilities.prefix(maxDynamicTapZonePredictions))
                 
                 for slice in slice.reversed() {
