@@ -104,19 +104,22 @@ class FinaleKeyboard: UIInputViewController {
     // Dynamic tap zones
     let maxDynamicTapZoneScale = 0.4
     let maxDynamicTapZonePredictions = 5
-    var ngrams: [Dictionary<String, [CharacterProbability]>] = []
+    let minNgram = 1
+    let maxNgram = 5
+    var ngramsEnglish: [Dictionary<String, [CharacterProbability]>] = []
+    var ngramsRussian: [Dictionary<String, [CharacterProbability]>] = []
     
     let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         FinaleKeyboard.instance = self
+        LoadPreferences()
         InitKeysView()
         BuildKeyboardView(viewType: .Characters)
         BuildEmojiView()
         SuggestionsView()
         InitSuggestionsArray()
-        LoadPreferences()
         InitDictionary()
         LoadNgrams()
     }
@@ -405,6 +408,7 @@ class FinaleKeyboard: UIInputViewController {
         
         self.textDocumentProxy.deleteBackward()
         CheckAutoCapitalization()
+        ProcessDynamicTapZones()
     }
     
     func ShowShortcutPreviews () {
@@ -441,6 +445,7 @@ class FinaleKeyboard: UIInputViewController {
         UIView.animate (withDuration: 0.3) {
             self.keysView.alpha = 1
         }
+        ProcessDynamicTapZones()
     }
     
     func MoveCursor (touchLocation: CGPoint) {
@@ -550,6 +555,7 @@ class FinaleKeyboard: UIInputViewController {
             InsertPunctuation(index: index)
         }
         CheckAutoCapitalization()
+        ResetDynamicTapZones()
         if FinaleKeyboard.currentViewType != .Characters { BuildKeyboardView(viewType: .Characters) }
     }
     func SwipeDown () {
@@ -821,6 +827,7 @@ class FinaleKeyboard: UIInputViewController {
         }
         CheckAutoCapitalization()
         RedrawSuggestionsLabels()
+        ProcessDynamicTapZones()
         canEditPrevPunctuation = false
     }
     func InsertPunctuation (index: Int) {

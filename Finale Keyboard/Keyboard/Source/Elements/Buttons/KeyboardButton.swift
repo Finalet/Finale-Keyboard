@@ -114,6 +114,7 @@ class KeyboardButton: NoClipTouchUIView {
         touchZoneConstraints.forEach { constraint in
             constraint.constant = constraint.firstAnchor == touchZone.trailingAnchor || constraint.firstAnchor == touchZone.bottomAnchor ? scaleBy : -scaleBy
         }
+        touchZone.backgroundColor = by == 0.0 ? .clearInteractable : .brand.withAlphaComponent(by / CGFloat(FinaleKeyboard.instance.maxDynamicTapZoneScale * 1.1))
     }
     
     func OnTapBegin (_ sender: UILongPressGestureRecognizer) {}

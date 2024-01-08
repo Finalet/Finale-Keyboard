@@ -49,6 +49,11 @@
 		37D686892B4B65C300833DCA /* english-30000-n4-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D686842B4B65C300833DCA /* english-30000-n4-probabilities.json */; };
 		37D6868A2B4B65C300833DCA /* english-30000-n2-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D686852B4B65C300833DCA /* english-30000-n2-probabilities.json */; };
 		37D6868B2B4B65C300833DCA /* english-30000-n5-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D686862B4B65C300833DCA /* english-30000-n5-probabilities.json */; };
+		37D686922B4C616C00833DCA /* russian-50000-n3-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D6868D2B4C616C00833DCA /* russian-50000-n3-probabilities.json */; };
+		37D686932B4C616C00833DCA /* russian-50000-n1-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D6868E2B4C616C00833DCA /* russian-50000-n1-probabilities.json */; };
+		37D686942B4C616C00833DCA /* russian-50000-n5-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D6868F2B4C616C00833DCA /* russian-50000-n5-probabilities.json */; };
+		37D686952B4C616C00833DCA /* russian-50000-n2-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D686902B4C616C00833DCA /* russian-50000-n2-probabilities.json */; };
+		37D686962B4C616C00833DCA /* russian-50000-n4-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D686912B4C616C00833DCA /* russian-50000-n4-probabilities.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,6 +125,11 @@
 		37D686842B4B65C300833DCA /* english-30000-n4-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n4-probabilities.json"; sourceTree = "<group>"; };
 		37D686852B4B65C300833DCA /* english-30000-n2-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n2-probabilities.json"; sourceTree = "<group>"; };
 		37D686862B4B65C300833DCA /* english-30000-n5-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n5-probabilities.json"; sourceTree = "<group>"; };
+		37D6868D2B4C616C00833DCA /* russian-50000-n3-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n3-probabilities.json"; sourceTree = "<group>"; };
+		37D6868E2B4C616C00833DCA /* russian-50000-n1-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n1-probabilities.json"; sourceTree = "<group>"; };
+		37D6868F2B4C616C00833DCA /* russian-50000-n5-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n5-probabilities.json"; sourceTree = "<group>"; };
+		37D686902B4C616C00833DCA /* russian-50000-n2-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n2-probabilities.json"; sourceTree = "<group>"; };
+		37D686912B4C616C00833DCA /* russian-50000-n4-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n4-probabilities.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -269,6 +279,7 @@
 		37D686762B4B639300833DCA /* NGrams */ = {
 			isa = PBXGroup;
 			children = (
+				37D6868C2B4C615400833DCA /* Russian */,
 				37D686812B4B63E800833DCA /* English */,
 			);
 			path = NGrams;
@@ -284,6 +295,18 @@
 				37D686862B4B65C300833DCA /* english-30000-n5-probabilities.json */,
 			);
 			path = English;
+			sourceTree = "<group>";
+		};
+		37D6868C2B4C615400833DCA /* Russian */ = {
+			isa = PBXGroup;
+			children = (
+				37D6868E2B4C616C00833DCA /* russian-50000-n1-probabilities.json */,
+				37D686902B4C616C00833DCA /* russian-50000-n2-probabilities.json */,
+				37D6868D2B4C616C00833DCA /* russian-50000-n3-probabilities.json */,
+				37D686912B4C616C00833DCA /* russian-50000-n4-probabilities.json */,
+				37D6868F2B4C616C00833DCA /* russian-50000-n5-probabilities.json */,
+			);
+			path = Russian;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -392,7 +415,12 @@
 				3720638627AACEC100964120 /* Gilroy-Medium.ttf in Resources */,
 				37D686872B4B65C300833DCA /* english-30000-n3-probabilities.json in Resources */,
 				37D6868A2B4B65C300833DCA /* english-30000-n2-probabilities.json in Resources */,
+				37D686952B4C616C00833DCA /* russian-50000-n2-probabilities.json in Resources */,
+				37D686942B4C616C00833DCA /* russian-50000-n5-probabilities.json in Resources */,
+				37D686922B4C616C00833DCA /* russian-50000-n3-probabilities.json in Resources */,
 				37D686882B4B65C300833DCA /* english-30000-n1-probabilities.json in Resources */,
+				37D686932B4C616C00833DCA /* russian-50000-n1-probabilities.json in Resources */,
+				37D686962B4C616C00833DCA /* russian-50000-n4-probabilities.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

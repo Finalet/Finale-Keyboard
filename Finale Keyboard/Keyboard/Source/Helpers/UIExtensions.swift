@@ -10,6 +10,7 @@ import Foundation
 
 extension UIColor {
     static let clearInteractable = UIColor(red: 1, green: 1, blue: 1, alpha: 0.001)
+    static let brand = UIColor(red: 0.33, green: 0.51, blue: 0.85, alpha: 1)
     
     var components: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
         var red: CGFloat = 0
