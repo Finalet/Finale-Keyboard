@@ -296,9 +296,6 @@ struct DynamicTapZones: View {
             }
         }
         .navigationTitle("Dynamic Tap Zones")
-        .onTapGesture {
-            shouldShowKeyboard = false
-        }
         .onAppear {
             Load()
         }
