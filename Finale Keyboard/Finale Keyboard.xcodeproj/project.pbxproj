@@ -10,6 +10,27 @@
 		3709029627B2F54000213BDD /* DefaultDictionary.json in Resources */ = {isa = PBXBuildFile; fileRef = 3709029527B2F54000213BDD /* DefaultDictionary.json */; };
 		370B056A28B3F0EF0062000A /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370B056928B3F0EF0062000A /* Defaults.swift */; };
 		370B056B28B3F1080062000A /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370B056928B3F0EF0062000A /* Defaults.swift */; };
+		37178A7B2B4DB00500748DD0 /* CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37178A7A2B4DB00500748DD0 /* CoreData.swift */; };
+		37178A7C2B4DB05100748DD0 /* CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37178A7A2B4DB00500748DD0 /* CoreData.swift */; };
+		37178A7F2B4DB06B00748DD0 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 37178A7D2B4DB06B00748DD0 /* DataModel.xcdatamodeld */; };
+		37178A802B4DB06B00748DD0 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 37178A7D2B4DB06B00748DD0 /* DataModel.xcdatamodeld */; };
+		37178A822B4DC50600748DD0 /* Ngrams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37178A812B4DC50600748DD0 /* Ngrams.swift */; };
+		37178A832B4DC50600748DD0 /* Ngrams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37178A812B4DC50600748DD0 /* Ngrams.swift */; };
+		37178A892B4DC8BE00748DD0 /* english-30000-n2-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A842B4DC8BE00748DD0 /* english-30000-n2-probabilities.json */; };
+		37178A8B2B4DC8BE00748DD0 /* english-30000-n4-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A852B4DC8BE00748DD0 /* english-30000-n4-probabilities.json */; };
+		37178A8D2B4DC8BE00748DD0 /* english-30000-n5-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A862B4DC8BE00748DD0 /* english-30000-n5-probabilities.json */; };
+		37178A8F2B4DC8BE00748DD0 /* english-30000-n3-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A872B4DC8BE00748DD0 /* english-30000-n3-probabilities.json */; };
+		37178A912B4DC8BE00748DD0 /* english-30000-n1-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A882B4DC8BE00748DD0 /* english-30000-n1-probabilities.json */; };
+		37178A932B4DC8C700748DD0 /* english-30000-n2-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A842B4DC8BE00748DD0 /* english-30000-n2-probabilities.json */; };
+		37178A942B4DC8C700748DD0 /* english-30000-n4-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A852B4DC8BE00748DD0 /* english-30000-n4-probabilities.json */; };
+		37178A952B4DC8C700748DD0 /* english-30000-n1-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A882B4DC8BE00748DD0 /* english-30000-n1-probabilities.json */; };
+		37178A962B4DC8C700748DD0 /* english-30000-n3-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A872B4DC8BE00748DD0 /* english-30000-n3-probabilities.json */; };
+		37178A972B4DC8C700748DD0 /* english-30000-n5-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A862B4DC8BE00748DD0 /* english-30000-n5-probabilities.json */; };
+		37178A9D2B4DC8FC00748DD0 /* russian-50000-n5-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A982B4DC8FB00748DD0 /* russian-50000-n5-probabilities.json */; };
+		37178A9E2B4DC8FC00748DD0 /* russian-50000-n3-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A992B4DC8FB00748DD0 /* russian-50000-n3-probabilities.json */; };
+		37178A9F2B4DC8FC00748DD0 /* russian-50000-n2-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A9A2B4DC8FB00748DD0 /* russian-50000-n2-probabilities.json */; };
+		37178AA02B4DC8FC00748DD0 /* russian-50000-n1-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A9B2B4DC8FC00748DD0 /* russian-50000-n1-probabilities.json */; };
+		37178AA12B4DC8FC00748DD0 /* russian-50000-n4-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A9C2B4DC8FC00748DD0 /* russian-50000-n4-probabilities.json */; };
 		371F496827ADA92F00686BC7 /* EmojiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F496727ADA92F00686BC7 /* EmojiView.swift */; };
 		3720638627AACEC100964120 /* Gilroy-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3720638527AACEB600964120 /* Gilroy-Medium.ttf */; };
 		3720638827AB2CAF00964120 /* Locales.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3720638727AB2CAF00964120 /* Locales.swift */; };
@@ -44,16 +65,6 @@
 		37CE3295288A05E9002DAD2A /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 37CE3297288A05E9002DAD2A /* Localizable.strings */; };
 		37D686732B4B3CA600833DCA /* NoClipTouchUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D686722B4B3CA600833DCA /* NoClipTouchUIView.swift */; };
 		37D686752B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D686742B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift */; };
-		37D686872B4B65C300833DCA /* english-30000-n3-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D686822B4B65C200833DCA /* english-30000-n3-probabilities.json */; };
-		37D686882B4B65C300833DCA /* english-30000-n1-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D686832B4B65C300833DCA /* english-30000-n1-probabilities.json */; };
-		37D686892B4B65C300833DCA /* english-30000-n4-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D686842B4B65C300833DCA /* english-30000-n4-probabilities.json */; };
-		37D6868A2B4B65C300833DCA /* english-30000-n2-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D686852B4B65C300833DCA /* english-30000-n2-probabilities.json */; };
-		37D6868B2B4B65C300833DCA /* english-30000-n5-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D686862B4B65C300833DCA /* english-30000-n5-probabilities.json */; };
-		37D686922B4C616C00833DCA /* russian-50000-n3-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D6868D2B4C616C00833DCA /* russian-50000-n3-probabilities.json */; };
-		37D686932B4C616C00833DCA /* russian-50000-n1-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D6868E2B4C616C00833DCA /* russian-50000-n1-probabilities.json */; };
-		37D686942B4C616C00833DCA /* russian-50000-n5-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D6868F2B4C616C00833DCA /* russian-50000-n5-probabilities.json */; };
-		37D686952B4C616C00833DCA /* russian-50000-n2-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D686902B4C616C00833DCA /* russian-50000-n2-probabilities.json */; };
-		37D686962B4C616C00833DCA /* russian-50000-n4-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37D686912B4C616C00833DCA /* russian-50000-n4-probabilities.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +94,19 @@
 /* Begin PBXFileReference section */
 		3709029527B2F54000213BDD /* DefaultDictionary.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = DefaultDictionary.json; sourceTree = "<group>"; };
 		370B056928B3F0EF0062000A /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
+		37178A7A2B4DB00500748DD0 /* CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreData.swift; sourceTree = "<group>"; };
+		37178A7E2B4DB06B00748DD0 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		37178A812B4DC50600748DD0 /* Ngrams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ngrams.swift; sourceTree = "<group>"; };
+		37178A842B4DC8BE00748DD0 /* english-30000-n2-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n2-probabilities.json"; sourceTree = "<group>"; };
+		37178A852B4DC8BE00748DD0 /* english-30000-n4-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n4-probabilities.json"; sourceTree = "<group>"; };
+		37178A862B4DC8BE00748DD0 /* english-30000-n5-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n5-probabilities.json"; sourceTree = "<group>"; };
+		37178A872B4DC8BE00748DD0 /* english-30000-n3-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n3-probabilities.json"; sourceTree = "<group>"; };
+		37178A882B4DC8BE00748DD0 /* english-30000-n1-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n1-probabilities.json"; sourceTree = "<group>"; };
+		37178A982B4DC8FB00748DD0 /* russian-50000-n5-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n5-probabilities.json"; sourceTree = "<group>"; };
+		37178A992B4DC8FB00748DD0 /* russian-50000-n3-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n3-probabilities.json"; sourceTree = "<group>"; };
+		37178A9A2B4DC8FB00748DD0 /* russian-50000-n2-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n2-probabilities.json"; sourceTree = "<group>"; };
+		37178A9B2B4DC8FC00748DD0 /* russian-50000-n1-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n1-probabilities.json"; sourceTree = "<group>"; };
+		37178A9C2B4DC8FC00748DD0 /* russian-50000-n4-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n4-probabilities.json"; sourceTree = "<group>"; };
 		371F496727ADA92F00686BC7 /* EmojiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiView.swift; sourceTree = "<group>"; };
 		3720638527AACEB600964120 /* Gilroy-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gilroy-Medium.ttf"; sourceTree = "<group>"; };
 		3720638727AB2CAF00964120 /* Locales.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locales.swift; sourceTree = "<group>"; };
@@ -120,16 +144,6 @@
 		37CE329A288A1051002DAD2A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		37D686722B4B3CA600833DCA /* NoClipTouchUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoClipTouchUIView.swift; sourceTree = "<group>"; };
 		37D686742B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FinaleKeyboard+DynamicTouchZones.swift"; sourceTree = "<group>"; };
-		37D686822B4B65C200833DCA /* english-30000-n3-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n3-probabilities.json"; sourceTree = "<group>"; };
-		37D686832B4B65C300833DCA /* english-30000-n1-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n1-probabilities.json"; sourceTree = "<group>"; };
-		37D686842B4B65C300833DCA /* english-30000-n4-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n4-probabilities.json"; sourceTree = "<group>"; };
-		37D686852B4B65C300833DCA /* english-30000-n2-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n2-probabilities.json"; sourceTree = "<group>"; };
-		37D686862B4B65C300833DCA /* english-30000-n5-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "english-30000-n5-probabilities.json"; sourceTree = "<group>"; };
-		37D6868D2B4C616C00833DCA /* russian-50000-n3-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n3-probabilities.json"; sourceTree = "<group>"; };
-		37D6868E2B4C616C00833DCA /* russian-50000-n1-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n1-probabilities.json"; sourceTree = "<group>"; };
-		37D6868F2B4C616C00833DCA /* russian-50000-n5-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n5-probabilities.json"; sourceTree = "<group>"; };
-		37D686902B4C616C00833DCA /* russian-50000-n2-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n2-probabilities.json"; sourceTree = "<group>"; };
-		37D686912B4C616C00833DCA /* russian-50000-n4-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n4-probabilities.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +165,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		37178A792B4DAFF500748DD0 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				37D686762B4B639300833DCA /* NGrams */,
+				37178A7A2B4DB00500748DD0 /* CoreData.swift */,
+				37178A7D2B4DB06B00748DD0 /* DataModel.xcdatamodeld */,
+				37178A812B4DC50600748DD0 /* Ngrams.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		375A62CB29E8E7BF007E6065 /* EmojiView */ = {
 			isa = PBXGroup;
 			children = (
@@ -227,6 +252,7 @@
 		37A0ACF127A8694100578290 /* Finale Keyboard */ = {
 			isa = PBXGroup;
 			children = (
+				37178A792B4DAFF500748DD0 /* CoreData */,
 				37CE32872889FEF8002DAD2A /* Localization */,
 				3743FC5827B168090043B2A2 /* Finale Keyboard.entitlements */,
 				37A0ACF227A8694100578290 /* Finale_KeyboardApp.swift */,
@@ -256,7 +282,6 @@
 		37A0AD0527A869BA00578290 /* Keyboard */ = {
 			isa = PBXGroup;
 			children = (
-				37D686762B4B639300833DCA /* NGrams */,
 				3791F23329E77F22005F39B4 /* Source */,
 				37A0AD0627A869BA00578290 /* FinaleKeyboard.swift */,
 				37A0AD0827A869BA00578290 /* Info.plist */,
@@ -288,11 +313,11 @@
 		37D686812B4B63E800833DCA /* English */ = {
 			isa = PBXGroup;
 			children = (
-				37D686832B4B65C300833DCA /* english-30000-n1-probabilities.json */,
-				37D686852B4B65C300833DCA /* english-30000-n2-probabilities.json */,
-				37D686822B4B65C200833DCA /* english-30000-n3-probabilities.json */,
-				37D686842B4B65C300833DCA /* english-30000-n4-probabilities.json */,
-				37D686862B4B65C300833DCA /* english-30000-n5-probabilities.json */,
+				37178A882B4DC8BE00748DD0 /* english-30000-n1-probabilities.json */,
+				37178A842B4DC8BE00748DD0 /* english-30000-n2-probabilities.json */,
+				37178A872B4DC8BE00748DD0 /* english-30000-n3-probabilities.json */,
+				37178A852B4DC8BE00748DD0 /* english-30000-n4-probabilities.json */,
+				37178A862B4DC8BE00748DD0 /* english-30000-n5-probabilities.json */,
 			);
 			path = English;
 			sourceTree = "<group>";
@@ -300,11 +325,11 @@
 		37D6868C2B4C615400833DCA /* Russian */ = {
 			isa = PBXGroup;
 			children = (
-				37D6868E2B4C616C00833DCA /* russian-50000-n1-probabilities.json */,
-				37D686902B4C616C00833DCA /* russian-50000-n2-probabilities.json */,
-				37D6868D2B4C616C00833DCA /* russian-50000-n3-probabilities.json */,
-				37D686912B4C616C00833DCA /* russian-50000-n4-probabilities.json */,
-				37D6868F2B4C616C00833DCA /* russian-50000-n5-probabilities.json */,
+				37178A9B2B4DC8FC00748DD0 /* russian-50000-n1-probabilities.json */,
+				37178A9A2B4DC8FB00748DD0 /* russian-50000-n2-probabilities.json */,
+				37178A992B4DC8FB00748DD0 /* russian-50000-n3-probabilities.json */,
+				37178A9C2B4DC8FC00748DD0 /* russian-50000-n4-probabilities.json */,
+				37178A982B4DC8FB00748DD0 /* russian-50000-n5-probabilities.json */,
 			);
 			path = Russian;
 			sourceTree = "<group>";
@@ -399,9 +424,19 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				37178A9D2B4DC8FC00748DD0 /* russian-50000-n5-probabilities.json in Resources */,
+				37178A8B2B4DC8BE00748DD0 /* english-30000-n4-probabilities.json in Resources */,
+				37178A892B4DC8BE00748DD0 /* english-30000-n2-probabilities.json in Resources */,
+				37178A8F2B4DC8BE00748DD0 /* english-30000-n3-probabilities.json in Resources */,
+				37178A9E2B4DC8FC00748DD0 /* russian-50000-n3-probabilities.json in Resources */,
 				37A0ACFA27A8694200578290 /* Preview Assets.xcassets in Resources */,
+				37178A9F2B4DC8FC00748DD0 /* russian-50000-n2-probabilities.json in Resources */,
+				37178A8D2B4DC8BE00748DD0 /* english-30000-n5-probabilities.json in Resources */,
+				37178AA02B4DC8FC00748DD0 /* russian-50000-n1-probabilities.json in Resources */,
+				37178AA12B4DC8FC00748DD0 /* russian-50000-n4-probabilities.json in Resources */,
 				37CE3295288A05E9002DAD2A /* Localizable.strings in Resources */,
 				37A0ACF727A8694200578290 /* Assets.xcassets in Resources */,
+				37178A912B4DC8BE00748DD0 /* english-30000-n1-probabilities.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,18 +444,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				37D686892B4B65C300833DCA /* english-30000-n4-probabilities.json in Resources */,
-				37D6868B2B4B65C300833DCA /* english-30000-n5-probabilities.json in Resources */,
+				37178A932B4DC8C700748DD0 /* english-30000-n2-probabilities.json in Resources */,
 				3709029627B2F54000213BDD /* DefaultDictionary.json in Resources */,
 				3720638627AACEC100964120 /* Gilroy-Medium.ttf in Resources */,
-				37D686872B4B65C300833DCA /* english-30000-n3-probabilities.json in Resources */,
-				37D6868A2B4B65C300833DCA /* english-30000-n2-probabilities.json in Resources */,
-				37D686952B4C616C00833DCA /* russian-50000-n2-probabilities.json in Resources */,
-				37D686942B4C616C00833DCA /* russian-50000-n5-probabilities.json in Resources */,
-				37D686922B4C616C00833DCA /* russian-50000-n3-probabilities.json in Resources */,
-				37D686882B4B65C300833DCA /* english-30000-n1-probabilities.json in Resources */,
-				37D686932B4C616C00833DCA /* russian-50000-n1-probabilities.json in Resources */,
-				37D686962B4C616C00833DCA /* russian-50000-n4-probabilities.json in Resources */,
+				37178A972B4DC8C700748DD0 /* english-30000-n5-probabilities.json in Resources */,
+				37178A962B4DC8C700748DD0 /* english-30000-n3-probabilities.json in Resources */,
+				37178A942B4DC8C700748DD0 /* english-30000-n4-probabilities.json in Resources */,
+				37178A952B4DC8C700748DD0 /* english-30000-n1-probabilities.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -435,7 +465,9 @@
 				37CE328B2889FF41002DAD2A /* Localization.swift in Sources */,
 				37AB663E28876ECB00741889 /* MoreView.swift in Sources */,
 				3743FC5527B1523A0043B2A2 /* KeyboardEnabledState.swift in Sources */,
+				37178A7B2B4DB00500748DD0 /* CoreData.swift in Sources */,
 				37A0ACF527A8694100578290 /* ContentView.swift in Sources */,
+				37178A7F2B4DB06B00748DD0 /* DataModel.xcdatamodeld in Sources */,
 				375D075029EA400B00EA2980 /* Locales.swift in Sources */,
 				3743FC5727B158AD0043B2A2 /* FavoriteEmoji.swift in Sources */,
 				3727766D27D8E38D00CC8CD8 /* TutorialView.swift in Sources */,
@@ -444,6 +476,7 @@
 				37256A7927DB52ED0071180B /* DictionaryListView.swift in Sources */,
 				37A0ACF327A8694100578290 /* Finale_KeyboardApp.swift in Sources */,
 				370B056B28B3F1080062000A /* Defaults.swift in Sources */,
+				37178A822B4DC50600748DD0 /* Ngrams.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,6 +488,7 @@
 				37A0AD1327A88AAA00578290 /* UIExtensions.swift in Sources */,
 				37991F3729E9E7CD00900BC9 /* SkinToneSelector.swift in Sources */,
 				3791F23129E77F17005F39B4 /* Definitions.swift in Sources */,
+				37178A7C2B4DB05100748DD0 /* CoreData.swift in Sources */,
 				371F496827ADA92F00686BC7 /* EmojiView.swift in Sources */,
 				37D686732B4B3CA600833DCA /* NoClipTouchUIView.swift in Sources */,
 				375A62CD29E8E7D6007E6065 /* EmojiCollectionView.swift in Sources */,
@@ -464,10 +498,12 @@
 				37D686752B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift in Sources */,
 				37A0AD0727A869BA00578290 /* FinaleKeyboard.swift in Sources */,
 				37991F3229E9964400900BC9 /* FunctionButton.swift in Sources */,
+				37178A802B4DB06B00748DD0 /* DataModel.xcdatamodeld in Sources */,
 				375A62CF29E8E80F007E6065 /* PageControl.swift in Sources */,
 				375A62D129E8F3E4007E6065 /* EmojiSearchRow.swift in Sources */,
 				3720638827AB2CAF00964120 /* Locales.swift in Sources */,
 				379865362851176B00A66716 /* HapticFeedback.swift in Sources */,
+				37178A832B4DC50600748DD0 /* Ngrams.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -791,6 +827,19 @@
 			productName = ElegantEmojiPicker;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		37178A7D2B4DB06B00748DD0 /* DataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				37178A7E2B4DB06B00748DD0 /* DataModel.xcdatamodel */,
+			);
+			currentVersion = 37178A7E2B4DB06B00748DD0 /* DataModel.xcdatamodel */;
+			path = DataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 37A0ACE727A8694100578290 /* Project object */;
 }

@@ -2,7 +2,7 @@
 //  PreferencesView.swift
 //  Finale Keyboard
 //
-//  Created by Grant Oganan on 3/13/22.
+//  Created by Grant Oganyan on 3/13/22.
 //
 
 import Foundation
@@ -57,8 +57,10 @@ struct PreferencesView: View {
                     Text(Localize.Punctuation.pageTitle)
                 }
                 .frame(height: 30)
-            }
-            Section {
+                ListNavigationLink(destination: DynamicTapZones()) {
+                    Text("Dynamic Tap Zones")
+                }
+                .frame(height: 30)
                 ListNavigationLink(destination: AdvancedView()) {
                     Text(Localize.Advanced.pageTitle)
                 }
@@ -233,5 +235,72 @@ struct AdvancedView: View {
                 wordsTwoTimeUse += 1
             }
         }
+    }
+}
+
+struct DynamicTapZones: View {
+    
+    let suiteName = "group.finale-keyboard-cache"
+    let tintColor = Color(red: 0.33, green: 0.51, blue: 0.85)
+    
+    @State var isDynamicTapZonesEnabled: Bool = false
+    
+    @State var loadingStatus: String? = nil
+    
+    var shouldLoadNGrams: Bool { return Ngrams.shared.totalNgramsLoaded == 0 }
+    
+    var body: some View {
+        Form {
+            Section {
+                Toggle("Dynamic tap zones", isOn: $isDynamicTapZonesEnabled.animation())
+                    .toggleStyle(SwitchToggleStyle(tint: tintColor))
+                    .onChange(of: isDynamicTapZonesEnabled) { value in
+                        OnChange()
+                    }
+            }
+            if isDynamicTapZonesEnabled {
+                Section (footer: Text("\(shouldLoadNGrams ? "Loading" : "Deleting") can take up to a minute. Do not leave this page until it is done.")) {
+                    TextRow(label: "Loaded n-grams", value: Ngrams.shared.totalNgramsLoaded)
+                    Button(action: {
+                        if shouldLoadNGrams {
+                            Ngrams.shared.LoadNgramsToCoreData() { status, isDone in
+                                loadingStatus = isDone ? nil : status
+                            }
+                        } else {
+                            Ngrams.shared.DeleteAllNgrams() { status, isDone in
+                                loadingStatus = isDone ? nil : status
+                            }
+                        }
+                    }, label: {
+                        Text(loadingStatus ?? (shouldLoadNGrams ? "Load dictionary" : "Clear dictionary"))
+                    })
+                    .disabled(loadingStatus != nil)
+                }
+            }
+        }
+        .navigationTitle("Dynamic Tap Zones")
+        .onAppear {
+            Load()
+        }
+    }
+    
+    @ViewBuilder
+    func TextRow(label: String, value: Int) -> some View {
+        HStack {
+            Text(label)
+            Spacer()
+            Text("\(value)")
+                .foregroundColor(.gray)
+        }
+    }
+    
+    func OnChange () {
+        let userDefaults = UserDefaults(suiteName: suiteName)
+        userDefaults?.setValue(isDynamicTapZonesEnabled, forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled")
+    }
+    
+    func Load () {
+        let userDefaults = UserDefaults(suiteName: suiteName)
+        isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
     }
 }
