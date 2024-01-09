@@ -25,29 +25,24 @@ struct PreferencesView: View {
         List {
             Section {
                 Toggle(Localize.autocorrectWords, isOn: $autocorrectWords)
-                .toggleStyle(SwitchToggleStyle(tint: tintColor))
                 .onChange(of: autocorrectWords) { value in
                     OnChange()
                 }
                 Toggle(Localize.autocorrectGrammar, isOn: $autocorrectGrammar)
-                .toggleStyle(SwitchToggleStyle(tint: tintColor))
                 .onChange(of: autocorrectGrammar) { value in
                     OnChange()
                 }
                 Toggle(Localize.autocapitalizeWords, isOn: $autocapitalizeWords)
-                .toggleStyle(SwitchToggleStyle(tint: tintColor))
                 .onChange(of: autocapitalizeWords) { value in
                     OnChange()
                 }
             }
             Section {
                 Toggle(Localize.gesturesHapticFeedback, isOn: $isGesturesHapticEnabled)
-                .toggleStyle(SwitchToggleStyle(tint: tintColor))
                 .onChange(of: isGesturesHapticEnabled) { value in
                     OnChange()
                 }
                 Toggle(Localize.typingHapticFeedback, isOn: $isTypingHapticEnabled)
-                .toggleStyle(SwitchToggleStyle(tint: tintColor))
                 .onChange(of: isTypingHapticEnabled) { value in
                     OnChange()
                 }
@@ -241,34 +236,56 @@ struct AdvancedView: View {
 struct DynamicTapZones: View {
     
     let suiteName = "group.finale-keyboard-cache"
-    let tintColor = Color(red: 0.33, green: 0.51, blue: 0.85)
+    
+    @State var testText = ""
     
     @State var isDynamicTapZonesEnabled: Bool = false
+    @State var isDynamicTapZonesDisplayEnabled: Bool = false
+    @State var maxDynamicTapZoneScale: Float = 0.4
     
     @State var loadingStatus: String? = nil
+    @State var totalNgramsLoaded = 0
+    var shouldLoadNGrams: Bool { return totalNgramsLoaded == 0 }
     
-    var shouldLoadNGrams: Bool { return Ngrams.shared.totalNgramsLoaded == 0 }
+    @FocusState private var shouldShowKeyboard: Bool
+    
+    typealias Localize = Localization.HomeScreen
     
     var body: some View {
         Form {
-            Section {
-                Toggle("Dynamic tap zones", isOn: $isDynamicTapZonesEnabled.animation())
-                    .toggleStyle(SwitchToggleStyle(tint: tintColor))
+            Section (footer: Text("When enabled, Finale Keyboard will try to predict what key you will tap next and slightly increase its tap zone.\n\nRequires a loaded dictionary below.")) {
+                Toggle("Enable", isOn: $isDynamicTapZonesEnabled.animation())
                     .onChange(of: isDynamicTapZonesEnabled) { value in
                         OnChange()
                     }
             }
             if isDynamicTapZonesEnabled {
+                Section(header: Text(Localize.inputFieldTitle)) {
+                    TextField(Localize.inputFieldPlaceholder, text: $testText)
+                        .focused($shouldShowKeyboard)
+                }
+                Section (footer: Text("Default: 140%")) {
+                    Toggle("Show tap zones", isOn: $isDynamicTapZonesDisplayEnabled.animation())
+                        .onChange(of: isDynamicTapZonesDisplayEnabled) { value in
+                            OnChange()
+                        }
+                    TextRow(label: "Maximum tap zone scale", value: "\(100 + Int(maxDynamicTapZoneScale * 100))%")
+                    Slider(value: $maxDynamicTapZoneScale, in: 0.05...1.0, step: 0.05) { _ in
+                        OnChange()
+                    }
+                }
                 Section (footer: Text("\(shouldLoadNGrams ? "Loading" : "Deleting") can take up to a minute. Do not leave this page until it is done.")) {
-                    TextRow(label: "Loaded n-grams", value: Ngrams.shared.totalNgramsLoaded)
+                    TextRow(label: "Loaded n-grams", value: "\(totalNgramsLoaded)")
                     Button(action: {
                         if shouldLoadNGrams {
                             Ngrams.shared.LoadNgramsToCoreData() { status, isDone in
                                 loadingStatus = isDone ? nil : status
+                                if isDone { totalNgramsLoaded = Ngrams.shared.totalNgramsLoaded }
                             }
                         } else {
                             Ngrams.shared.DeleteAllNgrams() { status, isDone in
                                 loadingStatus = isDone ? nil : status
+                                if isDone { totalNgramsLoaded = Ngrams.shared.totalNgramsLoaded }
                             }
                         }
                     }, label: {
@@ -279,17 +296,20 @@ struct DynamicTapZones: View {
             }
         }
         .navigationTitle("Dynamic Tap Zones")
+        .onTapGesture {
+            shouldShowKeyboard = false
+        }
         .onAppear {
             Load()
         }
     }
     
     @ViewBuilder
-    func TextRow(label: String, value: Int) -> some View {
+    func TextRow(label: String, value: String) -> some View {
         HStack {
             Text(label)
             Spacer()
-            Text("\(value)")
+            Text(value)
                 .foregroundColor(.gray)
         }
     }
@@ -297,10 +317,16 @@ struct DynamicTapZones: View {
     func OnChange () {
         let userDefaults = UserDefaults(suiteName: suiteName)
         userDefaults?.setValue(isDynamicTapZonesEnabled, forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled")
+        userDefaults?.setValue(isDynamicTapZonesDisplayEnabled, forKey: "FINALE_DEV_APP_isDynamicTapZonesDisplayEnabled")
+        userDefaults?.setValue(maxDynamicTapZoneScale, forKey: "FINALE_DEV_APP_maxDynamicTapZoneScale")
     }
     
     func Load () {
+        totalNgramsLoaded = Ngrams.shared.totalNgramsLoaded
+        
         let userDefaults = UserDefaults(suiteName: suiteName)
         isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
+        isDynamicTapZonesDisplayEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesDisplayEnabled") as? Bool ?? false
+        maxDynamicTapZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxDynamicTapZoneScale") as? Float ?? 0.4
     }
 }

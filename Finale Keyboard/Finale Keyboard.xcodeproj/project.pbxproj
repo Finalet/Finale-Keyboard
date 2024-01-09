@@ -31,6 +31,7 @@
 		37178A9F2B4DC8FC00748DD0 /* russian-50000-n2-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A9A2B4DC8FB00748DD0 /* russian-50000-n2-probabilities.json */; };
 		37178AA02B4DC8FC00748DD0 /* russian-50000-n1-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A9B2B4DC8FC00748DD0 /* russian-50000-n1-probabilities.json */; };
 		37178AA12B4DC8FC00748DD0 /* russian-50000-n4-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 37178A9C2B4DC8FC00748DD0 /* russian-50000-n4-probabilities.json */; };
+		37178AA32B4DE03500748DD0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37178AA22B4DE03500748DD0 /* Extensions.swift */; };
 		371F496827ADA92F00686BC7 /* EmojiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 371F496727ADA92F00686BC7 /* EmojiView.swift */; };
 		3720638627AACEC100964120 /* Gilroy-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3720638527AACEB600964120 /* Gilroy-Medium.ttf */; };
 		3720638827AB2CAF00964120 /* Locales.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3720638727AB2CAF00964120 /* Locales.swift */; };
@@ -107,6 +108,7 @@
 		37178A9A2B4DC8FB00748DD0 /* russian-50000-n2-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n2-probabilities.json"; sourceTree = "<group>"; };
 		37178A9B2B4DC8FC00748DD0 /* russian-50000-n1-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n1-probabilities.json"; sourceTree = "<group>"; };
 		37178A9C2B4DC8FC00748DD0 /* russian-50000-n4-probabilities.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "russian-50000-n4-probabilities.json"; sourceTree = "<group>"; };
+		37178AA22B4DE03500748DD0 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		371F496727ADA92F00686BC7 /* EmojiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiView.swift; sourceTree = "<group>"; };
 		3720638527AACEB600964120 /* Gilroy-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gilroy-Medium.ttf"; sourceTree = "<group>"; };
 		3720638727AB2CAF00964120 /* Locales.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locales.swift; sourceTree = "<group>"; };
@@ -267,6 +269,7 @@
 				374C861927DD74B8003BA47B /* PreferencesView.swift */,
 				37AB663D28876ECB00741889 /* MoreView.swift */,
 				375D074A29EA3D2100EA2980 /* ShortcutsView.swift */,
+				37178AA22B4DE03500748DD0 /* Extensions.swift */,
 			);
 			path = "Finale Keyboard";
 			sourceTree = "<group>";
@@ -475,6 +478,7 @@
 				375D074B29EA3D2100EA2980 /* ShortcutsView.swift in Sources */,
 				37256A7927DB52ED0071180B /* DictionaryListView.swift in Sources */,
 				37A0ACF327A8694100578290 /* Finale_KeyboardApp.swift in Sources */,
+				37178AA32B4DE03500748DD0 /* Extensions.swift in Sources */,
 				370B056B28B3F1080062000A /* Defaults.swift in Sources */,
 				37178A822B4DC50600748DD0 /* Ngrams.swift in Sources */,
 			);

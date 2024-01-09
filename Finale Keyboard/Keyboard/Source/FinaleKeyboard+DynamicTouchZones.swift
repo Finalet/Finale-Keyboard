@@ -11,6 +11,8 @@ import UIKit
 extension FinaleKeyboard {
     
     func ProcessDynamicTapZones () {
+        if !FinaleKeyboard.isDynamicTapZonesEnabled { return }
+        
         ResetDynamicTapZones()
         
         let startTime = Date().timeIntervalSinceReferenceDate
@@ -23,7 +25,7 @@ extension FinaleKeyboard {
                 for probability in probabilities.reversed() {
                     guard let char = probability.character else { continue }
                     
-                    ScaleCharacterKey(key: char, by: min(CGFloat(probability.probability), maxDynamicTapZoneScale))
+                    ScaleCharacterKey(key: char, by: min(CGFloat(probability.probability), FinaleKeyboard.maxDynamicTapZoneScale))
                 }
             }
         }

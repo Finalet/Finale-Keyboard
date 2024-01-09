@@ -108,6 +108,7 @@ struct ContentView: View {
                 shouldShowKeyboard = false
             }))
         }
+        .tint(.brand)
         .environmentObject(keyboardState)
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear() {

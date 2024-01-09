@@ -102,8 +102,9 @@ class FinaleKeyboard: UIInputViewController {
     var autoLearnWords = true
     
     // Dynamic tap zones
-    let maxDynamicTapZoneScale = 0.4
-    let maxDynamicTapZonePredictions = 5
+    static var isDynamicTapZonesEnabled: Bool = false
+    static var isDynamicTapZonesDisplayEnabled: Bool = false
+    static var maxDynamicTapZoneScale = 0.4
     let minNgram = 1
     let maxNgram = 5
     
@@ -167,6 +168,10 @@ class FinaleKeyboard: UIInputViewController {
         FinaleKeyboard.isAutoCapitalizeOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocapitalizeWords") as? Bool ?? true
         FinaleKeyboard.isTypingHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isTypingHapticEnabled") as? Bool ?? false
         FinaleKeyboard.isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
+        FinaleKeyboard.isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
+        FinaleKeyboard.isDynamicTapZonesDisplayEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesDisplayEnabled") as? Bool ?? false
+        FinaleKeyboard.maxDynamicTapZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxDynamicTapZoneScale") as? CGFloat ?? 0.4
+        
         punctuationArray = userDefaults?.value(forKey: "FINALE_DEV_APP_punctuationArray") as? [String] ?? Defaults.punctuation
         shortcuts = userDefaults?.value(forKey: "FINALE_DEV_APP_shortcuts") as? [String : String] ?? Defaults.shortcuts
         FinaleKeyboard.currentLocale = Locale(rawValue: UserDefaults.standard.integer(forKey: "FINALE_DEV_APP_CurrentLocale")) ?? .en_US
