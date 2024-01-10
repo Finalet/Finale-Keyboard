@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import Charts
 
 struct PreferencesView: View {
     @State var autocorrectWords = true
@@ -254,7 +255,7 @@ struct DynamicTouchZones: View {
     typealias Localize = Localization.HomeScreen
     
     var body: some View {
-        Form {
+        List {
             Section (footer: Text("When enabled, Finale Keyboard will try to predict what key you will tap next and slightly increase its tap zone.")) {
                 Toggle("Enable", isOn: $isDynamicTapZonesEnabled.animation())
                     .onChange(of: isDynamicTapZonesEnabled) { value in
@@ -296,6 +297,9 @@ struct DynamicTouchZones: View {
                     TextField(Localize.inputFieldPlaceholder, text: $testText)
                         .focused($shouldShowKeyboard)
                 }
+                if #available(iOS 16.0, *) {
+                    ScaleGraph(maxScale: $maxTouchZoneScale, multiplier: $dynamicTapZoneProbabilityMultiplier)
+                }
                 Section (footer: Text("Default: 140%")) {
                     TextRow(label: "Maximum key scale", value: "\(100 + Int(maxTouchZoneScale*100))%")
                     Slider(value: $maxTouchZoneScale, in: 0.05...1.0, step: 0.05) { _ in
@@ -327,6 +331,7 @@ struct DynamicTouchZones: View {
     }
     
     func OnChange () {
+        shouldShowKeyboard = false
         let userDefaults = UserDefaults(suiteName: suiteName)
         userDefaults?.setValue(isDynamicTapZonesEnabled, forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled")
         userDefaults?.setValue(showTouchZones, forKey: "FINALE_DEV_APP_showTouchZones")
@@ -344,5 +349,54 @@ struct DynamicTouchZones: View {
         maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? Float ?? 0.4
         dynamicTapZoneProbabilityMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier") as? Float ?? 1.5
         dynamicKeyHighlighting = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicKeyHighlighting") as? Bool ?? false
+    }
+}
+
+@available(iOS 16.0, *)
+struct ScaleGraph: View {
+    
+    @Binding var maxScale: Float
+    @Binding var multiplier: Float
+    
+    var interceptX: Float {
+        return 1 / multiplier
+    }
+    
+    var second: (Int, Int) {
+        return (Int(interceptX*100), Int(maxScale*100+100))
+    }
+    var last: (Int, Int) {
+        return (Int(100), Int(maxScale*100+100))
+    }
+    
+    var yAxisLabels: [Int] {
+        return [Int(100), Int(last.1), Int(200)]
+    }
+    var xAxisLabels: [Int] {
+        return [0, Int(interceptX*100), 100]
+    }
+    
+    var body: some View {
+        Chart {
+            LineMark(x: .value("Probability", 0), y: .value("Scale", 100))
+                .interpolationMethod(.monotone)
+            LineMark(x: .value("Probability", second.0), y: .value("Scale", second.1))
+                .interpolationMethod(.monotone)
+            LineMark(x: .value("Probability", last.0), y: .value("Scale", last.1))
+                .interpolationMethod(.monotone)
+        }
+        .listRowBackground(Color(UIColor.systemGroupedBackground))
+        .listRowInsets(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
+        .chartXAxisLabel("Key probability", alignment: .center)
+        .chartYAxisLabel("Touch zone scale", position: .trailing, alignment: .center)
+        .chartYAxis {
+            AxisMarks(format: .percent.scale(1), values: yAxisLabels)
+        }
+        .chartXAxis {
+            AxisMarks(format: .percent.scale(1), values: xAxisLabels)
+        }
+        .chartYScale(domain: [100, 200])
+        .chartXScale(domain: [0, 100])
+        .aspectRatio(1.7, contentMode: .fill)
     }
 }
