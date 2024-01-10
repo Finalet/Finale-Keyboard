@@ -114,6 +114,7 @@ class KeyboardButton: NoClipTouchUIView {
         touchZoneConstraints.forEach { constraint in
             constraint.constant = constraint.firstAnchor == touchZone.trailingAnchor || constraint.firstAnchor == touchZone.bottomAnchor ? scaleBy : -scaleBy
         }
+        touchZone.layer.cornerRadius = by == 0.0 ? 0 : 8
         touchZone.backgroundColor = !FinaleKeyboard.isDynamicTapZonesDisplayEnabled || by == 0.0 ? .clearInteractable : .brand.withAlphaComponent(by / CGFloat(FinaleKeyboard.maxDynamicTapZoneScale * 1.1))
     }
     

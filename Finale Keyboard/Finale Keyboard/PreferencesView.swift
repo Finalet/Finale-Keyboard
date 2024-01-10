@@ -242,6 +242,7 @@ struct DynamicTapZones: View {
     @State var isDynamicTapZonesEnabled: Bool = false
     @State var isDynamicTapZonesDisplayEnabled: Bool = false
     @State var maxDynamicTapZoneScale: Float = 0.4
+    @State var dynamicTapZoneProbabilityMultiplier: Float = 1.5
     
     @State var loadingStatus: String? = nil
     @State var totalNgramsLoaded = 0
@@ -264,13 +265,21 @@ struct DynamicTapZones: View {
                     TextField(Localize.inputFieldPlaceholder, text: $testText)
                         .focused($shouldShowKeyboard)
                 }
-                Section (footer: Text("Default: 140%")) {
+                Section {
                     Toggle("Show tap zones", isOn: $isDynamicTapZonesDisplayEnabled.animation())
                         .onChange(of: isDynamicTapZonesDisplayEnabled) { value in
                             OnChange()
                         }
-                    TextRow(label: "Maximum tap zone scale", value: "\(100 + Int(maxDynamicTapZoneScale * 100))%")
+                }
+                Section (footer: Text("Default: 140%")) {
+                    TextRow(label: "Maximum key scale", value: "\(100 + Int(maxDynamicTapZoneScale*100))%")
                     Slider(value: $maxDynamicTapZoneScale, in: 0.05...1.0, step: 0.05) { _ in
+                        OnChange()
+                    }
+                }
+                Section (footer: Text("Default: 1.5")) {
+                    TextRow(label: "Scale multiplier", value: "\(round(dynamicTapZoneProbabilityMultiplier*10)/10)")
+                    Slider(value: $dynamicTapZoneProbabilityMultiplier, in: 1.0...3.0, step: 0.1) { _ in
                         OnChange()
                     }
                 }
@@ -316,6 +325,7 @@ struct DynamicTapZones: View {
         userDefaults?.setValue(isDynamicTapZonesEnabled, forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled")
         userDefaults?.setValue(isDynamicTapZonesDisplayEnabled, forKey: "FINALE_DEV_APP_isDynamicTapZonesDisplayEnabled")
         userDefaults?.setValue(maxDynamicTapZoneScale, forKey: "FINALE_DEV_APP_maxDynamicTapZoneScale")
+        userDefaults?.setValue(dynamicTapZoneProbabilityMultiplier, forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier")
     }
     
     func Load () {
@@ -325,5 +335,6 @@ struct DynamicTapZones: View {
         isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
         isDynamicTapZonesDisplayEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesDisplayEnabled") as? Bool ?? false
         maxDynamicTapZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxDynamicTapZoneScale") as? Float ?? 0.4
+        dynamicTapZoneProbabilityMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier") as? Float ?? 1.5
     }
 }

@@ -9,10 +9,7 @@
         <relationship name="characterProbabilities" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="CharacterProbability"/>
     </entity>
     <entity name="NgramDictionary" representedClassName="NgramDictionary" syncable="YES" codeGenerationType="class">
-        <relationship name="biGram" toMany="YES" deletionRule="Cascade" destinationEntity="Ngram"/>
-        <relationship name="pentaGram" toMany="YES" deletionRule="Cascade" destinationEntity="Ngram"/>
-        <relationship name="quadGram" toMany="YES" deletionRule="Cascade" destinationEntity="Ngram"/>
-        <relationship name="singleGram" toMany="YES" deletionRule="Cascade" destinationEntity="Ngram"/>
-        <relationship name="triGram" toMany="YES" deletionRule="Cascade" destinationEntity="Ngram"/>
+        <relationship name="eng" toMany="YES" deletionRule="Cascade" destinationEntity="Ngram"/>
+        <relationship name="ru" toMany="YES" deletionRule="Cascade" destinationEntity="Ngram"/>
     </entity>
 </model>

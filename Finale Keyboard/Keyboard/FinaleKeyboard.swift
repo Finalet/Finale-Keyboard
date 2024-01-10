@@ -105,6 +105,7 @@ class FinaleKeyboard: UIInputViewController {
     static var isDynamicTapZonesEnabled: Bool = false
     static var isDynamicTapZonesDisplayEnabled: Bool = false
     static var maxDynamicTapZoneScale = 0.4
+    static var dynamicTapZoneProbabilityMultiplier = 1.0
     let minNgram = 1
     let maxNgram = 5
     
@@ -171,6 +172,7 @@ class FinaleKeyboard: UIInputViewController {
         FinaleKeyboard.isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
         FinaleKeyboard.isDynamicTapZonesDisplayEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesDisplayEnabled") as? Bool ?? false
         FinaleKeyboard.maxDynamicTapZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxDynamicTapZoneScale") as? CGFloat ?? 0.4
+        FinaleKeyboard.dynamicTapZoneProbabilityMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier") as? CGFloat ?? 1.5
         
         punctuationArray = userDefaults?.value(forKey: "FINALE_DEV_APP_punctuationArray") as? [String] ?? Defaults.punctuation
         shortcuts = userDefaults?.value(forKey: "FINALE_DEV_APP_shortcuts") as? [String : String] ?? Defaults.shortcuts

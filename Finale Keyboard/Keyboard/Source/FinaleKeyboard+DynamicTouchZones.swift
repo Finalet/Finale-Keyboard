@@ -15,8 +15,6 @@ extension FinaleKeyboard {
         
         ResetDynamicTapZones()
         
-        let startTime = Date().timeIntervalSinceReferenceDate
-        
         if let lastNSubstring = getStringBeforeCursor(length: maxNgram), let lastSubstring = lastNSubstring.split(separator: " ").last {
             let lastString = String(lastSubstring).lowercased()
             if lastString.count < minNgram { return }
@@ -25,13 +23,12 @@ extension FinaleKeyboard {
                 for probability in probabilities.reversed() {
                     guard let char = probability.character else { continue }
                     
-                    ScaleCharacterKey(key: char, by: min(CGFloat(probability.probability), FinaleKeyboard.maxDynamicTapZoneScale))
+                    let prob = CGFloat(probability.probability) 
+                    let by = min(prob * FinaleKeyboard.maxDynamicTapZoneScale * FinaleKeyboard.dynamicTapZoneProbabilityMultiplier, FinaleKeyboard.maxDynamicTapZoneScale)
+                    ScaleCharacterKey(key: char, by: by)
                 }
             }
         }
-        
-        let endTime = Date().timeIntervalSinceReferenceDate
-        print("Fetching ngram tool \(endTime - startTime) seconds.")
     }
     
     func ResetDynamicTapZones () {

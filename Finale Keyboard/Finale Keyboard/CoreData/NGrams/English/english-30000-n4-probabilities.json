@@ -1351,10 +1351,6 @@
     {
       "character": "e",
       "probability": 0.111
-    },
-    {
-      "character": "p",
-      "probability": 0.111
     }
   ],
   "acry": [
@@ -1425,14 +1421,6 @@
     {
       "character": "t",
       "probability": 0.024
-    },
-    {
-      "character": "s",
-      "probability": 0.024
-    },
-    {
-      "character": "l",
-      "probability": 0.012
     }
   ],
   "actl": [
@@ -1985,10 +1973,6 @@
     {
       "character": "g",
       "probability": 0.125
-    },
-    {
-      "character": "t",
-      "probability": 0.125
     }
   ],
   "adip": [
@@ -2137,10 +2121,6 @@
     {
       "character": "l",
       "probability": 0.067
-    },
-    {
-      "character": "u",
-      "probability": 0.033
     }
   ],
   "adne": [
@@ -2608,14 +2588,6 @@
     },
     {
       "character": "t",
-      "probability": 0.063
-    },
-    {
-      "character": "d",
-      "probability": 0.063
-    },
-    {
-      "character": "x",
       "probability": 0.063
     }
   ],
@@ -3148,10 +3120,6 @@
     },
     {
       "character": "b",
-      "probability": 0.1
-    },
-    {
-      "character": "y",
       "probability": 0.1
     }
   ],
@@ -3783,14 +3751,6 @@
     {
       "character": "y",
       "probability": 0.069
-    },
-    {
-      "character": "b",
-      "probability": 0.034
-    },
-    {
-      "character": "r",
-      "probability": 0.034
     }
   ],
   "ainw": [
@@ -5107,14 +5067,6 @@
     {
       "character": "o",
       "probability": 0.024
-    },
-    {
-      "character": "b",
-      "probability": 0.024
-    },
-    {
-      "character": "i",
-      "probability": 0.024
     }
   ],
   "alit": [
@@ -5245,22 +5197,6 @@
     {
       "character": "s",
       "probability": 0.111
-    },
-    {
-      "character": "n",
-      "probability": 0.111
-    },
-    {
-      "character": "c",
-      "probability": 0.056
-    },
-    {
-      "character": "g",
-      "probability": 0.056
-    },
-    {
-      "character": "w",
-      "probability": 0.056
     }
   ],
   "allb": [
@@ -5289,26 +5225,6 @@
     {
       "character": "l",
       "probability": 0.088
-    },
-    {
-      "character": "t",
-      "probability": 0.088
-    },
-    {
-      "character": "y",
-      "probability": 0.07
-    },
-    {
-      "character": "s",
-      "probability": 0.035
-    },
-    {
-      "character": "v",
-      "probability": 0.018
-    },
-    {
-      "character": "j",
-      "probability": 0.018
     }
   ],
   "alli": [
@@ -5331,18 +5247,6 @@
     {
       "character": "c",
       "probability": 0.077
-    },
-    {
-      "character": "o",
-      "probability": 0.077
-    },
-    {
-      "character": "g",
-      "probability": 0.077
-    },
-    {
-      "character": "b",
-      "probability": 0.038
     }
   ],
   "allm": [
@@ -5375,18 +5279,6 @@
     {
       "character": "o",
       "probability": 0.059
-    },
-    {
-      "character": "y",
-      "probability": 0.059
-    },
-    {
-      "character": "r",
-      "probability": 0.059
-    },
-    {
-      "character": "u",
-      "probability": 0.029
     }
   ],
   "allp": [
@@ -5542,10 +5434,6 @@
     },
     {
       "character": "o",
-      "probability": 0.071
-    },
-    {
-      "character": "e",
       "probability": 0.071
     }
   ],
@@ -5750,14 +5638,6 @@
     },
     {
       "character": "a",
-      "probability": 0.111
-    },
-    {
-      "character": "d",
-      "probability": 0.111
-    },
-    {
-      "character": "g",
       "probability": 0.111
     }
   ],
@@ -6265,10 +6145,6 @@
     {
       "character": "i",
       "probability": 0.143
-    },
-    {
-      "character": "o",
-      "probability": 0.143
     }
   ],
   "amen": [
@@ -6467,10 +6343,6 @@
     {
       "character": "s",
       "probability": 0.027
-    },
-    {
-      "character": "i",
-      "probability": 0.027
     }
   ],
   "amir": [
@@ -6536,10 +6408,6 @@
     },
     {
       "character": "r",
-      "probability": 0.071
-    },
-    {
-      "character": "n",
       "probability": 0.071
     }
   ],
@@ -6632,10 +6500,6 @@
     },
     {
       "character": "a",
-      "probability": 0.1
-    },
-    {
-      "character": "i",
       "probability": 0.1
     }
   ],
@@ -7131,10 +6995,6 @@
     {
       "character": "m",
       "probability": 0.053
-    },
-    {
-      "character": "t",
-      "probability": 0.018
     }
   ],
   "anch": [
@@ -7174,18 +7034,6 @@
     },
     {
       "character": "l",
-      "probability": 0.048
-    },
-    {
-      "character": "d",
-      "probability": 0.048
-    },
-    {
-      "character": "o",
-      "probability": 0.048
-    },
-    {
-      "character": "p",
       "probability": 0.048
     }
   ],
@@ -7253,10 +7101,6 @@
     {
       "character": "u",
       "probability": 0.042
-    },
-    {
-      "character": "i",
-      "probability": 0.042
     }
   ],
   "andb": [
@@ -7309,18 +7153,6 @@
     {
       "character": "z",
       "probability": 0.049
-    },
-    {
-      "character": "x",
-      "probability": 0.024
-    },
-    {
-      "character": "s",
-      "probability": 0.024
-    },
-    {
-      "character": "u",
-      "probability": 0.024
     }
   ],
   "andf": [
@@ -7377,18 +7209,6 @@
     {
       "character": "t",
       "probability": 0.057
-    },
-    {
-      "character": "g",
-      "probability": 0.029
-    },
-    {
-      "character": "e",
-      "probability": 0.029
-    },
-    {
-      "character": "a",
-      "probability": 0.029
     }
   ],
   "andj": [
@@ -7445,18 +7265,6 @@
     {
       "character": "u",
       "probability": 0.118
-    },
-    {
-      "character": "w",
-      "probability": 0.118
-    },
-    {
-      "character": "v",
-      "probability": 0.059
-    },
-    {
-      "character": "a",
-      "probability": 0.059
     }
   ],
   "andp": [
@@ -7510,14 +7318,6 @@
     },
     {
       "character": "p",
-      "probability": 0.083
-    },
-    {
-      "character": "t",
-      "probability": 0.083
-    },
-    {
-      "character": "l",
       "probability": 0.083
     }
   ],
@@ -7715,14 +7515,6 @@
     {
       "character": "m",
       "probability": 0.041
-    },
-    {
-      "character": "n",
-      "probability": 0.02
-    },
-    {
-      "character": "a",
-      "probability": 0.02
     }
   ],
   "angh": [
@@ -7961,10 +7753,6 @@
     {
       "character": "a",
       "probability": 0.136
-    },
-    {
-      "character": "i",
-      "probability": 0.045
     }
   ],
   "anit": [
@@ -8157,10 +7945,6 @@
     {
       "character": "x",
       "probability": 0.077
-    },
-    {
-      "character": "t",
-      "probability": 0.077
     }
   ],
   "annh": [
@@ -8188,10 +7972,6 @@
     },
     {
       "character": "a",
-      "probability": 0.067
-    },
-    {
-      "character": "b",
       "probability": 0.067
     }
   ],
@@ -8453,14 +8233,6 @@
     {
       "character": "e",
       "probability": 0.063
-    },
-    {
-      "character": "d",
-      "probability": 0.063
-    },
-    {
-      "character": "v",
-      "probability": 0.063
     }
   ],
   "ansk": [
@@ -8581,18 +8353,6 @@
     {
       "character": "n",
       "probability": 0.111
-    },
-    {
-      "character": "l",
-      "probability": 0.074
-    },
-    {
-      "character": "b",
-      "probability": 0.037
-    },
-    {
-      "character": "m",
-      "probability": 0.037
     }
   ],
   "ante": [
@@ -8615,14 +8375,6 @@
     {
       "character": "c",
       "probability": 0.074
-    },
-    {
-      "character": "l",
-      "probability": 0.037
-    },
-    {
-      "character": "s",
-      "probability": 0.037
     }
   ],
   "antg": [
@@ -8669,46 +8421,6 @@
     {
       "character": "b",
       "probability": 0.063
-    },
-    {
-      "character": "s",
-      "probability": 0.063
-    },
-    {
-      "character": "a",
-      "probability": 0.048
-    },
-    {
-      "character": "e",
-      "probability": 0.048
-    },
-    {
-      "character": "g",
-      "probability": 0.048
-    },
-    {
-      "character": "o",
-      "probability": 0.048
-    },
-    {
-      "character": "f",
-      "probability": 0.048
-    },
-    {
-      "character": "v",
-      "probability": 0.032
-    },
-    {
-      "character": "l",
-      "probability": 0.032
-    },
-    {
-      "character": "m",
-      "probability": 0.032
-    },
-    {
-      "character": "d",
-      "probability": 0.032
     }
   ],
   "antl": [
@@ -8744,10 +8456,6 @@
     },
     {
       "character": "s",
-      "probability": 0.063
-    },
-    {
-      "character": "i",
       "probability": 0.063
     }
   ],
@@ -9077,10 +8785,6 @@
     {
       "character": "v",
       "probability": 0.083
-    },
-    {
-      "character": "e",
-      "probability": 0.083
     }
   ],
   "apes": [
@@ -9377,10 +9081,6 @@
     {
       "character": "r",
       "probability": 0.104
-    },
-    {
-      "character": "t",
-      "probability": 0.063
     }
   ],
   "apph": [
@@ -9558,14 +9258,6 @@
     },
     {
       "character": "n",
-      "probability": 0.071
-    },
-    {
-      "character": "z",
-      "probability": 0.071
-    },
-    {
-      "character": "t",
       "probability": 0.071
     }
   ],
@@ -9903,10 +9595,6 @@
     {
       "character": "o",
       "probability": 0.059
-    },
-    {
-      "character": "x",
-      "probability": 0.059
     }
   ],
   "arbr": [
@@ -9969,18 +9657,6 @@
     {
       "character": "m",
       "probability": 0.043
-    },
-    {
-      "character": "s",
-      "probability": 0.022
-    },
-    {
-      "character": "b",
-      "probability": 0.022
-    },
-    {
-      "character": "o",
-      "probability": 0.022
     }
   ],
   "arci": [
@@ -10022,10 +9698,6 @@
     },
     {
       "character": "u",
-      "probability": 0.143
-    },
-    {
-      "character": "m",
       "probability": 0.143
     }
   ],
@@ -10122,14 +9794,6 @@
     },
     {
       "character": "f",
-      "probability": 0.033
-    },
-    {
-      "character": "g",
-      "probability": 0.033
-    },
-    {
-      "character": "s",
       "probability": 0.033
     }
   ],
@@ -10415,18 +10079,6 @@
     {
       "character": "d",
       "probability": 0.13
-    },
-    {
-      "character": "m",
-      "probability": 0.087
-    },
-    {
-      "character": "l",
-      "probability": 0.043
-    },
-    {
-      "character": "a",
-      "probability": 0.043
     }
   ],
   "argi": [
@@ -10631,10 +10283,6 @@
     {
       "character": "h",
       "probability": 0.125
-    },
-    {
-      "character": "i",
-      "probability": 0.063
     }
   ],
   "arit": [
@@ -10831,10 +10479,6 @@
     {
       "character": "m",
       "probability": 0.059
-    },
-    {
-      "character": "q",
-      "probability": 0.059
     }
   ],
   "arli": [
@@ -10856,10 +10500,6 @@
     },
     {
       "character": "s",
-      "probability": 0.077
-    },
-    {
-      "character": "g",
       "probability": 0.077
     }
   ],
@@ -11069,10 +10709,6 @@
     {
       "character": "t",
       "probability": 0.158
-    },
-    {
-      "character": "g",
-      "probability": 0.053
     }
   ],
   "arnh": [
@@ -11271,10 +10907,6 @@
     {
       "character": "c",
       "probability": 0.08
-    },
-    {
-      "character": "f",
-      "probability": 0.04
     }
   ],
   "arre": [
@@ -11297,14 +10929,6 @@
     {
       "character": "d",
       "probability": 0.118
-    },
-    {
-      "character": "r",
-      "probability": 0.059
-    },
-    {
-      "character": "a",
-      "probability": 0.059
     }
   ],
   "arrh": [
@@ -11333,14 +10957,6 @@
     {
       "character": "a",
       "probability": 0.105
-    },
-    {
-      "character": "o",
-      "probability": 0.079
-    },
-    {
-      "character": "b",
-      "probability": 0.026
     }
   ],
   "arro": [
@@ -11362,10 +10978,6 @@
     },
     {
       "character": "n",
-      "probability": 0.043
-    },
-    {
-      "character": "y",
       "probability": 0.043
     }
   ],
@@ -11499,10 +11111,6 @@
     {
       "character": "m",
       "probability": 0.033
-    },
-    {
-      "character": "l",
-      "probability": 0.033
     }
   ],
   "artf": [
@@ -11535,18 +11143,6 @@
     {
       "character": "e",
       "probability": 0.143
-    },
-    {
-      "character": "l",
-      "probability": 0.143
-    },
-    {
-      "character": "y",
-      "probability": 0.071
-    },
-    {
-      "character": "o",
-      "probability": 0.071
     }
   ],
   "arti": [
@@ -11569,26 +11165,6 @@
     {
       "character": "f",
       "probability": 0.068
-    },
-    {
-      "character": "t",
-      "probability": 0.051
-    },
-    {
-      "character": "e",
-      "probability": 0.034
-    },
-    {
-      "character": "l",
-      "probability": 0.034
-    },
-    {
-      "character": "m",
-      "probability": 0.017
-    },
-    {
-      "character": "k",
-      "probability": 0.017
     }
   ],
   "artl": [
@@ -12487,22 +12063,6 @@
     {
       "character": "y",
       "probability": 0.1
-    },
-    {
-      "character": "s",
-      "probability": 0.1
-    },
-    {
-      "character": "n",
-      "probability": 0.1
-    },
-    {
-      "character": "t",
-      "probability": 0.05
-    },
-    {
-      "character": "m",
-      "probability": 0.05
     }
   ],
   "asse": [
@@ -12525,18 +12085,6 @@
     {
       "character": "n",
       "probability": 0.07
-    },
-    {
-      "character": "d",
-      "probability": 0.047
-    },
-    {
-      "character": "e",
-      "probability": 0.023
-    },
-    {
-      "character": "y",
-      "probability": 0.023
     }
   ],
   "assh": [
@@ -12565,30 +12113,6 @@
     {
       "character": "c",
       "probability": 0.104
-    },
-    {
-      "character": "o",
-      "probability": 0.104
-    },
-    {
-      "character": "v",
-      "probability": 0.063
-    },
-    {
-      "character": "e",
-      "probability": 0.042
-    },
-    {
-      "character": "u",
-      "probability": 0.021
-    },
-    {
-      "character": "d",
-      "probability": 0.021
-    },
-    {
-      "character": "m",
-      "probability": 0.021
     }
   ],
   "assl": [
@@ -12703,10 +12227,6 @@
     {
       "character": "l",
       "probability": 0.034
-    },
-    {
-      "character": "w",
-      "probability": 0.017
     }
   ],
   "astf": [
@@ -12748,10 +12268,6 @@
     },
     {
       "character": "t",
-      "probability": 0.03
-    },
-    {
-      "character": "e",
       "probability": 0.03
     }
   ],
@@ -13031,22 +12547,6 @@
     {
       "character": "d",
       "probability": 0.026
-    },
-    {
-      "character": "l",
-      "probability": 0.026
-    },
-    {
-      "character": "w",
-      "probability": 0.026
-    },
-    {
-      "character": "u",
-      "probability": 0.026
-    },
-    {
-      "character": "y",
-      "probability": 0.026
     }
   ],
   "atea": [
@@ -13157,38 +12657,6 @@
     {
       "character": "n",
       "probability": 0.091
-    },
-    {
-      "character": "e",
-      "probability": 0.068
-    },
-    {
-      "character": "m",
-      "probability": 0.068
-    },
-    {
-      "character": "p",
-      "probability": 0.045
-    },
-    {
-      "character": "c",
-      "probability": 0.045
-    },
-    {
-      "character": "w",
-      "probability": 0.045
-    },
-    {
-      "character": "l",
-      "probability": 0.023
-    },
-    {
-      "character": "t",
-      "probability": 0.023
-    },
-    {
-      "character": "b",
-      "probability": 0.023
     }
   ],
   "ates": [
@@ -13291,14 +12759,6 @@
     {
       "character": "i",
       "probability": 0.063
-    },
-    {
-      "character": "w",
-      "probability": 0.063
-    },
-    {
-      "character": "d",
-      "probability": 0.031
     }
   ],
   "athf": [
@@ -13519,10 +12979,6 @@
     {
       "character": "m",
       "probability": 0.053
-    },
-    {
-      "character": "e",
-      "probability": 0.053
     }
   ],
   "atit": [
@@ -13735,18 +13191,6 @@
     {
       "character": "n",
       "probability": 0.043
-    },
-    {
-      "character": "u",
-      "probability": 0.043
-    },
-    {
-      "character": "a",
-      "probability": 0.043
-    },
-    {
-      "character": "m",
-      "probability": 0.043
     }
   ],
   "atro": [
@@ -13834,10 +13278,6 @@
     },
     {
       "character": "l",
-      "probability": 0.026
-    },
-    {
-      "character": "s",
       "probability": 0.026
     }
   ],
@@ -14159,14 +13599,6 @@
     {
       "character": "s",
       "probability": 0.063
-    },
-    {
-      "character": "a",
-      "probability": 0.063
-    },
-    {
-      "character": "n",
-      "probability": 0.063
     }
   ],
   "augm": [
@@ -14459,10 +13891,6 @@
     {
       "character": "e",
       "probability": 0.059
-    },
-    {
-      "character": "l",
-      "probability": 0.059
     }
   ],
   "auto": [
@@ -14485,30 +13913,6 @@
     {
       "character": "c",
       "probability": 0.077
-    },
-    {
-      "character": "b",
-      "probability": 0.038
-    },
-    {
-      "character": "d",
-      "probability": 0.038
-    },
-    {
-      "character": "r",
-      "probability": 0.038
-    },
-    {
-      "character": "f",
-      "probability": 0.038
-    },
-    {
-      "character": "p",
-      "probability": 0.038
-    },
-    {
-      "character": "i",
-      "probability": 0.038
     }
   ],
   "autr": [
@@ -14681,10 +14085,6 @@
     {
       "character": "s",
       "probability": 0.067
-    },
-    {
-      "character": "m",
-      "probability": 0.067
     }
   ],
   "avem": [
@@ -14713,26 +14113,6 @@
     {
       "character": "l",
       "probability": 0.071
-    },
-    {
-      "character": "p",
-      "probability": 0.071
-    },
-    {
-      "character": "o",
-      "probability": 0.071
-    },
-    {
-      "character": "t",
-      "probability": 0.071
-    },
-    {
-      "character": "i",
-      "probability": 0.071
-    },
-    {
-      "character": "e",
-      "probability": 0.071
     }
   ],
   "aver": [
@@ -14755,14 +14135,6 @@
     {
       "character": "i",
       "probability": 0.105
-    },
-    {
-      "character": "l",
-      "probability": 0.053
-    },
-    {
-      "character": "t",
-      "probability": 0.053
     }
   ],
   "aves": [
@@ -14920,10 +14292,6 @@
     },
     {
       "character": "o",
-      "probability": 0.083
-    },
-    {
-      "character": "y",
       "probability": 0.083
     }
   ],
@@ -15767,34 +15135,6 @@
     {
       "character": "u",
       "probability": 0.063
-    },
-    {
-      "character": "e",
-      "probability": 0.063
-    },
-    {
-      "character": "w",
-      "probability": 0.063
-    },
-    {
-      "character": "d",
-      "probability": 0.063
-    },
-    {
-      "character": "i",
-      "probability": 0.031
-    },
-    {
-      "character": "y",
-      "probability": 0.031
-    },
-    {
-      "character": "b",
-      "probability": 0.031
-    },
-    {
-      "character": "c",
-      "probability": 0.031
     }
   ],
   "baco": [
@@ -16011,18 +15351,6 @@
     {
       "character": "e",
       "probability": 0.105
-    },
-    {
-      "character": "r",
-      "probability": 0.053
-    },
-    {
-      "character": "i",
-      "probability": 0.053
-    },
-    {
-      "character": "p",
-      "probability": 0.053
     }
   ],
   "bals": [
@@ -16083,10 +15411,6 @@
     {
       "character": "w",
       "probability": 0.083
-    },
-    {
-      "character": "e",
-      "probability": 0.083
     }
   ],
   "bane": [
@@ -16124,18 +15448,6 @@
     },
     {
       "character": "b",
-      "probability": 0.083
-    },
-    {
-      "character": "a",
-      "probability": 0.083
-    },
-    {
-      "character": "o",
-      "probability": 0.083
-    },
-    {
-      "character": "i",
       "probability": 0.083
     }
   ],
@@ -16226,10 +15538,6 @@
     },
     {
       "character": "o",
-      "probability": 0.091
-    },
-    {
-      "character": "r",
       "probability": 0.091
     }
   ],
@@ -16402,10 +15710,6 @@
     },
     {
       "character": "m",
-      "probability": 0.125
-    },
-    {
-      "character": "n",
       "probability": 0.125
     }
   ],
@@ -16968,14 +16272,6 @@
     },
     {
       "character": "a",
-      "probability": 0.143
-    },
-    {
-      "character": "r",
-      "probability": 0.143
-    },
-    {
-      "character": "t",
       "probability": 0.143
     }
   ],
@@ -17561,10 +16857,6 @@
     {
       "character": "h",
       "probability": 0.1
-    },
-    {
-      "character": "d",
-      "probability": 0.1
     }
   ],
   "bero": [
@@ -17629,14 +16921,6 @@
     {
       "character": "h",
       "probability": 0.154
-    },
-    {
-      "character": "i",
-      "probability": 0.077
-    },
-    {
-      "character": "r",
-      "probability": 0.077
     }
   ],
   "berw": [
@@ -18040,10 +17324,6 @@
     },
     {
       "character": "b",
-      "probability": 0.077
-    },
-    {
-      "character": "a",
       "probability": 0.077
     }
   ],
@@ -18803,22 +18083,6 @@
     {
       "character": "r",
       "probability": 0.071
-    },
-    {
-      "character": "i",
-      "probability": 0.071
-    },
-    {
-      "character": "o",
-      "probability": 0.071
-    },
-    {
-      "character": "a",
-      "probability": 0.071
-    },
-    {
-      "character": "w",
-      "probability": 0.071
     }
   ],
   "bloi": [
@@ -18874,10 +18138,6 @@
     },
     {
       "character": "s",
-      "probability": 0.125
-    },
-    {
-      "character": "o",
       "probability": 0.125
     }
   ],
@@ -19299,14 +18559,6 @@
     {
       "character": "l",
       "probability": 0.071
-    },
-    {
-      "character": "e",
-      "probability": 0.071
-    },
-    {
-      "character": "k",
-      "probability": 0.036
     }
   ],
   "bool": [
@@ -19613,14 +18865,6 @@
     {
       "character": "i",
       "probability": 0.077
-    },
-    {
-      "character": "b",
-      "probability": 0.077
-    },
-    {
-      "character": "e",
-      "probability": 0.077
     }
   ],
   "bout": [
@@ -19820,14 +19064,6 @@
     },
     {
       "character": "s",
-      "probability": 0.143
-    },
-    {
-      "character": "e",
-      "probability": 0.143
-    },
-    {
-      "character": "b",
       "probability": 0.143
     }
   ],
@@ -20232,14 +19468,6 @@
     },
     {
       "character": "n",
-      "probability": 0.077
-    },
-    {
-      "character": "s",
-      "probability": 0.077
-    },
-    {
-      "character": "e",
       "probability": 0.077
     }
   ],
@@ -21171,18 +20399,6 @@
     {
       "character": "o",
       "probability": 0.091
-    },
-    {
-      "character": "h",
-      "probability": 0.091
-    },
-    {
-      "character": "a",
-      "probability": 0.091
-    },
-    {
-      "character": "l",
-      "probability": 0.091
     }
   ],
   "burr": [
@@ -21731,10 +20947,6 @@
     {
       "character": "i",
       "probability": 0.143
-    },
-    {
-      "character": "d",
-      "probability": 0.143
     }
   ],
   "calc": [
@@ -21807,10 +21019,6 @@
     {
       "character": "n",
       "probability": 0.077
-    },
-    {
-      "character": "s",
-      "probability": 0.077
     }
   ],
   "call": [
@@ -21833,10 +21041,6 @@
     {
       "character": "a",
       "probability": 0.036
-    },
-    {
-      "character": "b",
-      "probability": 0.018
     }
   ],
   "calm": [
@@ -21981,22 +21185,6 @@
     {
       "character": "e",
       "probability": 0.125
-    },
-    {
-      "character": "i",
-      "probability": 0.063
-    },
-    {
-      "character": "b",
-      "probability": 0.063
-    },
-    {
-      "character": "o",
-      "probability": 0.063
-    },
-    {
-      "character": "f",
-      "probability": 0.063
     }
   ],
   "camr": [
@@ -22263,10 +21451,6 @@
     {
       "character": "c",
       "probability": 0.125
-    },
-    {
-      "character": "b",
-      "probability": 0.125
     }
   ],
   "carb": [
@@ -22317,10 +21501,6 @@
     {
       "character": "o",
       "probability": 0.056
-    },
-    {
-      "character": "h",
-      "probability": 0.056
     }
   ],
   "care": [
@@ -22342,18 +21522,6 @@
     },
     {
       "character": "y",
-      "probability": 0.071
-    },
-    {
-      "character": "s",
-      "probability": 0.071
-    },
-    {
-      "character": "r",
-      "probability": 0.071
-    },
-    {
-      "character": "l",
       "probability": 0.071
     }
   ],
@@ -22406,14 +21574,6 @@
     },
     {
       "character": "t",
-      "probability": 0.077
-    },
-    {
-      "character": "i",
-      "probability": 0.077
-    },
-    {
-      "character": "a",
       "probability": 0.077
     }
   ],
@@ -22513,22 +21673,6 @@
     {
       "character": "a",
       "probability": 0.1
-    },
-    {
-      "character": "i",
-      "probability": 0.1
-    },
-    {
-      "character": "s",
-      "probability": 0.05
-    },
-    {
-      "character": "n",
-      "probability": 0.05
-    },
-    {
-      "character": "w",
-      "probability": 0.05
     }
   ],
   "carv": [
@@ -22638,10 +21782,6 @@
     },
     {
       "character": "r",
-      "probability": 0.042
-    },
-    {
-      "character": "o",
       "probability": 0.042
     }
   ],
@@ -23391,10 +22531,6 @@
     {
       "character": "x",
       "probability": 0.038
-    },
-    {
-      "character": "d",
-      "probability": 0.038
     }
   ],
   "celi": [
@@ -23427,10 +22563,6 @@
     {
       "character": "p",
       "probability": 0.1
-    },
-    {
-      "character": "s",
-      "probability": 0.05
     }
   ],
   "celo": [
@@ -23561,22 +22693,6 @@
     {
       "character": "a",
       "probability": 0.064
-    },
-    {
-      "character": "i",
-      "probability": 0.064
-    },
-    {
-      "character": "l",
-      "probability": 0.021
-    },
-    {
-      "character": "o",
-      "probability": 0.021
-    },
-    {
-      "character": "c",
-      "probability": 0.021
     }
   ],
   "cepa": [
@@ -23610,10 +22726,6 @@
     },
     {
       "character": "s",
-      "probability": 0.056
-    },
-    {
-      "character": "o",
       "probability": 0.056
     }
   ],
@@ -23652,14 +22764,6 @@
     },
     {
       "character": "v",
-      "probability": 0.1
-    },
-    {
-      "character": "r",
-      "probability": 0.1
-    },
-    {
-      "character": "s",
       "probability": 0.1
     }
   ],
@@ -23781,14 +22885,6 @@
     {
       "character": "f",
       "probability": 0.071
-    },
-    {
-      "character": "n",
-      "probability": 0.024
-    },
-    {
-      "character": "k",
-      "probability": 0.024
     }
   ],
   "cest": [
@@ -24005,18 +23101,6 @@
     {
       "character": "n",
       "probability": 0.063
-    },
-    {
-      "character": "c",
-      "probability": 0.063
-    },
-    {
-      "character": "e",
-      "probability": 0.021
-    },
-    {
-      "character": "a",
-      "probability": 0.021
     }
   ],
   "chao": [
@@ -24071,34 +23155,6 @@
     {
       "character": "i",
       "probability": 0.129
-    },
-    {
-      "character": "t",
-      "probability": 0.097
-    },
-    {
-      "character": "m",
-      "probability": 0.065
-    },
-    {
-      "character": "s",
-      "probability": 0.032
-    },
-    {
-      "character": "c",
-      "probability": 0.016
-    },
-    {
-      "character": "o",
-      "probability": 0.016
-    },
-    {
-      "character": "e",
-      "probability": 0.016
-    },
-    {
-      "character": "y",
-      "probability": 0.016
     }
   ],
   "chas": [
@@ -24297,18 +23353,6 @@
     {
       "character": "t",
       "probability": 0.077
-    },
-    {
-      "character": "m",
-      "probability": 0.077
-    },
-    {
-      "character": "i",
-      "probability": 0.077
-    },
-    {
-      "character": "a",
-      "probability": 0.077
     }
   ],
   "chem": [
@@ -24353,18 +23397,6 @@
     {
       "character": "a",
       "probability": 0.1
-    },
-    {
-      "character": "w",
-      "probability": 0.1
-    },
-    {
-      "character": "i",
-      "probability": 0.1
-    },
-    {
-      "character": "r",
-      "probability": 0.1
     }
   ],
   "cheo": [
@@ -24398,10 +23430,6 @@
     },
     {
       "character": "o",
-      "probability": 0.059
-    },
-    {
-      "character": "c",
       "probability": 0.059
     }
   ],
@@ -24618,10 +23646,6 @@
     },
     {
       "character": "s",
-      "probability": 0.026
-    },
-    {
-      "character": "i",
       "probability": 0.026
     }
   ],
@@ -24864,10 +23888,6 @@
     },
     {
       "character": "y",
-      "probability": 0.063
-    },
-    {
-      "character": "l",
       "probability": 0.063
     }
   ],
@@ -26935,10 +25955,6 @@
     {
       "character": "i",
       "probability": 0.071
-    },
-    {
-      "character": "x",
-      "probability": 0.071
     }
   ],
   "codi": [
@@ -27175,14 +26191,6 @@
     {
       "character": "m",
       "probability": 0.094
-    },
-    {
-      "character": "s",
-      "probability": 0.063
-    },
-    {
-      "character": "c",
-      "probability": 0.031
     }
   ],
   "colt": [
@@ -27220,10 +26228,6 @@
     },
     {
       "character": "s",
-      "probability": 0.059
-    },
-    {
-      "character": "e",
       "probability": 0.059
     }
   ],
@@ -27299,10 +26303,6 @@
     {
       "character": "a",
       "probability": 0.108
-    },
-    {
-      "character": "s",
-      "probability": 0.01
     }
   ],
   "como": [
@@ -27339,22 +26339,6 @@
     {
       "character": "r",
       "probability": 0.102
-    },
-    {
-      "character": "u",
-      "probability": 0.096
-    },
-    {
-      "character": "i",
-      "probability": 0.045
-    },
-    {
-      "character": "t",
-      "probability": 0.013
-    },
-    {
-      "character": "s",
-      "probability": 0.006
     }
   ],
   "comr": [
@@ -27395,10 +26379,6 @@
     {
       "character": "i",
       "probability": 0.082
-    },
-    {
-      "character": "r",
-      "probability": 0.02
     }
   ],
   "cond": [
@@ -27421,18 +26401,6 @@
     {
       "character": "s",
       "probability": 0.041
-    },
-    {
-      "character": "a",
-      "probability": 0.041
-    },
-    {
-      "character": "l",
-      "probability": 0.02
-    },
-    {
-      "character": "h",
-      "probability": 0.02
     }
   ],
   "cone": [
@@ -27461,14 +26429,6 @@
     {
       "character": "u",
       "probability": 0.074
-    },
-    {
-      "character": "r",
-      "probability": 0.074
-    },
-    {
-      "character": "t",
-      "probability": 0.019
     }
   ],
   "cong": [
@@ -27567,14 +26527,6 @@
     {
       "character": "o",
       "probability": 0.068
-    },
-    {
-      "character": "c",
-      "probability": 0.051
-    },
-    {
-      "character": "p",
-      "probability": 0.017
     }
   ],
   "cont": [
@@ -27813,18 +26765,6 @@
     {
       "character": "o",
       "probability": 0.083
-    },
-    {
-      "character": "l",
-      "probability": 0.042
-    },
-    {
-      "character": "u",
-      "probability": 0.042
-    },
-    {
-      "character": "k",
-      "probability": 0.042
     }
   ],
   "core": [
@@ -27846,14 +26786,6 @@
     },
     {
       "character": "y",
-      "probability": 0.125
-    },
-    {
-      "character": "c",
-      "probability": 0.125
-    },
-    {
-      "character": "r",
       "probability": 0.125
     }
   ],
@@ -28044,10 +26976,6 @@
     },
     {
       "character": "l",
-      "probability": 0.125
-    },
-    {
-      "character": "i",
       "probability": 0.125
     }
   ],
@@ -28873,10 +27801,6 @@
     {
       "character": "b",
       "probability": 0.043
-    },
-    {
-      "character": "i",
-      "probability": 0.043
     }
   ],
   "crot": [
@@ -28910,10 +27834,6 @@
     },
     {
       "character": "e",
-      "probability": 0.083
-    },
-    {
-      "character": "s",
       "probability": 0.083
     }
   ],
@@ -29369,10 +28289,6 @@
     {
       "character": "l",
       "probability": 0.118
-    },
-    {
-      "character": "p",
-      "probability": 0.059
     }
   ],
   "ctru": [
@@ -31229,10 +30145,6 @@
     {
       "character": "a",
       "probability": 0.1
-    },
-    {
-      "character": "i",
-      "probability": 0.1
     }
   ],
   "deci": [
@@ -31537,18 +30449,6 @@
     {
       "character": "b",
       "probability": 0.103
-    },
-    {
-      "character": "e",
-      "probability": 0.069
-    },
-    {
-      "character": "t",
-      "probability": 0.034
-    },
-    {
-      "character": "m",
-      "probability": 0.034
     }
   ],
   "dell": [
@@ -31841,10 +30741,6 @@
     {
       "character": "o",
       "probability": 0.044
-    },
-    {
-      "character": "e",
-      "probability": 0.022
     }
   ],
   "denv": [
@@ -32037,10 +30933,6 @@
     {
       "character": "g",
       "probability": 0.063
-    },
-    {
-      "character": "s",
-      "probability": 0.063
     }
   ],
   "derf": [
@@ -32154,18 +31046,6 @@
     },
     {
       "character": "f",
-      "probability": 0.048
-    },
-    {
-      "character": "c",
-      "probability": 0.048
-    },
-    {
-      "character": "i",
-      "probability": 0.048
-    },
-    {
-      "character": "s",
       "probability": 0.048
     }
   ],
@@ -32415,10 +31295,6 @@
     {
       "character": "n",
       "probability": 0.143
-    },
-    {
-      "character": "o",
-      "probability": 0.071
     }
   ],
   "devo": [
@@ -32811,10 +31687,6 @@
     {
       "character": "n",
       "probability": 0.091
-    },
-    {
-      "character": "c",
-      "probability": 0.091
     }
   ],
   "diap": [
@@ -32975,10 +31847,6 @@
     {
       "character": "s",
       "probability": 0.065
-    },
-    {
-      "character": "m",
-      "probability": 0.032
     }
   ],
   "dicu": [
@@ -33503,10 +32371,6 @@
     {
       "character": "d",
       "probability": 0.13
-    },
-    {
-      "character": "r",
-      "probability": 0.043
     }
   ],
   "disb": [
@@ -33539,22 +32403,6 @@
     {
       "character": "u",
       "probability": 0.111
-    },
-    {
-      "character": "h",
-      "probability": 0.048
-    },
-    {
-      "character": "a",
-      "probability": 0.032
-    },
-    {
-      "character": "e",
-      "probability": 0.032
-    },
-    {
-      "character": "s",
-      "probability": 0.016
     }
   ],
   "dise": [
@@ -33663,10 +32511,6 @@
     {
       "character": "u",
       "probability": 0.097
-    },
-    {
-      "character": "r",
-      "probability": 0.032
     }
   ],
   "disq": [
@@ -33723,10 +32567,6 @@
     {
       "character": "o",
       "probability": 0.071
-    },
-    {
-      "character": "s",
-      "probability": 0.024
     }
   ],
   "dita": [
@@ -34799,22 +33639,6 @@
     {
       "character": "w",
       "probability": 0.045
-    },
-    {
-      "character": "h",
-      "probability": 0.045
-    },
-    {
-      "character": "i",
-      "probability": 0.045
-    },
-    {
-      "character": "r",
-      "probability": 0.045
-    },
-    {
-      "character": "f",
-      "probability": 0.045
     }
   ],
   "doxy": [
@@ -34993,10 +33817,6 @@
     {
       "character": "b",
       "probability": 0.167
-    },
-    {
-      "character": "s",
-      "probability": 0.083
     }
   ],
   "drea": [
@@ -35942,10 +34762,6 @@
     },
     {
       "character": "l",
-      "probability": 0.111
-    },
-    {
-      "character": "c",
       "probability": 0.111
     }
   ],
@@ -37167,14 +35983,6 @@
     {
       "character": "e",
       "probability": 0.077
-    },
-    {
-      "character": "y",
-      "probability": 0.077
-    },
-    {
-      "character": "f",
-      "probability": 0.077
     }
   ],
   "earw": [
@@ -37277,18 +36085,6 @@
     {
       "character": "o",
       "probability": 0.067
-    },
-    {
-      "character": "f",
-      "probability": 0.067
-    },
-    {
-      "character": "m",
-      "probability": 0.067
-    },
-    {
-      "character": "w",
-      "probability": 0.067
     }
   ],
   "easu": [
@@ -37351,10 +36147,6 @@
     {
       "character": "t",
       "probability": 0.091
-    },
-    {
-      "character": "a",
-      "probability": 0.091
     }
   ],
   "eati": [
@@ -37376,10 +36168,6 @@
     },
     {
       "character": "c",
-      "probability": 0.045
-    },
-    {
-      "character": "s",
       "probability": 0.045
     }
   ],
@@ -38473,10 +37261,6 @@
     {
       "character": "p",
       "probability": 0.059
-    },
-    {
-      "character": "s",
-      "probability": 0.059
     }
   ],
   "econ": [
@@ -38498,14 +37282,6 @@
     },
     {
       "character": "p",
-      "probability": 0.032
-    },
-    {
-      "character": "n",
-      "probability": 0.032
-    },
-    {
-      "character": "f",
       "probability": 0.032
     }
   ],
@@ -38607,14 +37383,6 @@
     {
       "character": "r",
       "probability": 0.1
-    },
-    {
-      "character": "l",
-      "probability": 0.1
-    },
-    {
-      "character": "d",
-      "probability": 0.05
     }
   ],
   "ecte": [
@@ -38653,10 +37421,6 @@
     {
       "character": "b",
       "probability": 0.018
-    },
-    {
-      "character": "l",
-      "probability": 0.009
     }
   ],
   "ectl": [
@@ -39009,18 +37773,6 @@
     {
       "character": "r",
       "probability": 0.063
-    },
-    {
-      "character": "b",
-      "probability": 0.063
-    },
-    {
-      "character": "h",
-      "probability": 0.063
-    },
-    {
-      "character": "w",
-      "probability": 0.063
     }
   ],
   "edgi": [
@@ -39076,10 +37828,6 @@
     },
     {
       "character": "w",
-      "probability": 0.048
-    },
-    {
-      "character": "s",
       "probability": 0.048
     }
   ],
@@ -39200,10 +37948,6 @@
     },
     {
       "character": "s",
-      "probability": 0.077
-    },
-    {
-      "character": "h",
       "probability": 0.077
     }
   ],
@@ -39722,10 +38466,6 @@
     },
     {
       "character": "t",
-      "probability": 0.111
-    },
-    {
-      "character": "p",
       "probability": 0.111
     }
   ],
@@ -40667,14 +39407,6 @@
     {
       "character": "b",
       "probability": 0.059
-    },
-    {
-      "character": "s",
-      "probability": 0.059
-    },
-    {
-      "character": "m",
-      "probability": 0.059
     }
   ],
   "egre": [
@@ -41369,10 +40101,6 @@
     {
       "character": "g",
       "probability": 0.053
-    },
-    {
-      "character": "e",
-      "probability": 0.053
     }
   ],
   "elap": [
@@ -41945,10 +40673,6 @@
     {
       "character": "m",
       "probability": 0.077
-    },
-    {
-      "character": "e",
-      "probability": 0.077
     }
   ],
   "elit": [
@@ -42063,22 +40787,6 @@
     {
       "character": "s",
       "probability": 0.04
-    },
-    {
-      "character": "y",
-      "probability": 0.04
-    },
-    {
-      "character": "v",
-      "probability": 0.04
-    },
-    {
-      "character": "t",
-      "probability": 0.04
-    },
-    {
-      "character": "e",
-      "probability": 0.02
     }
   ],
   "ellf": [
@@ -42107,14 +40815,6 @@
     {
       "character": "o",
       "probability": 0.083
-    },
-    {
-      "character": "p",
-      "probability": 0.083
-    },
-    {
-      "character": "g",
-      "probability": 0.056
     }
   ],
   "elln": [
@@ -42913,10 +41613,6 @@
     {
       "character": "e",
       "probability": 0.074
-    },
-    {
-      "character": "o",
-      "probability": 0.037
     }
   ],
   "emio": [
@@ -43106,10 +41802,6 @@
     },
     {
       "character": "e",
-      "probability": 0.071
-    },
-    {
-      "character": "r",
       "probability": 0.071
     }
   ],
@@ -43593,10 +42285,6 @@
     {
       "character": "s",
       "probability": 0.042
-    },
-    {
-      "character": "b",
-      "probability": 0.042
     }
   ],
   "ende": [
@@ -43619,18 +42307,6 @@
     {
       "character": "e",
       "probability": 0.03
-    },
-    {
-      "character": "z",
-      "probability": 0.015
-    },
-    {
-      "character": "m",
-      "probability": 0.015
-    },
-    {
-      "character": "l",
-      "probability": 0.015
     }
   ],
   "endi": [
@@ -43652,26 +42328,6 @@
     },
     {
       "character": "f",
-      "probability": 0.029
-    },
-    {
-      "character": "d",
-      "probability": 0.029
-    },
-    {
-      "character": "u",
-      "probability": 0.029
-    },
-    {
-      "character": "o",
-      "probability": 0.029
-    },
-    {
-      "character": "m",
-      "probability": 0.029
-    },
-    {
-      "character": "p",
       "probability": 0.029
     }
   ],
@@ -43720,22 +42376,6 @@
     },
     {
       "character": "n",
-      "probability": 0.05
-    },
-    {
-      "character": "g",
-      "probability": 0.05
-    },
-    {
-      "character": "t",
-      "probability": 0.05
-    },
-    {
-      "character": "z",
-      "probability": 0.05
-    },
-    {
-      "character": "m",
       "probability": 0.05
     }
   ],
@@ -43875,10 +42515,6 @@
     {
       "character": "i",
       "probability": 0.063
-    },
-    {
-      "character": "y",
-      "probability": 0.031
     }
   ],
   "enes": [
@@ -44339,10 +42975,6 @@
     {
       "character": "f",
       "probability": 0.067
-    },
-    {
-      "character": "u",
-      "probability": 0.067
     }
   ],
   "enno": [
@@ -44563,14 +43195,6 @@
     {
       "character": "e",
       "probability": 0.1
-    },
-    {
-      "character": "n",
-      "probability": 0.1
-    },
-    {
-      "character": "l",
-      "probability": 0.1
     }
   ],
   "ensh": [
@@ -44603,22 +43227,6 @@
     {
       "character": "b",
       "probability": 0.068
-    },
-    {
-      "character": "c",
-      "probability": 0.045
-    },
-    {
-      "character": "l",
-      "probability": 0.045
-    },
-    {
-      "character": "g",
-      "probability": 0.023
-    },
-    {
-      "character": "f",
-      "probability": 0.023
     }
   ],
   "ensk": [
@@ -44719,14 +43327,6 @@
     {
       "character": "g",
       "probability": 0.038
-    },
-    {
-      "character": "x",
-      "probability": 0.013
-    },
-    {
-      "character": "n",
-      "probability": 0.013
     }
   ],
   "entc": [
@@ -44795,38 +43395,6 @@
     {
       "character": "c",
       "probability": 0.075
-    },
-    {
-      "character": "t",
-      "probability": 0.067
-    },
-    {
-      "character": "s",
-      "probability": 0.05
-    },
-    {
-      "character": "v",
-      "probability": 0.042
-    },
-    {
-      "character": "r",
-      "probability": 0.025
-    },
-    {
-      "character": "l",
-      "probability": 0.025
-    },
-    {
-      "character": "m",
-      "probability": 0.025
-    },
-    {
-      "character": "e",
-      "probability": 0.017
-    },
-    {
-      "character": "u",
-      "probability": 0.008
     }
   ],
   "entl": [
@@ -44865,14 +43433,6 @@
     {
       "character": "w",
       "probability": 0.056
-    },
-    {
-      "character": "m",
-      "probability": 0.056
-    },
-    {
-      "character": "s",
-      "probability": 0.056
     }
   ],
   "entr": [
@@ -44894,10 +43454,6 @@
     },
     {
       "character": "o",
-      "probability": 0.051
-    },
-    {
-      "character": "u",
       "probability": 0.051
     }
   ],
@@ -45805,14 +44361,6 @@
     {
       "character": "b",
       "probability": 0.065
-    },
-    {
-      "character": "l",
-      "probability": 0.065
-    },
-    {
-      "character": "n",
-      "probability": 0.032
     }
   ],
   "epto": [
@@ -45919,18 +44467,6 @@
     {
       "character": "s",
       "probability": 0.115
-    },
-    {
-      "character": "n",
-      "probability": 0.115
-    },
-    {
-      "character": "l",
-      "probability": 0.077
-    },
-    {
-      "character": "e",
-      "probability": 0.038
     }
   ],
   "equo": [
@@ -46042,10 +44578,6 @@
     },
     {
       "character": "n",
-      "probability": 0.091
-    },
-    {
-      "character": "d",
       "probability": 0.091
     }
   ],
@@ -46497,14 +45029,6 @@
     {
       "character": "i",
       "probability": 0.024
-    },
-    {
-      "character": "a",
-      "probability": 0.024
-    },
-    {
-      "character": "e",
-      "probability": 0.024
     }
   ],
   "ereo": [
@@ -46691,18 +45215,6 @@
     {
       "character": "t",
       "probability": 0.048
-    },
-    {
-      "character": "s",
-      "probability": 0.048
-    },
-    {
-      "character": "i",
-      "probability": 0.048
-    },
-    {
-      "character": "y",
-      "probability": 0.048
     }
   ],
   "ergi": [
@@ -46852,10 +45364,6 @@
     },
     {
       "character": "t",
-      "probability": 0.042
-    },
-    {
-      "character": "o",
       "probability": 0.042
     }
   ],
@@ -47025,10 +45533,6 @@
     {
       "character": "s",
       "probability": 0.091
-    },
-    {
-      "character": "u",
-      "probability": 0.091
     }
   ],
   "eriv": [
@@ -47108,14 +45612,6 @@
     },
     {
       "character": "s",
-      "probability": 0.053
-    },
-    {
-      "character": "i",
-      "probability": 0.053
-    },
-    {
-      "character": "k",
       "probability": 0.053
     }
   ],
@@ -47227,14 +45723,6 @@
     {
       "character": "t",
       "probability": 0.071
-    },
-    {
-      "character": "r",
-      "probability": 0.071
-    },
-    {
-      "character": "l",
-      "probability": 0.071
     }
   ],
   "ermi": [
@@ -47275,14 +45763,6 @@
     {
       "character": "d",
       "probability": 0.083
-    },
-    {
-      "character": "t",
-      "probability": 0.083
-    },
-    {
-      "character": "p",
-      "probability": 0.083
     }
   ],
   "erms": [
@@ -47317,10 +45797,6 @@
     {
       "character": "m",
       "probability": 0.065
-    },
-    {
-      "character": "c",
-      "probability": 0.065
     }
   ],
   "ernd": [
@@ -47349,10 +45825,6 @@
     {
       "character": "r",
       "probability": 0.118
-    },
-    {
-      "character": "a",
-      "probability": 0.059
     }
   ],
   "ernh": [
@@ -47380,14 +45852,6 @@
     },
     {
       "character": "g",
-      "probability": 0.067
-    },
-    {
-      "character": "z",
-      "probability": 0.067
-    },
-    {
-      "character": "a",
       "probability": 0.067
     }
   ],
@@ -47549,14 +46013,6 @@
     {
       "character": "o",
       "probability": 0.091
-    },
-    {
-      "character": "f",
-      "probability": 0.091
-    },
-    {
-      "character": "c",
-      "probability": 0.091
     }
   ],
   "erot": [
@@ -47695,10 +46151,6 @@
     {
       "character": "r",
       "probability": 0.1
-    },
-    {
-      "character": "i",
-      "probability": 0.1
     }
   ],
   "erre": [
@@ -47720,22 +46172,6 @@
     },
     {
       "character": "s",
-      "probability": 0.05
-    },
-    {
-      "character": "g",
-      "probability": 0.05
-    },
-    {
-      "character": "t",
-      "probability": 0.05
-    },
-    {
-      "character": "y",
-      "probability": 0.05
-    },
-    {
-      "character": "z",
       "probability": 0.05
     }
   ],
@@ -47759,26 +46195,6 @@
     {
       "character": "d",
       "probability": 0.111
-    },
-    {
-      "character": "b",
-      "probability": 0.074
-    },
-    {
-      "character": "l",
-      "probability": 0.074
-    },
-    {
-      "character": "s",
-      "probability": 0.037
-    },
-    {
-      "character": "a",
-      "probability": 0.037
-    },
-    {
-      "character": "c",
-      "probability": 0.037
     }
   ],
   "errn": [
@@ -47873,26 +46289,6 @@
     {
       "character": "n",
       "probability": 0.125
-    },
-    {
-      "character": "e",
-      "probability": 0.125
-    },
-    {
-      "character": "a",
-      "probability": 0.042
-    },
-    {
-      "character": "t",
-      "probability": 0.042
-    },
-    {
-      "character": "s",
-      "probability": 0.042
-    },
-    {
-      "character": "v",
-      "probability": 0.042
     }
   ],
   "ersf": [
@@ -47935,30 +46331,6 @@
     {
       "character": "a",
       "probability": 0.081
-    },
-    {
-      "character": "g",
-      "probability": 0.054
-    },
-    {
-      "character": "f",
-      "probability": 0.054
-    },
-    {
-      "character": "b",
-      "probability": 0.054
-    },
-    {
-      "character": "z",
-      "probability": 0.054
-    },
-    {
-      "character": "n",
-      "probability": 0.027
-    },
-    {
-      "character": "e",
-      "probability": 0.027
     }
   ],
   "ersk": [
@@ -48115,34 +46487,6 @@
     {
       "character": "o",
       "probability": 0.091
-    },
-    {
-      "character": "c",
-      "probability": 0.068
-    },
-    {
-      "character": "e",
-      "probability": 0.045
-    },
-    {
-      "character": "m",
-      "probability": 0.045
-    },
-    {
-      "character": "a",
-      "probability": 0.045
-    },
-    {
-      "character": "b",
-      "probability": 0.023
-    },
-    {
-      "character": "p",
-      "probability": 0.023
-    },
-    {
-      "character": "g",
-      "probability": 0.023
     }
   ],
   "erto": [
@@ -48277,10 +46621,6 @@
     {
       "character": "l",
       "probability": 0.121
-    },
-    {
-      "character": "x",
-      "probability": 0.03
     }
   ],
   "ervl": [
@@ -49115,10 +47455,6 @@
     {
       "character": "l",
       "probability": 0.111
-    },
-    {
-      "character": "t",
-      "probability": 0.056
     }
   ],
   "esse": [
@@ -49141,14 +47477,6 @@
     {
       "character": "e",
       "probability": 0.033
-    },
-    {
-      "character": "l",
-      "probability": 0.033
-    },
-    {
-      "character": "x",
-      "probability": 0.017
     }
   ],
   "essf": [
@@ -49183,18 +47511,6 @@
     {
       "character": "t",
       "probability": 0.028
-    },
-    {
-      "character": "e",
-      "probability": 0.028
-    },
-    {
-      "character": "c",
-      "probability": 0.014
-    },
-    {
-      "character": "a",
-      "probability": 0.014
     }
   ],
   "essk": [
@@ -49283,14 +47599,6 @@
     {
       "character": "u",
       "probability": 0.083
-    },
-    {
-      "character": "m",
-      "probability": 0.083
-    },
-    {
-      "character": "l",
-      "probability": 0.042
     }
   ],
   "estb": [
@@ -49328,10 +47636,6 @@
     },
     {
       "character": "s",
-      "probability": 0.017
-    },
-    {
-      "character": "l",
       "probability": 0.017
     }
   ],
@@ -49371,26 +47675,6 @@
     {
       "character": "v",
       "probability": 0.08
-    },
-    {
-      "character": "c",
-      "probability": 0.053
-    },
-    {
-      "character": "t",
-      "probability": 0.04
-    },
-    {
-      "character": "a",
-      "probability": 0.027
-    },
-    {
-      "character": "f",
-      "probability": 0.027
-    },
-    {
-      "character": "s",
-      "probability": 0.013
     }
   ],
   "estl": [
@@ -49775,30 +48059,6 @@
     {
       "character": "a",
       "probability": 0.05
-    },
-    {
-      "character": "n",
-      "probability": 0.05
-    },
-    {
-      "character": "y",
-      "probability": 0.025
-    },
-    {
-      "character": "b",
-      "probability": 0.025
-    },
-    {
-      "character": "t",
-      "probability": 0.025
-    },
-    {
-      "character": "g",
-      "probability": 0.025
-    },
-    {
-      "character": "r",
-      "probability": 0.025
     }
   ],
   "etes": [
@@ -50155,10 +48415,6 @@
     {
       "character": "d",
       "probability": 0.091
-    },
-    {
-      "character": "z",
-      "probability": 0.091
     }
   ],
   "etre": [
@@ -50216,10 +48472,6 @@
     },
     {
       "character": "f",
-      "probability": 0.1
-    },
-    {
-      "character": "a",
       "probability": 0.1
     }
   ],
@@ -50685,18 +48937,6 @@
     {
       "character": "y",
       "probability": 0.053
-    },
-    {
-      "character": "l",
-      "probability": 0.053
-    },
-    {
-      "character": "e",
-      "probability": 0.053
-    },
-    {
-      "character": "i",
-      "probability": 0.053
     }
   ],
   "evem": [
@@ -50724,14 +48964,6 @@
     },
     {
       "character": "g",
-      "probability": 0.038
-    },
-    {
-      "character": "l",
-      "probability": 0.038
-    },
-    {
-      "character": "f",
       "probability": 0.038
     }
   ],
@@ -50761,30 +48993,6 @@
     {
       "character": "t",
       "probability": 0.093
-    },
-    {
-      "character": "l",
-      "probability": 0.07
-    },
-    {
-      "character": "g",
-      "probability": 0.047
-    },
-    {
-      "character": "i",
-      "probability": 0.023
-    },
-    {
-      "character": "q",
-      "probability": 0.023
-    },
-    {
-      "character": "n",
-      "probability": 0.023
-    },
-    {
-      "character": "b",
-      "probability": 0.023
     }
   ],
   "evia": [
@@ -50886,10 +49094,6 @@
     },
     {
       "character": "i",
-      "probability": 0.125
-    },
-    {
-      "character": "t",
       "probability": 0.125
     }
   ],
@@ -52264,38 +50468,6 @@
     },
     {
       "character": "m",
-      "probability": 0.067
-    },
-    {
-      "character": "n",
-      "probability": 0.067
-    },
-    {
-      "character": "b",
-      "probability": 0.067
-    },
-    {
-      "character": "i",
-      "probability": 0.067
-    },
-    {
-      "character": "v",
-      "probability": 0.067
-    },
-    {
-      "character": "e",
-      "probability": 0.067
-    },
-    {
-      "character": "w",
-      "probability": 0.067
-    },
-    {
-      "character": "c",
-      "probability": 0.067
-    },
-    {
-      "character": "g",
       "probability": 0.067
     }
   ],
@@ -53755,10 +51927,6 @@
     {
       "character": "m",
       "probability": 0.091
-    },
-    {
-      "character": "f",
-      "probability": 0.091
     }
   ],
   "fili": [
@@ -53895,10 +52063,6 @@
     {
       "character": "p",
       "probability": 0.063
-    },
-    {
-      "character": "l",
-      "probability": 0.063
     }
   ],
   "fing": [
@@ -53973,22 +52137,6 @@
     {
       "character": "a",
       "probability": 0.105
-    },
-    {
-      "character": "b",
-      "probability": 0.105
-    },
-    {
-      "character": "d",
-      "probability": 0.053
-    },
-    {
-      "character": "m",
-      "probability": 0.053
-    },
-    {
-      "character": "n",
-      "probability": 0.053
     }
   ],
   "firi": [
@@ -54016,10 +52164,6 @@
     },
     {
       "character": "l",
-      "probability": 0.1
-    },
-    {
-      "character": "i",
       "probability": 0.1
     }
   ],
@@ -54272,14 +52416,6 @@
     },
     {
       "character": "w",
-      "probability": 0.143
-    },
-    {
-      "character": "e",
-      "probability": 0.143
-    },
-    {
-      "character": "t",
       "probability": 0.143
     }
   ],
@@ -54767,26 +52903,6 @@
     {
       "character": "w",
       "probability": 0.071
-    },
-    {
-      "character": "a",
-      "probability": 0.071
-    },
-    {
-      "character": "j",
-      "probability": 0.071
-    },
-    {
-      "character": "s",
-      "probability": 0.071
-    },
-    {
-      "character": "h",
-      "probability": 0.071
-    },
-    {
-      "character": "i",
-      "probability": 0.071
     }
   ],
   "fopl": [
@@ -54863,34 +52979,6 @@
     {
       "character": "n",
       "probability": 0.065
-    },
-    {
-      "character": "g",
-      "probability": 0.065
-    },
-    {
-      "character": "h",
-      "probability": 0.065
-    },
-    {
-      "character": "v",
-      "probability": 0.032
-    },
-    {
-      "character": "x",
-      "probability": 0.032
-    },
-    {
-      "character": "f",
-      "probability": 0.032
-    },
-    {
-      "character": "w",
-      "probability": 0.032
-    },
-    {
-      "character": "a",
-      "probability": 0.032
     }
   ],
   "forf": [
@@ -54943,10 +53031,6 @@
     {
       "character": "u",
       "probability": 0.116
-    },
-    {
-      "character": "l",
-      "probability": 0.014
     }
   ],
   "forn": [
@@ -54991,22 +53075,6 @@
     {
       "character": "r",
       "probability": 0.091
-    },
-    {
-      "character": "e",
-      "probability": 0.091
-    },
-    {
-      "character": "i",
-      "probability": 0.091
-    },
-    {
-      "character": "y",
-      "probability": 0.045
-    },
-    {
-      "character": "l",
-      "probability": 0.045
     }
   ],
   "foru": [
@@ -55291,30 +53359,6 @@
     {
       "character": "w",
       "probability": 0.08
-    },
-    {
-      "character": "b",
-      "probability": 0.08
-    },
-    {
-      "character": "m",
-      "probability": 0.04
-    },
-    {
-      "character": "p",
-      "probability": 0.04
-    },
-    {
-      "character": "i",
-      "probability": 0.04
-    },
-    {
-      "character": "h",
-      "probability": 0.04
-    },
-    {
-      "character": "v",
-      "probability": 0.04
     }
   ],
   "frei": [
@@ -56153,10 +54197,6 @@
     {
       "character": "p",
       "probability": 0.077
-    },
-    {
-      "character": "f",
-      "probability": 0.077
     }
   ],
   "gami": [
@@ -56308,10 +54348,6 @@
     },
     {
       "character": "n",
-      "probability": 0.067
-    },
-    {
-      "character": "a",
       "probability": 0.067
     }
   ],
@@ -56867,14 +54903,6 @@
     {
       "character": "o",
       "probability": 0.056
-    },
-    {
-      "character": "v",
-      "probability": 0.028
-    },
-    {
-      "character": "i",
-      "probability": 0.028
     }
   ],
   "geni": [
@@ -56946,10 +54974,6 @@
     },
     {
       "character": "a",
-      "probability": 0.063
-    },
-    {
-      "character": "r",
       "probability": 0.063
     }
   ],
@@ -57605,10 +55629,6 @@
     {
       "character": "o",
       "probability": 0.059
-    },
-    {
-      "character": "s",
-      "probability": 0.059
     }
   ],
   "ghtf": [
@@ -57918,10 +55938,6 @@
     },
     {
       "character": "w",
-      "probability": 0.048
-    },
-    {
-      "character": "b",
       "probability": 0.048
     }
   ],
@@ -58899,18 +56915,6 @@
     {
       "character": "m",
       "probability": 0.1
-    },
-    {
-      "character": "i",
-      "probability": 0.1
-    },
-    {
-      "character": "y",
-      "probability": 0.1
-    },
-    {
-      "character": "r",
-      "probability": 0.1
     }
   ],
   "goof": [
@@ -58974,10 +56978,6 @@
     },
     {
       "character": "s",
-      "probability": 0.083
-    },
-    {
-      "character": "c",
       "probability": 0.083
     }
   ],
@@ -59143,10 +57143,6 @@
     {
       "character": "y",
       "probability": 0.033
-    },
-    {
-      "character": "s",
-      "probability": 0.033
     }
   ],
   "grae": [
@@ -59215,22 +57211,6 @@
     {
       "character": "n",
       "probability": 0.059
-    },
-    {
-      "character": "u",
-      "probability": 0.059
-    },
-    {
-      "character": "i",
-      "probability": 0.029
-    },
-    {
-      "character": "a",
-      "probability": 0.029
-    },
-    {
-      "character": "v",
-      "probability": 0.029
     }
   ],
   "grap": [
@@ -59272,10 +57252,6 @@
     },
     {
       "character": "s",
-      "probability": 0.034
-    },
-    {
-      "character": "h",
       "probability": 0.034
     }
   ],
@@ -59351,30 +57327,6 @@
     {
       "character": "s",
       "probability": 0.083
-    },
-    {
-      "character": "k",
-      "probability": 0.056
-    },
-    {
-      "character": "c",
-      "probability": 0.028
-    },
-    {
-      "character": "i",
-      "probability": 0.028
-    },
-    {
-      "character": "r",
-      "probability": 0.028
-    },
-    {
-      "character": "l",
-      "probability": 0.028
-    },
-    {
-      "character": "a",
-      "probability": 0.028
     }
   ],
   "greg": [
@@ -60397,18 +58349,6 @@
     {
       "character": "y",
       "probability": 0.077
-    },
-    {
-      "character": "p",
-      "probability": 0.077
-    },
-    {
-      "character": "d",
-      "probability": 0.077
-    },
-    {
-      "character": "l",
-      "probability": 0.077
     }
   ],
   "hait": [
@@ -60518,10 +58458,6 @@
     },
     {
       "character": "w",
-      "probability": 0.083
-    },
-    {
-      "character": "i",
       "probability": 0.083
     }
   ],
@@ -60653,14 +58589,6 @@
     {
       "character": "e",
       "probability": 0.111
-    },
-    {
-      "character": "o",
-      "probability": 0.056
-    },
-    {
-      "character": "h",
-      "probability": 0.056
     }
   ],
   "hamr": [
@@ -60729,46 +58657,6 @@
     {
       "character": "e",
       "probability": 0.089
-    },
-    {
-      "character": "y",
-      "probability": 0.067
-    },
-    {
-      "character": "h",
-      "probability": 0.044
-    },
-    {
-      "character": "j",
-      "probability": 0.044
-    },
-    {
-      "character": "o",
-      "probability": 0.044
-    },
-    {
-      "character": "w",
-      "probability": 0.044
-    },
-    {
-      "character": "m",
-      "probability": 0.022
-    },
-    {
-      "character": "f",
-      "probability": 0.022
-    },
-    {
-      "character": "c",
-      "probability": 0.022
-    },
-    {
-      "character": "r",
-      "probability": 0.022
-    },
-    {
-      "character": "g",
-      "probability": 0.022
     }
   ],
   "hane": [
@@ -60925,10 +58813,6 @@
     {
       "character": "e",
       "probability": 0.091
-    },
-    {
-      "character": "l",
-      "probability": 0.091
     }
   ],
   "hanu": [
@@ -61063,30 +58947,6 @@
     {
       "character": "i",
       "probability": 0.087
-    },
-    {
-      "character": "l",
-      "probability": 0.043
-    },
-    {
-      "character": "y",
-      "probability": 0.043
-    },
-    {
-      "character": "b",
-      "probability": 0.043
-    },
-    {
-      "character": "o",
-      "probability": 0.043
-    },
-    {
-      "character": "n",
-      "probability": 0.043
-    },
-    {
-      "character": "t",
-      "probability": 0.043
     }
   ],
   "hare": [
@@ -61108,10 +58968,6 @@
     },
     {
       "character": "p",
-      "probability": 0.1
-    },
-    {
-      "character": "a",
       "probability": 0.1
     }
   ],
@@ -61195,14 +59051,6 @@
     {
       "character": "i",
       "probability": 0.037
-    },
-    {
-      "character": "f",
-      "probability": 0.037
-    },
-    {
-      "character": "l",
-      "probability": 0.037
     }
   ],
   "harn": [
@@ -61282,14 +59130,6 @@
     },
     {
       "character": "l",
-      "probability": 0.1
-    },
-    {
-      "character": "o",
-      "probability": 0.1
-    },
-    {
-      "character": "i",
       "probability": 0.1
     }
   ],
@@ -61829,22 +59669,6 @@
     {
       "character": "i",
       "probability": 0.091
-    },
-    {
-      "character": "p",
-      "probability": 0.091
-    },
-    {
-      "character": "a",
-      "probability": 0.091
-    },
-    {
-      "character": "b",
-      "probability": 0.045
-    },
-    {
-      "character": "w",
-      "probability": 0.045
     }
   ],
   "heal": [
@@ -61927,10 +59751,6 @@
     {
       "character": "i",
       "probability": 0.105
-    },
-    {
-      "character": "o",
-      "probability": 0.053
     }
   ],
   "heav": [
@@ -61999,14 +59819,6 @@
     {
       "character": "b",
       "probability": 0.143
-    },
-    {
-      "character": "o",
-      "probability": 0.071
-    },
-    {
-      "character": "p",
-      "probability": 0.071
     }
   ],
   "hect": [
@@ -62289,14 +60101,6 @@
     {
       "character": "x",
       "probability": 0.1
-    },
-    {
-      "character": "n",
-      "probability": 0.1
-    },
-    {
-      "character": "s",
-      "probability": 0.1
     }
   ],
   "hell": [
@@ -62364,10 +60168,6 @@
     },
     {
       "character": "i",
-      "probability": 0.083
-    },
-    {
-      "character": "d",
       "probability": 0.083
     }
   ],
@@ -62745,30 +60545,6 @@
     {
       "character": "d",
       "probability": 0.111
-    },
-    {
-      "character": "s",
-      "probability": 0.111
-    },
-    {
-      "character": "o",
-      "probability": 0.083
-    },
-    {
-      "character": "b",
-      "probability": 0.083
-    },
-    {
-      "character": "t",
-      "probability": 0.056
-    },
-    {
-      "character": "v",
-      "probability": 0.028
-    },
-    {
-      "character": "u",
-      "probability": 0.028
     }
   ],
   "herf": [
@@ -62806,14 +60582,6 @@
     },
     {
       "character": "e",
-      "probability": 0.063
-    },
-    {
-      "character": "f",
-      "probability": 0.063
-    },
-    {
-      "character": "d",
       "probability": 0.063
     }
   ],
@@ -62883,10 +60651,6 @@
     {
       "character": "k",
       "probability": 0.1
-    },
-    {
-      "character": "m",
-      "probability": 0.1
     }
   ],
   "herp": [
@@ -62932,10 +60696,6 @@
     },
     {
       "character": "p",
-      "probability": 0.143
-    },
-    {
-      "character": "b",
       "probability": 0.143
     }
   ],
@@ -63030,10 +60790,6 @@
     },
     {
       "character": "o",
-      "probability": 0.133
-    },
-    {
-      "character": "z",
       "probability": 0.133
     }
   ],
@@ -63559,10 +61315,6 @@
     {
       "character": "s",
       "probability": 0.125
-    },
-    {
-      "character": "i",
-      "probability": 0.125
     }
   ],
   "hile": [
@@ -63620,14 +61372,6 @@
     },
     {
       "character": "a",
-      "probability": 0.05
-    },
-    {
-      "character": "t",
-      "probability": 0.05
-    },
-    {
-      "character": "c",
       "probability": 0.05
     }
   ],
@@ -63758,10 +61502,6 @@
     },
     {
       "character": "g",
-      "probability": 0.125
-    },
-    {
-      "character": "c",
       "probability": 0.125
     }
   ],
@@ -64050,14 +61790,6 @@
     },
     {
       "character": "w",
-      "probability": 0.071
-    },
-    {
-      "character": "n",
-      "probability": 0.071
-    },
-    {
-      "character": "b",
       "probability": 0.071
     }
   ],
@@ -64691,30 +62423,6 @@
     {
       "character": "w",
       "probability": 0.091
-    },
-    {
-      "character": "t",
-      "probability": 0.045
-    },
-    {
-      "character": "m",
-      "probability": 0.045
-    },
-    {
-      "character": "r",
-      "probability": 0.045
-    },
-    {
-      "character": "c",
-      "probability": 0.045
-    },
-    {
-      "character": "b",
-      "probability": 0.045
-    },
-    {
-      "character": "g",
-      "probability": 0.045
     }
   ],
   "homi": [
@@ -65125,26 +62833,6 @@
     {
       "character": "a",
       "probability": 0.1
-    },
-    {
-      "character": "i",
-      "probability": 0.1
-    },
-    {
-      "character": "o",
-      "probability": 0.05
-    },
-    {
-      "character": "f",
-      "probability": 0.05
-    },
-    {
-      "character": "h",
-      "probability": 0.05
-    },
-    {
-      "character": "y",
-      "probability": 0.05
     }
   ],
   "horu": [
@@ -65290,18 +62978,6 @@
     },
     {
       "character": "p",
-      "probability": 0.05
-    },
-    {
-      "character": "m",
-      "probability": 0.05
-    },
-    {
-      "character": "b",
-      "probability": 0.05
-    },
-    {
-      "character": "e",
       "probability": 0.05
     }
   ],
@@ -66182,10 +63858,6 @@
     },
     {
       "character": "l",
-      "probability": 0.1
-    },
-    {
-      "character": "o",
       "probability": 0.1
     }
   ],
@@ -67093,14 +64765,6 @@
     {
       "character": "g",
       "probability": 0.045
-    },
-    {
-      "character": "n",
-      "probability": 0.045
-    },
-    {
-      "character": "y",
-      "probability": 0.045
     }
   ],
   "ibet": [
@@ -67412,10 +65076,6 @@
     },
     {
       "character": "c",
-      "probability": 0.059
-    },
-    {
-      "character": "n",
       "probability": 0.059
     }
   ],
@@ -67797,14 +65457,6 @@
     {
       "character": "e",
       "probability": 0.1
-    },
-    {
-      "character": "s",
-      "probability": 0.05
-    },
-    {
-      "character": "i",
-      "probability": 0.05
     }
   ],
   "iciz": [
@@ -67851,14 +65503,6 @@
     {
       "character": "l",
       "probability": 0.083
-    },
-    {
-      "character": "y",
-      "probability": 0.028
-    },
-    {
-      "character": "s",
-      "probability": 0.028
     }
   ],
   "icki": [
@@ -67940,10 +65584,6 @@
     },
     {
       "character": "e",
-      "probability": 0.143
-    },
-    {
-      "character": "i",
       "probability": 0.143
     }
   ],
@@ -68065,22 +65705,6 @@
     {
       "character": "n",
       "probability": 0.091
-    },
-    {
-      "character": "f",
-      "probability": 0.091
-    },
-    {
-      "character": "e",
-      "probability": 0.045
-    },
-    {
-      "character": "o",
-      "probability": 0.045
-    },
-    {
-      "character": "a",
-      "probability": 0.045
     }
   ],
   "icss": [
@@ -68438,10 +66062,6 @@
     },
     {
       "character": "y",
-      "probability": 0.056
-    },
-    {
-      "character": "m",
       "probability": 0.056
     }
   ],
@@ -68953,10 +66573,6 @@
     {
       "character": "e",
       "probability": 0.087
-    },
-    {
-      "character": "o",
-      "probability": 0.043
     }
   ],
   "ienw": [
@@ -69569,10 +67185,6 @@
     {
       "character": "e",
       "probability": 0.1
-    },
-    {
-      "character": "v",
-      "probability": 0.1
     }
   ],
   "igeo": [
@@ -69687,42 +67299,6 @@
     {
       "character": "o",
       "probability": 0.035
-    },
-    {
-      "character": "w",
-      "probability": 0.035
-    },
-    {
-      "character": "y",
-      "probability": 0.035
-    },
-    {
-      "character": "h",
-      "probability": 0.035
-    },
-    {
-      "character": "f",
-      "probability": 0.035
-    },
-    {
-      "character": "n",
-      "probability": 0.023
-    },
-    {
-      "character": "m",
-      "probability": 0.023
-    },
-    {
-      "character": "c",
-      "probability": 0.023
-    },
-    {
-      "character": "b",
-      "probability": 0.012
-    },
-    {
-      "character": "t",
-      "probability": 0.012
     }
   ],
   "ighw": [
@@ -70689,30 +68265,6 @@
     {
       "character": "i",
       "probability": 0.074
-    },
-    {
-      "character": "s",
-      "probability": 0.037
-    },
-    {
-      "character": "c",
-      "probability": 0.037
-    },
-    {
-      "character": "z",
-      "probability": 0.037
-    },
-    {
-      "character": "m",
-      "probability": 0.037
-    },
-    {
-      "character": "b",
-      "probability": 0.037
-    },
-    {
-      "character": "u",
-      "probability": 0.037
     }
   ],
   "illb": [
@@ -70747,14 +68299,6 @@
     {
       "character": "g",
       "probability": 0.061
-    },
-    {
-      "character": "n",
-      "probability": 0.061
-    },
-    {
-      "character": "m",
-      "probability": 0.03
     }
   ],
   "illf": [
@@ -70782,14 +68326,6 @@
     },
     {
       "character": "p",
-      "probability": 0.043
-    },
-    {
-      "character": "s",
-      "probability": 0.043
-    },
-    {
-      "character": "c",
       "probability": 0.043
     }
   ],
@@ -71344,10 +68880,6 @@
     },
     {
       "character": "y",
-      "probability": 0.083
-    },
-    {
-      "character": "r",
       "probability": 0.083
     }
   ],
@@ -71907,10 +69439,6 @@
     {
       "character": "t",
       "probability": 0.067
-    },
-    {
-      "character": "p",
-      "probability": 0.067
     }
   ],
   "inch": [
@@ -72039,26 +69567,6 @@
     {
       "character": "m",
       "probability": 0.071
-    },
-    {
-      "character": "e",
-      "probability": 0.048
-    },
-    {
-      "character": "n",
-      "probability": 0.048
-    },
-    {
-      "character": "f",
-      "probability": 0.048
-    },
-    {
-      "character": "b",
-      "probability": 0.024
-    },
-    {
-      "character": "s",
-      "probability": 0.024
     }
   ],
   "indf": [
@@ -72097,22 +69605,6 @@
     {
       "character": "g",
       "probability": 0.053
-    },
-    {
-      "character": "e",
-      "probability": 0.053
-    },
-    {
-      "character": "r",
-      "probability": 0.053
-    },
-    {
-      "character": "f",
-      "probability": 0.053
-    },
-    {
-      "character": "s",
-      "probability": 0.026
     }
   ],
   "indl": [
@@ -72331,10 +69823,6 @@
     {
       "character": "i",
       "probability": 0.05
-    },
-    {
-      "character": "v",
-      "probability": 0.05
     }
   ],
   "ines": [
@@ -72484,18 +69972,6 @@
     },
     {
       "character": "c",
-      "probability": 0.031
-    },
-    {
-      "character": "p",
-      "probability": 0.031
-    },
-    {
-      "character": "t",
-      "probability": 0.031
-    },
-    {
-      "character": "m",
       "probability": 0.031
     }
   ],
@@ -73359,10 +70835,6 @@
     {
       "character": "b",
       "probability": 0.077
-    },
-    {
-      "character": "c",
-      "probability": 0.077
     }
   ],
   "intb": [
@@ -73391,14 +70863,6 @@
     {
       "character": "l",
       "probability": 0.043
-    },
-    {
-      "character": "s",
-      "probability": 0.019
-    },
-    {
-      "character": "t",
-      "probability": 0.006
     }
   ],
   "inth": [
@@ -73803,14 +71267,6 @@
     {
       "character": "i",
       "probability": 0.009
-    },
-    {
-      "character": "m",
-      "probability": 0.009
-    },
-    {
-      "character": "g",
-      "probability": 0.009
     }
   ],
   "ione": [
@@ -73832,10 +71288,6 @@
     },
     {
       "character": "s",
-      "probability": 0.032
-    },
-    {
-      "character": "n",
       "probability": 0.032
     }
   ],
@@ -75417,18 +72869,6 @@
     {
       "character": "p",
       "probability": 0.037
-    },
-    {
-      "character": "m",
-      "probability": 0.037
-    },
-    {
-      "character": "s",
-      "probability": 0.037
-    },
-    {
-      "character": "l",
-      "probability": 0.037
     }
   ],
   "iscr": [
@@ -76017,14 +73457,6 @@
     {
       "character": "n",
       "probability": 0.133
-    },
-    {
-      "character": "y",
-      "probability": 0.067
-    },
-    {
-      "character": "c",
-      "probability": 0.067
     }
   ],
   "issi": [
@@ -76047,18 +73479,6 @@
     {
       "character": "l",
       "probability": 0.054
-    },
-    {
-      "character": "b",
-      "probability": 0.054
-    },
-    {
-      "character": "m",
-      "probability": 0.027
-    },
-    {
-      "character": "v",
-      "probability": 0.027
     }
   ],
   "isso": [
@@ -76167,14 +73587,6 @@
     {
       "character": "v",
       "probability": 0.017
-    },
-    {
-      "character": "b",
-      "probability": 0.017
-    },
-    {
-      "character": "l",
-      "probability": 0.017
     }
   ],
   "istl": [
@@ -76212,18 +73624,6 @@
     },
     {
       "character": "t",
-      "probability": 0.032
-    },
-    {
-      "character": "g",
-      "probability": 0.032
-    },
-    {
-      "character": "i",
-      "probability": 0.032
-    },
-    {
-      "character": "w",
       "probability": 0.032
     }
   ],
@@ -76467,18 +73867,6 @@
     {
       "character": "b",
       "probability": 0.034
-    },
-    {
-      "character": "y",
-      "probability": 0.034
-    },
-    {
-      "character": "h",
-      "probability": 0.034
-    },
-    {
-      "character": "a",
-      "probability": 0.034
     }
   ],
   "iteb": [
@@ -76564,14 +73952,6 @@
     },
     {
       "character": "m",
-      "probability": 0.043
-    },
-    {
-      "character": "w",
-      "probability": 0.043
-    },
-    {
-      "character": "e",
       "probability": 0.043
     }
   ],
@@ -76852,10 +74232,6 @@
     },
     {
       "character": "y",
-      "probability": 0.091
-    },
-    {
-      "character": "i",
       "probability": 0.091
     }
   ],
@@ -77309,30 +74685,6 @@
     {
       "character": "t",
       "probability": 0.05
-    },
-    {
-      "character": "y",
-      "probability": 0.025
-    },
-    {
-      "character": "e",
-      "probability": 0.025
-    },
-    {
-      "character": "p",
-      "probability": 0.025
-    },
-    {
-      "character": "m",
-      "probability": 0.025
-    },
-    {
-      "character": "v",
-      "probability": 0.025
-    },
-    {
-      "character": "d",
-      "probability": 0.025
     }
   ],
   "ives": [
@@ -79083,10 +76435,6 @@
     {
       "character": "m",
       "probability": 0.167
-    },
-    {
-      "character": "a",
-      "probability": 0.167
     }
   ],
   "kati": [
@@ -80144,10 +77492,6 @@
     },
     {
       "character": "n",
-      "probability": 0.143
-    },
-    {
-      "character": "r",
       "probability": 0.143
     }
   ],
@@ -81209,14 +78553,6 @@
     {
       "character": "y",
       "probability": 0.053
-    },
-    {
-      "character": "r",
-      "probability": 0.053
-    },
-    {
-      "character": "n",
-      "probability": 0.053
     }
   ],
   "lach": [
@@ -81262,26 +78598,6 @@
     },
     {
       "character": "i",
-      "probability": 0.067
-    },
-    {
-      "character": "p",
-      "probability": 0.067
-    },
-    {
-      "character": "e",
-      "probability": 0.067
-    },
-    {
-      "character": "o",
-      "probability": 0.067
-    },
-    {
-      "character": "l",
-      "probability": 0.067
-    },
-    {
-      "character": "h",
       "probability": 0.067
     }
   ],
@@ -81539,14 +78855,6 @@
     {
       "character": "a",
       "probability": 0.056
-    },
-    {
-      "character": "l",
-      "probability": 0.056
-    },
-    {
-      "character": "f",
-      "probability": 0.056
     }
   ],
   "lair": [
@@ -81729,14 +79037,6 @@
     {
       "character": "o",
       "probability": 0.065
-    },
-    {
-      "character": "y",
-      "probability": 0.032
-    },
-    {
-      "character": "k",
-      "probability": 0.032
     }
   ],
   "land": [
@@ -81759,22 +79059,6 @@
     {
       "character": "l",
       "probability": 0.056
-    },
-    {
-      "character": "m",
-      "probability": 0.056
-    },
-    {
-      "character": "f",
-      "probability": 0.056
-    },
-    {
-      "character": "a",
-      "probability": 0.028
-    },
-    {
-      "character": "r",
-      "probability": 0.028
     }
   ],
   "lane": [
@@ -81887,10 +79171,6 @@
     {
       "character": "r",
       "probability": 0.045
-    },
-    {
-      "character": "h",
-      "probability": 0.045
     }
   ],
   "lanz": [
@@ -81997,22 +79277,6 @@
     {
       "character": "o",
       "probability": 0.083
-    },
-    {
-      "character": "z",
-      "probability": 0.083
-    },
-    {
-      "character": "e",
-      "probability": 0.042
-    },
-    {
-      "character": "a",
-      "probability": 0.042
-    },
-    {
-      "character": "u",
-      "probability": 0.042
     }
   ],
   "lark": [
@@ -82145,14 +79409,6 @@
     {
       "character": "d",
       "probability": 0.083
-    },
-    {
-      "character": "b",
-      "probability": 0.083
-    },
-    {
-      "character": "p",
-      "probability": 0.083
     }
   ],
   "lasi": [
@@ -82214,14 +79470,6 @@
     },
     {
       "character": "w",
-      "probability": 0.048
-    },
-    {
-      "character": "y",
-      "probability": 0.048
-    },
-    {
-      "character": "p",
       "probability": 0.048
     }
   ],
@@ -82289,14 +79537,6 @@
     {
       "character": "n",
       "probability": 0.04
-    },
-    {
-      "character": "x",
-      "probability": 0.02
-    },
-    {
-      "character": "a",
-      "probability": 0.02
     }
   ],
   "latf": [
@@ -82334,10 +79574,6 @@
     },
     {
       "character": "t",
-      "probability": 0.011
-    },
-    {
-      "character": "a",
       "probability": 0.011
     }
   ],
@@ -83311,10 +80547,6 @@
     {
       "character": "l",
       "probability": 0.071
-    },
-    {
-      "character": "o",
-      "probability": 0.071
     }
   ],
   "leap": [
@@ -83347,14 +80579,6 @@
     {
       "character": "a",
       "probability": 0.063
-    },
-    {
-      "character": "w",
-      "probability": 0.063
-    },
-    {
-      "character": "s",
-      "probability": 0.063
     }
   ],
   "leas": [
@@ -83377,14 +80601,6 @@
     {
       "character": "t",
       "probability": 0.08
-    },
-    {
-      "character": "u",
-      "probability": 0.08
-    },
-    {
-      "character": "o",
-      "probability": 0.04
     }
   ],
   "leat": [
@@ -83475,14 +80691,6 @@
     {
       "character": "e",
       "probability": 0.068
-    },
-    {
-      "character": "s",
-      "probability": 0.068
-    },
-    {
-      "character": "a",
-      "probability": 0.041
     }
   ],
   "lecu": [
@@ -83999,10 +81207,6 @@
     {
       "character": "e",
       "probability": 0.077
-    },
-    {
-      "character": "o",
-      "probability": 0.077
     }
   ],
   "lenw": [
@@ -84301,10 +81505,6 @@
     {
       "character": "n",
       "probability": 0.077
-    },
-    {
-      "character": "a",
-      "probability": 0.077
     }
   ],
   "lest": [
@@ -84507,10 +81707,6 @@
     {
       "character": "l",
       "probability": 0.091
-    },
-    {
-      "character": "e",
-      "probability": 0.091
     }
   ],
   "levu": [
@@ -84576,14 +81772,6 @@
     },
     {
       "character": "n",
-      "probability": 0.083
-    },
-    {
-      "character": "a",
-      "probability": 0.083
-    },
-    {
-      "character": "o",
       "probability": 0.083
     }
   ],
@@ -84925,10 +82113,6 @@
     {
       "character": "o",
       "probability": 0.048
-    },
-    {
-      "character": "g",
-      "probability": 0.048
     }
   ],
   "liar": [
@@ -85127,14 +82311,6 @@
     {
       "character": "a",
       "probability": 0.038
-    },
-    {
-      "character": "z",
-      "probability": 0.038
-    },
-    {
-      "character": "s",
-      "probability": 0.038
     }
   ],
   "lick": [
@@ -85156,10 +82332,6 @@
     },
     {
       "character": "a",
-      "probability": 0.083
-    },
-    {
-      "character": "z",
       "probability": 0.083
     }
   ],
@@ -85336,14 +82508,6 @@
     },
     {
       "character": "c",
-      "probability": 0.1
-    },
-    {
-      "character": "h",
-      "probability": 0.1
-    },
-    {
-      "character": "b",
       "probability": 0.1
     }
   ],
@@ -85675,10 +82839,6 @@
     {
       "character": "r",
       "probability": 0.071
-    },
-    {
-      "character": "h",
-      "probability": 0.071
     }
   ],
   "line": [
@@ -85701,10 +82861,6 @@
     {
       "character": "r",
       "probability": 0.063
-    },
-    {
-      "character": "u",
-      "probability": 0.031
     }
   ],
   "ling": [
@@ -85726,30 +82882,6 @@
     },
     {
       "character": "n",
-      "probability": 0.028
-    },
-    {
-      "character": "h",
-      "probability": 0.028
-    },
-    {
-      "character": "v",
-      "probability": 0.028
-    },
-    {
-      "character": "o",
-      "probability": 0.028
-    },
-    {
-      "character": "l",
-      "probability": 0.028
-    },
-    {
-      "character": "w",
-      "probability": 0.028
-    },
-    {
-      "character": "f",
       "probability": 0.028
     }
   ],
@@ -86059,10 +83191,6 @@
     {
       "character": "a",
       "probability": 0.049
-    },
-    {
-      "character": "p",
-      "probability": 0.024
     }
   ],
   "lita": [
@@ -86136,10 +83264,6 @@
     },
     {
       "character": "a",
-      "probability": 0.032
-    },
-    {
-      "character": "s",
       "probability": 0.032
     }
   ],
@@ -86218,14 +83342,6 @@
     },
     {
       "character": "d",
-      "probability": 0.04
-    },
-    {
-      "character": "j",
-      "probability": 0.04
-    },
-    {
-      "character": "t",
       "probability": 0.04
     }
   ],
@@ -86511,10 +83627,6 @@
     {
       "character": "y",
       "probability": 0.1
-    },
-    {
-      "character": "o",
-      "probability": 0.1
     }
   ],
   "llap": [
@@ -86542,10 +83654,6 @@
     },
     {
       "character": "n",
-      "probability": 0.071
-    },
-    {
-      "character": "a",
       "probability": 0.071
     }
   ],
@@ -86878,10 +83986,6 @@
     },
     {
       "character": "n",
-      "probability": 0.018
-    },
-    {
-      "character": "i",
       "probability": 0.018
     }
   ],
@@ -87577,18 +84681,6 @@
     {
       "character": "w",
       "probability": 0.091
-    },
-    {
-      "character": "b",
-      "probability": 0.045
-    },
-    {
-      "character": "o",
-      "probability": 0.045
-    },
-    {
-      "character": "a",
-      "probability": 0.045
     }
   ],
   "loco": [
@@ -87702,10 +84794,6 @@
     },
     {
       "character": "t",
-      "probability": 0.019
-    },
-    {
-      "character": "z",
       "probability": 0.019
     }
   ],
@@ -87919,22 +85007,6 @@
     {
       "character": "a",
       "probability": 0.095
-    },
-    {
-      "character": "t",
-      "probability": 0.048
-    },
-    {
-      "character": "v",
-      "probability": 0.048
-    },
-    {
-      "character": "m",
-      "probability": 0.048
-    },
-    {
-      "character": "o",
-      "probability": 0.048
     }
   ],
   "loni": [
@@ -87988,10 +85060,6 @@
     },
     {
       "character": "e",
-      "probability": 0.167
-    },
-    {
-      "character": "p",
       "probability": 0.167
     }
   ],
@@ -88181,10 +85249,6 @@
     {
       "character": "t",
       "probability": 0.143
-    },
-    {
-      "character": "c",
-      "probability": 0.071
     }
   ],
   "lorf": [
@@ -88213,10 +85277,6 @@
     {
       "character": "a",
       "probability": 0.143
-    },
-    {
-      "character": "o",
-      "probability": 0.071
     }
   ],
   "lorn": [
@@ -88263,22 +85323,6 @@
     {
       "character": "o",
       "probability": 0.111
-    },
-    {
-      "character": "l",
-      "probability": 0.056
-    },
-    {
-      "character": "u",
-      "probability": 0.056
-    },
-    {
-      "character": "c",
-      "probability": 0.056
-    },
-    {
-      "character": "v",
-      "probability": 0.056
     }
   ],
   "losi": [
@@ -88552,10 +85596,6 @@
     },
     {
       "character": "l",
-      "probability": 0.04
-    },
-    {
-      "character": "p",
       "probability": 0.04
     }
   ],
@@ -89073,10 +86113,6 @@
     {
       "character": "a",
       "probability": 0.1
-    },
-    {
-      "character": "y",
-      "probability": 0.05
     }
   ],
   "ltes": [
@@ -89280,10 +86316,6 @@
     },
     {
       "character": "c",
-      "probability": 0.111
-    },
-    {
-      "character": "n",
       "probability": 0.111
     }
   ],
@@ -89972,14 +87004,6 @@
     },
     {
       "character": "n",
-      "probability": 0.143
-    },
-    {
-      "character": "s",
-      "probability": 0.143
-    },
-    {
-      "character": "m",
       "probability": 0.143
     }
   ],
@@ -90743,10 +87767,6 @@
     {
       "character": "t",
       "probability": 0.067
-    },
-    {
-      "character": "m",
-      "probability": 0.067
     }
   ],
   "main": [
@@ -90768,22 +87788,6 @@
     },
     {
       "character": "i",
-      "probability": 0.043
-    },
-    {
-      "character": "d",
-      "probability": 0.043
-    },
-    {
-      "character": "f",
-      "probability": 0.043
-    },
-    {
-      "character": "b",
-      "probability": 0.043
-    },
-    {
-      "character": "z",
       "probability": 0.043
     }
   ],
@@ -90869,10 +87873,6 @@
     {
       "character": "n",
       "probability": 0.1
-    },
-    {
-      "character": "c",
-      "probability": 0.1
     }
   ],
   "malc": [
@@ -90919,22 +87919,6 @@
     {
       "character": "g",
       "probability": 0.083
-    },
-    {
-      "character": "b",
-      "probability": 0.083
-    },
-    {
-      "character": "t",
-      "probability": 0.083
-    },
-    {
-      "character": "e",
-      "probability": 0.083
-    },
-    {
-      "character": "k",
-      "probability": 0.083
     }
   ],
   "malk": [
@@ -90962,14 +87946,6 @@
     },
     {
       "character": "v",
-      "probability": 0.077
-    },
-    {
-      "character": "p",
-      "probability": 0.077
-    },
-    {
-      "character": "t",
       "probability": 0.077
     }
   ],
@@ -91103,22 +88079,6 @@
     {
       "character": "y",
       "probability": 0.08
-    },
-    {
-      "character": "r",
-      "probability": 0.08
-    },
-    {
-      "character": "m",
-      "probability": 0.08
-    },
-    {
-      "character": "o",
-      "probability": 0.08
-    },
-    {
-      "character": "u",
-      "probability": 0.04
     }
   ],
   "mane": [
@@ -91173,10 +88133,6 @@
     {
       "character": "c",
       "probability": 0.107
-    },
-    {
-      "character": "l",
-      "probability": 0.036
     }
   ],
   "mank": [
@@ -91262,14 +88218,6 @@
     },
     {
       "character": "r",
-      "probability": 0.091
-    },
-    {
-      "character": "s",
-      "probability": 0.091
-    },
-    {
-      "character": "o",
       "probability": 0.091
     }
   ],
@@ -91363,14 +88311,6 @@
     {
       "character": "i",
       "probability": 0.091
-    },
-    {
-      "character": "k",
-      "probability": 0.091
-    },
-    {
-      "character": "y",
-      "probability": 0.091
     }
   ],
   "mard": [
@@ -91427,26 +88367,6 @@
     {
       "character": "e",
       "probability": 0.088
-    },
-    {
-      "character": "t",
-      "probability": 0.088
-    },
-    {
-      "character": "o",
-      "probability": 0.059
-    },
-    {
-      "character": "j",
-      "probability": 0.029
-    },
-    {
-      "character": "c",
-      "probability": 0.029
-    },
-    {
-      "character": "s",
-      "probability": 0.029
     }
   ],
   "marj": [
@@ -91475,14 +88395,6 @@
     {
       "character": "u",
       "probability": 0.059
-    },
-    {
-      "character": "o",
-      "probability": 0.029
-    },
-    {
-      "character": "h",
-      "probability": 0.029
     }
   ],
   "marl": [
@@ -91568,18 +88480,6 @@
     },
     {
       "character": "h",
-      "probability": 0.045
-    },
-    {
-      "character": "a",
-      "probability": 0.045
-    },
-    {
-      "character": "m",
-      "probability": 0.045
-    },
-    {
-      "character": "s",
       "probability": 0.045
     }
   ],
@@ -91731,10 +88631,6 @@
     {
       "character": "l",
       "probability": 0.087
-    },
-    {
-      "character": "o",
-      "probability": 0.043
     }
   ],
   "math": [
@@ -91770,10 +88666,6 @@
     },
     {
       "character": "t",
-      "probability": 0.014
-    },
-    {
-      "character": "l",
       "probability": 0.014
     }
   ],
@@ -92079,10 +88971,6 @@
     {
       "character": "i",
       "probability": 0.069
-    },
-    {
-      "character": "t",
-      "probability": 0.034
     }
   ],
   "mbet": [
@@ -92743,18 +89631,6 @@
     {
       "character": "u",
       "probability": 0.042
-    },
-    {
-      "character": "r",
-      "probability": 0.021
-    },
-    {
-      "character": "n",
-      "probability": 0.021
-    },
-    {
-      "character": "o",
-      "probability": 0.021
     }
   ],
   "medl": [
@@ -93025,10 +89901,6 @@
     {
       "character": "s",
       "probability": 0.133
-    },
-    {
-      "character": "i",
-      "probability": 0.133
     }
   ],
   "meni": [
@@ -93113,10 +89985,6 @@
     {
       "character": "o",
       "probability": 0.027
-    },
-    {
-      "character": "u",
-      "probability": 0.007
     }
   ],
   "menu": [
@@ -93198,14 +90066,6 @@
     },
     {
       "character": "y",
-      "probability": 0.045
-    },
-    {
-      "character": "k",
-      "probability": 0.045
-    },
-    {
-      "character": "a",
       "probability": 0.045
     }
   ],
@@ -93446,10 +90306,6 @@
     },
     {
       "character": "d",
-      "probability": 0.059
-    },
-    {
-      "character": "c",
       "probability": 0.059
     }
   ],
@@ -94045,10 +90901,6 @@
     {
       "character": "f",
       "probability": 0.091
-    },
-    {
-      "character": "y",
-      "probability": 0.091
     }
   ],
   "mine": [
@@ -94071,10 +90923,6 @@
     {
       "character": "e",
       "probability": 0.083
-    },
-    {
-      "character": "m",
-      "probability": 0.042
     }
   ],
   "ming": [
@@ -94097,14 +90945,6 @@
     {
       "character": "o",
       "probability": 0.143
-    },
-    {
-      "character": "b",
-      "probability": 0.071
-    },
-    {
-      "character": "w",
-      "probability": 0.071
     }
   ],
   "mini": [
@@ -94127,34 +90967,6 @@
     {
       "character": "u",
       "probability": 0.06
-    },
-    {
-      "character": "a",
-      "probability": 0.04
-    },
-    {
-      "character": "d",
-      "probability": 0.04
-    },
-    {
-      "character": "o",
-      "probability": 0.02
-    },
-    {
-      "character": "q",
-      "probability": 0.02
-    },
-    {
-      "character": "f",
-      "probability": 0.02
-    },
-    {
-      "character": "v",
-      "probability": 0.02
-    },
-    {
-      "character": "z",
-      "probability": 0.02
     }
   ],
   "minn": [
@@ -94186,10 +90998,6 @@
     },
     {
       "character": "p",
-      "probability": 0.083
-    },
-    {
-      "character": "s",
       "probability": 0.083
     }
   ],
@@ -94256,10 +91064,6 @@
     },
     {
       "character": "g",
-      "probability": 0.1
-    },
-    {
-      "character": "b",
       "probability": 0.1
     }
   ],
@@ -94416,10 +91220,6 @@
     },
     {
       "character": "y",
-      "probability": 0.083
-    },
-    {
-      "character": "e",
       "probability": 0.083
     }
   ],
@@ -94877,14 +91677,6 @@
     {
       "character": "w",
       "probability": 0.091
-    },
-    {
-      "character": "e",
-      "probability": 0.091
-    },
-    {
-      "character": "p",
-      "probability": 0.091
     }
   ],
   "mmor": [
@@ -95293,10 +92085,6 @@
     {
       "character": "d",
       "probability": 0.1
-    },
-    {
-      "character": "g",
-      "probability": 0.1
     }
   ],
   "mond": [
@@ -95372,14 +92160,6 @@
     },
     {
       "character": "u",
-      "probability": 0.048
-    },
-    {
-      "character": "q",
-      "probability": 0.048
-    },
-    {
-      "character": "o",
       "probability": 0.048
     }
   ],
@@ -95477,30 +92257,6 @@
     {
       "character": "p",
       "probability": 0.087
-    },
-    {
-      "character": "g",
-      "probability": 0.043
-    },
-    {
-      "character": "o",
-      "probability": 0.043
-    },
-    {
-      "character": "s",
-      "probability": 0.043
-    },
-    {
-      "character": "y",
-      "probability": 0.043
-    },
-    {
-      "character": "i",
-      "probability": 0.043
-    },
-    {
-      "character": "c",
-      "probability": 0.043
     }
   ],
   "monu": [
@@ -96133,10 +92889,6 @@
     {
       "character": "f",
       "probability": 0.067
-    },
-    {
-      "character": "e",
-      "probability": 0.067
     }
   ],
   "mpes": [
@@ -96309,10 +93061,6 @@
     {
       "character": "r",
       "probability": 0.088
-    },
-    {
-      "character": "d",
-      "probability": 0.029
     }
   ],
   "mpli": [
@@ -96335,18 +93083,6 @@
     {
       "character": "a",
       "probability": 0.083
-    },
-    {
-      "character": "m",
-      "probability": 0.083
-    },
-    {
-      "character": "n",
-      "probability": 0.028
-    },
-    {
-      "character": "t",
-      "probability": 0.028
     }
   ],
   "mplo": [
@@ -98553,10 +95289,6 @@
     {
       "character": "r",
       "probability": 0.063
-    },
-    {
-      "character": "c",
-      "probability": 0.063
     }
   ],
   "nchi": [
@@ -98979,14 +95711,6 @@
     {
       "character": "i",
       "probability": 0.091
-    },
-    {
-      "character": "a",
-      "probability": 0.091
-    },
-    {
-      "character": "u",
-      "probability": 0.091
     }
   ],
   "ndam": [
@@ -99209,50 +95933,6 @@
     {
       "character": "t",
       "probability": 0.065
-    },
-    {
-      "character": "l",
-      "probability": 0.054
-    },
-    {
-      "character": "i",
-      "probability": 0.043
-    },
-    {
-      "character": "m",
-      "probability": 0.032
-    },
-    {
-      "character": "f",
-      "probability": 0.022
-    },
-    {
-      "character": "n",
-      "probability": 0.022
-    },
-    {
-      "character": "b",
-      "probability": 0.022
-    },
-    {
-      "character": "o",
-      "probability": 0.011
-    },
-    {
-      "character": "a",
-      "probability": 0.011
-    },
-    {
-      "character": "c",
-      "probability": 0.011
-    },
-    {
-      "character": "r",
-      "probability": 0.011
-    },
-    {
-      "character": "d",
-      "probability": 0.011
     }
   ],
   "ndes": [
@@ -100159,10 +96839,6 @@
     {
       "character": "y",
       "probability": 0.125
-    },
-    {
-      "character": "h",
-      "probability": 0.125
     }
   ],
   "neer": [
@@ -100691,14 +97367,6 @@
     {
       "character": "i",
       "probability": 0.1
-    },
-    {
-      "character": "o",
-      "probability": 0.1
-    },
-    {
-      "character": "s",
-      "probability": 0.1
     }
   ],
   "nesv": [
@@ -100999,26 +97667,6 @@
     {
       "character": "p",
       "probability": 0.1
-    },
-    {
-      "character": "r",
-      "probability": 0.05
-    },
-    {
-      "character": "q",
-      "probability": 0.05
-    },
-    {
-      "character": "s",
-      "probability": 0.05
-    },
-    {
-      "character": "d",
-      "probability": 0.05
-    },
-    {
-      "character": "b",
-      "probability": 0.05
     }
   ],
   "newt": [
@@ -101339,10 +97987,6 @@
     {
       "character": "e",
       "probability": 0.049
-    },
-    {
-      "character": "g",
-      "probability": 0.024
     }
   ],
   "nfos": [
@@ -101563,10 +98207,6 @@
     {
       "character": "a",
       "probability": 0.077
-    },
-    {
-      "character": "y",
-      "probability": 0.077
     }
   ],
   "ngem": [
@@ -101619,10 +98259,6 @@
     {
       "character": "p",
       "probability": 0.08
-    },
-    {
-      "character": "t",
-      "probability": 0.04
     }
   ],
   "nges": [
@@ -101768,10 +98404,6 @@
     },
     {
       "character": "w",
-      "probability": 0.067
-    },
-    {
-      "character": "t",
       "probability": 0.067
     }
   ],
@@ -102551,14 +99183,6 @@
     {
       "character": "l",
       "probability": 0.045
-    },
-    {
-      "character": "i",
-      "probability": 0.045
-    },
-    {
-      "character": "b",
-      "probability": 0.045
     }
   ],
   "ninj": [
@@ -102759,10 +99383,6 @@
     {
       "character": "i",
       "probability": 0.08
-    },
-    {
-      "character": "o",
-      "probability": 0.04
     }
   ],
   "nisy": [
@@ -104223,10 +100843,6 @@
     {
       "character": "w",
       "probability": 0.091
-    },
-    {
-      "character": "p",
-      "probability": 0.091
     }
   ],
   "notf": [
@@ -105301,14 +101917,6 @@
     {
       "character": "i",
       "probability": 0.034
-    },
-    {
-      "character": "p",
-      "probability": 0.034
-    },
-    {
-      "character": "t",
-      "probability": 0.034
     }
   ],
   "nste": [
@@ -105749,14 +102357,6 @@
     {
       "character": "n",
       "probability": 0.083
-    },
-    {
-      "character": "a",
-      "probability": 0.056
-    },
-    {
-      "character": "e",
-      "probability": 0.028
     }
   ],
   "nter": [
@@ -105779,54 +102379,6 @@
     {
       "character": "v",
       "probability": 0.088
-    },
-    {
-      "character": "a",
-      "probability": 0.073
-    },
-    {
-      "character": "e",
-      "probability": 0.066
-    },
-    {
-      "character": "f",
-      "probability": 0.066
-    },
-    {
-      "character": "r",
-      "probability": 0.066
-    },
-    {
-      "character": "t",
-      "probability": 0.044
-    },
-    {
-      "character": "m",
-      "probability": 0.044
-    },
-    {
-      "character": "i",
-      "probability": 0.036
-    },
-    {
-      "character": "l",
-      "probability": 0.022
-    },
-    {
-      "character": "o",
-      "probability": 0.015
-    },
-    {
-      "character": "b",
-      "probability": 0.007
-    },
-    {
-      "character": "d",
-      "probability": 0.007
-    },
-    {
-      "character": "g",
-      "probability": 0.007
     }
   ],
   "ntes": [
@@ -106313,18 +102865,6 @@
     {
       "character": "n",
       "probability": 0.103
-    },
-    {
-      "character": "s",
-      "probability": 0.077
-    },
-    {
-      "character": "r",
-      "probability": 0.026
-    },
-    {
-      "character": "v",
-      "probability": 0.026
     }
   ],
   "ntre": [
@@ -106346,10 +102886,6 @@
     },
     {
       "character": "z",
-      "probability": 0.091
-    },
-    {
-      "character": "e",
       "probability": 0.091
     }
   ],
@@ -106373,18 +102909,6 @@
     {
       "character": "n",
       "probability": 0.087
-    },
-    {
-      "character": "l",
-      "probability": 0.043
-    },
-    {
-      "character": "m",
-      "probability": 0.043
-    },
-    {
-      "character": "f",
-      "probability": 0.043
     }
   ],
   "ntro": [
@@ -106406,10 +102930,6 @@
     },
     {
       "character": "p",
-      "probability": 0.048
-    },
-    {
-      "character": "s",
       "probability": 0.048
     }
   ],
@@ -106492,10 +103012,6 @@
     },
     {
       "character": "o",
-      "probability": 0.1
-    },
-    {
-      "character": "n",
       "probability": 0.1
     }
   ],
@@ -107924,18 +104440,6 @@
     },
     {
       "character": "h",
-      "probability": 0.071
-    },
-    {
-      "character": "y",
-      "probability": 0.071
-    },
-    {
-      "character": "a",
-      "probability": 0.071
-    },
-    {
-      "character": "p",
       "probability": 0.071
     }
   ],
@@ -109421,10 +105925,6 @@
     {
       "character": "i",
       "probability": 0.077
-    },
-    {
-      "character": "y",
-      "probability": 0.077
     }
   ],
   "oger": [
@@ -110685,10 +107185,6 @@
     {
       "character": "g",
       "probability": 0.095
-    },
-    {
-      "character": "t",
-      "probability": 0.048
     }
   ],
   "olle": [
@@ -110711,18 +107207,6 @@
     {
       "character": "a",
       "probability": 0.054
-    },
-    {
-      "character": "y",
-      "probability": 0.054
-    },
-    {
-      "character": "n",
-      "probability": 0.054
-    },
-    {
-      "character": "e",
-      "probability": 0.027
     }
   ],
   "ollh": [
@@ -110778,10 +107262,6 @@
     },
     {
       "character": "n",
-      "probability": 0.071
-    },
-    {
-      "character": "u",
       "probability": 0.071
     }
   ],
@@ -110856,10 +107336,6 @@
     },
     {
       "character": "u",
-      "probability": 0.01
-    },
-    {
-      "character": "o",
       "probability": 0.01
     }
   ],
@@ -111235,10 +107711,6 @@
     {
       "character": "o",
       "probability": 0.125
-    },
-    {
-      "character": "a",
-      "probability": 0.125
     }
   ],
   "omar": [
@@ -111276,10 +107748,6 @@
     },
     {
       "character": "s",
-      "probability": 0.056
-    },
-    {
-      "character": "a",
       "probability": 0.056
     }
   ],
@@ -111518,10 +107986,6 @@
     },
     {
       "character": "o",
-      "probability": 0.048
-    },
-    {
-      "character": "s",
       "probability": 0.048
     }
   ],
@@ -111833,10 +108297,6 @@
     {
       "character": "c",
       "probability": 0.063
-    },
-    {
-      "character": "q",
-      "probability": 0.031
     }
   ],
   "ompe": [
@@ -111930,10 +108390,6 @@
     },
     {
       "character": "o",
-      "probability": 0.167
-    },
-    {
-      "character": "i",
       "probability": 0.167
     }
   ],
@@ -112193,14 +108649,6 @@
     {
       "character": "a",
       "probability": 0.071
-    },
-    {
-      "character": "s",
-      "probability": 0.071
-    },
-    {
-      "character": "d",
-      "probability": 0.036
     }
   ],
   "onci": [
@@ -112242,10 +108690,6 @@
     },
     {
       "character": "d",
-      "probability": 0.1
-    },
-    {
-      "character": "g",
       "probability": 0.1
     }
   ],
@@ -112473,10 +108917,6 @@
     {
       "character": "b",
       "probability": 0.077
-    },
-    {
-      "character": "s",
-      "probability": 0.077
     }
   ],
   "onet": [
@@ -112622,10 +109062,6 @@
     },
     {
       "character": "b",
-      "probability": 0.1
-    },
-    {
-      "character": "n",
       "probability": 0.1
     }
   ],
@@ -112935,10 +109371,6 @@
     {
       "character": "s",
       "probability": 0.034
-    },
-    {
-      "character": "v",
-      "probability": 0.034
     }
   ],
   "onni": [
@@ -113157,18 +109589,6 @@
     {
       "character": "c",
       "probability": 0.043
-    },
-    {
-      "character": "t",
-      "probability": 0.043
-    },
-    {
-      "character": "x",
-      "probability": 0.043
-    },
-    {
-      "character": "i",
-      "probability": 0.043
     }
   ],
   "onsh": [
@@ -113196,18 +109616,6 @@
     },
     {
       "character": "n",
-      "probability": 0.032
-    },
-    {
-      "character": "t",
-      "probability": 0.032
-    },
-    {
-      "character": "g",
-      "probability": 0.032
-    },
-    {
-      "character": "e",
       "probability": 0.032
     }
   ],
@@ -113287,22 +109695,6 @@
     {
       "character": "g",
       "probability": 0.129
-    },
-    {
-      "character": "l",
-      "probability": 0.097
-    },
-    {
-      "character": "k",
-      "probability": 0.065
-    },
-    {
-      "character": "r",
-      "probability": 0.032
-    },
-    {
-      "character": "t",
-      "probability": 0.032
     }
   ],
   "ontc": [
@@ -113331,18 +109723,6 @@
     {
       "character": "r",
       "probability": 0.069
-    },
-    {
-      "character": "d",
-      "probability": 0.034
-    },
-    {
-      "character": "g",
-      "probability": 0.034
-    },
-    {
-      "character": "l",
-      "probability": 0.034
     }
   ],
   "ontg": [
@@ -114151,10 +110531,6 @@
     {
       "character": "b",
       "probability": 0.125
-    },
-    {
-      "character": "p",
-      "probability": 0.125
     }
   ],
   "ooti": [
@@ -114368,30 +110744,6 @@
     },
     {
       "character": "l",
-      "probability": 0.053
-    },
-    {
-      "character": "b",
-      "probability": 0.053
-    },
-    {
-      "character": "g",
-      "probability": 0.053
-    },
-    {
-      "character": "o",
-      "probability": 0.053
-    },
-    {
-      "character": "n",
-      "probability": 0.053
-    },
-    {
-      "character": "a",
-      "probability": 0.053
-    },
-    {
-      "character": "v",
       "probability": 0.053
     }
   ],
@@ -115027,10 +111379,6 @@
     {
       "character": "l",
       "probability": 0.071
-    },
-    {
-      "character": "a",
-      "probability": 0.071
     }
   ],
   "orch": [
@@ -115341,10 +111689,6 @@
     {
       "character": "s",
       "probability": 0.071
-    },
-    {
-      "character": "a",
-      "probability": 0.071
     }
   ],
   "oret": [
@@ -115613,10 +111957,6 @@
     {
       "character": "a",
       "probability": 0.111
-    },
-    {
-      "character": "z",
-      "probability": 0.056
     }
   ],
   "oriu": [
@@ -116201,14 +112541,6 @@
     {
       "character": "p",
       "probability": 0.091
-    },
-    {
-      "character": "b",
-      "probability": 0.091
-    },
-    {
-      "character": "y",
-      "probability": 0.091
     }
   ],
   "orsh": [
@@ -116265,10 +112597,6 @@
     {
       "character": "g",
       "probability": 0.136
-    },
-    {
-      "character": "r",
-      "probability": 0.045
     }
   ],
   "ortc": [
@@ -116300,18 +112628,6 @@
     },
     {
       "character": "s",
-      "probability": 0.029
-    },
-    {
-      "character": "l",
-      "probability": 0.029
-    },
-    {
-      "character": "z",
-      "probability": 0.029
-    },
-    {
-      "character": "u",
       "probability": 0.029
     }
   ],
@@ -116351,34 +112667,6 @@
     {
       "character": "a",
       "probability": 0.107
-    },
-    {
-      "character": "l",
-      "probability": 0.071
-    },
-    {
-      "character": "c",
-      "probability": 0.036
-    },
-    {
-      "character": "u",
-      "probability": 0.036
-    },
-    {
-      "character": "s",
-      "probability": 0.036
-    },
-    {
-      "character": "i",
-      "probability": 0.036
-    },
-    {
-      "character": "f",
-      "probability": 0.036
-    },
-    {
-      "character": "r",
-      "probability": 0.036
     }
   ],
   "orti": [
@@ -116400,18 +112688,6 @@
     },
     {
       "character": "u",
-      "probability": 0.034
-    },
-    {
-      "character": "v",
-      "probability": 0.034
-    },
-    {
-      "character": "f",
-      "probability": 0.034
-    },
-    {
-      "character": "m",
       "probability": 0.034
     }
   ],
@@ -117119,10 +113395,6 @@
     {
       "character": "a",
       "probability": 0.071
-    },
-    {
-      "character": "e",
-      "probability": 0.071
     }
   ],
   "ossm": [
@@ -117207,10 +113479,6 @@
     {
       "character": "n",
       "probability": 0.077
-    },
-    {
-      "character": "s",
-      "probability": 0.038
     }
   ],
   "ostf": [
@@ -117603,14 +113871,6 @@
     {
       "character": "b",
       "probability": 0.03
-    },
-    {
-      "character": "d",
-      "probability": 0.03
-    },
-    {
-      "character": "n",
-      "probability": 0.03
     }
   ],
   "othi": [
@@ -117868,18 +114128,6 @@
     },
     {
       "character": "o",
-      "probability": 0.063
-    },
-    {
-      "character": "w",
-      "probability": 0.063
-    },
-    {
-      "character": "h",
-      "probability": 0.063
-    },
-    {
-      "character": "u",
       "probability": 0.063
     }
   ],
@@ -118161,18 +114409,6 @@
     {
       "character": "b",
       "probability": 0.083
-    },
-    {
-      "character": "o",
-      "probability": 0.042
-    },
-    {
-      "character": "p",
-      "probability": 0.042
-    },
-    {
-      "character": "i",
-      "probability": 0.042
     }
   ],
   "ougl": [
@@ -118289,26 +114525,6 @@
     {
       "character": "t",
       "probability": 0.063
-    },
-    {
-      "character": "l",
-      "probability": 0.042
-    },
-    {
-      "character": "w",
-      "probability": 0.042
-    },
-    {
-      "character": "u",
-      "probability": 0.021
-    },
-    {
-      "character": "r",
-      "probability": 0.021
-    },
-    {
-      "character": "b",
-      "probability": 0.021
     }
   ],
   "oung": [
@@ -118347,18 +114563,6 @@
     {
       "character": "i",
       "probability": 0.093
-    },
-    {
-      "character": "y",
-      "probability": 0.047
-    },
-    {
-      "character": "l",
-      "probability": 0.023
-    },
-    {
-      "character": "d",
-      "probability": 0.023
     }
   ],
   "oupe": [
@@ -118547,10 +114751,6 @@
     {
       "character": "n",
       "probability": 0.1
-    },
-    {
-      "character": "r",
-      "probability": 0.1
     }
   ],
   "ousa": [
@@ -118578,14 +114778,6 @@
     },
     {
       "character": "r",
-      "probability": 0.059
-    },
-    {
-      "character": "k",
-      "probability": 0.059
-    },
-    {
-      "character": "l",
       "probability": 0.059
     }
   ],
@@ -118708,14 +114900,6 @@
     },
     {
       "character": "f",
-      "probability": 0.071
-    },
-    {
-      "character": "p",
-      "probability": 0.071
-    },
-    {
-      "character": "l",
       "probability": 0.071
     }
   ],
@@ -118937,10 +115121,6 @@
     {
       "character": "i",
       "probability": 0.143
-    },
-    {
-      "character": "a",
-      "probability": 0.143
     }
   ],
   "ovem": [
@@ -118995,50 +115175,6 @@
     {
       "character": "t",
       "probability": 0.081
-    },
-    {
-      "character": "i",
-      "probability": 0.058
-    },
-    {
-      "character": "w",
-      "probability": 0.058
-    },
-    {
-      "character": "c",
-      "probability": 0.047
-    },
-    {
-      "character": "a",
-      "probability": 0.035
-    },
-    {
-      "character": "h",
-      "probability": 0.035
-    },
-    {
-      "character": "r",
-      "probability": 0.035
-    },
-    {
-      "character": "d",
-      "probability": 0.035
-    },
-    {
-      "character": "v",
-      "probability": 0.023
-    },
-    {
-      "character": "y",
-      "probability": 0.023
-    },
-    {
-      "character": "f",
-      "probability": 0.012
-    },
-    {
-      "character": "b",
-      "probability": 0.012
     }
   ],
   "ovet": [
@@ -119268,26 +115404,6 @@
     },
     {
       "character": "f",
-      "probability": 0.034
-    },
-    {
-      "character": "b",
-      "probability": 0.034
-    },
-    {
-      "character": "m",
-      "probability": 0.034
-    },
-    {
-      "character": "h",
-      "probability": 0.034
-    },
-    {
-      "character": "l",
-      "probability": 0.034
-    },
-    {
-      "character": "c",
       "probability": 0.034
     }
   ],
@@ -120417,10 +116533,6 @@
     {
       "character": "e",
       "probability": 0.077
-    },
-    {
-      "character": "r",
-      "probability": 0.077
     }
   ],
   "pany": [
@@ -120473,26 +116585,6 @@
     {
       "character": "d",
       "probability": 0.104
-    },
-    {
-      "character": "n",
-      "probability": 0.063
-    },
-    {
-      "character": "s",
-      "probability": 0.063
-    },
-    {
-      "character": "b",
-      "probability": 0.042
-    },
-    {
-      "character": "c",
-      "probability": 0.021
-    },
-    {
-      "character": "i",
-      "probability": 0.021
     }
   ],
   "parc": [
@@ -120661,34 +116753,6 @@
     {
       "character": "s",
       "probability": 0.053
-    },
-    {
-      "character": "u",
-      "probability": 0.053
-    },
-    {
-      "character": "e",
-      "probability": 0.053
-    },
-    {
-      "character": "y",
-      "probability": 0.035
-    },
-    {
-      "character": "l",
-      "probability": 0.018
-    },
-    {
-      "character": "h",
-      "probability": 0.018
-    },
-    {
-      "character": "r",
-      "probability": 0.018
-    },
-    {
-      "character": "o",
-      "probability": 0.018
     }
   ],
   "pasa": [
@@ -120733,10 +116797,6 @@
     {
       "character": "p",
       "probability": 0.091
-    },
-    {
-      "character": "o",
-      "probability": 0.045
     }
   ],
   "past": [
@@ -120815,14 +116875,6 @@
     {
       "character": "s",
       "probability": 0.059
-    },
-    {
-      "character": "f",
-      "probability": 0.059
-    },
-    {
-      "character": "i",
-      "probability": 0.059
     }
   ],
   "pati": [
@@ -120845,14 +116897,6 @@
     {
       "character": "n",
       "probability": 0.077
-    },
-    {
-      "character": "t",
-      "probability": 0.038
-    },
-    {
-      "character": "c",
-      "probability": 0.038
     }
   ],
   "pato": [
@@ -121227,10 +117271,6 @@
     {
       "character": "i",
       "probability": 0.125
-    },
-    {
-      "character": "c",
-      "probability": 0.063
     }
   ],
   "peas": [
@@ -121321,18 +117361,6 @@
     {
       "character": "s",
       "probability": 0.111
-    },
-    {
-      "character": "o",
-      "probability": 0.044
-    },
-    {
-      "character": "f",
-      "probability": 0.044
-    },
-    {
-      "character": "u",
-      "probability": 0.022
     }
   ],
   "pecu": [
@@ -121598,10 +117626,6 @@
     },
     {
       "character": "l",
-      "probability": 0.031
-    },
-    {
-      "character": "u",
       "probability": 0.031
     }
   ],
@@ -121893,26 +117917,6 @@
     {
       "character": "n",
       "probability": 0.088
-    },
-    {
-      "character": "a",
-      "probability": 0.059
-    },
-    {
-      "character": "t",
-      "probability": 0.029
-    },
-    {
-      "character": "l",
-      "probability": 0.029
-    },
-    {
-      "character": "d",
-      "probability": 0.029
-    },
-    {
-      "character": "s",
-      "probability": 0.029
     }
   ],
   "perk": [
@@ -122021,22 +118025,6 @@
     {
       "character": "u",
       "probability": 0.095
-    },
-    {
-      "character": "p",
-      "probability": 0.048
-    },
-    {
-      "character": "k",
-      "probability": 0.024
-    },
-    {
-      "character": "c",
-      "probability": 0.024
-    },
-    {
-      "character": "a",
-      "probability": 0.024
     }
   ],
   "pert": [
@@ -122058,18 +118046,6 @@
     },
     {
       "character": "y",
-      "probability": 0.071
-    },
-    {
-      "character": "s",
-      "probability": 0.071
-    },
-    {
-      "character": "h",
-      "probability": 0.071
-    },
-    {
-      "character": "o",
       "probability": 0.071
     }
   ],
@@ -122417,14 +118393,6 @@
     {
       "character": "d",
       "probability": 0.105
-    },
-    {
-      "character": "y",
-      "probability": 0.053
-    },
-    {
-      "character": "o",
-      "probability": 0.053
     }
   ],
   "phes": [
@@ -122494,10 +118462,6 @@
     },
     {
       "character": "h",
-      "probability": 0.043
-    },
-    {
-      "character": "e",
       "probability": 0.043
     }
   ],
@@ -123399,22 +119363,6 @@
     {
       "character": "d",
       "probability": 0.051
-    },
-    {
-      "character": "s",
-      "probability": 0.026
-    },
-    {
-      "character": "o",
-      "probability": 0.026
-    },
-    {
-      "character": "c",
-      "probability": 0.026
-    },
-    {
-      "character": "k",
-      "probability": 0.026
     }
   ],
   "plaq": [
@@ -123463,10 +119411,6 @@
     {
       "character": "o",
       "probability": 0.091
-    },
-    {
-      "character": "a",
-      "probability": 0.045
     }
   ],
   "plau": [
@@ -123499,34 +119443,6 @@
     {
       "character": "b",
       "probability": 0.077
-    },
-    {
-      "character": "a",
-      "probability": 0.077
-    },
-    {
-      "character": "o",
-      "probability": 0.077
-    },
-    {
-      "character": "g",
-      "probability": 0.038
-    },
-    {
-      "character": "f",
-      "probability": 0.038
-    },
-    {
-      "character": "h",
-      "probability": 0.038
-    },
-    {
-      "character": "w",
-      "probability": 0.038
-    },
-    {
-      "character": "m",
-      "probability": 0.038
     }
   ],
   "plaz": [
@@ -124143,14 +120059,6 @@
     {
       "character": "y",
       "probability": 0.091
-    },
-    {
-      "character": "e",
-      "probability": 0.091
-    },
-    {
-      "character": "a",
-      "probability": 0.091
     }
   ],
   "polo": [
@@ -124185,18 +120093,6 @@
     {
       "character": "g",
       "probability": 0.111
-    },
-    {
-      "character": "c",
-      "probability": 0.111
-    },
-    {
-      "character": "t",
-      "probability": 0.056
-    },
-    {
-      "character": "u",
-      "probability": 0.056
     }
   ],
   "pomo": [
@@ -124435,30 +120331,6 @@
     {
       "character": "u",
       "probability": 0.065
-    },
-    {
-      "character": "r",
-      "probability": 0.065
-    },
-    {
-      "character": "f",
-      "probability": 0.026
-    },
-    {
-      "character": "l",
-      "probability": 0.013
-    },
-    {
-      "character": "o",
-      "probability": 0.013
-    },
-    {
-      "character": "m",
-      "probability": 0.013
-    },
-    {
-      "character": "y",
-      "probability": 0.013
     }
   ],
   "posa": [
@@ -124537,46 +120409,6 @@
     {
       "character": "c",
       "probability": 0.091
-    },
-    {
-      "character": "a",
-      "probability": 0.061
-    },
-    {
-      "character": "g",
-      "probability": 0.061
-    },
-    {
-      "character": "l",
-      "probability": 0.061
-    },
-    {
-      "character": "o",
-      "probability": 0.061
-    },
-    {
-      "character": "m",
-      "probability": 0.061
-    },
-    {
-      "character": "n",
-      "probability": 0.03
-    },
-    {
-      "character": "f",
-      "probability": 0.03
-    },
-    {
-      "character": "u",
-      "probability": 0.03
-    },
-    {
-      "character": "d",
-      "probability": 0.03
-    },
-    {
-      "character": "w",
-      "probability": 0.03
     }
   ],
   "posu": [
@@ -124878,10 +120710,6 @@
     },
     {
       "character": "g",
-      "probability": 0.067
-    },
-    {
-      "character": "d",
       "probability": 0.067
     }
   ],
@@ -125253,22 +121081,6 @@
     {
       "character": "t",
       "probability": 0.041
-    },
-    {
-      "character": "u",
-      "probability": 0.041
-    },
-    {
-      "character": "l",
-      "probability": 0.01
-    },
-    {
-      "character": "b",
-      "probability": 0.01
-    },
-    {
-      "character": "a",
-      "probability": 0.01
     }
   ],
   "pret": [
@@ -125435,10 +121247,6 @@
     {
       "character": "t",
       "probability": 0.045
-    },
-    {
-      "character": "c",
-      "probability": 0.045
     }
   ],
   "prit": [
@@ -125520,10 +121328,6 @@
     },
     {
       "character": "t",
-      "probability": 0.04
-    },
-    {
-      "character": "i",
       "probability": 0.04
     }
   ],
@@ -125669,18 +121473,6 @@
     {
       "character": "a",
       "probability": 0.091
-    },
-    {
-      "character": "s",
-      "probability": 0.023
-    },
-    {
-      "character": "u",
-      "probability": 0.023
-    },
-    {
-      "character": "y",
-      "probability": 0.023
     }
   ],
   "proq": [
@@ -126803,14 +122595,6 @@
     {
       "character": "r",
       "probability": 0.043
-    },
-    {
-      "character": "a",
-      "probability": 0.043
-    },
-    {
-      "character": "d",
-      "probability": 0.043
     }
   ],
   "quas": [
@@ -127055,10 +122839,6 @@
     {
       "character": "r",
       "probability": 0.08
-    },
-    {
-      "character": "k",
-      "probability": 0.04
     }
   ],
   "quis": [
@@ -127090,14 +122870,6 @@
     },
     {
       "character": "a",
-      "probability": 0.077
-    },
-    {
-      "character": "t",
-      "probability": 0.077
-    },
-    {
-      "character": "s",
       "probability": 0.077
     }
   ],
@@ -127247,22 +123019,6 @@
     {
       "character": "p",
       "probability": 0.125
-    },
-    {
-      "character": "f",
-      "probability": 0.083
-    },
-    {
-      "character": "y",
-      "probability": 0.042
-    },
-    {
-      "character": "t",
-      "probability": 0.042
-    },
-    {
-      "character": "w",
-      "probability": 0.042
     }
   ],
   "rach": [
@@ -127303,10 +123059,6 @@
     {
       "character": "o",
       "probability": 0.077
-    },
-    {
-      "character": "c",
-      "probability": 0.077
     }
   ],
   "rack": [
@@ -127328,10 +123080,6 @@
     },
     {
       "character": "m",
-      "probability": 0.053
-    },
-    {
-      "character": "d",
       "probability": 0.053
     }
   ],
@@ -127367,10 +123115,6 @@
     {
       "character": "u",
       "probability": 0.056
-    },
-    {
-      "character": "a",
-      "probability": 0.028
     }
   ],
   "racu": [
@@ -127433,10 +123177,6 @@
     {
       "character": "o",
       "probability": 0.05
-    },
-    {
-      "character": "n",
-      "probability": 0.05
     }
   ],
   "radf": [
@@ -127465,22 +123205,6 @@
     {
       "character": "n",
       "probability": 0.098
-    },
-    {
-      "character": "s",
-      "probability": 0.049
-    },
-    {
-      "character": "g",
-      "probability": 0.049
-    },
-    {
-      "character": "e",
-      "probability": 0.049
-    },
-    {
-      "character": "u",
-      "probability": 0.024
     }
   ],
   "radl": [
@@ -127741,10 +123465,6 @@
     {
       "character": "i",
       "probability": 0.182
-    },
-    {
-      "character": "l",
-      "probability": 0.091
     }
   ],
   "rain": [
@@ -127767,18 +123487,6 @@
     {
       "character": "f",
       "probability": 0.05
-    },
-    {
-      "character": "b",
-      "probability": 0.025
-    },
-    {
-      "character": "a",
-      "probability": 0.025
-    },
-    {
-      "character": "y",
-      "probability": 0.025
     }
   ],
   "rair": [
@@ -127971,14 +123679,6 @@
     {
       "character": "s",
       "probability": 0.125
-    },
-    {
-      "character": "r",
-      "probability": 0.125
-    },
-    {
-      "character": "l",
-      "probability": 0.063
     }
   ],
   "rami": [
@@ -128000,10 +123700,6 @@
     },
     {
       "character": "e",
-      "probability": 0.1
-    },
-    {
-      "character": "f",
       "probability": 0.1
     }
   ],
@@ -128107,10 +123803,6 @@
     {
       "character": "a",
       "probability": 0.045
-    },
-    {
-      "character": "s",
-      "probability": 0.023
     }
   ],
   "rand": [
@@ -128133,38 +123825,6 @@
     {
       "character": "a",
       "probability": 0.071
-    },
-    {
-      "character": "m",
-      "probability": 0.071
-    },
-    {
-      "character": "i",
-      "probability": 0.071
-    },
-    {
-      "character": "p",
-      "probability": 0.071
-    },
-    {
-      "character": "u",
-      "probability": 0.036
-    },
-    {
-      "character": "f",
-      "probability": 0.036
-    },
-    {
-      "character": "c",
-      "probability": 0.036
-    },
-    {
-      "character": "t",
-      "probability": 0.036
-    },
-    {
-      "character": "d",
-      "probability": 0.036
     }
   ],
   "rane": [
@@ -128301,42 +123961,6 @@
     {
       "character": "i",
       "probability": 0.089
-    },
-    {
-      "character": "c",
-      "probability": 0.089
-    },
-    {
-      "character": "a",
-      "probability": 0.051
-    },
-    {
-      "character": "e",
-      "probability": 0.051
-    },
-    {
-      "character": "s",
-      "probability": 0.038
-    },
-    {
-      "character": "v",
-      "probability": 0.038
-    },
-    {
-      "character": "d",
-      "probability": 0.038
-    },
-    {
-      "character": "o",
-      "probability": 0.025
-    },
-    {
-      "character": "g",
-      "probability": 0.025
-    },
-    {
-      "character": "n",
-      "probability": 0.013
     }
   ],
   "rant": [
@@ -128359,10 +123983,6 @@
     {
       "character": "o",
       "probability": 0.083
-    },
-    {
-      "character": "z",
-      "probability": 0.042
     }
   ],
   "ranu": [
@@ -128418,10 +124038,6 @@
     },
     {
       "character": "f",
-      "probability": 0.143
-    },
-    {
-      "character": "v",
       "probability": 0.143
     }
   ],
@@ -128653,10 +124269,6 @@
     {
       "character": "l",
       "probability": 0.111
-    },
-    {
-      "character": "y",
-      "probability": 0.111
     }
   ],
   "rast": [
@@ -128703,10 +124315,6 @@
     {
       "character": "f",
       "probability": 0.032
-    },
-    {
-      "character": "r",
-      "probability": 0.032
     }
   ],
   "ratf": [
@@ -128745,14 +124353,6 @@
     {
       "character": "s",
       "probability": 0.014
-    },
-    {
-      "character": "f",
-      "probability": 0.014
-    },
-    {
-      "character": "t",
-      "probability": 0.007
     }
   ],
   "rato": [
@@ -128882,10 +124482,6 @@
     },
     {
       "character": "d",
-      "probability": 0.036
-    },
-    {
-      "character": "y",
       "probability": 0.036
     }
   ],
@@ -129515,10 +125111,6 @@
     {
       "character": "b",
       "probability": 0.043
-    },
-    {
-      "character": "i",
-      "probability": 0.043
     }
   ],
   "rchb": [
@@ -129561,26 +125153,6 @@
     {
       "character": "d",
       "probability": 0.077
-    },
-    {
-      "character": "e",
-      "probability": 0.077
-    },
-    {
-      "character": "c",
-      "probability": 0.038
-    },
-    {
-      "character": "p",
-      "probability": 0.038
-    },
-    {
-      "character": "s",
-      "probability": 0.038
-    },
-    {
-      "character": "b",
-      "probability": 0.038
     }
   ],
   "rchm": [
@@ -130273,18 +125845,6 @@
     {
       "character": "y",
       "probability": 0.077
-    },
-    {
-      "character": "a",
-      "probability": 0.077
-    },
-    {
-      "character": "t",
-      "probability": 0.038
-    },
-    {
-      "character": "f",
-      "probability": 0.038
     }
   ],
   "reaf": [
@@ -130323,26 +125883,6 @@
     {
       "character": "o",
       "probability": 0.111
-    },
-    {
-      "character": "d",
-      "probability": 0.056
-    },
-    {
-      "character": "t",
-      "probability": 0.056
-    },
-    {
-      "character": "y",
-      "probability": 0.056
-    },
-    {
-      "character": "a",
-      "probability": 0.056
-    },
-    {
-      "character": "u",
-      "probability": 0.056
     }
   ],
   "real": [
@@ -130364,18 +125904,6 @@
     },
     {
       "character": "s",
-      "probability": 0.036
-    },
-    {
-      "character": "p",
-      "probability": 0.036
-    },
-    {
-      "character": "a",
-      "probability": 0.036
-    },
-    {
-      "character": "e",
       "probability": 0.036
     }
   ],
@@ -130399,22 +125927,6 @@
     {
       "character": "y",
       "probability": 0.105
-    },
-    {
-      "character": "w",
-      "probability": 0.053
-    },
-    {
-      "character": "c",
-      "probability": 0.053
-    },
-    {
-      "character": "p",
-      "probability": 0.053
-    },
-    {
-      "character": "b",
-      "probability": 0.053
     }
   ],
   "reap": [
@@ -130457,10 +125969,6 @@
     {
       "character": "i",
       "probability": 0.107
-    },
-    {
-      "character": "y",
-      "probability": 0.036
     }
   ],
   "reat": [
@@ -130483,26 +125991,6 @@
     {
       "character": "m",
       "probability": 0.043
-    },
-    {
-      "character": "o",
-      "probability": 0.043
-    },
-    {
-      "character": "u",
-      "probability": 0.043
-    },
-    {
-      "character": "l",
-      "probability": 0.022
-    },
-    {
-      "character": "y",
-      "probability": 0.022
-    },
-    {
-      "character": "n",
-      "probability": 0.022
     }
   ],
   "reau": [
@@ -130611,10 +126099,6 @@
     {
       "character": "p",
       "probability": 0.083
-    },
-    {
-      "character": "r",
-      "probability": 0.083
     }
   ],
   "rece": [
@@ -130673,14 +126157,6 @@
     {
       "character": "n",
       "probability": 0.083
-    },
-    {
-      "character": "e",
-      "probability": 0.083
-    },
-    {
-      "character": "t",
-      "probability": 0.042
     }
   ],
   "reck": [
@@ -130731,14 +126207,6 @@
     {
       "character": "v",
       "probability": 0.109
-    },
-    {
-      "character": "u",
-      "probability": 0.043
-    },
-    {
-      "character": "l",
-      "probability": 0.022
     }
   ],
   "recr": [
@@ -130771,26 +126239,6 @@
     {
       "character": "a",
       "probability": 0.095
-    },
-    {
-      "character": "v",
-      "probability": 0.024
-    },
-    {
-      "character": "s",
-      "probability": 0.024
-    },
-    {
-      "character": "n",
-      "probability": 0.024
-    },
-    {
-      "character": "x",
-      "probability": 0.024
-    },
-    {
-      "character": "t",
-      "probability": 0.024
     }
   ],
   "recu": [
@@ -130845,22 +126293,6 @@
     {
       "character": "s",
       "probability": 0.111
-    },
-    {
-      "character": "c",
-      "probability": 0.111
-    },
-    {
-      "character": "f",
-      "probability": 0.111
-    },
-    {
-      "character": "m",
-      "probability": 0.056
-    },
-    {
-      "character": "t",
-      "probability": 0.056
     }
   ],
   "redg": [
@@ -130899,10 +126331,6 @@
     {
       "character": "s",
       "probability": 0.083
-    },
-    {
-      "character": "e",
-      "probability": 0.056
     }
   ],
   "redm": [
@@ -131005,10 +126433,6 @@
     {
       "character": "y",
       "probability": 0.111
-    },
-    {
-      "character": "m",
-      "probability": 0.111
     }
   ],
   "reef": [
@@ -131087,26 +126511,6 @@
     {
       "character": "h",
       "probability": 0.083
-    },
-    {
-      "character": "p",
-      "probability": 0.083
-    },
-    {
-      "character": "l",
-      "probability": 0.042
-    },
-    {
-      "character": "v",
-      "probability": 0.042
-    },
-    {
-      "character": "f",
-      "probability": 0.042
-    },
-    {
-      "character": "b",
-      "probability": 0.042
     }
   ],
   "reep": [
@@ -131601,14 +127005,6 @@
     {
       "character": "c",
       "probability": 0.095
-    },
-    {
-      "character": "m",
-      "probability": 0.048
-    },
-    {
-      "character": "n",
-      "probability": 0.048
     }
   ],
   "rell": [
@@ -131663,14 +127059,6 @@
     {
       "character": "k",
       "probability": 0.053
-    },
-    {
-      "character": "s",
-      "probability": 0.053
-    },
-    {
-      "character": "c",
-      "probability": 0.053
     }
   ],
   "remb": [
@@ -131703,10 +127091,6 @@
     {
       "character": "s",
       "probability": 0.04
-    },
-    {
-      "character": "t",
-      "probability": 0.04
     }
   ],
   "remi": [
@@ -131729,14 +127113,6 @@
     {
       "character": "x",
       "probability": 0.087
-    },
-    {
-      "character": "t",
-      "probability": 0.087
-    },
-    {
-      "character": "a",
-      "probability": 0.043
     }
   ],
   "remn": [
@@ -131765,10 +127141,6 @@
     {
       "character": "r",
       "probability": 0.095
-    },
-    {
-      "character": "s",
-      "probability": 0.048
     }
   ],
   "rems": [
@@ -131802,14 +127174,6 @@
     },
     {
       "character": "u",
-      "probability": 0.077
-    },
-    {
-      "character": "t",
-      "probability": 0.077
-    },
-    {
-      "character": "s",
       "probability": 0.077
     }
   ],
@@ -131850,14 +127214,6 @@
     },
     {
       "character": "u",
-      "probability": 0.063
-    },
-    {
-      "character": "y",
-      "probability": 0.063
-    },
-    {
-      "character": "o",
       "probability": 0.063
     }
   ],
@@ -131959,18 +127315,6 @@
     {
       "character": "e",
       "probability": 0.094
-    },
-    {
-      "character": "o",
-      "probability": 0.094
-    },
-    {
-      "character": "h",
-      "probability": 0.063
-    },
-    {
-      "character": "w",
-      "probability": 0.031
     }
   ],
   "renz": [
@@ -132060,10 +127404,6 @@
     },
     {
       "character": "r",
-      "probability": 0.067
-    },
-    {
-      "character": "l",
       "probability": 0.067
     }
   ],
@@ -132223,14 +127563,6 @@
     {
       "character": "m",
       "probability": 0.073
-    },
-    {
-      "character": "l",
-      "probability": 0.055
-    },
-    {
-      "character": "e",
-      "probability": 0.036
     }
   ],
   "resh": [
@@ -132252,18 +127584,6 @@
     },
     {
       "character": "i",
-      "probability": 0.071
-    },
-    {
-      "character": "l",
-      "probability": 0.071
-    },
-    {
-      "character": "n",
-      "probability": 0.071
-    },
-    {
-      "character": "a",
       "probability": 0.071
     }
   ],
@@ -132287,10 +127607,6 @@
     {
       "character": "l",
       "probability": 0.05
-    },
-    {
-      "character": "z",
-      "probability": 0.025
     }
   ],
   "resl": [
@@ -132367,26 +127683,6 @@
     {
       "character": "a",
       "probability": 0.044
-    },
-    {
-      "character": "l",
-      "probability": 0.015
-    },
-    {
-      "character": "h",
-      "probability": 0.015
-    },
-    {
-      "character": "m",
-      "probability": 0.015
-    },
-    {
-      "character": "f",
-      "probability": 0.015
-    },
-    {
-      "character": "w",
-      "probability": 0.015
     }
   ],
   "rest": [
@@ -132409,14 +127705,6 @@
     {
       "character": "a",
       "probability": 0.078
-    },
-    {
-      "character": "s",
-      "probability": 0.078
-    },
-    {
-      "character": "l",
-      "probability": 0.059
     }
   ],
   "resu": [
@@ -132661,10 +127949,6 @@
     {
       "character": "v",
       "probability": 0.111
-    },
-    {
-      "character": "t",
-      "probability": 0.037
     }
   ],
   "revo": [
@@ -133451,10 +128735,6 @@
     {
       "character": "a",
       "probability": 0.176
-    },
-    {
-      "character": "n",
-      "probability": 0.059
     }
   ],
   "rias": [
@@ -133607,10 +128887,6 @@
     {
       "character": "d",
       "probability": 0.1
-    },
-    {
-      "character": "g",
-      "probability": 0.1
     }
   ],
   "rich": [
@@ -133633,18 +128909,6 @@
     {
       "character": "l",
       "probability": 0.118
-    },
-    {
-      "character": "t",
-      "probability": 0.118
-    },
-    {
-      "character": "n",
-      "probability": 0.059
-    },
-    {
-      "character": "o",
-      "probability": 0.059
     }
   ],
   "rici": [
@@ -133802,10 +129066,6 @@
     },
     {
       "character": "e",
-      "probability": 0.125
-    },
-    {
-      "character": "u",
       "probability": 0.125
     }
   ],
@@ -134289,14 +129549,6 @@
     {
       "character": "h",
       "probability": 0.063
-    },
-    {
-      "character": "f",
-      "probability": 0.031
-    },
-    {
-      "character": "g",
-      "probability": 0.031
     }
   ],
   "rini": [
@@ -134366,18 +129618,6 @@
     },
     {
       "character": "i",
-      "probability": 0.048
-    },
-    {
-      "character": "a",
-      "probability": 0.048
-    },
-    {
-      "character": "p",
-      "probability": 0.048
-    },
-    {
-      "character": "o",
       "probability": 0.048
     }
   ],
@@ -134657,22 +129897,6 @@
     {
       "character": "y",
       "probability": 0.051
-    },
-    {
-      "character": "a",
-      "probability": 0.051
-    },
-    {
-      "character": "m",
-      "probability": 0.026
-    },
-    {
-      "character": "c",
-      "probability": 0.026
-    },
-    {
-      "character": "b",
-      "probability": 0.026
     }
   ],
   "rita": [
@@ -134694,18 +129918,6 @@
     },
     {
       "character": "g",
-      "probability": 0.063
-    },
-    {
-      "character": "i",
-      "probability": 0.063
-    },
-    {
-      "character": "s",
-      "probability": 0.063
-    },
-    {
-      "character": "r",
       "probability": 0.063
     }
   ],
@@ -134755,22 +129967,6 @@
     {
       "character": "s",
       "probability": 0.073
-    },
-    {
-      "character": "q",
-      "probability": 0.073
-    },
-    {
-      "character": "m",
-      "probability": 0.024
-    },
-    {
-      "character": "u",
-      "probability": 0.024
-    },
-    {
-      "character": "z",
-      "probability": 0.024
     }
   ],
   "ritn": [
@@ -135545,18 +130741,6 @@
     {
       "character": "y",
       "probability": 0.071
-    },
-    {
-      "character": "i",
-      "probability": 0.071
-    },
-    {
-      "character": "s",
-      "probability": 0.071
-    },
-    {
-      "character": "n",
-      "probability": 0.071
     }
   ],
   "rmar": [
@@ -135705,14 +130889,6 @@
     {
       "character": "o",
       "probability": 0.025
-    },
-    {
-      "character": "u",
-      "probability": 0.025
-    },
-    {
-      "character": "t",
-      "probability": 0.025
     }
   ],
   "rmio": [
@@ -135798,10 +130974,6 @@
     },
     {
       "character": "s",
-      "probability": 0.083
-    },
-    {
-      "character": "a",
       "probability": 0.083
     }
   ],
@@ -136261,14 +131433,6 @@
     {
       "character": "b",
       "probability": 0.056
-    },
-    {
-      "character": "l",
-      "probability": 0.056
-    },
-    {
-      "character": "m",
-      "probability": 0.056
     }
   ],
   "roam": [
@@ -136468,22 +131632,6 @@
     },
     {
       "character": "f",
-      "probability": 0.05
-    },
-    {
-      "character": "v",
-      "probability": 0.05
-    },
-    {
-      "character": "w",
-      "probability": 0.05
-    },
-    {
-      "character": "p",
-      "probability": 0.05
-    },
-    {
-      "character": "l",
       "probability": 0.05
     }
   ],
@@ -136809,14 +131957,6 @@
     {
       "character": "a",
       "probability": 0.074
-    },
-    {
-      "character": "m",
-      "probability": 0.037
-    },
-    {
-      "character": "t",
-      "probability": 0.037
     }
   ],
   "rolm": [
@@ -136898,10 +132038,6 @@
     },
     {
       "character": "n",
-      "probability": 0.111
-    },
-    {
-      "character": "s",
       "probability": 0.111
     }
   ],
@@ -137000,10 +132136,6 @@
     },
     {
       "character": "t",
-      "probability": 0.1
-    },
-    {
-      "character": "g",
       "probability": 0.1
     }
   ],
@@ -137133,18 +132265,6 @@
     {
       "character": "p",
       "probability": 0.077
-    },
-    {
-      "character": "g",
-      "probability": 0.077
-    },
-    {
-      "character": "l",
-      "probability": 0.077
-    },
-    {
-      "character": "s",
-      "probability": 0.077
     }
   ],
   "ronu": [
@@ -137204,10 +132324,6 @@
     },
     {
       "character": "f",
-      "probability": 0.1
-    },
-    {
-      "character": "h",
       "probability": 0.1
     }
   ],
@@ -137483,22 +132599,6 @@
     {
       "character": "v",
       "probability": 0.056
-    },
-    {
-      "character": "w",
-      "probability": 0.056
-    },
-    {
-      "character": "t",
-      "probability": 0.056
-    },
-    {
-      "character": "x",
-      "probability": 0.056
-    },
-    {
-      "character": "b",
-      "probability": 0.056
     }
   ],
   "rosf": [
@@ -137532,10 +132632,6 @@
     },
     {
       "character": "t",
-      "probability": 0.091
-    },
-    {
-      "character": "v",
       "probability": 0.091
     }
   ],
@@ -137588,14 +132684,6 @@
     },
     {
       "character": "o",
-      "probability": 0.067
-    },
-    {
-      "character": "f",
-      "probability": 0.067
-    },
-    {
-      "character": "m",
       "probability": 0.067
     }
   ],
@@ -139467,10 +134555,6 @@
     {
       "character": "y",
       "probability": 0.063
-    },
-    {
-      "character": "b",
-      "probability": 0.063
     }
   ],
   "rtes": [
@@ -139616,10 +134700,6 @@
     },
     {
       "character": "e",
-      "probability": 0.111
-    },
-    {
-      "character": "g",
       "probability": 0.111
     }
   ],
@@ -139796,10 +134876,6 @@
     },
     {
       "character": "s",
-      "probability": 0.036
-    },
-    {
-      "character": "d",
       "probability": 0.036
     }
   ],
@@ -140331,10 +135407,6 @@
     {
       "character": "f",
       "probability": 0.111
-    },
-    {
-      "character": "y",
-      "probability": 0.111
     }
   ],
   "rule": [
@@ -140555,10 +135627,6 @@
     {
       "character": "u",
       "probability": 0.067
-    },
-    {
-      "character": "l",
-      "probability": 0.067
     }
   ],
   "rura": [
@@ -140644,14 +135712,6 @@
     },
     {
       "character": "p",
-      "probability": 0.071
-    },
-    {
-      "character": "y",
-      "probability": 0.071
-    },
-    {
-      "character": "w",
       "probability": 0.071
     }
   ],
@@ -141783,26 +136843,6 @@
     {
       "character": "w",
       "probability": 0.1
-    },
-    {
-      "character": "a",
-      "probability": 0.1
-    },
-    {
-      "character": "y",
-      "probability": 0.05
-    },
-    {
-      "character": "b",
-      "probability": 0.05
-    },
-    {
-      "character": "m",
-      "probability": 0.05
-    },
-    {
-      "character": "l",
-      "probability": 0.05
     }
   ],
   "sanf": [
@@ -142034,10 +137074,6 @@
     },
     {
       "character": "r",
-      "probability": 0.026
-    },
-    {
-      "character": "v",
       "probability": 0.026
     }
   ],
@@ -142387,38 +137423,6 @@
     {
       "character": "d",
       "probability": 0.091
-    },
-    {
-      "character": "s",
-      "probability": 0.091
-    },
-    {
-      "character": "g",
-      "probability": 0.091
-    },
-    {
-      "character": "a",
-      "probability": 0.091
-    },
-    {
-      "character": "y",
-      "probability": 0.045
-    },
-    {
-      "character": "b",
-      "probability": 0.045
-    },
-    {
-      "character": "v",
-      "probability": 0.045
-    },
-    {
-      "character": "t",
-      "probability": 0.045
-    },
-    {
-      "character": "r",
-      "probability": 0.045
     }
   ],
   "scat": [
@@ -142463,14 +137467,6 @@
     {
       "character": "a",
       "probability": 0.067
-    },
-    {
-      "character": "i",
-      "probability": 0.033
-    },
-    {
-      "character": "s",
-      "probability": 0.033
     }
   ],
   "scep": [
@@ -142950,10 +137946,6 @@
     },
     {
       "character": "l",
-      "probability": 0.1
-    },
-    {
-      "character": "o",
       "probability": 0.1
     }
   ],
@@ -143625,18 +138617,6 @@
     {
       "character": "l",
       "probability": 0.031
-    },
-    {
-      "character": "h",
-      "probability": 0.031
-    },
-    {
-      "character": "r",
-      "probability": 0.031
-    },
-    {
-      "character": "m",
-      "probability": 0.031
     }
   ],
   "seou": [
@@ -143772,10 +138752,6 @@
     },
     {
       "character": "n",
-      "probability": 0.083
-    },
-    {
-      "character": "d",
       "probability": 0.083
     }
   ],
@@ -144363,10 +139339,6 @@
     {
       "character": "i",
       "probability": 0.167
-    },
-    {
-      "character": "k",
-      "probability": 0.167
     }
   ],
   "shap": [
@@ -144398,14 +139370,6 @@
     },
     {
       "character": "i",
-      "probability": 0.042
-    },
-    {
-      "character": "o",
-      "probability": 0.042
-    },
-    {
-      "character": "r",
       "probability": 0.042
     }
   ],
@@ -144581,10 +139545,6 @@
     {
       "character": "b",
       "probability": 0.063
-    },
-    {
-      "character": "d",
-      "probability": 0.063
     }
   ],
   "shem": [
@@ -144636,22 +139596,6 @@
     },
     {
       "character": "a",
-      "probability": 0.053
-    },
-    {
-      "character": "w",
-      "probability": 0.053
-    },
-    {
-      "character": "r",
-      "probability": 0.053
-    },
-    {
-      "character": "l",
-      "probability": 0.053
-    },
-    {
-      "character": "p",
       "probability": 0.053
     }
   ],
@@ -144961,22 +139905,6 @@
     {
       "character": "n",
       "probability": 0.067
-    },
-    {
-      "character": "i",
-      "probability": 0.067
-    },
-    {
-      "character": "r",
-      "probability": 0.067
-    },
-    {
-      "character": "d",
-      "probability": 0.067
-    },
-    {
-      "character": "b",
-      "probability": 0.067
     }
   ],
   "shpo": [
@@ -145201,14 +140129,6 @@
     {
       "character": "d",
       "probability": 0.057
-    },
-    {
-      "character": "b",
-      "probability": 0.029
-    },
-    {
-      "character": "k",
-      "probability": 0.029
     }
   ],
   "sidi": [
@@ -145351,18 +140271,6 @@
     {
       "character": "m",
       "probability": 0.067
-    },
-    {
-      "character": "u",
-      "probability": 0.022
-    },
-    {
-      "character": "j",
-      "probability": 0.022
-    },
-    {
-      "character": "l",
-      "probability": 0.022
     }
   ],
   "sild": [
@@ -145530,18 +140438,6 @@
     },
     {
       "character": "a",
-      "probability": 0.045
-    },
-    {
-      "character": "i",
-      "probability": 0.045
-    },
-    {
-      "character": "h",
-      "probability": 0.045
-    },
-    {
-      "character": "t",
       "probability": 0.045
     }
   ],
@@ -146915,10 +141811,6 @@
     {
       "character": "p",
       "probability": 0.125
-    },
-    {
-      "character": "e",
-      "probability": 0.125
     }
   ],
   "soil": [
@@ -146966,10 +141858,6 @@
     },
     {
       "character": "m",
-      "probability": 0.167
-    },
-    {
-      "character": "n",
       "probability": 0.167
     }
   ],
@@ -147056,18 +141944,6 @@
     },
     {
       "character": "o",
-      "probability": 0.071
-    },
-    {
-      "character": "b",
-      "probability": 0.071
-    },
-    {
-      "character": "h",
-      "probability": 0.071
-    },
-    {
-      "character": "d",
       "probability": 0.071
     }
   ],
@@ -147511,14 +142387,6 @@
     {
       "character": "s",
       "probability": 0.083
-    },
-    {
-      "character": "d",
-      "probability": 0.083
-    },
-    {
-      "character": "a",
-      "probability": 0.083
     }
   ],
   "spap": [
@@ -147547,18 +142415,6 @@
     {
       "character": "i",
       "probability": 0.095
-    },
-    {
-      "character": "c",
-      "probability": 0.048
-    },
-    {
-      "character": "r",
-      "probability": 0.048
-    },
-    {
-      "character": "s",
-      "probability": 0.048
     }
   ],
   "spat": [
@@ -147672,10 +142528,6 @@
     },
     {
       "character": "e",
-      "probability": 0.059
-    },
-    {
-      "character": "o",
       "probability": 0.059
     }
   ],
@@ -148833,10 +143685,6 @@
     {
       "character": "s",
       "probability": 0.04
-    },
-    {
-      "character": "e",
-      "probability": 0.04
     }
   ],
   "stam": [
@@ -148877,22 +143725,6 @@
     {
       "character": "l",
       "probability": 0.016
-    },
-    {
-      "character": "f",
-      "probability": 0.016
-    },
-    {
-      "character": "b",
-      "probability": 0.016
-    },
-    {
-      "character": "i",
-      "probability": 0.016
-    },
-    {
-      "character": "s",
-      "probability": 0.016
     }
   ],
   "stap": [
@@ -148929,34 +143761,6 @@
     {
       "character": "e",
       "probability": 0.057
-    },
-    {
-      "character": "c",
-      "probability": 0.057
-    },
-    {
-      "character": "v",
-      "probability": 0.057
-    },
-    {
-      "character": "k",
-      "probability": 0.029
-    },
-    {
-      "character": "i",
-      "probability": 0.029
-    },
-    {
-      "character": "b",
-      "probability": 0.029
-    },
-    {
-      "character": "g",
-      "probability": 0.029
-    },
-    {
-      "character": "l",
-      "probability": 0.029
     }
   ],
   "stas": [
@@ -149121,10 +143925,6 @@
     {
       "character": "p",
       "probability": 0.1
-    },
-    {
-      "character": "n",
-      "probability": 0.1
     }
   ],
   "stef": [
@@ -149191,14 +143991,6 @@
     {
       "character": "s",
       "probability": 0.08
-    },
-    {
-      "character": "l",
-      "probability": 0.08
-    },
-    {
-      "character": "o",
-      "probability": 0.04
     }
   ],
   "steo": [
@@ -149245,38 +144037,6 @@
     {
       "character": "o",
       "probability": 0.086
-    },
-    {
-      "character": "y",
-      "probability": 0.049
-    },
-    {
-      "character": "d",
-      "probability": 0.025
-    },
-    {
-      "character": "l",
-      "probability": 0.025
-    },
-    {
-      "character": "b",
-      "probability": 0.025
-    },
-    {
-      "character": "p",
-      "probability": 0.025
-    },
-    {
-      "character": "c",
-      "probability": 0.012
-    },
-    {
-      "character": "r",
-      "probability": 0.012
-    },
-    {
-      "character": "f",
-      "probability": 0.012
     }
   ],
   "stes": [
@@ -149501,18 +144261,6 @@
     {
       "character": "i",
       "probability": 0.026
-    },
-    {
-      "character": "y",
-      "probability": 0.013
-    },
-    {
-      "character": "k",
-      "probability": 0.013
-    },
-    {
-      "character": "t",
-      "probability": 0.013
     }
   ],
   "stio": [
@@ -149817,14 +144565,6 @@
     {
       "character": "s",
       "probability": 0.098
-    },
-    {
-      "character": "a",
-      "probability": 0.078
-    },
-    {
-      "character": "t",
-      "probability": 0.059
     }
   ],
   "stos": [
@@ -149919,34 +144659,6 @@
     {
       "character": "c",
       "probability": 0.068
-    },
-    {
-      "character": "p",
-      "probability": 0.057
-    },
-    {
-      "character": "w",
-      "probability": 0.034
-    },
-    {
-      "character": "r",
-      "probability": 0.023
-    },
-    {
-      "character": "u",
-      "probability": 0.011
-    },
-    {
-      "character": "y",
-      "probability": 0.011
-    },
-    {
-      "character": "s",
-      "probability": 0.011
-    },
-    {
-      "character": "d",
-      "probability": 0.011
     }
   ],
   "stre": [
@@ -149969,14 +144681,6 @@
     {
       "character": "e",
       "probability": 0.088
-    },
-    {
-      "character": "i",
-      "probability": 0.029
-    },
-    {
-      "character": "p",
-      "probability": 0.029
     }
   ],
   "stri": [
@@ -149999,26 +144703,6 @@
     {
       "character": "n",
       "probability": 0.077
-    },
-    {
-      "character": "e",
-      "probability": 0.062
-    },
-    {
-      "character": "k",
-      "probability": 0.062
-    },
-    {
-      "character": "v",
-      "probability": 0.046
-    },
-    {
-      "character": "d",
-      "probability": 0.031
-    },
-    {
-      "character": "f",
-      "probability": 0.015
     }
   ],
   "strl": [
@@ -150047,38 +144731,6 @@
     {
       "character": "k",
       "probability": 0.054
-    },
-    {
-      "character": "u",
-      "probability": 0.054
-    },
-    {
-      "character": "g",
-      "probability": 0.027
-    },
-    {
-      "character": "i",
-      "probability": 0.027
-    },
-    {
-      "character": "s",
-      "probability": 0.027
-    },
-    {
-      "character": "m",
-      "probability": 0.027
-    },
-    {
-      "character": "e",
-      "probability": 0.027
-    },
-    {
-      "character": "b",
-      "probability": 0.027
-    },
-    {
-      "character": "o",
-      "probability": 0.027
     }
   ],
   "stru": [
@@ -150100,14 +144752,6 @@
     },
     {
       "character": "e",
-      "probability": 0.021
-    },
-    {
-      "character": "a",
-      "probability": 0.021
-    },
-    {
-      "character": "n",
       "probability": 0.021
     }
   ],
@@ -150445,10 +145089,6 @@
     {
       "character": "y",
       "probability": 0.054
-    },
-    {
-      "character": "u",
-      "probability": 0.027
     }
   ],
   "subt": [
@@ -150916,10 +145556,6 @@
     },
     {
       "character": "l",
-      "probability": 0.043
-    },
-    {
-      "character": "t",
       "probability": 0.043
     }
   ],
@@ -151903,22 +146539,6 @@
     {
       "character": "m",
       "probability": 0.06
-    },
-    {
-      "character": "l",
-      "probability": 0.04
-    },
-    {
-      "character": "a",
-      "probability": 0.04
-    },
-    {
-      "character": "d",
-      "probability": 0.02
-    },
-    {
-      "character": "o",
-      "probability": 0.02
     }
   ],
   "taip": [
@@ -152053,22 +146673,6 @@
     {
       "character": "n",
       "probability": 0.105
-    },
-    {
-      "character": "c",
-      "probability": 0.079
-    },
-    {
-      "character": "e",
-      "probability": 0.053
-    },
-    {
-      "character": "o",
-      "probability": 0.026
-    },
-    {
-      "character": "b",
-      "probability": 0.026
     }
   ],
   "talk": [
@@ -152109,10 +146713,6 @@
     {
       "character": "s",
       "probability": 0.074
-    },
-    {
-      "character": "m",
-      "probability": 0.037
     }
   ],
   "talo": [
@@ -152261,10 +146861,6 @@
     {
       "character": "e",
       "probability": 0.05
-    },
-    {
-      "character": "p",
-      "probability": 0.05
     }
   ],
   "tane": [
@@ -152298,10 +146894,6 @@
     },
     {
       "character": "o",
-      "probability": 0.111
-    },
-    {
-      "character": "s",
       "probability": 0.111
     }
   ],
@@ -152535,18 +147127,6 @@
     {
       "character": "s",
       "probability": 0.056
-    },
-    {
-      "character": "n",
-      "probability": 0.056
-    },
-    {
-      "character": "l",
-      "probability": 0.056
-    },
-    {
-      "character": "u",
-      "probability": 0.056
     }
   ],
   "tarl": [
@@ -152608,10 +147188,6 @@
     },
     {
       "character": "a",
-      "probability": 0.111
-    },
-    {
-      "character": "l",
       "probability": 0.111
     }
   ],
@@ -152720,10 +147296,6 @@
     },
     {
       "character": "n",
-      "probability": 0.059
-    },
-    {
-      "character": "l",
       "probability": 0.059
     }
   ],
@@ -153047,14 +147619,6 @@
     {
       "character": "l",
       "probability": 0.021
-    },
-    {
-      "character": "w",
-      "probability": 0.021
-    },
-    {
-      "character": "t",
-      "probability": 0.021
     }
   ],
   "tchf": [
@@ -153283,10 +147847,6 @@
     {
       "character": "x",
       "probability": 0.125
-    },
-    {
-      "character": "m",
-      "probability": 0.125
     }
   ],
   "teap": [
@@ -153393,10 +147953,6 @@
     {
       "character": "s",
       "probability": 0.136
-    },
-    {
-      "character": "a",
-      "probability": 0.045
     }
   ],
   "tedd": [
@@ -153597,22 +148153,6 @@
     {
       "character": "f",
       "probability": 0.111
-    },
-    {
-      "character": "m",
-      "probability": 0.111
-    },
-    {
-      "character": "g",
-      "probability": 0.074
-    },
-    {
-      "character": "t",
-      "probability": 0.037
-    },
-    {
-      "character": "x",
-      "probability": 0.037
     }
   ],
   "telf": [
@@ -153650,10 +148190,6 @@
     },
     {
       "character": "o",
-      "probability": 0.053
-    },
-    {
-      "character": "u",
       "probability": 0.053
     }
   ],
@@ -153917,10 +148453,6 @@
     {
       "character": "a",
       "probability": 0.087
-    },
-    {
-      "character": "h",
-      "probability": 0.043
     }
   ],
   "tenu": [
@@ -154019,10 +148551,6 @@
     {
       "character": "r",
       "probability": 0.034
-    },
-    {
-      "character": "g",
-      "probability": 0.034
     }
   ],
   "terb": [
@@ -154059,10 +148587,6 @@
     {
       "character": "r",
       "probability": 0.063
-    },
-    {
-      "character": "u",
-      "probability": 0.063
     }
   ],
   "terd": [
@@ -154095,14 +148619,6 @@
     {
       "character": "y",
       "probability": 0.028
-    },
-    {
-      "character": "n",
-      "probability": 0.028
-    },
-    {
-      "character": "c",
-      "probability": 0.028
     }
   ],
   "terf": [
@@ -154124,10 +148640,6 @@
     },
     {
       "character": "r",
-      "probability": 0.056
-    },
-    {
-      "character": "i",
       "probability": 0.056
     }
   ],
@@ -154167,22 +148679,6 @@
     {
       "character": "s",
       "probability": 0.074
-    },
-    {
-      "character": "z",
-      "probability": 0.074
-    },
-    {
-      "character": "m",
-      "probability": 0.037
-    },
-    {
-      "character": "l",
-      "probability": 0.037
-    },
-    {
-      "character": "c",
-      "probability": 0.019
     }
   ],
   "terl": [
@@ -154267,10 +148763,6 @@
     {
       "character": "p",
       "probability": 0.071
-    },
-    {
-      "character": "s",
-      "probability": 0.071
     }
   ],
   "terp": [
@@ -154292,10 +148784,6 @@
     },
     {
       "character": "e",
-      "probability": 0.045
-    },
-    {
-      "character": "l",
       "probability": 0.045
     }
   ],
@@ -154319,10 +148807,6 @@
     {
       "character": "o",
       "probability": 0.139
-    },
-    {
-      "character": "y",
-      "probability": 0.028
     }
   ],
   "ters": [
@@ -154344,10 +148828,6 @@
     },
     {
       "character": "t",
-      "probability": 0.071
-    },
-    {
-      "character": "p",
       "probability": 0.071
     }
   ],
@@ -154591,10 +149071,6 @@
     {
       "character": "r",
       "probability": 0.071
-    },
-    {
-      "character": "t",
-      "probability": 0.071
     }
   ],
   "tfal": [
@@ -154817,26 +149293,6 @@
     {
       "character": "y",
       "probability": 0.053
-    },
-    {
-      "character": "i",
-      "probability": 0.053
-    },
-    {
-      "character": "h",
-      "probability": 0.053
-    },
-    {
-      "character": "a",
-      "probability": 0.053
-    },
-    {
-      "character": "d",
-      "probability": 0.053
-    },
-    {
-      "character": "s",
-      "probability": 0.053
     }
   ],
   "thar": [
@@ -155015,18 +149471,6 @@
     {
       "character": "c",
       "probability": 0.077
-    },
-    {
-      "character": "a",
-      "probability": 0.077
-    },
-    {
-      "character": "d",
-      "probability": 0.077
-    },
-    {
-      "character": "b",
-      "probability": 0.077
     }
   ],
   "theo": [
@@ -155067,38 +149511,6 @@
     {
       "character": "i",
       "probability": 0.062
-    },
-    {
-      "character": "n",
-      "probability": 0.046
-    },
-    {
-      "character": "h",
-      "probability": 0.046
-    },
-    {
-      "character": "o",
-      "probability": 0.046
-    },
-    {
-      "character": "l",
-      "probability": 0.031
-    },
-    {
-      "character": "b",
-      "probability": 0.031
-    },
-    {
-      "character": "w",
-      "probability": 0.015
-    },
-    {
-      "character": "f",
-      "probability": 0.015
-    },
-    {
-      "character": "t",
-      "probability": 0.015
     }
   ],
   "thes": [
@@ -155457,14 +149869,6 @@
     {
       "character": "a",
       "probability": 0.071
-    },
-    {
-      "character": "e",
-      "probability": 0.036
-    },
-    {
-      "character": "p",
-      "probability": 0.036
     }
   ],
   "thos": [
@@ -155569,14 +149973,6 @@
     {
       "character": "c",
       "probability": 0.067
-    },
-    {
-      "character": "e",
-      "probability": 0.067
-    },
-    {
-      "character": "d",
-      "probability": 0.067
     }
   ],
   "thro": [
@@ -155599,18 +149995,6 @@
     {
       "character": "a",
       "probability": 0.08
-    },
-    {
-      "character": "n",
-      "probability": 0.08
-    },
-    {
-      "character": "m",
-      "probability": 0.08
-    },
-    {
-      "character": "t",
-      "probability": 0.04
     }
   ],
   "thru": [
@@ -155923,14 +150307,6 @@
     {
       "character": "n",
       "probability": 0.065
-    },
-    {
-      "character": "t",
-      "probability": 0.065
-    },
-    {
-      "character": "z",
-      "probability": 0.065
     }
   ],
   "tick": [
@@ -155952,10 +150328,6 @@
     },
     {
       "character": "y",
-      "probability": 0.063
-    },
-    {
-      "character": "b",
       "probability": 0.063
     }
   ],
@@ -156291,26 +150663,6 @@
     {
       "character": "d",
       "probability": 0.077
-    },
-    {
-      "character": "t",
-      "probability": 0.077
-    },
-    {
-      "character": "o",
-      "probability": 0.038
-    },
-    {
-      "character": "z",
-      "probability": 0.038
-    },
-    {
-      "character": "x",
-      "probability": 0.038
-    },
-    {
-      "character": "f",
-      "probability": 0.038
     }
   ],
   "timi": [
@@ -156405,10 +150757,6 @@
     {
       "character": "z",
       "probability": 0.067
-    },
-    {
-      "character": "d",
-      "probability": 0.067
     }
   ],
   "ting": [
@@ -156430,18 +150778,6 @@
     },
     {
       "character": "t",
-      "probability": 0.034
-    },
-    {
-      "character": "l",
-      "probability": 0.034
-    },
-    {
-      "character": "d",
-      "probability": 0.034
-    },
-    {
-      "character": "a",
       "probability": 0.034
     }
   ],
@@ -156497,10 +150833,6 @@
     {
       "character": "m",
       "probability": 0.067
-    },
-    {
-      "character": "u",
-      "probability": 0.067
     }
   ],
   "tioc": [
@@ -156535,14 +150867,6 @@
     {
       "character": "w",
       "probability": 0.005
-    },
-    {
-      "character": "n",
-      "probability": 0.005
-    },
-    {
-      "character": "h",
-      "probability": 0.003
     }
   ],
   "tiou": [
@@ -156650,10 +150974,6 @@
     },
     {
       "character": "s",
-      "probability": 0.125
-    },
-    {
-      "character": "t",
       "probability": 0.125
     }
   ],
@@ -157349,10 +151669,6 @@
     {
       "character": "e",
       "probability": 0.111
-    },
-    {
-      "character": "p",
-      "probability": 0.111
     }
   ],
   "toco": [
@@ -157553,10 +151869,6 @@
     {
       "character": "s",
       "probability": 0.063
-    },
-    {
-      "character": "k",
-      "probability": 0.063
     }
   ],
   "tomb": [
@@ -157694,18 +152006,6 @@
     },
     {
       "character": "s",
-      "probability": 0.091
-    },
-    {
-      "character": "n",
-      "probability": 0.091
-    },
-    {
-      "character": "u",
-      "probability": 0.091
-    },
-    {
-      "character": "x",
       "probability": 0.091
     }
   ],
@@ -157939,22 +152239,6 @@
     {
       "character": "u",
       "probability": 0.039
-    },
-    {
-      "character": "o",
-      "probability": 0.039
-    },
-    {
-      "character": "s",
-      "probability": 0.039
-    },
-    {
-      "character": "z",
-      "probability": 0.02
-    },
-    {
-      "character": "l",
-      "probability": 0.02
     }
   ],
   "torm": [
@@ -158545,18 +152829,6 @@
     {
       "character": "e",
       "probability": 0.031
-    },
-    {
-      "character": "t",
-      "probability": 0.02
-    },
-    {
-      "character": "q",
-      "probability": 0.02
-    },
-    {
-      "character": "n",
-      "probability": 0.01
     }
   ],
   "trao": [
@@ -158631,14 +152903,6 @@
     {
       "character": "a",
       "probability": 0.018
-    },
-    {
-      "character": "t",
-      "probability": 0.018
-    },
-    {
-      "character": "u",
-      "probability": 0.018
     }
   ],
   "trau": [
@@ -158710,14 +152974,6 @@
     },
     {
       "character": "l",
-      "probability": 0.03
-    },
-    {
-      "character": "c",
-      "probability": 0.03
-    },
-    {
-      "character": "k",
       "probability": 0.03
     }
   ],
@@ -158877,18 +153133,6 @@
     {
       "character": "s",
       "probability": 0.122
-    },
-    {
-      "character": "h",
-      "probability": 0.073
-    },
-    {
-      "character": "e",
-      "probability": 0.049
-    },
-    {
-      "character": "u",
-      "probability": 0.024
     }
   ],
   "trid": [
@@ -159009,10 +153253,6 @@
     {
       "character": "o",
       "probability": 0.133
-    },
-    {
-      "character": "s",
-      "probability": 0.067
     }
   ],
   "trio": [
@@ -159045,10 +153285,6 @@
     {
       "character": "o",
       "probability": 0.125
-    },
-    {
-      "character": "a",
-      "probability": 0.063
     }
   ],
   "tris": [
@@ -159184,10 +153420,6 @@
     },
     {
       "character": "u",
-      "probability": 0.05
-    },
-    {
-      "character": "y",
       "probability": 0.05
     }
   ],
@@ -159809,26 +154041,6 @@
     {
       "character": "y",
       "probability": 0.094
-    },
-    {
-      "character": "f",
-      "probability": 0.094
-    },
-    {
-      "character": "l",
-      "probability": 0.031
-    },
-    {
-      "character": "d",
-      "probability": 0.031
-    },
-    {
-      "character": "h",
-      "probability": 0.031
-    },
-    {
-      "character": "m",
-      "probability": 0.031
     }
   ],
   "ttes": [
@@ -159942,14 +154154,6 @@
     },
     {
       "character": "r",
-      "probability": 0.071
-    },
-    {
-      "character": "t",
-      "probability": 0.071
-    },
-    {
-      "character": "w",
       "probability": 0.071
     }
   ],
@@ -160533,18 +154737,6 @@
     {
       "character": "a",
       "probability": 0.111
-    },
-    {
-      "character": "t",
-      "probability": 0.111
-    },
-    {
-      "character": "k",
-      "probability": 0.056
-    },
-    {
-      "character": "p",
-      "probability": 0.056
     }
   ],
   "turo": [
@@ -162269,10 +156461,6 @@
     {
       "character": "h",
       "probability": 0.083
-    },
-    {
-      "character": "s",
-      "probability": 0.083
     }
   ],
   "udle": [
@@ -162604,18 +156792,6 @@
     },
     {
       "character": "r",
-      "probability": 0.059
-    },
-    {
-      "character": "h",
-      "probability": 0.059
-    },
-    {
-      "character": "o",
-      "probability": 0.059
-    },
-    {
-      "character": "a",
       "probability": 0.059
     }
   ],
@@ -163056,10 +157232,6 @@
     },
     {
       "character": "c",
-      "probability": 0.091
-    },
-    {
-      "character": "b",
       "probability": 0.091
     }
   ],
@@ -163815,10 +157987,6 @@
     {
       "character": "d",
       "probability": 0.067
-    },
-    {
-      "character": "y",
-      "probability": 0.067
     }
   ],
   "ulli": [
@@ -164027,26 +158195,6 @@
     {
       "character": "c",
       "probability": 0.086
-    },
-    {
-      "character": "e",
-      "probability": 0.057
-    },
-    {
-      "character": "l",
-      "probability": 0.057
-    },
-    {
-      "character": "d",
-      "probability": 0.057
-    },
-    {
-      "character": "t",
-      "probability": 0.029
-    },
-    {
-      "character": "f",
-      "probability": 0.029
     }
   ],
   "ulto": [
@@ -164645,10 +158793,6 @@
     {
       "character": "t",
       "probability": 0.071
-    },
-    {
-      "character": "y",
-      "probability": 0.071
     }
   ],
   "unci": [
@@ -164725,14 +158869,6 @@
     {
       "character": "r",
       "probability": 0.095
-    },
-    {
-      "character": "b",
-      "probability": 0.095
-    },
-    {
-      "character": "i",
-      "probability": 0.048
     }
   ],
   "undb": [
@@ -164760,22 +158896,6 @@
     },
     {
       "character": "e",
-      "probability": 0.013
-    },
-    {
-      "character": "s",
-      "probability": 0.013
-    },
-    {
-      "character": "a",
-      "probability": 0.013
-    },
-    {
-      "character": "l",
-      "probability": 0.013
-    },
-    {
-      "character": "t",
       "probability": 0.013
     }
   ],
@@ -165180,14 +159300,6 @@
     },
     {
       "character": "m",
-      "probability": 0.083
-    },
-    {
-      "character": "o",
-      "probability": 0.083
-    },
-    {
-      "character": "y",
       "probability": 0.083
     }
   ],
@@ -165853,30 +159965,6 @@
     {
       "character": "f",
       "probability": 0.103
-    },
-    {
-      "character": "b",
-      "probability": 0.069
-    },
-    {
-      "character": "n",
-      "probability": 0.069
-    },
-    {
-      "character": "t",
-      "probability": 0.034
-    },
-    {
-      "character": "p",
-      "probability": 0.034
-    },
-    {
-      "character": "a",
-      "probability": 0.034
-    },
-    {
-      "character": "h",
-      "probability": 0.034
     }
   ],
   "upfr": [
@@ -166286,10 +160374,6 @@
     },
     {
       "character": "o",
-      "probability": 0.091
-    },
-    {
-      "character": "u",
       "probability": 0.091
     }
   ],
@@ -167049,10 +161133,6 @@
     {
       "character": "w",
       "probability": 0.125
-    },
-    {
-      "character": "d",
-      "probability": 0.125
     }
   ],
   "ursh": [
@@ -167409,10 +161489,6 @@
     {
       "character": "i",
       "probability": 0.111
-    },
-    {
-      "character": "l",
-      "probability": 0.111
     }
   ],
   "uset": [
@@ -167620,14 +161696,6 @@
     },
     {
       "character": "i",
-      "probability": 0.091
-    },
-    {
-      "character": "n",
-      "probability": 0.091
-    },
-    {
-      "character": "a",
       "probability": 0.091
     }
   ],
@@ -169119,10 +163187,6 @@
     {
       "character": "c",
       "probability": 0.029
-    },
-    {
-      "character": "z",
-      "probability": 0.029
     }
   ],
   "vato": [
@@ -169475,10 +163539,6 @@
     {
       "character": "e",
       "probability": 0.077
-    },
-    {
-      "character": "r",
-      "probability": 0.077
     }
   ],
   "venf": [
@@ -169513,10 +163573,6 @@
     {
       "character": "a",
       "probability": 0.133
-    },
-    {
-      "character": "c",
-      "probability": 0.067
     }
   ],
   "venl": [
@@ -169571,22 +163627,6 @@
     {
       "character": "o",
       "probability": 0.093
-    },
-    {
-      "character": "h",
-      "probability": 0.047
-    },
-    {
-      "character": "r",
-      "probability": 0.047
-    },
-    {
-      "character": "y",
-      "probability": 0.023
-    },
-    {
-      "character": "a",
-      "probability": 0.023
     }
   ],
   "venu": [
@@ -169675,10 +163715,6 @@
     {
       "character": "r",
       "probability": 0.125
-    },
-    {
-      "character": "u",
-      "probability": 0.125
     }
   ],
   "vere": [
@@ -169700,10 +163736,6 @@
     },
     {
       "character": "t",
-      "probability": 0.071
-    },
-    {
-      "character": "s",
       "probability": 0.071
     }
   ],
@@ -169757,18 +163789,6 @@
     {
       "character": "c",
       "probability": 0.1
-    },
-    {
-      "character": "z",
-      "probability": 0.05
-    },
-    {
-      "character": "s",
-      "probability": 0.05
-    },
-    {
-      "character": "g",
-      "probability": 0.05
     }
   ],
   "verl": [
@@ -169819,10 +163839,6 @@
     {
       "character": "a",
       "probability": 0.071
-    },
-    {
-      "character": "s",
-      "probability": 0.071
     }
   ],
   "vero": [
@@ -169869,14 +163885,6 @@
     {
       "character": "u",
       "probability": 0.016
-    },
-    {
-      "character": "y",
-      "probability": 0.016
-    },
-    {
-      "character": "o",
-      "probability": 0.016
     }
   ],
   "vert": [
@@ -169899,14 +163907,6 @@
     {
       "character": "s",
       "probability": 0.053
-    },
-    {
-      "character": "u",
-      "probability": 0.053
-    },
-    {
-      "character": "y",
-      "probability": 0.026
     }
   ],
   "verv": [
@@ -170297,14 +164297,6 @@
     {
       "character": "a",
       "probability": 0.042
-    },
-    {
-      "character": "c",
-      "probability": 0.042
-    },
-    {
-      "character": "f",
-      "probability": 0.042
     }
   ],
   "viga": [
@@ -170650,10 +164642,6 @@
     },
     {
       "character": "e",
-      "probability": 0.077
-    },
-    {
-      "character": "r",
       "probability": 0.077
     }
   ],
@@ -171367,14 +165355,6 @@
     {
       "character": "a",
       "probability": 0.118
-    },
-    {
-      "character": "i",
-      "probability": 0.118
-    },
-    {
-      "character": "y",
-      "probability": 0.059
     }
   ],
   "walm": [
@@ -172179,10 +166159,6 @@
     {
       "character": "n",
       "probability": 0.167
-    },
-    {
-      "character": "e",
-      "probability": 0.167
     }
   ],
   "weez": [
@@ -172491,26 +166467,6 @@
     {
       "character": "l",
       "probability": 0.1
-    },
-    {
-      "character": "c",
-      "probability": 0.1
-    },
-    {
-      "character": "o",
-      "probability": 0.05
-    },
-    {
-      "character": "f",
-      "probability": 0.05
-    },
-    {
-      "character": "p",
-      "probability": 0.05
-    },
-    {
-      "character": "s",
-      "probability": 0.05
     }
   ],
   "wetl": [
@@ -172740,22 +166696,6 @@
     },
     {
       "character": "i",
-      "probability": 0.056
-    },
-    {
-      "character": "t",
-      "probability": 0.056
-    },
-    {
-      "character": "l",
-      "probability": 0.056
-    },
-    {
-      "character": "b",
-      "probability": 0.056
-    },
-    {
-      "character": "f",
       "probability": 0.056
     }
   ],
@@ -172993,14 +166933,6 @@
     {
       "character": "y",
       "probability": 0.056
-    },
-    {
-      "character": "e",
-      "probability": 0.056
-    },
-    {
-      "character": "f",
-      "probability": 0.056
     }
   ],
   "wilm": [
@@ -173098,18 +167030,6 @@
     },
     {
       "character": "c",
-      "probability": 0.077
-    },
-    {
-      "character": "h",
-      "probability": 0.077
-    },
-    {
-      "character": "m",
-      "probability": 0.077
-    },
-    {
-      "character": "e",
       "probability": 0.077
     }
   ],
@@ -173336,10 +167256,6 @@
     },
     {
       "character": "o",
-      "probability": 0.071
-    },
-    {
-      "character": "e",
       "probability": 0.071
     }
   ],
@@ -173661,18 +167577,6 @@
     {
       "character": "b",
       "probability": 0.111
-    },
-    {
-      "character": "r",
-      "probability": 0.111
-    },
-    {
-      "character": "y",
-      "probability": 0.056
-    },
-    {
-      "character": "p",
-      "probability": 0.056
     }
   ],
   "woof": [
@@ -173735,30 +167639,6 @@
     {
       "character": "f",
       "probability": 0.057
-    },
-    {
-      "character": "o",
-      "probability": 0.057
-    },
-    {
-      "character": "b",
-      "probability": 0.057
-    },
-    {
-      "character": "a",
-      "probability": 0.057
-    },
-    {
-      "character": "m",
-      "probability": 0.057
-    },
-    {
-      "character": "l",
-      "probability": 0.029
-    },
-    {
-      "character": "g",
-      "probability": 0.029
     }
   ],
   "worl": [
@@ -174956,10 +168836,6 @@
     },
     {
       "character": "i",
-      "probability": 0.077
-    },
-    {
-      "character": "v",
       "probability": 0.077
     }
   ],

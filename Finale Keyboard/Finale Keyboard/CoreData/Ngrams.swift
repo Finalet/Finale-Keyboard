@@ -35,49 +35,17 @@ class Ngrams {
                 let context = CoreData.shared.persistentContainer.newBackgroundContext()
                 context.automaticallyMergesChangesFromParent = true
                 context.perform {
-                    let engNgramDictionary = NgramDictionary(context: context)
-                    let rusNgramDictionary = NgramDictionary(context: context)
+                    let ngramDictionary = NgramDictionary(context: context)
                     
-                    onProgressChange("Writing 0-gram to database...", false)
-                    eng[0].forEach { (key: String, value: [CharacterProbabilityJSON]) in
-                        engNgramDictionary.addToSingleGram(self.createNgram(ngram: key, probabilities: value, context: context))
+                    for n in 0..<eng.count {
+                        onProgressChange("Writing \(n)-gram to database...", false)
+                        eng[n].forEach { (key: String, value: [CharacterProbabilityJSON]) in
+                            ngramDictionary.addToEng(self.createNgram(ngram: key, probabilities: value, context: context))
+                        }
+                        rus[n].forEach { (key: String, value: [CharacterProbabilityJSON]) in
+                            ngramDictionary.addToRu(self.createNgram(ngram: key, probabilities: value, context: context))
+                        }
                     }
-                    rus[0].forEach { (key: String, value: [CharacterProbabilityJSON]) in
-                        rusNgramDictionary.addToSingleGram(self.createNgram(ngram: key, probabilities: value, context: context))
-                    }
-                    
-                    onProgressChange("Writing 1-gram to database...", false)
-                    eng[1].forEach { (key: String, value: [CharacterProbabilityJSON]) in
-                        engNgramDictionary.addToBiGram(self.createNgram(ngram: key, probabilities: value, context: context))
-                    }
-                    rus[1].forEach { (key: String, value: [CharacterProbabilityJSON]) in
-                        rusNgramDictionary.addToBiGram(self.createNgram(ngram: key, probabilities: value, context: context))
-                    }
-                    
-                    onProgressChange("Writing 2-gram to database...", false)
-                    eng[2].forEach { (key: String, value: [CharacterProbabilityJSON]) in
-                        engNgramDictionary.addToTriGram(self.createNgram(ngram: key, probabilities: value, context: context))
-                    }
-                    rus[2].forEach { (key: String, value: [CharacterProbabilityJSON]) in
-                        rusNgramDictionary.addToTriGram(self.createNgram(ngram: key, probabilities: value, context: context))
-                    }
-                    
-                    onProgressChange("Writing 3-gram to database...", false)
-                    eng[3].forEach { (key: String, value: [CharacterProbabilityJSON]) in
-                        engNgramDictionary.addToQuadGram(self.createNgram(ngram: key, probabilities: value, context: context))
-                    }
-                    rus[3].forEach { (key: String, value: [CharacterProbabilityJSON]) in
-                        rusNgramDictionary.addToQuadGram(self.createNgram(ngram: key, probabilities: value, context: context))
-                    }
-                    
-                    onProgressChange("Writing 4-gram to database...", false)
-                    eng[4].forEach { (key: String, value: [CharacterProbabilityJSON]) in
-                        engNgramDictionary.addToPentaGram(self.createNgram(ngram: key, probabilities: value, context: context))
-                    }
-                    rus[4].forEach { (key: String, value: [CharacterProbabilityJSON]) in
-                        rusNgramDictionary.addToPentaGram(self.createNgram(ngram: key, probabilities: value, context: context))
-                    }
-                    
                     
                     do {
                         onProgressChange("Saving the database...", false)
@@ -129,14 +97,11 @@ class Ngrams {
     }
     
     func getCharacterProbabilities(_ str: String) -> [CharacterProbability]? {
-        let n = str.count
-        if n > 5 { return nil }
-       
         let fetch = Ngram.fetchRequest()
         fetch.predicate = NSPredicate(format: "ngram = %@", str)
         do {
-            let results = try CoreData.shared.context.fetch(fetch).first
-            return results?.characterProbabilities?.array as? [CharacterProbability]
+            let result = try CoreData.shared.context.fetch(fetch).first
+            return result?.characterProbabilities?.array as? [CharacterProbability]
         } catch let error as NSError {
             print("[\(str)] Failed to fetch ngram.")
             print(error)
