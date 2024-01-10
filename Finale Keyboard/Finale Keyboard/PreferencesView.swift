@@ -255,7 +255,7 @@ struct DynamicTouchZones: View {
     
     var body: some View {
         Form {
-            Section (footer: Text("When enabled, Finale Keyboard will try to predict what key you will tap next and slightly increase its tap zone.\n\nRequires a loaded dictionary below.")) {
+            Section (footer: Text("When enabled, Finale Keyboard will try to predict what key you will tap next and slightly increase its tap zone.")) {
                 Toggle("Enable", isOn: $isDynamicTapZonesEnabled.animation())
                     .onChange(of: isDynamicTapZonesEnabled) { value in
                         OnChange()
@@ -269,6 +269,24 @@ struct DynamicTouchZones: View {
                 }
             }
             if isDynamicTapZonesEnabled {
+                Section (footer: Text(loadingStatus == nil ? "Loaded dictionary is required for dynamic touch zones." : "\(shouldLoadNGrams ? "Loading" : "Clearing") can take up to a minute. Do not leave this page until it is done.")) {
+                   Button(action: {
+                        if shouldLoadNGrams {
+                            Ngrams.shared.LoadNgramsToCoreData() { status, isDone in
+                                loadingStatus = isDone ? nil : status
+                                if isDone { totalNgramsLoaded = Ngrams.shared.totalNgramsLoaded }
+                            }
+                        } else {
+                            Ngrams.shared.DeleteAllNgrams() { status, isDone in
+                                loadingStatus = isDone ? nil : status
+                                if isDone { totalNgramsLoaded = Ngrams.shared.totalNgramsLoaded }
+                            }
+                        }
+                    }, label: {
+                        Text(loadingStatus ?? (shouldLoadNGrams ? "Load dictionary" : "Clear dictionary"))
+                    })
+                    .disabled(loadingStatus != nil)
+                }
                 Section(header: Text("Advanced")) {
                     Toggle("Show touch zones", isOn: $showTouchZones.animation())
                         .onChange(of: showTouchZones) { value in
@@ -289,25 +307,6 @@ struct DynamicTouchZones: View {
                     Slider(value: $dynamicTapZoneProbabilityMultiplier, in: 1.0...3.0, step: 0.1) { _ in
                         OnChange()
                     }
-                }
-                Section (footer: Text("\(shouldLoadNGrams ? "Loading" : "Deleting") can take up to a minute. Do not leave this page until it is done.")) {
-                    TextRow(label: "Loaded n-grams", value: "\(totalNgramsLoaded)")
-                    Button(action: {
-                        if shouldLoadNGrams {
-                            Ngrams.shared.LoadNgramsToCoreData() { status, isDone in
-                                loadingStatus = isDone ? nil : status
-                                if isDone { totalNgramsLoaded = Ngrams.shared.totalNgramsLoaded }
-                            }
-                        } else {
-                            Ngrams.shared.DeleteAllNgrams() { status, isDone in
-                                loadingStatus = isDone ? nil : status
-                                if isDone { totalNgramsLoaded = Ngrams.shared.totalNgramsLoaded }
-                            }
-                        }
-                    }, label: {
-                        Text(loadingStatus ?? (shouldLoadNGrams ? "Load dictionary" : "Clear dictionary"))
-                    })
-                    .disabled(loadingStatus != nil)
                 }
             }
         }

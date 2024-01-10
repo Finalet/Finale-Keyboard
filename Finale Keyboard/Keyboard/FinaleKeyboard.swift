@@ -1021,6 +1021,7 @@ class FinaleKeyboard: UIInputViewController {
     override func textDidChange(_ textInput: UITextInput?) {
         // The app has just changed the document's contents, the document context has been updated.
         CheckAutoCapitalization()
+        ProcessDynamicTouchZones()
         if (!self.textDocumentProxy.hasText) { RedrawSuggestionsLabels() }
     }
     
