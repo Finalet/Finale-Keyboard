@@ -103,9 +103,10 @@ class FinaleKeyboard: UIInputViewController {
     
     // Dynamic tap zones
     static var isDynamicTapZonesEnabled: Bool = false
-    static var isDynamicTapZonesDisplayEnabled: Bool = false
-    static var maxDynamicTapZoneScale = 0.4
+    static var showTouchZones: Bool = false
+    static var maxTouchZoneScale = 0.4
     static var dynamicTapZoneProbabilityMultiplier = 1.0
+    static var dynamicKeyHighlighting = false
     let minNgram = 1
     let maxNgram = 5
     
@@ -170,9 +171,10 @@ class FinaleKeyboard: UIInputViewController {
         FinaleKeyboard.isTypingHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isTypingHapticEnabled") as? Bool ?? false
         FinaleKeyboard.isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
         FinaleKeyboard.isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
-        FinaleKeyboard.isDynamicTapZonesDisplayEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesDisplayEnabled") as? Bool ?? false
-        FinaleKeyboard.maxDynamicTapZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxDynamicTapZoneScale") as? CGFloat ?? 0.4
+        FinaleKeyboard.showTouchZones = userDefaults?.value(forKey: "FINALE_DEV_APP_showTouchZones") as? Bool ?? false
+        FinaleKeyboard.maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? CGFloat ?? 0.4
         FinaleKeyboard.dynamicTapZoneProbabilityMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier") as? CGFloat ?? 1.5
+        FinaleKeyboard.dynamicKeyHighlighting = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicKeyHighlighting") as? Bool ?? false
         
         punctuationArray = userDefaults?.value(forKey: "FINALE_DEV_APP_punctuationArray") as? [String] ?? Defaults.punctuation
         shortcuts = userDefaults?.value(forKey: "FINALE_DEV_APP_shortcuts") as? [String : String] ?? Defaults.shortcuts
@@ -387,7 +389,7 @@ class FinaleKeyboard: UIInputViewController {
         if (x) { self.textDocumentProxy.insertText(" ") }
         
         CheckAutoCapitalization()
-        ProcessDynamicTapZones()
+        ProcessDynamicTouchZones()
     }
     func TypeEmoji (emoji: String) {
         if (getOneBeforeLastChar() != "" && Character(getOneBeforeLastChar()).isEmoji && getLastChar() == " ") {
@@ -412,7 +414,7 @@ class FinaleKeyboard: UIInputViewController {
         
         self.textDocumentProxy.deleteBackward()
         CheckAutoCapitalization()
-        ProcessDynamicTapZones()
+        ProcessDynamicTouchZones()
     }
     
     func ShowShortcutPreviews () {
@@ -449,7 +451,7 @@ class FinaleKeyboard: UIInputViewController {
         UIView.animate (withDuration: 0.3) {
             self.keysView.alpha = 1
         }
-        ProcessDynamicTapZones()
+        ProcessDynamicTouchZones()
     }
     
     func MoveCursor (touchLocation: CGPoint) {
@@ -559,7 +561,7 @@ class FinaleKeyboard: UIInputViewController {
             InsertPunctuation(index: index)
         }
         CheckAutoCapitalization()
-        ResetDynamicTapZones()
+        ResetDynamicTouchZones()
         if FinaleKeyboard.currentViewType != .Characters { BuildKeyboardView(viewType: .Characters) }
     }
     func SwipeDown () {
@@ -831,7 +833,7 @@ class FinaleKeyboard: UIInputViewController {
         }
         CheckAutoCapitalization()
         RedrawSuggestionsLabels()
-        ProcessDynamicTapZones()
+        ProcessDynamicTouchZones()
         canEditPrevPunctuation = false
     }
     func InsertPunctuation (index: Int) {

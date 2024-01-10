@@ -10,10 +10,10 @@ import UIKit
 
 extension FinaleKeyboard {
     
-    func ProcessDynamicTapZones () {
+    func ProcessDynamicTouchZones () {
         if !FinaleKeyboard.isDynamicTapZonesEnabled { return }
         
-        ResetDynamicTapZones()
+        ResetDynamicTouchZones()
         
         if let lastNSubstring = getStringBeforeCursor(length: maxNgram), let lastSubstring = lastNSubstring.split(separator: " ").last {
             let lastString = String(lastSubstring).lowercased()
@@ -24,14 +24,14 @@ extension FinaleKeyboard {
                     guard let char = probability.character else { continue }
                     
                     let prob = CGFloat(probability.probability) 
-                    let by = min(prob * FinaleKeyboard.maxDynamicTapZoneScale * FinaleKeyboard.dynamicTapZoneProbabilityMultiplier, FinaleKeyboard.maxDynamicTapZoneScale)
+                    let by = min(prob * FinaleKeyboard.maxTouchZoneScale * FinaleKeyboard.dynamicTapZoneProbabilityMultiplier, FinaleKeyboard.maxTouchZoneScale)
                     ScaleCharacterKey(key: char, by: by)
                 }
             }
         }
     }
     
-    func ResetDynamicTapZones () {
+    func ResetDynamicTouchZones () {
         characterButtons.forEach {
             $0.value.ScaleTouchZone(by: 0.0)
         }

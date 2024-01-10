@@ -52,8 +52,8 @@ struct PreferencesView: View {
                     Text(Localize.Punctuation.pageTitle)
                 }
                 .frame(height: 30)
-                ListNavigationLink(destination: DynamicTapZones()) {
-                    Text("Dynamic Tap Zones")
+                ListNavigationLink(destination: DynamicTouchZones()) {
+                    Text("Dynamic Touch Zones")
                 }
                 .frame(height: 30)
                 ListNavigationLink(destination: AdvancedView()) {
@@ -233,16 +233,17 @@ struct AdvancedView: View {
     }
 }
 
-struct DynamicTapZones: View {
+struct DynamicTouchZones: View {
     
     let suiteName = "group.finale-keyboard-cache"
     
     @State var testText = ""
     
     @State var isDynamicTapZonesEnabled: Bool = false
-    @State var isDynamicTapZonesDisplayEnabled: Bool = false
-    @State var maxDynamicTapZoneScale: Float = 0.4
+    @State var showTouchZones: Bool = false
+    @State var maxTouchZoneScale: Float = 0.4
     @State var dynamicTapZoneProbabilityMultiplier: Float = 1.5
+    @State var dynamicKeyHighlighting: Bool = false
     
     @State var loadingStatus: String? = nil
     @State var totalNgramsLoaded = 0
@@ -259,21 +260,27 @@ struct DynamicTapZones: View {
                     .onChange(of: isDynamicTapZonesEnabled) { value in
                         OnChange()
                     }
-            }
-            if isDynamicTapZonesEnabled {
-                Section(header: Text(Localize.inputFieldTitle)) {
-                    TextField(Localize.inputFieldPlaceholder, text: $testText)
-                        .focused($shouldShowKeyboard)
-                }
-                Section {
-                    Toggle("Show tap zones", isOn: $isDynamicTapZonesDisplayEnabled.animation())
-                        .onChange(of: isDynamicTapZonesDisplayEnabled) { value in
+                if isDynamicTapZonesEnabled {
+                    Toggle("Highlight keys", isOn: $dynamicKeyHighlighting.animation())
+                        .onChange(of: dynamicKeyHighlighting) { value in
+                            if value && showTouchZones { withAnimation { showTouchZones = false } }
                             OnChange()
                         }
                 }
+            }
+            if isDynamicTapZonesEnabled {
+                Section(header: Text("Advanced")) {
+                    Toggle("Show touch zones", isOn: $showTouchZones.animation())
+                        .onChange(of: showTouchZones) { value in
+                            if value && dynamicKeyHighlighting { withAnimation { dynamicKeyHighlighting = false } }
+                            OnChange()
+                        }
+                    TextField(Localize.inputFieldPlaceholder, text: $testText)
+                        .focused($shouldShowKeyboard)
+                }
                 Section (footer: Text("Default: 140%")) {
-                    TextRow(label: "Maximum key scale", value: "\(100 + Int(maxDynamicTapZoneScale*100))%")
-                    Slider(value: $maxDynamicTapZoneScale, in: 0.05...1.0, step: 0.05) { _ in
+                    TextRow(label: "Maximum key scale", value: "\(100 + Int(maxTouchZoneScale*100))%")
+                    Slider(value: $maxTouchZoneScale, in: 0.05...1.0, step: 0.05) { _ in
                         OnChange()
                     }
                 }
@@ -304,7 +311,7 @@ struct DynamicTapZones: View {
                 }
             }
         }
-        .navigationTitle("Dynamic Tap Zones")
+        .navigationTitle("Dynamic Touch Zones")
         .onAppear {
             Load()
         }
@@ -323,9 +330,10 @@ struct DynamicTapZones: View {
     func OnChange () {
         let userDefaults = UserDefaults(suiteName: suiteName)
         userDefaults?.setValue(isDynamicTapZonesEnabled, forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled")
-        userDefaults?.setValue(isDynamicTapZonesDisplayEnabled, forKey: "FINALE_DEV_APP_isDynamicTapZonesDisplayEnabled")
-        userDefaults?.setValue(maxDynamicTapZoneScale, forKey: "FINALE_DEV_APP_maxDynamicTapZoneScale")
+        userDefaults?.setValue(showTouchZones, forKey: "FINALE_DEV_APP_showTouchZones")
+        userDefaults?.setValue(maxTouchZoneScale, forKey: "FINALE_DEV_APP_maxTouchZoneScale")
         userDefaults?.setValue(dynamicTapZoneProbabilityMultiplier, forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier")
+        userDefaults?.setValue(dynamicKeyHighlighting, forKey: "FINALE_DEV_APP_dynamicKeyHighlighting")
     }
     
     func Load () {
@@ -333,8 +341,9 @@ struct DynamicTapZones: View {
         
         let userDefaults = UserDefaults(suiteName: suiteName)
         isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
-        isDynamicTapZonesDisplayEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesDisplayEnabled") as? Bool ?? false
-        maxDynamicTapZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxDynamicTapZoneScale") as? Float ?? 0.4
+        showTouchZones = userDefaults?.value(forKey: "FINALE_DEV_APP_showTouchZones") as? Bool ?? false
+        maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? Float ?? 0.4
         dynamicTapZoneProbabilityMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier") as? Float ?? 1.5
+        dynamicKeyHighlighting = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicKeyHighlighting") as? Bool ?? false
     }
 }

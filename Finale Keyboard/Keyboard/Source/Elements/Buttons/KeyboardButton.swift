@@ -111,11 +111,21 @@ class KeyboardButton: NoClipTouchUIView {
     
     func ScaleTouchZone(by: CGFloat) {
         let scaleBy = self.frame.size.width * by
+        
         touchZoneConstraints.forEach { constraint in
             constraint.constant = constraint.firstAnchor == touchZone.trailingAnchor || constraint.firstAnchor == touchZone.bottomAnchor ? scaleBy : -scaleBy
         }
-        touchZone.layer.cornerRadius = by == 0.0 ? 0 : 8
-        touchZone.backgroundColor = !FinaleKeyboard.isDynamicTapZonesDisplayEnabled || by == 0.0 ? .clearInteractable : .brand.withAlphaComponent(by / CGFloat(FinaleKeyboard.maxDynamicTapZoneScale * 1.1))
+        
+        if FinaleKeyboard.dynamicKeyHighlighting {
+            self.layer.cornerRadius = by == 0.0 ? 0 : 8
+            self.layer.borderWidth = 2
+            self.layer.borderColor = by == 0.0 ? UIColor.clear.cgColor : UIColor.brand.withAlphaComponent(0.5).cgColor
+            self.backgroundColor = by == 0.0 ? .clearInteractable : .brand.withAlphaComponent(by / CGFloat(FinaleKeyboard.maxTouchZoneScale * 1.1))
+        }
+        if FinaleKeyboard.showTouchZones {
+            touchZone.layer.cornerRadius = by == 0.0 ? 0 : 8
+            touchZone.backgroundColor = by == 0.0 ? .clearInteractable : .brand.withAlphaComponent(by / CGFloat(FinaleKeyboard.maxTouchZoneScale * 1.1))
+        }
     }
     
     func OnTapBegin (_ sender: UILongPressGestureRecognizer) {}
