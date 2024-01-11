@@ -1,4 +1,13 @@
 /* No comment provided by engineer. */
+"actions_delete" = "Удалить";
+
+/* No comment provided by engineer. */
+"actions_enable" = "Включить";
+
+/* No comment provided by engineer. */
+"actions_load" = "Загрузить";
+
+/* No comment provided by engineer. */
 "dictionary_footer" = "Finale может учить новые слова. Напишите новое слово и свайпните вверх, что бы добавить его в словарь.";
 
 /* No comment provided by engineer. */
@@ -80,6 +89,30 @@
 "languages_title" = "Языки";
 
 /* No comment provided by engineer. */
+"misc_default" = "По умолчанию";
+
+/* No comment provided by engineer. */
+"misc_deleting" = "Удаление";
+
+/* No comment provided by engineer. */
+"misc_loading" = "Загрузка";
+
+/* No comment provided by engineer. */
+"ngram_deleting_ngrams" = "Удаление словаря…";
+
+/* No comment provided by engineer. */
+"ngram_loading_n_dictionary" = "Загрузка %D-грамм…";
+
+/* No comment provided by engineer. */
+"ngram_loading_status_started" = "Загрузка началась";
+
+/* No comment provided by engineer. */
+"ngram_saving_database" = "Сохранение словаря…";
+
+/* No comment provided by engineer. */
+"ngram_writing_n_to_database" = "Запись %D-грамм…";
+
+/* No comment provided by engineer. */
 "preferences_advanced_clean_words_one_use" = "Удалить слова с 1 исп.";
 
 /* No comment provided by engineer. */
@@ -108,6 +141,42 @@
 
 /* No comment provided by engineer. */
 "preferences_autocorrect_words" = "Автокоррекция слов";
+
+/* No comment provided by engineer. */
+"preferences_dynamic_touch_zones_dict_key_probability" = "Вероятность клавиши";
+
+/* No comment provided by engineer. */
+"preferences_dynamic_touch_zones_dict_loaded" = "Словарь загружен";
+
+/* No comment provided by engineer. */
+"preferences_dynamic_touch_zones_dict_not_loaded" = "Словарь не загружен";
+
+/* No comment provided by engineer. */
+"preferences_dynamic_touch_zones_dict_touch_zone_scale" = "Размер клавиши";
+
+/* No comment provided by engineer. */
+"preferences_dynamic_touch_zones_dictionary_required" = "Для работы умных клавиш необходим словарь.";
+
+/* No comment provided by engineer. */
+"preferences_dynamic_touch_zones_explanation" = "Когда Умные Клавиши включены, Finale Keyboard попытается предсказать, какую клавишу вы нажмете следующей, и слегка увеличит ее площадь нажатия.";
+
+/* No comment provided by engineer. */
+"preferences_dynamic_touch_zones_highlight_keys" = "Подсвечивать клавиши";
+
+/* No comment provided by engineer. */
+"preferences_dynamic_touch_zones_loading_duration_warning" = "%@ может занять до минуты. Не покидайте эту страницу, пока это не будет сделано.";
+
+/* No comment provided by engineer. */
+"preferences_dynamic_touch_zones_max_key_scale" = "Макс. площадь клавиши";
+
+/* No comment provided by engineer. */
+"preferences_dynamic_touch_zones_page_title" = "Умные клавиши";
+
+/* No comment provided by engineer. */
+"preferences_dynamic_touch_zones_scale_multiplier" = "Множитель площади";
+
+/* No comment provided by engineer. */
+"preferences_dynamic_touch_zones_show_touch_zones" = "Отображать площадь клавиш";
 
 /* No comment provided by engineer. */
 "preferences_gestures_haptic" = "Тактильная отдача для жестов";
@@ -141,6 +210,12 @@
 
 /* No comment provided by engineer. */
 "preferences_typing_haptic" = "Тактильная отдача для клавиш";
+
+/* No comment provided by engineer. */
+"Probability" = "Вероятность";
+
+/* No comment provided by engineer. */
+"Scale" = "Размер";
 
 /* No comment provided by engineer. */
 "shortcuts_extra_symbols" = "Больше символов";

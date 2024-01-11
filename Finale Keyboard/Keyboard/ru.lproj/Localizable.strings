@@ -1,0 +1,15 @@
+/* No comment provided by engineer. */
+"ngram_deleting_ngrams" = "Удаление словаря";
+
+/* No comment provided by engineer. */
+"ngram_loading_n_dictionary" = "Загрузка %D-грамм…";
+
+/* No comment provided by engineer. */
+"ngram_loading_status_started" = "Загрузка началась";
+
+/* No comment provided by engineer. */
+"ngram_saving_database" = "Сохранение словаря…";
+
+/* No comment provided by engineer. */
+"ngram_writing_n_to_database" = "Запись %D-грамм…";
+

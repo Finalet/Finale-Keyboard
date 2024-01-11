@@ -50,7 +50,7 @@ struct PreferencesView: View {
             }
             Section {
                 ListNavigationLink(destination: DynamicTouchZones()) {
-                    Text("Dynamic Touch Zones")
+                    Text(Localize.DynamicTouchZones.pageTitle)
                 }
                 .frame(height: 30)
                 ListNavigationLink(destination: PreferencesPunctuationView()) {
@@ -251,17 +251,17 @@ struct DynamicTouchZones: View {
     
     @FocusState private var shouldShowKeyboard: Bool
     
-    typealias Localize = Localization.HomeScreen
+    typealias Localize = Localization.PreferencesScreen.DynamicTouchZones
     
     var body: some View {
         List {
-            Section (footer: Text("When enabled, Finale Keyboard will try to predict what key you will tap next and slightly increase its tap zone.")) {
-                Toggle("Enable", isOn: $isDynamicTapZonesEnabled.animation())
+            Section (footer: Text(Localize.explanation)) {
+                Toggle(Localization.Actions.enable, isOn: $isDynamicTapZonesEnabled.animation())
                     .onChange(of: isDynamicTapZonesEnabled) { value in
                         OnChange()
                     }
                 if isDynamicTapZonesEnabled {
-                    Toggle("Highlight keys", isOn: $dynamicKeyHighlighting.animation())
+                    Toggle(Localize.highlightKeys, isOn: $dynamicKeyHighlighting.animation())
                         .onChange(of: dynamicKeyHighlighting) { value in
                             if value && showTouchZones { withAnimation { showTouchZones = false } }
                             OnChange()
@@ -269,7 +269,7 @@ struct DynamicTouchZones: View {
                 }
             }
             if isDynamicTapZonesEnabled {
-                Section (footer: Text(loadingStatus == nil ? !isDictionaryLoaded ? "Dictionary is required for dynamic touch zones to work." : "" : "\(!isDictionaryLoaded ? "Loading" : "Deleting") can take up to a minute. Do not leave this page until it is done.")) {
+                Section (footer: Text(loadingStatus == nil ? !isDictionaryLoaded ? Localize.dictionaryRequired : "" : String(format: Localize.loadingDurationWarning, !isDictionaryLoaded ? Localization.Misc.loading : Localization.Misc.deleting))) {
                     HStack{
                         if loadingStatus == nil {
                             Image(systemName: isDictionaryLoaded ? "checkmark" : "exclamationmark.triangle")
@@ -279,7 +279,7 @@ struct DynamicTouchZones: View {
                                 .tint(.gray)
                                 .padding(.trailing, 4)
                         }
-                        Text(loadingStatus ?? "Dictionary\(isDictionaryLoaded ? " " : " not ")loaded")
+                        Text(loadingStatus ?? (isDictionaryLoaded ? Localize.dictionaryLoaded : Localize.dictionaryNotLoaded))
                             .foregroundColor(loadingStatus != nil ? .gray : isDictionaryLoaded ? .green : .red)
                         Spacer()
                         Button(action: {
@@ -295,38 +295,38 @@ struct DynamicTouchZones: View {
                                 }
                             }
                         }, label: {
-                            Text(loadingStatus == nil ? (!isDictionaryLoaded ? "Load" : "Delete") : "")
+                            Text(loadingStatus == nil ? (!isDictionaryLoaded ? Localization.Actions.load : Localization.Actions.delete) : "")
                         })
                         .disabled(loadingStatus != nil)
                     }
                 }
-                Section(header: Text("Advanced")) {
-                    Toggle("Show touch zones", isOn: $showTouchZones.animation())
+                Section(header: Text(Localization.PreferencesScreen.Advanced.pageTitle)) {
+                    Toggle(Localize.showTouchZones, isOn: $showTouchZones.animation())
                         .onChange(of: showTouchZones) { value in
                             if value && dynamicKeyHighlighting { withAnimation { dynamicKeyHighlighting = false } }
                             OnChange()
                         }
-                    TextField(Localize.inputFieldPlaceholder, text: $testText)
+                    TextField(Localization.HomeScreen.inputFieldPlaceholder, text: $testText)
                         .focused($shouldShowKeyboard)
                 }
                 if #available(iOS 16.0, *) {
                     ScaleGraph(maxScale: $maxTouchZoneScale, multiplier: $dynamicTapZoneProbabilityMultiplier)
                 }
-                Section (footer: Text("Default: 140%")) {
-                    TextRow(label: "Maximum key scale", value: "\(100 + Int(maxTouchZoneScale*100))%")
+                Section (footer: Text(verbatim: "\(Localization.Misc.Default): 140%")) {
+                    TextRow(label: Localize.maximumKeyScale, value: "\(100 + Int(maxTouchZoneScale*100))%")
                     Slider(value: $maxTouchZoneScale, in: 0.05...1.0, step: 0.05) { _ in
                         OnChange()
                     }
                 }
-                Section (footer: Text("Default: 1.2")) {
-                    TextRow(label: "Scale multiplier", value: "\(round(dynamicTapZoneProbabilityMultiplier*10)/10)")
+                Section (footer: Text(verbatim: "\(Localization.Misc.Default): 1.2")) {
+                    TextRow(label: Localize.scaleMultiplier, value: "\(round(dynamicTapZoneProbabilityMultiplier*10)/10)")
                     Slider(value: $dynamicTapZoneProbabilityMultiplier, in: 1.0...3.0, step: 0.1) { _ in
                         OnChange()
                     }
                 }
             }
         }
-        .navigationTitle("Dynamic Touch Zones")
+        .navigationTitle(Localize.pageTitle)
         .onAppear {
             Load()
         }
@@ -399,8 +399,8 @@ struct ScaleGraph: View {
         }
         .listRowBackground(Color(UIColor.systemGroupedBackground))
         .listRowInsets(EdgeInsets(top: 8, leading: 8, bottom: 8, trailing: 8))
-        .chartXAxisLabel("Key probability", alignment: .center)
-        .chartYAxisLabel("Touch zone scale", position: .trailing, alignment: .center)
+        .chartXAxisLabel(Localization.PreferencesScreen.DynamicTouchZones.keyProbability, alignment: .center)
+        .chartYAxisLabel(Localization.PreferencesScreen.DynamicTouchZones.touchZoneScale, position: .trailing, alignment: .center)
         .chartYAxis {
             AxisMarks(format: .percent.scale(1), values: yAxisLabels)
         }
