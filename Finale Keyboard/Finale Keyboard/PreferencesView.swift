@@ -49,12 +49,12 @@ struct PreferencesView: View {
                 }
             }
             Section {
-                ListNavigationLink(destination: PreferencesPunctuationView()) {
-                    Text(Localize.Punctuation.pageTitle)
-                }
-                .frame(height: 30)
                 ListNavigationLink(destination: DynamicTouchZones()) {
                     Text("Dynamic Touch Zones")
+                }
+                .frame(height: 30)
+                ListNavigationLink(destination: PreferencesPunctuationView()) {
+                    Text(Localize.Punctuation.pageTitle)
                 }
                 .frame(height: 30)
                 ListNavigationLink(destination: AdvancedView()) {
@@ -243,12 +243,11 @@ struct DynamicTouchZones: View {
     @State var isDynamicTapZonesEnabled: Bool = false
     @State var showTouchZones: Bool = false
     @State var maxTouchZoneScale: Float = 0.4
-    @State var dynamicTapZoneProbabilityMultiplier: Float = 1.5
+    @State var dynamicTapZoneProbabilityMultiplier: Float = 1.2
     @State var dynamicKeyHighlighting: Bool = false
     
     @State var loadingStatus: String? = nil
-    @State var totalNgramsLoaded = 0
-    var shouldLoadNGrams: Bool { return totalNgramsLoaded == 0 }
+    @State var isDictionaryLoaded: Bool = false
     
     @FocusState private var shouldShowKeyboard: Bool
     
@@ -270,23 +269,36 @@ struct DynamicTouchZones: View {
                 }
             }
             if isDynamicTapZonesEnabled {
-                Section (footer: Text(loadingStatus == nil ? "Loaded dictionary is required for dynamic touch zones." : "\(shouldLoadNGrams ? "Loading" : "Clearing") can take up to a minute. Do not leave this page until it is done.")) {
-                   Button(action: {
-                        if shouldLoadNGrams {
-                            Ngrams.shared.LoadNgramsToCoreData() { status, isDone in
-                                loadingStatus = isDone ? nil : status
-                                if isDone { totalNgramsLoaded = Ngrams.shared.totalNgramsLoaded }
-                            }
+                Section (footer: Text(loadingStatus == nil ? !isDictionaryLoaded ? "Dictionary is required for dynamic touch zones to work." : "" : "\(!isDictionaryLoaded ? "Loading" : "Deleting") can take up to a minute. Do not leave this page until it is done.")) {
+                    HStack{
+                        if loadingStatus == nil {
+                            Image(systemName: isDictionaryLoaded ? "checkmark" : "exclamationmark.triangle")
+                                .foregroundColor(isDictionaryLoaded ? .green : .red)
                         } else {
-                            Ngrams.shared.DeleteAllNgrams() { status, isDone in
-                                loadingStatus = isDone ? nil : status
-                                if isDone { totalNgramsLoaded = Ngrams.shared.totalNgramsLoaded }
-                            }
+                            ProgressView()
+                                .tint(.gray)
+                                .padding(.trailing, 4)
                         }
-                    }, label: {
-                        Text(loadingStatus ?? (shouldLoadNGrams ? "Load dictionary" : "Clear dictionary"))
-                    })
-                    .disabled(loadingStatus != nil)
+                        Text(loadingStatus ?? "Dictionary\(isDictionaryLoaded ? " " : " not ")loaded")
+                            .foregroundColor(loadingStatus != nil ? .gray : isDictionaryLoaded ? .green : .red)
+                        Spacer()
+                        Button(action: {
+                            if !isDictionaryLoaded {
+                                Ngrams.shared.LoadNgramsToCoreData() { status, isDone in
+                                    loadingStatus = isDone ? nil : status
+                                    if isDone { isDictionaryLoaded = Ngrams.shared.totalNgramsLoaded > 0 }
+                                }
+                            } else {
+                                Ngrams.shared.DeleteAllNgrams() { status, isDone in
+                                    loadingStatus = isDone ? nil : status
+                                    if isDone { isDictionaryLoaded = Ngrams.shared.totalNgramsLoaded > 0 }
+                                }
+                            }
+                        }, label: {
+                            Text(loadingStatus == nil ? (!isDictionaryLoaded ? "Load" : "Delete") : "")
+                        })
+                        .disabled(loadingStatus != nil)
+                    }
                 }
                 Section(header: Text("Advanced")) {
                     Toggle("Show touch zones", isOn: $showTouchZones.animation())
@@ -306,7 +318,7 @@ struct DynamicTouchZones: View {
                         OnChange()
                     }
                 }
-                Section (footer: Text("Default: 1.5")) {
+                Section (footer: Text("Default: 1.2")) {
                     TextRow(label: "Scale multiplier", value: "\(round(dynamicTapZoneProbabilityMultiplier*10)/10)")
                     Slider(value: $dynamicTapZoneProbabilityMultiplier, in: 1.0...3.0, step: 0.1) { _ in
                         OnChange()
@@ -341,13 +353,13 @@ struct DynamicTouchZones: View {
     }
     
     func Load () {
-        totalNgramsLoaded = Ngrams.shared.totalNgramsLoaded
+        isDictionaryLoaded = Ngrams.shared.totalNgramsLoaded > 0
         
         let userDefaults = UserDefaults(suiteName: suiteName)
         isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
         showTouchZones = userDefaults?.value(forKey: "FINALE_DEV_APP_showTouchZones") as? Bool ?? false
         maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? Float ?? 0.4
-        dynamicTapZoneProbabilityMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier") as? Float ?? 1.5
+        dynamicTapZoneProbabilityMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier") as? Float ?? 1.2
         dynamicKeyHighlighting = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicKeyHighlighting") as? Bool ?? false
     }
 }

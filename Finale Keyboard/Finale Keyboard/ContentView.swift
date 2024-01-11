@@ -168,6 +168,7 @@ struct EnabledListItem: View {
     let isEnabled: Bool
     let enabledText: String
     let disabledText: String
+    var disabledColor: Color = .orange
     
     var body: some View {
         ListItem {
@@ -175,7 +176,7 @@ struct EnabledListItem: View {
                 isEnabled ? enabledText : disabledText,
                 systemImage: isEnabled ? "checkmark" : "exclamationmark.triangle")
         }
-        .foregroundColor(isEnabled ? .green : .orange)
+        .foregroundColor(isEnabled ? .green : disabledColor)
     }
 }
 
