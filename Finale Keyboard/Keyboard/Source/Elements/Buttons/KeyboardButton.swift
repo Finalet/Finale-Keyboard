@@ -118,8 +118,6 @@ class KeyboardButton: NoClipTouchUIView {
         
         if FinaleKeyboard.dynamicKeyHighlighting {
             self.layer.cornerRadius = by == 0.0 ? 0 : 8
-            self.layer.borderWidth = 2
-            self.layer.borderColor = by == 0.0 ? UIColor.clear.cgColor : UIColor.brand.withAlphaComponent(0.5).cgColor
             self.backgroundColor = by == 0.0 ? .clearInteractable : .brand.withAlphaComponent(by / CGFloat(FinaleKeyboard.maxTouchZoneScale * 1.1))
         }
         if FinaleKeyboard.showTouchZones {
