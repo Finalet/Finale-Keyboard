@@ -84,7 +84,7 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
     
     func ShowEmojiPicker (emoji: Emoji, cell: EmojiCell) {
         skinToneSelector?.removeFromSuperview()
-        skinToneSelector = SkinToneSelector(emoji.duplicate(nil), fontSize: cell.label.font.pointSize*0.6, collectionView: self, emojiCell: cell)
+        skinToneSelector = SkinToneSelector(emoji.duplicate(nil), fontSize: 18, collectionView: self, emojiCell: cell)
         skinToneSelector?.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(skinToneSelector!)
         skinToneSelector?.topAnchor.constraint(greaterThanOrEqualTo: FinaleKeyboard.instance.view.topAnchor, constant: 8).isActive = true
@@ -142,18 +142,18 @@ class EmojiCell: UICollectionViewCell {
     var emoji: Emoji?
     var collectionView: EmojiCollectionCell?
     
-    var label = UILabel()
+    var image = UIImageView()
+    
+    var padding = 5.0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
         backgroundColor = .clear
         
-        label.frame = CGRect(x: 0, y: 0, width: frame.width, height: frame.height)
-        label.font = label.font.withSize(32)
-        label.adjustsFontSizeToFitWidth = true
-        label.textAlignment = .center
-        addSubview(label)
+        image.frame = CGRect(x: padding, y: padding, width: frame.width - padding*2, height: frame.height - padding*2)
+        image.contentMode = .scaleAspectFit
+        addSubview(image)
         
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(LongPress))
         longPress.minimumPressDuration = 0.3
@@ -164,13 +164,17 @@ class EmojiCell: UICollectionViewCell {
     func Setup (emoji: Emoji, collectionView: EmojiCollectionCell) {
         self.emoji = emoji
         self.collectionView = collectionView
+        self.padding = 5
+        self.image.frame = CGRect(x: padding, y: padding, width: frame.width - padding*2, height: frame.height - padding*2)
         
-        label.text = emoji.emoji
+        image.image = emoji.emoji.image(size: round((self.frame.width - padding*2)/1.5) )
     }
     
     func Setup(emoji: Emoji) {
         self.emoji = emoji
-        label.text = emoji.emoji
+        self.padding = 1
+        self.image.frame = CGRect(x: padding, y: padding, width: frame.width - padding*2, height: frame.height - padding*2)
+        image.image = emoji.emoji.image(size: round((self.frame.width - padding*2)/1.5) )
     }
     
     func TypeEmoji () {
@@ -179,12 +183,12 @@ class EmojiCell: UICollectionViewCell {
         FinaleKeyboard.instance.TypeEmoji(emoji: emoji.emoji)
         HapticFeedback.TypingImpactOccurred()
         UIView.animate(withDuration: 0.05, delay: 0, options: [.allowUserInteraction, .curveEaseOut]) {
-            self.label.frame.origin.y -= self.label.frame.size.height*0.3
-            self.label.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
+            self.image.frame.origin.y -= self.image.frame.size.height*0.3
+            self.image.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
         } completion: { _ in
             UIView.animate(withDuration: 0.05, delay: 0, options: [.allowUserInteraction, .curveEaseOut]) {
-                self.label.transform = CGAffineTransform(scaleX: 1, y: 1)
-                self.label.frame.origin.y = 0
+                self.image.transform = CGAffineTransform(scaleX: 1, y: 1)
+                self.image.frame.origin.y = self.padding
             }
         }
     }

@@ -26,7 +26,7 @@
 		3743FC5527B1523A0043B2A2 /* KeyboardEnabledState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3743FC5427B1523A0043B2A2 /* KeyboardEnabledState.swift */; };
 		3743FC5727B158AD0043B2A2 /* FavoriteEmoji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3743FC5627B158AD0043B2A2 /* FavoriteEmoji.swift */; };
 		374C861A27DD74B8003BA47B /* PreferencesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 374C861927DD74B8003BA47B /* PreferencesView.swift */; };
-		375A62CD29E8E7D6007E6065 /* EmojiCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375A62CC29E8E7D6007E6065 /* EmojiCollectionView.swift */; };
+		375A62CD29E8E7D6007E6065 /* EmojiCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375A62CC29E8E7D6007E6065 /* EmojiCollectionCell.swift */; };
 		375A62CF29E8E80F007E6065 /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375A62CE29E8E80F007E6065 /* PageControl.swift */; };
 		375A62D129E8F3E4007E6065 /* EmojiSearchRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375A62D029E8F3E4007E6065 /* EmojiSearchRow.swift */; };
 		375D074B29EA3D2100EA2980 /* ShortcutsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 375D074A29EA3D2100EA2980 /* ShortcutsView.swift */; };
@@ -104,7 +104,7 @@
 		3743FC5827B168090043B2A2 /* Finale Keyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Finale Keyboard.entitlements"; sourceTree = "<group>"; };
 		3743FC5927B168230043B2A2 /* Keyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Keyboard.entitlements; sourceTree = "<group>"; };
 		374C861927DD74B8003BA47B /* PreferencesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesView.swift; sourceTree = "<group>"; };
-		375A62CC29E8E7D6007E6065 /* EmojiCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCollectionView.swift; sourceTree = "<group>"; };
+		375A62CC29E8E7D6007E6065 /* EmojiCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiCollectionCell.swift; sourceTree = "<group>"; };
 		375A62CE29E8E80F007E6065 /* PageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageControl.swift; sourceTree = "<group>"; };
 		375A62D029E8F3E4007E6065 /* EmojiSearchRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiSearchRow.swift; sourceTree = "<group>"; };
 		375D074A29EA3D2100EA2980 /* ShortcutsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutsView.swift; sourceTree = "<group>"; };
@@ -177,7 +177,7 @@
 			isa = PBXGroup;
 			children = (
 				371F496727ADA92F00686BC7 /* EmojiView.swift */,
-				375A62CC29E8E7D6007E6065 /* EmojiCollectionView.swift */,
+				375A62CC29E8E7D6007E6065 /* EmojiCollectionCell.swift */,
 				375A62CE29E8E80F007E6065 /* PageControl.swift */,
 				37991F3629E9E7CD00900BC9 /* SkinToneSelector.swift */,
 			);
@@ -485,7 +485,7 @@
 				37178A7C2B4DB05100748DD0 /* CoreData.swift in Sources */,
 				371F496827ADA92F00686BC7 /* EmojiView.swift in Sources */,
 				37D686732B4B3CA600833DCA /* NoClipTouchUIView.swift in Sources */,
-				375A62CD29E8E7D6007E6065 /* EmojiCollectionView.swift in Sources */,
+				375A62CD29E8E7D6007E6065 /* EmojiCollectionCell.swift in Sources */,
 				37991F3029E9963C00900BC9 /* CharacterButton.swift in Sources */,
 				3791F22F29E7750E005F39B4 /* AutoLayout.swift in Sources */,
 				370B056A28B3F0EF0062000A /* Defaults.swift in Sources */,
