@@ -144,7 +144,7 @@ class EmojiCell: UICollectionViewCell {
     
     var image = UIImageView()
     
-    var padding = 5.0
+    var padding = 6.0
     
     override init(frame: CGRect) {
         super.init(frame: frame)
