@@ -109,14 +109,14 @@ class Ngrams {
         }
     }
     
-    var totalNgramsLoaded: Int {
-        let fetch = Ngram.fetchRequest()
+    var isNgramDictionaryLoaded: Bool {
+        let fetch = NgramDictionary.fetchRequest()
         do {
             let results = try CoreData.shared.context.fetch(fetch)
-            return results.count
+            return results.count > 0
         } catch let error as NSError {
             print(error)
-            return 0
+            return false
         }
     }
     

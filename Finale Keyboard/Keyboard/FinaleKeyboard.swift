@@ -104,8 +104,8 @@ class FinaleKeyboard: UIInputViewController {
     // Dynamic tap zones
     static var isDynamicTapZonesEnabled: Bool = false
     static var showTouchZones: Bool = false
-    static var maxTouchZoneScale = 0.4
-    static var dynamicTapZoneProbabilityMultiplier = 1.0
+    static var maxTouchZoneScale = 0.6
+    static var dynamicTapZoneProbabilityMultiplier = 1.5
     static var dynamicKeyHighlighting = false
     let minNgram = 1
     let maxNgram = 5
@@ -172,8 +172,8 @@ class FinaleKeyboard: UIInputViewController {
         FinaleKeyboard.isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
         FinaleKeyboard.isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
         FinaleKeyboard.showTouchZones = userDefaults?.value(forKey: "FINALE_DEV_APP_showTouchZones") as? Bool ?? false
-        FinaleKeyboard.maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? CGFloat ?? 0.4
-        FinaleKeyboard.dynamicTapZoneProbabilityMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier") as? CGFloat ?? 1.2
+        FinaleKeyboard.maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? CGFloat ?? 0.6
+        FinaleKeyboard.dynamicTapZoneProbabilityMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier") as? CGFloat ?? 1.5
         FinaleKeyboard.dynamicKeyHighlighting = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicKeyHighlighting") as? Bool ?? false
         
         punctuationArray = userDefaults?.value(forKey: "FINALE_DEV_APP_punctuationArray") as? [String] ?? Defaults.punctuation
@@ -311,12 +311,12 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func OpenEmoji () {
-        emojiView.ResetView()
+        FinaleKeyboard.currentViewType = .Emoji
+        emojiView.PrepareView()
         ResetSuggestionsLabels()
         keysViewTopConstraint?.constant = -self.view.frame.height
         keysViewBottomConstraint?.constant = -self.view.frame.height
         lastViewType = FinaleKeyboard.currentViewType
-        FinaleKeyboard.currentViewType = .Emoji
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.4, options: .curveEaseIn) {
             self.view.layoutIfNeeded()
         }

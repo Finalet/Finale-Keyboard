@@ -106,10 +106,9 @@ class EmojiView: UIView, UIScrollViewDelegate, UICollectionViewDelegate, UIColle
         canDismiss = true
     }
     
-    func ResetView () {
-        masterCollection.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredHorizontally, animated: false)
+    func PrepareView () {
         masterCollection.visibleCells.forEach {
-            ($0 as? EmojiCollectionCell)?.collectionView.scrollToItem(at: IndexPath(row: 0, section: 0), at: .centeredHorizontally, animated: false)
+            ($0 as? EmojiCollectionCell)?.collectionView.reloadData()
         }
         canDismiss = true
         toggleOnce = false

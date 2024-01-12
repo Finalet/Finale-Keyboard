@@ -110,7 +110,7 @@ class KeyboardButton: NoClipTouchUIView {
     }
     
     func ScaleTouchZone(by: CGFloat) {
-        let scaleBy = self.frame.size.width * by
+        let scaleBy = self.frame.size.width * by * 0.5
         
         touchZoneConstraints.forEach { constraint in
             constraint.constant = constraint.firstAnchor == touchZone.trailingAnchor || constraint.firstAnchor == touchZone.bottomAnchor ? scaleBy : -scaleBy

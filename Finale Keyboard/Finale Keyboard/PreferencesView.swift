@@ -242,8 +242,8 @@ struct DynamicTouchZones: View {
     
     @State var isDynamicTapZonesEnabled: Bool = false
     @State var showTouchZones: Bool = false
-    @State var maxTouchZoneScale: Float = 0.4
-    @State var dynamicTapZoneProbabilityMultiplier: Float = 1.2
+    @State var maxTouchZoneScale: Float = 0.6
+    @State var dynamicTapZoneProbabilityMultiplier: Float = 1.5
     @State var dynamicKeyHighlighting: Bool = false
     
     @State var loadingStatus: String? = nil
@@ -286,12 +286,12 @@ struct DynamicTouchZones: View {
                             if !isDictionaryLoaded {
                                 Ngrams.shared.LoadNgramsToCoreData() { status, isDone in
                                     loadingStatus = isDone ? nil : status
-                                    if isDone { isDictionaryLoaded = Ngrams.shared.totalNgramsLoaded > 0 }
+                                    if isDone { isDictionaryLoaded = Ngrams.shared.isNgramDictionaryLoaded }
                                 }
                             } else {
                                 Ngrams.shared.DeleteAllNgrams() { status, isDone in
                                     loadingStatus = isDone ? nil : status
-                                    if isDone { isDictionaryLoaded = Ngrams.shared.totalNgramsLoaded > 0 }
+                                    if isDone { isDictionaryLoaded = Ngrams.shared.isNgramDictionaryLoaded }
                                 }
                             }
                         }, label: {
@@ -312,13 +312,13 @@ struct DynamicTouchZones: View {
                 if #available(iOS 16.0, *) {
                     ScaleGraph(maxScale: $maxTouchZoneScale, multiplier: $dynamicTapZoneProbabilityMultiplier)
                 }
-                Section (footer: Text(verbatim: "\(Localization.Misc.Default): 140%")) {
+                Section (footer: Text(verbatim: "\(Localization.Misc.Default): 160%")) {
                     TextRow(label: Localize.maximumKeyScale, value: "\(100 + Int(maxTouchZoneScale*100))%")
-                    Slider(value: $maxTouchZoneScale, in: 0.05...1.0, step: 0.05) { _ in
+                    Slider(value: $maxTouchZoneScale, in: 0.1...2.0, step: 0.1) { _ in
                         OnChange()
                     }
                 }
-                Section (footer: Text(verbatim: "\(Localization.Misc.Default): 1.2")) {
+                Section (footer: Text(verbatim: "\(Localization.Misc.Default): 1.5")) {
                     TextRow(label: Localize.scaleMultiplier, value: "\(round(dynamicTapZoneProbabilityMultiplier*10)/10)")
                     Slider(value: $dynamicTapZoneProbabilityMultiplier, in: 1.0...3.0, step: 0.1) { _ in
                         OnChange()
@@ -353,13 +353,13 @@ struct DynamicTouchZones: View {
     }
     
     func Load () {
-        isDictionaryLoaded = Ngrams.shared.totalNgramsLoaded > 0
+        isDictionaryLoaded = Ngrams.shared.isNgramDictionaryLoaded
         
         let userDefaults = UserDefaults(suiteName: suiteName)
         isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
         showTouchZones = userDefaults?.value(forKey: "FINALE_DEV_APP_showTouchZones") as? Bool ?? false
-        maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? Float ?? 0.4
-        dynamicTapZoneProbabilityMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier") as? Float ?? 1.2
+        maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? Float ?? 0.6
+        dynamicTapZoneProbabilityMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier") as? Float ?? 1.5
         dynamicKeyHighlighting = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicKeyHighlighting") as? Bool ?? false
     }
 }
@@ -382,7 +382,7 @@ struct ScaleGraph: View {
     }
     
     var yAxisLabels: [Int] {
-        return [Int(100), Int(last.1), Int(200)]
+        return [Int(100), Int(last.1), Int(300)]
     }
     var xAxisLabels: [Int] {
         return [0, Int(interceptX*100), 100]
@@ -407,7 +407,7 @@ struct ScaleGraph: View {
         .chartXAxis {
             AxisMarks(format: .percent.scale(1), values: xAxisLabels)
         }
-        .chartYScale(domain: [100, 200])
+        .chartYScale(domain: [100, 300])
         .chartXScale(domain: [0, 100])
         .aspectRatio(1.7, contentMode: .fill)
     }

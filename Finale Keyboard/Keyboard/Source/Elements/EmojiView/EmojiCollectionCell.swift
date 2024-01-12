@@ -111,7 +111,7 @@ class EmojiCollectionCell: UICollectionViewCell, UIScrollViewDelegate, UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return emojiSection?.emojis.count ?? 0
+        return FinaleKeyboard.currentViewType == .Emoji ? (emojiSection?.emojis.count ?? 0) : 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

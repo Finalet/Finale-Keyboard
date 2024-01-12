@@ -167,13 +167,13 @@
 "preferences_dynamic_touch_zones_loading_duration_warning" = "%@ может занять до минуты. Не покидайте эту страницу, пока это не будет сделано.";
 
 /* No comment provided by engineer. */
-"preferences_dynamic_touch_zones_max_key_scale" = "Макс. площадь клавиши";
+"preferences_dynamic_touch_zones_max_key_scale" = "Макс. размер клавиши";
 
 /* No comment provided by engineer. */
 "preferences_dynamic_touch_zones_page_title" = "Умные клавиши";
 
 /* No comment provided by engineer. */
-"preferences_dynamic_touch_zones_scale_multiplier" = "Множитель площади";
+"preferences_dynamic_touch_zones_scale_multiplier" = "Множитель размера";
 
 /* No comment provided by engineer. */
 "preferences_dynamic_touch_zones_show_touch_zones" = "Отображать площадь клавиш";
