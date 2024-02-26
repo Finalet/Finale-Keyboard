@@ -96,16 +96,23 @@ class Ngrams {
         }
     }
     
-    func getCharacterProbabilities(_ str: String) -> [CharacterProbability]? {
-        let fetch = Ngram.fetchRequest()
-        fetch.predicate = NSPredicate(format: "ngram = %@", str)
-        do {
-            let result = try CoreData.shared.context.fetch(fetch).first
-            return result?.characterProbabilities?.array as? [CharacterProbability]
-        } catch let error as NSError {
-            print("[\(str)] Failed to fetch ngram.")
-            print(error)
-            return nil
+    func getCharacterProbabilities(_ str: String, callback: @escaping ([CharacterProbability]?) -> ()) {
+        let backgroundContext = CoreData.shared.persistentContainer.newBackgroundContext()
+        backgroundContext.perform {
+            let fetch = Ngram.fetchRequest()
+            fetch.predicate = NSPredicate(format: "ngram = %@", str)
+            do {
+                let result = try CoreData.shared.context.fetch(fetch).first
+                DispatchQueue.main.async {
+                    callback(result?.characterProbabilities?.array as? [CharacterProbability])
+                }
+            } catch let error as NSError {
+                print("[\(str)] Failed to fetch ngram.")
+                print(error)
+                DispatchQueue.main.async {
+                    callback(nil)
+                }
+            }
         }
     }
     
