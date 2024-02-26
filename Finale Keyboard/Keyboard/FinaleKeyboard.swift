@@ -46,21 +46,16 @@ class FinaleKeyboard: UIInputViewController {
     let emojiRowHeight = 38.0
     
     var emojiSearchRow: EmojiSearchRow?
-    var topRowView = UIView()
-    var middleRowView = UIView()
-    var bottomRowView = UIView()
-    var topRowTopConstraint: NSLayoutConstraint?
-    var bottomRowBottomConstraint: NSLayoutConstraint?
+    var keysView = UIView()
+    var keysViewTopConstraint: NSLayoutConstraint?
+    var keysViewBottomConstraint: NSLayoutConstraint?
+    var middleRowStrip = UIView()
     
     var emojiView = EmojiView()
     
-    var characterButtons = [CharacterButton]()
+    var characterButtons: Dictionary<String, CharacterButton> = [String:CharacterButton]()
     var leadingBottomButton: FunctionButton = FunctionButton(.Shift)
     var trailingBottomButton: FunctionButton = FunctionButton(.Backspace)
-    var leadingBottomButtonTrailingConstraint: NSLayoutConstraint?
-    var leadingBottomButtonWidthConstraint: NSLayoutConstraint?
-    var trailingBottomButtonLeadingConstraint: NSLayoutConstraint?
-    var trailingBottomButtonWidthConstraint: NSLayoutConstraint?
     
     static var isShift = false
     static var isCaps = false
@@ -106,17 +101,26 @@ class FinaleKeyboard: UIInputViewController {
     let learningWordsRepeateThreashold = 3
     var autoLearnWords = true
     
+    // Dynamic tap zones
+    static var isDynamicTapZonesEnabled: Bool = false
+    static var showTouchZones: Bool = false
+    static var maxTouchZoneScale = 0.6
+    static var dynamicTapZoneProbabilityMultiplier = 1.5
+    static var dynamicKeyHighlighting = false
+    let minNgram = 1
+    let maxNgram = 5
+    
     let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
     
     override func viewDidLoad() {
         super.viewDidLoad()
         FinaleKeyboard.instance = self
-        InitRows()
+        LoadPreferences()
+        InitKeysView()
         BuildKeyboardView(viewType: .Characters)
         BuildEmojiView()
         SuggestionsView()
         InitSuggestionsArray()
-        LoadPreferences()
         InitDictionary()
     }
     
@@ -166,6 +170,12 @@ class FinaleKeyboard: UIInputViewController {
         FinaleKeyboard.isAutoCapitalizeOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocapitalizeWords") as? Bool ?? true
         FinaleKeyboard.isTypingHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isTypingHapticEnabled") as? Bool ?? false
         FinaleKeyboard.isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
+        FinaleKeyboard.isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
+        FinaleKeyboard.showTouchZones = userDefaults?.value(forKey: "FINALE_DEV_APP_showTouchZones") as? Bool ?? false
+        FinaleKeyboard.maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? CGFloat ?? 0.6
+        FinaleKeyboard.dynamicTapZoneProbabilityMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier") as? CGFloat ?? 1.5
+        FinaleKeyboard.dynamicKeyHighlighting = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicKeyHighlighting") as? Bool ?? false
+        
         punctuationArray = userDefaults?.value(forKey: "FINALE_DEV_APP_punctuationArray") as? [String] ?? Defaults.punctuation
         shortcuts = userDefaults?.value(forKey: "FINALE_DEV_APP_shortcuts") as? [String : String] ?? Defaults.shortcuts
         FinaleKeyboard.currentLocale = Locale(rawValue: UserDefaults.standard.integer(forKey: "FINALE_DEV_APP_CurrentLocale")) ?? .en_US
@@ -181,23 +191,21 @@ class FinaleKeyboard: UIInputViewController {
         }
     }
     
-    func InitRows () {
-        topRowView.backgroundColor = .clear
-        self.view.addSubview(topRowView, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0)])
-        topRowTopConstraint?.isActive = false
-        topRowTopConstraint = topRowView.topAnchor.constraint(equalTo: self.view.topAnchor)
-        topRowTopConstraint?.isActive = true
+    func InitKeysView () {
+        keysView.backgroundColor = .clear
+        self.view.addSubview(keysView, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0)])
+        keysViewTopConstraint?.isActive = false
+        keysViewTopConstraint = keysView.topAnchor.constraint(equalTo: self.view.topAnchor)
+        keysViewTopConstraint?.isActive = true
+        keysViewBottomConstraint?.isActive = false
+        keysViewBottomConstraint = keysView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
+        keysViewBottomConstraint?.isActive = true
         
-        middleRowView.backgroundColor = .gray.withAlphaComponent(0.5)
-        self.view.addSubview(middleRowView, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .topToBottom(topRowView, 0), .heightToHeight(topRowView, 0)])
+        middleRowStrip.backgroundColor = .gray.withAlphaComponent(0.5)
+        keysView.addSubview(middleRowStrip, anchors: [.leading(0), .trailing(0), .centerY(0), .heightMultiplier(0.3333)])
         
-        bottomRowView.addSubview(leadingBottomButton, anchors: [.leading(0), .top(0), .bottom(0)])
-        bottomRowView.addSubview(trailingBottomButton, anchors: [.trailing(0), .top(0), .bottom(0)])
-        bottomRowView.backgroundColor = .clear
-        self.view.addSubview(bottomRowView, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .topToBottom(middleRowView, 0), .heightToHeight(middleRowView, 0)])
-        bottomRowBottomConstraint?.isActive = false
-        bottomRowBottomConstraint = bottomRowView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor)
-        bottomRowBottomConstraint?.isActive = true
+        keysView.addSubview(leadingBottomButton, anchors: [.leading(0), .bottom(0)])
+        keysView.addSubview(trailingBottomButton, anchors: [.trailing(0), .bottom(0)])
     }
     
     func BuildKeyboardView (viewType: ViewType, updateViewType: Bool = true) {
@@ -219,50 +227,58 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func BuildKeyboardView (topRow: [String], middleRow: [String], bottomRow: [String]) {
-        characterButtons.forEach{ $0.removeFromSuperview() }
+        characterButtons.forEach{ $0.value.removeFromSuperview() }
         characterButtons.removeAll()
-                
-        topRow.forEach { CreateCharacterButton($0, row: topRowView) }
-        if let first = topRowView.subviews.first { first.leadingAnchor.constraint(equalTo: topRowView.leadingAnchor).isActive = true }
-        if let last = topRowView.subviews.last { last.trailingAnchor.constraint(equalTo: topRowView.trailingAnchor).isActive = true }
         
-        middleRow.forEach { CreateCharacterButton($0, row: middleRowView) }
-        if let first = middleRowView.subviews.first { first.leadingAnchor.constraint(equalTo: middleRowView.leadingAnchor).isActive = true }
-        if let last = middleRowView.subviews.last { last.trailingAnchor.constraint(equalTo: middleRowView.trailingAnchor).isActive = true }
-
-        let first = CreateCharacterButton(bottomRow.first!, row: bottomRowView)
-        for i in 1..<(bottomRow.count-1) { CreateCharacterButton(bottomRow[i], row: bottomRowView) }
-        let last = CreateCharacterButton(bottomRow.last!, row: bottomRowView)
-
-        leadingBottomButtonTrailingConstraint?.isActive = false
-        leadingBottomButtonTrailingConstraint = leadingBottomButton.trailingAnchor.constraint(equalTo: first.leadingAnchor)
-        leadingBottomButtonTrailingConstraint?.isActive = true
-
-        leadingBottomButtonWidthConstraint?.isActive = false
-        leadingBottomButtonWidthConstraint = leadingBottomButton.widthAnchor.constraint(equalTo: first.widthAnchor)
-        leadingBottomButtonWidthConstraint?.isActive = true
-
-        trailingBottomButtonLeadingConstraint?.isActive = false
-        trailingBottomButtonLeadingConstraint = trailingBottomButton.leadingAnchor.constraint(equalTo: last.trailingAnchor)
-        trailingBottomButtonLeadingConstraint?.isActive = true
-
-        trailingBottomButtonWidthConstraint?.isActive = false
-        trailingBottomButtonWidthConstraint = trailingBottomButton.widthAnchor.constraint(equalTo: last.widthAnchor)
-        trailingBottomButtonWidthConstraint?.isActive = true
+        
+        BuildRow(characters: topRow, row: .Top)
+        BuildRow(characters: middleRow, row: .Middle, prevRowFirstButton: characterButtons[topRow[0]])
+        BuildRow(characters: bottomRow, row: .Bottom, prevRowFirstButton: characterButtons[middleRow[0]])
     }
     
-    @discardableResult
-    func CreateCharacterButton(_ character: String, row: UIView) -> UIView {
-        let button = CharacterButton(character)
-        let prevButton = row.subviews.last as? CharacterButton
-        row.addSubview(button, anchors: [.top(0), .bottom(0)])
-        if let prevButton = prevButton {
-            button.widthAnchor.constraint(equalTo: prevButton.widthAnchor).isActive = true
-            button.leadingAnchor.constraint(equalTo: prevButton.trailingAnchor).isActive = true
+    func BuildRow (characters: [String], row: KeyboardRow, prevRowFirstButton: CharacterButton? = nil) {
+        for i in 0..<characters.count {
+            let button = CharacterButton(characters[i])
+            let prevButton = i != 0 ? characterButtons[characters[i-1]] : nil
+            
+            var anchors: [LayoutAnchor] = []
+            if i == 0 { // The first key is responsible for vertical anchors.
+                if row == .Top { anchors.append(.top(0)) }
+                else if row == .Bottom { anchors.append(.bottom(0)) }
+                
+                if let prevRowFirstButton = prevRowFirstButton {
+                    anchors.append(contentsOf: [.topToBottom(prevRowFirstButton, 0), .heightToHeight(prevRowFirstButton, 0)])
+                }
+            }
+            keysView.addSubview(button, anchors: anchors)
+            
+            if let prevButton = prevButton {
+                button.widthAnchor.constraint(equalTo: prevButton.widthAnchor).isActive = true
+                button.leadingAnchor.constraint(equalTo: prevButton.trailingAnchor).isActive = true
+                button.topAnchor.constraint(equalTo: prevButton.topAnchor).isActive = true
+                button.bottomAnchor.constraint(equalTo: prevButton.bottomAnchor).isActive = true
+            }
+            
+            if i == 0 {
+                if row == .Bottom {
+                    button.leadingAnchor.constraint(equalTo: leadingBottomButton.trailingAnchor).isActive = true
+                    button.heightAnchor.constraint(equalTo: leadingBottomButton.heightAnchor).isActive = true
+                    button.widthAnchor.constraint(equalTo: leadingBottomButton.widthAnchor).isActive = true
+                } else {
+                    button.leadingAnchor.constraint(equalTo: keysView.leadingAnchor).isActive = true
+                }
+            } else if i == characters.count - 1 {
+                if row == .Bottom {
+                    button.trailingAnchor.constraint(equalTo: trailingBottomButton.leadingAnchor).isActive = true
+                    button.heightAnchor.constraint(equalTo: trailingBottomButton.heightAnchor).isActive = true
+                    button.widthAnchor.constraint(equalTo: trailingBottomButton.widthAnchor).isActive = true
+                } else {
+                    button.trailingAnchor.constraint(equalTo: keysView.trailingAnchor).isActive = true
+                }
+            }
+            
+            characterButtons[characters[i]] = button
         }
-        characterButtons.append(button)
-        
-        return button
     }
     
     func SuggestionsView () {
@@ -291,24 +307,24 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func BuildEmojiView () {
-        self.view.addSubview(emojiView, anchors: [.topToBottom(bottomRowView, 0), .leading(0), .trailing(0), .heightToHeight(self.view, 0)])
+        self.view.addSubview(emojiView, anchors: [.topToBottom(keysView, 0), .leading(0), .trailing(0), .heightToHeight(self.view, 0)])
     }
     
     func OpenEmoji () {
-        emojiView.ResetView()
-        ResetSuggestionsLabels()
-        topRowTopConstraint?.constant = -self.view.frame.height
-        bottomRowBottomConstraint?.constant = -self.view.frame.height
-        lastViewType = FinaleKeyboard.currentViewType
         FinaleKeyboard.currentViewType = .Emoji
+        emojiView.PrepareView()
+        ResetSuggestionsLabels()
+        keysViewTopConstraint?.constant = -self.view.frame.height
+        keysViewBottomConstraint?.constant = -self.view.frame.height
+        lastViewType = FinaleKeyboard.currentViewType
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.4, options: .curveEaseIn) {
             self.view.layoutIfNeeded()
         }
     }
     
     func CloseEmoji (hideEmojiSearchRow: Bool = false) {
-        topRowTopConstraint?.constant = (emojiSearchRow == nil || hideEmojiSearchRow) ? 0 : emojiRowHeight
-        bottomRowBottomConstraint?.constant = 0
+        keysViewTopConstraint?.constant = (emojiSearchRow == nil || hideEmojiSearchRow) ? 0 : emojiRowHeight
+        keysViewBottomConstraint?.constant = 0
         UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
             self.view.layoutIfNeeded()
         } completion: { _ in
@@ -331,7 +347,7 @@ class FinaleKeyboard: UIInputViewController {
             emojiSearchRow?.removeFromSuperview()
             emojiSearchRow = EmojiSearchRow()
             
-            self.view.addSubview(emojiSearchRow!, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .bottomToTop(topRowView, 0), .height(emojiRowHeight)])
+            self.view.addSubview(emojiSearchRow!, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .bottomToTop(keysView, 0), .height(emojiRowHeight)])
             
         } else {
             hideEmojiSearchRow = true
@@ -373,6 +389,7 @@ class FinaleKeyboard: UIInputViewController {
         if (x) { self.textDocumentProxy.insertText(" ") }
         
         CheckAutoCapitalization()
+        ProcessDynamicTouchZones()
     }
     func TypeEmoji (emoji: String) {
         if (getOneBeforeLastChar() != "" && Character(getOneBeforeLastChar()).isEmoji && getLastChar() == " ") {
@@ -397,16 +414,17 @@ class FinaleKeyboard: UIInputViewController {
         
         self.textDocumentProxy.deleteBackward()
         CheckAutoCapitalization()
+        ProcessDynamicTouchZones()
     }
     
     func ShowShortcutPreviews () {
         characterButtons.forEach {
-            $0.ShowShortcutPreview()
+            $0.value.ShowShortcutPreview()
         }
     }
     func HideShortcutPreviews () {
         characterButtons.forEach {
-            $0.HideShortcutPreview()
+            $0.value.HideShortcutPreview()
         }
     }
     
@@ -423,9 +441,7 @@ class FinaleKeyboard: UIInputViewController {
         self.lastTouchPosX = touchLocation.x
         
         UIView.animate (withDuration: 0.3) {
-            self.topRowView.alpha = 0.5
-            self.middleRowView.alpha = 0.5
-            self.bottomRowView.alpha = 0.5
+            self.keysView.alpha = 0.5
         }
         
         HapticFeedback.GestureImpactOccurred()
@@ -433,10 +449,9 @@ class FinaleKeyboard: UIInputViewController {
     
     func EndMoveCursor () {
         UIView.animate (withDuration: 0.3) {
-            self.topRowView.alpha = 1
-            self.middleRowView.alpha = 1
-            self.bottomRowView.alpha = 1
+            self.keysView.alpha = 1
         }
+        ProcessDynamicTouchZones()
     }
     
     func MoveCursor (touchLocation: CGPoint) {
@@ -546,6 +561,7 @@ class FinaleKeyboard: UIInputViewController {
             InsertPunctuation(index: index)
         }
         CheckAutoCapitalization()
+        ResetDynamicTouchZones()
         if FinaleKeyboard.currentViewType != .Characters { BuildKeyboardView(viewType: .Characters) }
     }
     func SwipeDown () {
@@ -817,6 +833,7 @@ class FinaleKeyboard: UIInputViewController {
         }
         CheckAutoCapitalization()
         RedrawSuggestionsLabels()
+        ProcessDynamicTouchZones()
         canEditPrevPunctuation = false
     }
     func InsertPunctuation (index: Int) {
@@ -844,7 +861,7 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func UpdateButtonsTitles () {
-        characterButtons.forEach { $0.ToggleCapitalization(shouldCapitalize) }
+        characterButtons.forEach { $0.value.ToggleCapitalization(shouldCapitalize) }
         if leadingBottomButton.function == .Shift || leadingBottomButton.function == .Caps {
             leadingBottomButton.ToggleHighlight(shouldCapitalize)
         }
@@ -1004,15 +1021,16 @@ class FinaleKeyboard: UIInputViewController {
     override func textDidChange(_ textInput: UITextInput?) {
         // The app has just changed the document's contents, the document context has been updated.
         CheckAutoCapitalization()
+        ProcessDynamicTouchZones()
         if (!self.textDocumentProxy.hasText) { RedrawSuggestionsLabels() }
     }
     
     func MiddleRowReactAnimation () {
         UIView.animate(withDuration: 0.17, delay: 0, options: .allowUserInteraction) {
-            self.middleRowView.backgroundColor = self.middleRowView.backgroundColor?.withAlphaComponent(0.57)
+            self.middleRowStrip.backgroundColor = self.middleRowStrip.backgroundColor?.withAlphaComponent(0.6)
         } completion: { _ in
             UIView.animate(withDuration: 0.17, delay: 0, options: .allowUserInteraction) {
-                self.middleRowView.backgroundColor = self.middleRowView.backgroundColor?.withAlphaComponent(0.5)
+                self.middleRowStrip.backgroundColor = self.middleRowStrip.backgroundColor?.withAlphaComponent(0.5)
             }
         }
         
@@ -1057,6 +1075,11 @@ class FinaleKeyboard: UIInputViewController {
         let text: String = self.textDocumentProxy.documentContextBeforeInput!
         return String(text[text.index(text.endIndex, offsetBy: -3)])
     }
+    func getStringBeforeCursor(length: Int) -> String? {
+        if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput == "") { return nil }
+        let text: String = self.textDocumentProxy.documentContextBeforeInput!
+        return String(text[text.index(text.endIndex, offsetBy: -min(length, text.count))..<text.endIndex])
+    }
     
     func ToggleLocale () {
         let index = ((FinaleKeyboard.enabledLocales.firstIndex(of: FinaleKeyboard.currentLocale) ?? 0) + 1) % FinaleKeyboard.enabledLocales.count
@@ -1088,14 +1111,13 @@ class FinaleKeyboard: UIInputViewController {
         suggestionLabels.forEach { $0.removeFromSuperview() }
         suggestionLabels.removeAll()
 
-        characterButtons.forEach { $0.removeFromSuperview() }
+        characterButtons.forEach { $0.value.removeFromSuperview() }
         characterButtons.removeAll()
 
         emojiSearchRow?.removeFromSuperview()
         emojiSearchRow = nil
-        topRowView.removeFromSuperview()
-        middleRowView.removeFromSuperview()
-        bottomRowView.removeFromSuperview()
+        keysView.removeFromSuperview()
+        middleRowStrip.removeFromSuperview()
         leadingBottomButton.removeFromSuperview()
         trailingBottomButton.removeFromSuperview()
         

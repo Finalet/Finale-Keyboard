@@ -68,6 +68,8 @@ class FunctionButton: KeyboardButton {
     override func ShowCallout() {
         calloutView.alpha = 1
         iconView.tintColor = .label
+        
+        HapticFeedback.TypingImpactOccurred()
     }
     
     override func HideCallout(direction: KeyboardButton.SwipeDirection? = nil) {

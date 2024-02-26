@@ -8,8 +8,11 @@
 import Foundation
 import UIKit
 
-class KeyboardButton: UIView {
+class KeyboardButton: NoClipTouchUIView {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
+    let touchZone: UIView = UIView()
+    var touchZoneConstraints: [NSLayoutConstraint] = []
     
     var registerSwipeSensitivity = 0.5
     var registeredSwipe = false
@@ -25,11 +28,21 @@ class KeyboardButton: UIView {
     init() {
         super.init(frame: .zero)
         
-        self.backgroundColor = .clearInteractable
-        
         let touch = UILongPressGestureRecognizer(target: self, action: #selector(Touch))
         touch.minimumPressDuration = 0
-        self.addGestureRecognizer(touch)
+        touchZone.addGestureRecognizer(touch)
+        
+        self.clipsToBounds = false
+        touchZone.backgroundColor = .clearInteractable
+        touchZone.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(touchZone)
+        touchZoneConstraints.append(contentsOf: [
+            touchZone.topAnchor.constraint(equalTo: self.topAnchor),
+            touchZone.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+            touchZone.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            touchZone.trailingAnchor.constraint(equalTo: self.trailingAnchor)
+        ])
+        NSLayoutConstraint.activate(touchZoneConstraints)
     }
     
     @objc func Touch (_ sender: UILongPressGestureRecognizer) {
@@ -94,6 +107,23 @@ class KeyboardButton: UIView {
         didLongPress = false
         longPressTimer?.invalidate()
         longPressRepeatTimer?.invalidate()
+    }
+    
+    func ScaleTouchZone(by: CGFloat) {
+        let scaleBy = self.frame.size.width * by * 0.5
+        
+        touchZoneConstraints.forEach { constraint in
+            constraint.constant = constraint.firstAnchor == touchZone.trailingAnchor || constraint.firstAnchor == touchZone.bottomAnchor ? scaleBy : -scaleBy
+        }
+        
+        if FinaleKeyboard.dynamicKeyHighlighting {
+            self.layer.cornerRadius = by == 0.0 ? 0 : 8
+            self.backgroundColor = by == 0.0 ? .clearInteractable : .brand.withAlphaComponent(by / CGFloat(FinaleKeyboard.maxTouchZoneScale * 1.1))
+        }
+        if FinaleKeyboard.showTouchZones {
+            touchZone.layer.cornerRadius = by == 0.0 ? 0 : 8
+            touchZone.backgroundColor = by == 0.0 ? .clearInteractable : .brand.withAlphaComponent(by / CGFloat(FinaleKeyboard.maxTouchZoneScale * 1.1))
+        }
     }
     
     func OnTapBegin (_ sender: UILongPressGestureRecognizer) {}

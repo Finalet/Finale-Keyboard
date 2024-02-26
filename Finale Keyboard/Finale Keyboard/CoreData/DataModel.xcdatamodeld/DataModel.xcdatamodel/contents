@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21513" systemVersion="21G115" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="CharacterProbability" representedClassName="CharacterProbability" syncable="YES" codeGenerationType="class">
+        <attribute name="character" attributeType="String" defaultValueString=""/>
+        <attribute name="probability" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="Ngram" representedClassName="Ngram" syncable="YES" codeGenerationType="class">
+        <attribute name="ngram" attributeType="String" defaultValueString=""/>
+        <relationship name="characterProbabilities" toMany="YES" deletionRule="Cascade" ordered="YES" destinationEntity="CharacterProbability"/>
+    </entity>
+    <entity name="NgramDictionary" representedClassName="NgramDictionary" syncable="YES" codeGenerationType="class">
+        <relationship name="eng" toMany="YES" deletionRule="Cascade" destinationEntity="Ngram"/>
+        <relationship name="ru" toMany="YES" deletionRule="Cascade" destinationEntity="Ngram"/>
+    </entity>
+</model>

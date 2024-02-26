@@ -10,6 +10,21 @@ import Foundation
 
 extension UIColor {
     static let clearInteractable = UIColor(red: 1, green: 1, blue: 1, alpha: 0.001)
+    static let brand = UIColor(red: 0.33, green: 0.51, blue: 0.85, alpha: 1)
+    
+    var components: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+
+        return (red, green, blue, alpha)
+    }
+    
+    func lerp (second: UIColor, percentage: CGFloat) -> UIColor {
+        return UIColor(red: (1-percentage)*self.components.red + percentage*second.components.red, green: (1-percentage)*self.components.green + percentage*second.components.green, blue: (1-percentage)*self.components.blue + percentage*second.components.blue, alpha: (1-percentage)*self.components.alpha + percentage*second.components.alpha)
+    }
 }
 
 extension Dictionary where Value: Equatable {
@@ -45,4 +60,20 @@ extension String {
     var isCombinedIntoEmoji: Bool { unicodeScalars.count > 1 && unicodeScalars.first?.properties.isEmoji ?? false }
 
     var isEmoji: Bool { isSimpleEmoji || isCombinedIntoEmoji }
+    
+    func image(size: CGFloat = 18) -> UIImage? {
+        let nsString = (self as NSString)
+        let font = UIFont.systemFont(ofSize: size)
+        let stringAttributes = [NSAttributedString.Key.font: font]
+        let imageSize = nsString.size(withAttributes: stringAttributes)
+
+        UIGraphicsBeginImageContextWithOptions(imageSize, false, 0)
+        UIColor.clear.set()
+        UIRectFill(CGRect(origin: CGPoint(), size: imageSize))
+        nsString.draw(at: CGPoint.zero, withAttributes: stringAttributes)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+
+        return image ?? UIImage()
+    }
 }
