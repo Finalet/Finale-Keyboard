@@ -145,6 +145,8 @@ class EmojiCell: UICollectionViewCell {
     var image = UIImageView()
     
     var padding = 6.0
+    let compressionFactor = 2.0
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -167,14 +169,14 @@ class EmojiCell: UICollectionViewCell {
         self.padding = 5
         self.image.frame = CGRect(x: padding, y: padding, width: frame.width - padding*2, height: frame.height - padding*2)
         
-        image.image = emoji.emoji.image(size: round((self.frame.width - padding*2)/1.5) )
+        image.image = emoji.emoji.image(size: round((self.frame.width - padding*2)/compressionFactor) )
     }
     
     func Setup(emoji: Emoji) {
         self.emoji = emoji
         self.padding = 1
         self.image.frame = CGRect(x: padding, y: padding, width: frame.width - padding*2, height: frame.height - padding*2)
-        image.image = emoji.emoji.image(size: round((self.frame.width - padding*2)/1.5) )
+        image.image = emoji.emoji.image(size: round((self.frame.width - padding*2)/compressionFactor) )
     }
     
     func TypeEmoji () {

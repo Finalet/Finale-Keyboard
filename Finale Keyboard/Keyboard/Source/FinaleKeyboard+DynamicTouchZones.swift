@@ -19,13 +19,15 @@ extension FinaleKeyboard {
             let lastString = String(lastSubstring).lowercased()
             if lastString.count < minNgram { return }
             
-            if let probabilities = Ngrams.shared.getCharacterProbabilities(lastString) {
+            Ngrams.shared.getCharacterProbabilities(lastString) { probabilities in
+                guard let probabilities = probabilities else { return }
+                
                 for probability in probabilities.reversed() {
                     guard let char = probability.character else { continue }
                     
                     let prob = CGFloat(probability.probability) 
                     let by = min(prob * FinaleKeyboard.maxTouchZoneScale * FinaleKeyboard.dynamicTapZoneProbabilityMultiplier, FinaleKeyboard.maxTouchZoneScale)
-                    ScaleCharacterKey(key: char, by: by)
+                    self.ScaleCharacterKey(key: char, by: by)
                 }
             }
         }
