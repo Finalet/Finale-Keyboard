@@ -160,6 +160,9 @@ class CharacterButton: KeyboardButton {
     func TypeShortcut () -> Bool {
         if let shortcut = FinaleKeyboard.instance.shortcuts[String(character)] {
             if shortcut.isEmoji { FinaleKeyboard.instance.TypeEmoji(emoji: shortcut) }
+            else if shortcut == "Cut" { FinaleKeyboard.instance.Cut() }
+            else if shortcut == "Copy" { FinaleKeyboard.instance.Copy() }
+            else if shortcut == "Paste" { FinaleKeyboard.instance.Paste() }
             else { FinaleKeyboard.instance.TypeCharacter(shortcut) }
             AnimateShortcutCallout(title: shortcut)
             HapticFeedback.TypingImpactOccurred()

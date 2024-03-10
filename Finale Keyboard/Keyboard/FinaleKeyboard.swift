@@ -399,6 +399,26 @@ class FinaleKeyboard: UIInputViewController {
         self.textDocumentProxy.insertText(" ")
     }
     
+    func Cut () {
+        guard let selection = self.textDocumentProxy.selectedText else { return }
+        
+        UIPasteboard.general.string = selection
+        self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
+        for _ in 1..<selection.count {
+            self.textDocumentProxy.deleteBackward()
+        }
+        self.textDocumentProxy.adjustTextPosition(byCharacterOffset: 1)
+        self.textDocumentProxy.deleteBackward()
+    }
+    
+    func Copy () {
+        UIPasteboard.general.string = self.textDocumentProxy.selectedText
+    }
+    
+    func Paste () {
+        TypeCharacter(UIPasteboard.general.string ?? "")
+    }
+    
     func BackAction() {
         if FinaleKeyboard.currentViewType == .SearchEmoji {
             ToggleSearchEmojiView()
