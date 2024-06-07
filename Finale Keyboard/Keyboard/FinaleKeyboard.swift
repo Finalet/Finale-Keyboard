@@ -416,7 +416,10 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func Paste () {
-        TypeCharacter(UIPasteboard.general.string ?? "")
+        self.textDocumentProxy.insertText(UIPasteboard.general.string ?? "")
+        FadeoutSuggestions()
+        CheckAutoCapitalization()
+        ProcessDynamicTouchZones()
     }
     
     func BackAction() {
