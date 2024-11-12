@@ -875,7 +875,7 @@ class FinaleKeyboard: UIInputViewController {
     
     func EditPreviousPunctuation () {
         var dis = 0
-        while self.textDocumentProxy.documentContextBeforeInput != "" && !isPunctuation(char: getLastChar()) {
+        while let contextBeforeInput = self.textDocumentProxy.documentContextBeforeInput, contextBeforeInput != "" && !isPunctuation(char: getLastChar()) {
             self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
             dis += 1
         }

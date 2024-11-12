@@ -1,11 +1,23 @@
 /* No comment provided by engineer. */
+"actions_clear" = "Отчистить";
+
+/* No comment provided by engineer. */
 "actions_delete" = "Удалить";
 
 /* No comment provided by engineer. */
 "actions_enable" = "Включить";
 
 /* No comment provided by engineer. */
+"actions_export" = "Экспортировать";
+
+/* No comment provided by engineer. */
+"actions_import" = "Импортировать";
+
+/* No comment provided by engineer. */
 "actions_load" = "Загрузить";
+
+/* No comment provided by engineer. */
+"dictionary_clear_dictionary_confirmation" = "Вы уверены, что хотите очистить словарь?";
 
 /* No comment provided by engineer. */
 "dictionary_footer" = "Finale может учить новые слова. Напишите новое слово и свайпните вверх, что бы добавить его в словарь.";

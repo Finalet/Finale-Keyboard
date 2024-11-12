@@ -38,7 +38,7 @@ struct ContentView: View {
                         }, icon: {
                             Image(systemName: "heart")
                                 .foregroundColor(.red)
-                        } )
+                        })
                     }
                     ListNavigationLink(destination: ShortcutsView(EN_enabled: $EN_enabled, RU_enabled: $RU_enabled)) {
                         Label(title: {
@@ -46,7 +46,7 @@ struct ContentView: View {
                         }, icon: {
                             Image(systemName: "keyboard")
                                 .foregroundColor(.blue)
-                        } )
+                        })
                     }
                     ListNavigationLink(destination: LanguagesSettings(EN_enabled: $EN_enabled, RU_enabled: $RU_enabled)) {
                         Label(title: {
@@ -54,7 +54,7 @@ struct ContentView: View {
                         }, icon: {
                             Image(systemName: "globe")
                                 .foregroundColor(.blue)
-                        } )
+                        })
                     }
                     ListNavigationLink(destination: DictionaryListView()) {
                         Label(title: {
@@ -62,7 +62,7 @@ struct ContentView: View {
                         }, icon: {
                             Image(systemName: "character.book.closed")
                                 .foregroundColor(.blue)
-                        } )
+                        })
                     }
                     ListNavigationLink(destination: PreferencesView()) {
                         Label(title: {
@@ -70,7 +70,7 @@ struct ContentView: View {
                         }, icon: {
                             Image(systemName: "square.and.pencil")
                                 .foregroundColor(.blue)
-                        } )
+                        })
                     }
                 }
                 Section(header: Text(Localize.setupTitle), footer: footerText) {
@@ -299,7 +299,7 @@ public struct ListItem<Content: View>: View {
         HStack {
             content().padding(.vertical, 5)
         }
-        .frame(minHeight: 30)
+        .frame(height: 36)
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
     }
