@@ -78,7 +78,7 @@ struct Localization {
         static var learnWordsAutomatically = NSLocalizedString("dictionary_learn_words_automatically", value: "Learn words automatically", comment: "")
         static var learnWordsAutomaticallyIsOn = NSLocalizedString("dictionary_learn_words_automatically_toggle_is_on", value: "Turn off to stop Finale from automatically learning new words. You will still be able to add new words by swiping up.", comment: "")
         static var learnWordsAutomaticallyIsOff = NSLocalizedString("dictionary_learn_words_automatically_toggle_is_off", value: "Turn on to make Finale automatically learn new words. You will still be able to add new words by swiping up.", comment: "")
-        static var clearDictionaryConfirmation = NSLocalizedString("dictionary_clear_dictionary_confirmation", value: "Are your sure you want to clear your dictionary?", comment: "")
+        static var clearDictionaryConfirmation = NSLocalizedString("dictionary_clear_dictionary_confirmation", value: "Are your sure you want to clear the dictionary?", comment: "")
         static var footer = NSLocalizedString("dictionary_footer", value: "Finale can 'learn' new words. Just swipe up after typing an unrecognized word to add it to the dictionary.", comment: "")
     }
     
