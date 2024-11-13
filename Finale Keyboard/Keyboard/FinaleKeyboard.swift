@@ -68,7 +68,6 @@ class FinaleKeyboard: UIInputViewController {
     static var currentLocale = Locale.en_US
     static var enabledLocales = [Locale.en_US, Locale.ru_RU]
     static var currentViewType = ViewType.Characters
-    var lastViewType = ViewType.Characters
     
     var pickedPunctuationIndex = 0
     var lastPickedPunctuationIndex = 0
@@ -316,7 +315,6 @@ class FinaleKeyboard: UIInputViewController {
         ResetSuggestionsLabels()
         keysViewTopConstraint?.constant = -self.view.frame.height
         keysViewBottomConstraint?.constant = -self.view.frame.height
-        lastViewType = FinaleKeyboard.currentViewType
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.4, options: .curveEaseIn) {
             self.view.layoutIfNeeded()
         }
@@ -334,7 +332,7 @@ class FinaleKeyboard: UIInputViewController {
             }
         }
         if FinaleKeyboard.currentViewType != .SearchEmoji {
-            FinaleKeyboard.currentViewType = lastViewType
+            FinaleKeyboard.currentViewType = .Characters
             RedrawSuggestionsLabels()
         }
     }
