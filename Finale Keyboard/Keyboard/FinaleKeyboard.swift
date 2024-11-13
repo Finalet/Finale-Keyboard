@@ -413,8 +413,8 @@ class FinaleKeyboard: UIInputViewController {
         UIPasteboard.general.string = self.textDocumentProxy.selectedText
     }
     
-    func Paste () {
-        self.textDocumentProxy.insertText(UIPasteboard.general.string ?? "")
+    func Paste (text: String? = nil) {
+        self.textDocumentProxy.insertText(text ?? UIPasteboard.general.string ?? "")
         FadeoutSuggestions()
         CheckAutoCapitalization()
         ProcessDynamicTouchZones()
