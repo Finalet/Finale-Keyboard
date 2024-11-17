@@ -180,7 +180,7 @@ class EmojiCell: UICollectionViewCell {
     }
     
     func TypeEmoji () {
-        guard let emoji = emoji else { return }
+        guard let emoji = emoji, emoji.emoji != "" else { return }
         
         FinaleKeyboard.instance.TypeEmoji(emoji: emoji.emoji)
         HapticFeedback.TypingImpactOccurred()

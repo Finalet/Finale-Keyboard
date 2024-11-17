@@ -63,6 +63,8 @@ extension String {
     
     func image(size: CGFloat = 18) -> UIImage? {
         let nsString = (self as NSString)
+        if nsString == "" { return UIImage() }
+        
         let font = UIFont.systemFont(ofSize: size)
         let stringAttributes = [NSAttributedString.Key.font: font]
         let imageSize = nsString.size(withAttributes: stringAttributes)
