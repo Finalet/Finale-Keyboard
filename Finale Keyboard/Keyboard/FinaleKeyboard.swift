@@ -126,7 +126,6 @@ class FinaleKeyboard: UIInputViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         SaveLearningWordsDictionary()
-        ReleaseMemory()
     }
     
     func InitDictionary () {
@@ -1122,40 +1121,6 @@ class FinaleKeyboard: UIInputViewController {
     
     var shouldCapitalize: Bool {
         return FinaleKeyboard.isShift || FinaleKeyboard.isCaps
-    }
-    
-    func ReleaseMemory () {
-        FinaleKeyboard.instance = nil
-        
-        suggestionsArrays.removeAll()
-
-        suggestionLabels.forEach { $0.removeFromSuperview() }
-        suggestionLabels.removeAll()
-
-        characterButtons.forEach { $0.value.removeFromSuperview() }
-        characterButtons.removeAll()
-
-        emojiSearchRow?.removeFromSuperview()
-        emojiSearchRow = nil
-        keysView.removeFromSuperview()
-        middleRowStrip.removeFromSuperview()
-        leadingBottomButton.removeFromSuperview()
-        trailingBottomButton.removeFromSuperview()
-        
-        emojiView.pageControl.removeFromSuperview()
-        emojiView.emojiSections.removeAll()
-        (emojiView.masterCollection.visibleCells as? [EmojiCollectionCell])?.forEach {
-            $0.emojiSection = nil
-            $0.collectionView.removeFromSuperview()
-        }
-        emojiView.masterCollection.removeFromSuperview()
-        emojiView.removeFromSuperview()
-
-        punctuationArray = []
-        shortcuts = [:]
-        defaultDictionary = [:]
-        userDictionary = []
-        learningWordsDictionary = [:]
     }
     
     struct SuggestionsArray {
