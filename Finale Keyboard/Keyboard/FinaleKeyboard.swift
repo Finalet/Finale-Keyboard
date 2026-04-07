@@ -723,7 +723,7 @@ class FinaleKeyboard: UIInputViewController {
         
         if (suggestionsArrays[x].suggestions.count > 1) {
             var originalInput = ""
-            while self.textDocumentProxy.hasText && self.textDocumentProxy.documentContextBeforeInput?.last != " " {
+            while !isPrevCharWhitespace() {
                 if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.last == nil) { break }
                 originalInput.insert(self.textDocumentProxy.documentContextBeforeInput?.last ?? Character(""), at: originalInput.startIndex)
                 self.textDocumentProxy.deleteBackward()
@@ -797,7 +797,7 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func getLastWord () -> String {
-        if (self.textDocumentProxy.documentContextBeforeInput?.count==0 || !self.textDocumentProxy.hasText) {return ""}
+        if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.count == 0 || !self.textDocumentProxy.hasText) { return "" }
         
         var lastSpace = false
         if getLastChar() == " " {
@@ -805,15 +805,18 @@ class FinaleKeyboard: UIInputViewController {
             lastSpace = true
         }
         
-        var beginning = self.textDocumentProxy.documentContextBeforeInput?.lastIndex(of: " ")
-        if beginning == nil {
-            beginning = self.textDocumentProxy.documentContextBeforeInput?.startIndex
+        let output: String
+        if let context = self.textDocumentProxy.documentContextBeforeInput {
+            let delimiters: [Character] = [" ", "\n", "\t"]
+            var startIndex = context.startIndex
+            if let lastDelimiterIndex = context.lastIndex(where: { delimiters.contains($0) }) {
+                startIndex = context.index(after: lastDelimiterIndex)
+            }
+            output = String(context[startIndex...])
         } else {
-            beginning = self.textDocumentProxy.documentContextBeforeInput?.index((self.textDocumentProxy.documentContextBeforeInput?.lastIndex(of: " "))!, offsetBy: 1)
+            output = ""
         }
-        
-        let output = String(self.textDocumentProxy.documentContextBeforeInput?[beginning!...] ?? "")
-        
+
         if lastSpace { self.textDocumentProxy.insertText(" ") }
         
         return output
@@ -841,7 +844,7 @@ class FinaleKeyboard: UIInputViewController {
             }
         }
         //Delete Words
-        while self.textDocumentProxy.hasText && self.textDocumentProxy.documentContextBeforeInput?.last != " " {
+        while !isPrevCharWhitespace() {
             if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.last == nil) { break }
             self.textDocumentProxy.deleteBackward()
         }
@@ -1099,6 +1102,10 @@ class FinaleKeyboard: UIInputViewController {
         if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput == "") { return nil }
         let text: String = self.textDocumentProxy.documentContextBeforeInput!
         return String(text[text.index(text.endIndex, offsetBy: -min(length, text.count))..<text.endIndex])
+    }
+    func isPrevCharWhitespace() -> Bool {
+        let breakingCharacters: [Character] = [" ", "\n", "\t"]
+        return !self.textDocumentProxy.hasText || breakingCharacters.contains(self.textDocumentProxy.documentContextBeforeInput?.last ?? " ")
     }
     
     func ToggleLocale () {
