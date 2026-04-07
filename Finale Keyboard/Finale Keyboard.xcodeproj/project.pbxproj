@@ -679,7 +679,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.20.6;
+				MARKETING_VERSION = 1.20.7;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Grant151.Finale-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -717,7 +717,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.20.6;
+				MARKETING_VERSION = 1.20.7;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Grant151.Finale-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
