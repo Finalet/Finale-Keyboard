@@ -549,11 +549,12 @@ class FinaleKeyboard: UIInputViewController {
             return
         }
         
-        if self.textDocumentProxy.documentContextBeforeInput == nil {
+        let context = self.textDocumentProxy.documentContextBeforeInput
+        if context == nil {
             ResetSuggestionsLabels()
             pickedPunctuationIndex = 0
             InsertPunctuation(index: pickedPunctuationIndex)
-        } else if self.textDocumentProxy.documentContextBeforeInput?.last != " " {
+        } else if context?.last != " " {
             ResetSuggestionsLabels()
             if (FinaleKeyboard.isAutoCorrectOn) {
                 GenerateAutocorrections()
@@ -564,7 +565,7 @@ class FinaleKeyboard: UIInputViewController {
             }
             canEditPrevPunctuation = false
         } else {
-            if (self.textDocumentProxy.documentContextBeforeInput!.count < 2) {
+            if ((context?.count ?? 0) < 2) {
                 ResetSuggestionsLabels()
                 Spacebar()
                 canEditPrevPunctuation = false
@@ -572,8 +573,9 @@ class FinaleKeyboard: UIInputViewController {
             }
             
             var index = 1
-            if isPunctuation(char: getOneBeforeLastChar()) {
-                index = punctuationArray.firstIndex(of: getOneBeforeLastChar())!
+            let oneBeforeLastChar = getOneBeforeLastChar()
+            if isPunctuation(char: oneBeforeLastChar) {
+                index = punctuationArray.firstIndex(of: oneBeforeLastChar) ?? 1
             } else {
                 ResetSuggestionsLabels()
             }
@@ -1007,7 +1009,7 @@ class FinaleKeyboard: UIInputViewController {
     func CheckAutoCapitalization () -> Bool {
         if !FinaleKeyboard.isAutoCapitalizeOn { return false }
         
-        if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput == "") {
+        guard let context = self.textDocumentProxy.documentContextBeforeInput, !context.isEmpty else {
             ForceShift()
             return true
         }
@@ -1017,7 +1019,7 @@ class FinaleKeyboard: UIInputViewController {
             return true
         }
         
-        if (self.textDocumentProxy.documentContextBeforeInput!.count <= 1) {
+        if (context.count <= 1) {
             RemoveShift()
             return false
         }

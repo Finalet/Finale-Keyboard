@@ -62,7 +62,9 @@ class PageControl: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         highlighter.layer.cornerRadius = highlighter.frame.height*0.5
-        SetHighlightPosition(emojiView!.masterCollection.contentOffset.x / emojiView!.masterCollection.frame.width)
+        
+        guard let emojiView = emojiView, emojiView.masterCollection.frame.width > 0 else { SetHighlightPosition(0); return }
+        SetHighlightPosition(emojiView.masterCollection.contentOffset.x / emojiView.masterCollection.frame.width)
     }
     
     func SetHighlightPosition (_ pos: CGFloat, animated: Bool = false) {

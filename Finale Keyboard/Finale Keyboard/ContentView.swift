@@ -297,9 +297,8 @@ public struct ListItem<Content: View>: View {
     
     public var body: some View {
         HStack {
-            content().padding(.vertical, 5)
+            content()
         }
-        .frame(height: 36)
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
     }

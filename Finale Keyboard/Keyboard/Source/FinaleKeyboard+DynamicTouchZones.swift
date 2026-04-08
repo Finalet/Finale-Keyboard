@@ -23,11 +23,8 @@ extension FinaleKeyboard {
                 guard let probabilities = probabilities else { return }
                 
                 for probability in probabilities.reversed() {
-                    guard let char = probability.character else { continue }
-                    
-                    let prob = CGFloat(probability.probability) 
-                    let by = min(prob * FinaleKeyboard.maxTouchZoneScale * FinaleKeyboard.dynamicTapZoneProbabilityMultiplier, FinaleKeyboard.maxTouchZoneScale)
-                    self.ScaleCharacterKey(key: char, by: by)
+                    let by = min(probability.probability * FinaleKeyboard.maxTouchZoneScale * FinaleKeyboard.dynamicTapZoneProbabilityMultiplier, FinaleKeyboard.maxTouchZoneScale)
+                    self.ScaleCharacterKey(key: probability.character, by: by)
                 }
             }
         }

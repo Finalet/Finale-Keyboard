@@ -242,7 +242,7 @@ struct DynamicTouchZones: View {
     
     @State var isDynamicTapZonesEnabled: Bool = false
     @State var showTouchZones: Bool = false
-    @State var maxTouchZoneScale: Float = 0.6
+    @State var maxTouchZoneScale: Float = 0.3
     @State var dynamicTapZoneProbabilityMultiplier: Float = 1.5
     @State var dynamicKeyHighlighting: Bool = false
     
@@ -312,7 +312,7 @@ struct DynamicTouchZones: View {
                 if #available(iOS 16.0, *) {
                     ScaleGraph(maxScale: $maxTouchZoneScale, multiplier: $dynamicTapZoneProbabilityMultiplier)
                 }
-                Section (footer: Text(verbatim: "\(Localization.Misc.Default): 160%")) {
+                Section (footer: Text(verbatim: "\(Localization.Misc.Default): 130%")) {
                     TextRow(label: Localize.maximumKeyScale, value: "\(100 + Int(maxTouchZoneScale*100))%")
                     Slider(value: $maxTouchZoneScale, in: 0.1...2.0, step: 0.1) { _ in
                         OnChange()
@@ -358,7 +358,7 @@ struct DynamicTouchZones: View {
         let userDefaults = UserDefaults(suiteName: suiteName)
         isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
         showTouchZones = userDefaults?.value(forKey: "FINALE_DEV_APP_showTouchZones") as? Bool ?? false
-        maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? Float ?? 0.6
+        maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? Float ?? 0.3
         dynamicTapZoneProbabilityMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier") as? Float ?? 1.5
         dynamicKeyHighlighting = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicKeyHighlighting") as? Bool ?? false
     }
