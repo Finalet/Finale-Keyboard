@@ -52,15 +52,12 @@ struct PreferencesView: View {
                 ListNavigationLink(destination: DynamicTouchZones()) {
                     Text(Localize.DynamicTouchZones.pageTitle)
                 }
-                .frame(height: 30)
                 ListNavigationLink(destination: PreferencesPunctuationView()) {
                     Text(Localize.Punctuation.pageTitle)
                 }
-                .frame(height: 30)
                 ListNavigationLink(destination: AdvancedView()) {
                     Text(Localize.Advanced.pageTitle)
                 }
-                .frame(height: 30)
             }
         }
         .navigationTitle(Localize.title)
