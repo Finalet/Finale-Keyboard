@@ -13,8 +13,11 @@ struct PreferencesView: View {
     @State var autocorrectWords = true
     @State var autocorrectGrammar = true
     @State var autocapitalizeWords = true
+    
+    @State var isSpacebarEnabled = false
+    
     @State var isTypingHapticEnabled = false
-    @State var isGesturesHapticEnabled = false
+    @State var isGesturesHapticEnabled = true
     
     let tintColor = Color(red: 0.33, green: 0.51, blue: 0.85)
     
@@ -35,6 +38,12 @@ struct PreferencesView: View {
                 }
                 Toggle(Localize.autocapitalizeWords, isOn: $autocapitalizeWords)
                 .onChange(of: autocapitalizeWords) { value in
+                    OnChange()
+                }
+            }
+            Section {
+                Toggle("Spacebar", isOn: $isSpacebarEnabled)
+                .onChange(of: isSpacebarEnabled) { value in
                     OnChange()
                 }
             }
@@ -71,6 +80,7 @@ struct PreferencesView: View {
         userDefaults?.setValue(autocorrectWords, forKey: "FINALE_DEV_APP_autocorrectWords")
         userDefaults?.setValue(autocorrectGrammar, forKey: "FINALE_DEV_APP_autocorrectGrammar")
         userDefaults?.setValue(autocapitalizeWords, forKey: "FINALE_DEV_APP_autocapitalizeWords")
+        userDefaults?.setValue(isSpacebarEnabled, forKey: "FINALE_DEV_APP_isSpacebarEnabled")
         userDefaults?.setValue(isTypingHapticEnabled, forKey: "FINALE_DEV_APP_isTypingHapticEnabled")
         userDefaults?.setValue(isGesturesHapticEnabled, forKey: "FINALE_DEV_APP_isGesturesHapticEnabled")
     }
@@ -80,6 +90,7 @@ struct PreferencesView: View {
         autocorrectWords = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectWords") as? Bool ?? true
         autocorrectGrammar = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectGrammar") as? Bool ?? true
         autocapitalizeWords = userDefaults?.value(forKey: "FINALE_DEV_APP_autocapitalizeWords") as? Bool ?? true
+        isSpacebarEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isSpacebarEnabled") as? Bool ?? false
         isTypingHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isTypingHapticEnabled") as? Bool ?? false
         isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
     }

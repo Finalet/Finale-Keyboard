@@ -62,6 +62,7 @@
 		37D686732B4B3CA600833DCA /* NoClipTouchUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D686722B4B3CA600833DCA /* NoClipTouchUIView.swift */; };
 		37D686752B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D686742B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift */; };
 		37FAF7012B4F9F25002C361C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 37FAF6FF2B4F9F25002C361C /* Localizable.strings */; };
+		8610FCB72F873EDF00D3DB2F /* SpacebarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8610FCB62F873ED900D3DB2F /* SpacebarButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -143,6 +144,7 @@
 		37D686722B4B3CA600833DCA /* NoClipTouchUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoClipTouchUIView.swift; sourceTree = "<group>"; };
 		37D686742B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FinaleKeyboard+DynamicTouchZones.swift"; sourceTree = "<group>"; };
 		37FAF7002B4F9F25002C361C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8610FCB62F873ED900D3DB2F /* SpacebarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacebarButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -223,6 +225,7 @@
 		37991F3329E9964700900BC9 /* Buttons */ = {
 			isa = PBXGroup;
 			children = (
+				8610FCB62F873ED900D3DB2F /* SpacebarButton.swift */,
 				37991F3429E999B300900BC9 /* KeyboardButton.swift */,
 				37991F2F29E9963C00900BC9 /* CharacterButton.swift */,
 				37991F3129E9964400900BC9 /* FunctionButton.swift */,
@@ -483,6 +486,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				37991F3529E999B300900BC9 /* KeyboardButton.swift in Sources */,
+				8610FCB72F873EDF00D3DB2F /* SpacebarButton.swift in Sources */,
 				37A0AD1327A88AAA00578290 /* UIExtensions.swift in Sources */,
 				37991F3729E9E7CD00900BC9 /* SkinToneSelector.swift in Sources */,
 				3791F23129E77F17005F39B4 /* Definitions.swift in Sources */,
