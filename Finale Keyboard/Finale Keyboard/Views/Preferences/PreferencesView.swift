@@ -13,6 +13,7 @@ struct PreferencesView: View {
     @State var autocorrectGrammar = true
     @State var autocapitalizeWords = true
     
+    @State var showSpacebarPurchase = false
     @State var isSpacebarEnabled = false
     @State var spacebarAutocorrect = false
     
@@ -44,7 +45,12 @@ struct PreferencesView: View {
             Section {
                 Toggle("Spacebar", isOn: $isSpacebarEnabled.animation())
                 .onChange(of: isSpacebarEnabled) { value in
-                    OnChange()
+                    if value {
+                        isSpacebarEnabled = false
+                        showSpacebarPurchase = true
+                    } else {
+                        OnChange()
+                    }
                 }
                 if isSpacebarEnabled {
                     Toggle("Spacebar Autocorrect", isOn: $spacebarAutocorrect)
@@ -74,6 +80,9 @@ struct PreferencesView: View {
                     Text(Localize.Advanced.pageTitle)
                 }
             }
+        }
+        .sheet(isPresented: $showSpacebarPurchase) {
+            SpacebarPurchaseView()
         }
         .navigationTitle(Localize.title)
         .onAppear {
