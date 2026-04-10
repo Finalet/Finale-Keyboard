@@ -62,6 +62,7 @@
 		37D686732B4B3CA600833DCA /* NoClipTouchUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D686722B4B3CA600833DCA /* NoClipTouchUIView.swift */; };
 		37D686752B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37D686742B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift */; };
 		37FAF7012B4F9F25002C361C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 37FAF6FF2B4F9F25002C361C /* Localizable.strings */; };
+		8610184B2F897D2A007CA8F5 /* SpacebarLootboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8610184A2F897D1E007CA8F5 /* SpacebarLootboxView.swift */; };
 		8610FCB72F873EDF00D3DB2F /* SpacebarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8610FCB62F873ED900D3DB2F /* SpacebarButton.swift */; };
 		861119ED2F88832D00F6F7EB /* DynamicTouchZonesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861119EC2F88831B00F6F7EB /* DynamicTouchZonesView.swift */; };
 		861119EF2F88838200F6F7EB /* PunctuationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861119EE2F88837B00F6F7EB /* PunctuationView.swift */; };
@@ -148,6 +149,7 @@
 		37D686722B4B3CA600833DCA /* NoClipTouchUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoClipTouchUIView.swift; sourceTree = "<group>"; };
 		37D686742B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FinaleKeyboard+DynamicTouchZones.swift"; sourceTree = "<group>"; };
 		37FAF7002B4F9F25002C361C /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		8610184A2F897D1E007CA8F5 /* SpacebarLootboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacebarLootboxView.swift; sourceTree = "<group>"; };
 		8610FCB62F873ED900D3DB2F /* SpacebarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacebarButton.swift; sourceTree = "<group>"; };
 		861119EC2F88831B00F6F7EB /* DynamicTouchZonesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DynamicTouchZonesView.swift; sourceTree = "<group>"; };
 		861119EE2F88837B00F6F7EB /* PunctuationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PunctuationView.swift; sourceTree = "<group>"; };
@@ -357,6 +359,7 @@
 		861119EB2F8882CE00F6F7EB /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
+				8610184A2F897D1E007CA8F5 /* SpacebarLootboxView.swift */,
 				861119F02F8883B800F6F7EB /* AdvancedView.swift */,
 				861119EE2F88837B00F6F7EB /* PunctuationView.swift */,
 				861119EC2F88831B00F6F7EB /* DynamicTouchZonesView.swift */,
@@ -490,6 +493,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				379E9FA227DA358000B9ECA6 /* LanguagesView.swift in Sources */,
+				8610184B2F897D2A007CA8F5 /* SpacebarLootboxView.swift in Sources */,
 				37CE328B2889FF41002DAD2A /* Localization.swift in Sources */,
 				37AB663E28876ECB00741889 /* MoreView.swift in Sources */,
 				3743FC5527B1523A0043B2A2 /* KeyboardEnabledState.swift in Sources */,

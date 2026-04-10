@@ -1,0 +1,163 @@
+//
+//  SpacebarLootboxView.swift
+//  Finale Keyboard
+//
+//  Created by Grant Oganyan on 4/10/26.
+//
+
+import Foundation
+import SwiftUI
+
+struct SpacebarLootboxView: View {
+    let cellSize: CGFloat = 72
+    let spacing: CGFloat = 16
+    let spinDuration = 10.0
+    let nItems = 50
+    let winProbability = 1.0
+
+    @State var items: [Bool] = []
+
+    @State var offset: CGFloat = 0
+    @State var landed = false
+
+    var pitch: CGFloat { cellSize + spacing }
+    var targetIndex: Int { max(items.count - 5, 0) }
+
+    var body: some View {
+        VStack(spacing: 24) {
+            Spacer()
+            GeometryReader { geometry in
+                VStack {
+                    HStack(spacing: spacing) {
+                        ForEach(items.indices, id: \.self) { index in
+                            LootboxCell(isSpacebar: items[index], isTarget: landed && index == targetIndex, cellSize: cellSize)
+                        }
+                    }
+                    .offset(x: offset)
+                    .padding(.vertical, spacing * 2)
+                    .border(width: 1, edges: [.top, .bottom], color: Color(uiColor: .systemGray5))
+                }
+                .background(Color(uiColor: .secondarySystemBackground))
+                .onAppear {
+                    if items.isEmpty {
+                        items = (0..<nItems).map { i in Double.random(in: 0..<1) < winProbability }
+                        for i in (targetIndex - 3)...(targetIndex + 3) {
+                            if i == targetIndex { continue }
+                            items[i] = Double.random(in: 0..<1) < winProbability * 2
+                        }
+                    }
+                    start(width: geometry.size.width)
+                }
+            }
+            .frame(height: cellSize + spacing * 4)
+            .overlay(
+                HStack {
+                    Spacer()
+                    VStack{
+                        Rectangle()
+                            .fill(landed ? Color.brand : Color(uiColor: .systemGray5))
+                            .frame(width: 2, height: 20)
+                        Spacer()
+                        Rectangle()
+                            .fill(landed ? Color.brand : Color(uiColor: .systemGray5))
+                            .frame(width: 2, height: 20)
+                    }
+                    Spacer()
+                }
+            )
+            Spacer()
+        }
+        // .interactiveDismissDisabled()
+    }
+
+    private func start(width: CGFloat) {
+        guard width > 0, nItems > 0 else { return }
+
+        let center = CGFloat(targetIndex) * pitch + cellSize / 2
+        let end = width / 2 - center
+
+        landed = false
+        offset = width + cellSize
+
+        DispatchQueue.main.async {
+            withAnimation(.timingCurve(0.25, 1, 0.36, 1, duration: spinDuration)) {
+                offset = end
+            }
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + spinDuration) {
+            withAnimation {
+                landed = true
+            }
+        }
+    }
+}
+
+private struct LootboxCell: View {
+    let isSpacebar: Bool
+    let isTarget: Bool
+    let cellSize: CGFloat
+
+    @State private var showPrize = false
+
+    var body: some View {
+        let cornerRadius: CGFloat = 18
+
+        ZStack {
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .fill(isTarget ? Color.brand.opacity(0.16) : Color(uiColor: .systemBackground))
+                .stroke(isTarget ? Color.brand : Color(uiColor: .systemGray4), lineWidth: isTarget ? 3 : 1)
+                .frame(width: cellSize, height: cellSize)
+
+            Group {
+                if isSpacebar {
+                    Spacebar(glow: showPrize)
+                        .frame(width: cellSize * 0.8, height: cellSize * 0.8)
+                        .scaleEffect(cellSize * 0.8 / 200)
+                        .rotationEffect(.degrees(showPrize ? 0 : -45))
+                } else {
+                    Text("🖕")
+                        .font(.system(size: 34))
+                }
+            }
+            .offset(y: showPrize ? -60 : 0)
+            .scaleEffect(showPrize ? 3 : 1)
+        }
+        .onChange(of: isTarget) { _, newValue in
+            if newValue {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                    withAnimation { self.showPrize = true }
+                }
+            }
+        }
+    }
+}
+
+struct EdgeBorder: Shape {
+    var width: CGFloat
+    var edges: [Edge]
+
+    func path(in rect: CGRect) -> Path {
+        edges.map { edge -> Path in
+            switch edge {
+            case .top: return Path(.init(x: rect.minX, y: rect.minY, width: rect.width, height: width))
+            case .bottom: return Path(.init(x: rect.minX, y: rect.maxY - width, width: rect.width, height: width))
+            case .leading: return Path(.init(x: rect.minX, y: rect.minY, width: width, height: rect.height))
+            case .trailing: return Path(.init(x: rect.maxX - width, y: rect.minY, width: width, height: rect.height))
+            }
+        }.reduce(into: Path()) { $0.addPath($1) }
+    }
+}
+
+
+extension View {
+    func border(width: CGFloat, edges: [Edge], color: Color) -> some View {
+        overlay(EdgeBorder(width: width, edges: edges).foregroundColor(color))
+    }
+    
+}
+
+#Preview {
+    SpacebarLootboxView()
+}
+

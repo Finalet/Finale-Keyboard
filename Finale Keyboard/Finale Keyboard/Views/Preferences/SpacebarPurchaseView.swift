@@ -13,6 +13,8 @@ struct SpacebarPurchaseView: View {
     @State var purchaseAlertPresented = false
     @State var gambleAlertPresented = false
 
+    @State var presentLootboxSheet = false
+    
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -25,7 +27,7 @@ struct SpacebarPurchaseView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.top, 32)
                     HStack (alignment: .center) {
-                        Spacebar()
+                        Spacebar(glow: true)
                     }
                     .padding(.vertical, 32)
                     .frame(maxWidth: .infinity)
@@ -58,7 +60,7 @@ struct SpacebarPurchaseView: View {
                             
                         }
                         .keyboardShortcut(.defaultAction)
-                        Button("I WANT to buy it for $99.") {
+                        Button("I need to buy it for $99.") {
                             
                         }
                         .keyboardShortcut(.cancelAction)
@@ -71,13 +73,9 @@ struct SpacebarPurchaseView: View {
                         gambleAlertPresented = true
                     }
                     .alert("Is this a good life?", isPresented: $gambleAlertPresented, actions: {
-                        Button("Sorry, I'll be better.") {
-                            
-                        }
+                        Button("Sorry, I'll be better.") { }
                         .keyboardShortcut(.defaultAction)
-                        Button("I'm addicted, I'll spin for $0.99.") {
-                            
-                        }
+                        Button("I'm addicted, I'll spin for $0.99.") { presentLootboxSheet = true }
                         .keyboardShortcut(.cancelAction)
                     }, message: {
                         Text("Where you about to gamble again? Its only a 10% chance, go learn the swipe gestures instead. You'll thank me later.")
@@ -96,20 +94,22 @@ struct SpacebarPurchaseView: View {
             .ignoresSafeArea()
         }
         .interactiveDismissDisabled()
+        .sheet(isPresented: $presentLootboxSheet) { SpacebarLootboxView() }
     }
 }
 
 struct Spacebar: View {
+    let glow: Bool
+    let width: CGFloat = 200
     static let rotationAmount: Double = 5
     let rotationDuration: Double = 2
-    let width: CGFloat = 200
     let height: CGFloat = 40
     
     @State var rotationAngle: Angle = .degrees(-Spacebar.rotationAmount)
     
     var body: some View {
          ZStack {
-             BackgroundGlow()
+             if glow { BackgroundGlow() }
              ForEach(0..<6) { i in
                  RoundedRectangle(cornerRadius: 5)
                      .fill(Color(uiColor: .systemGray2))
