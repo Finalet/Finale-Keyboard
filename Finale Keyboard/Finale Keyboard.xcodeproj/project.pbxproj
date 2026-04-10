@@ -271,7 +271,6 @@
 				3743FC5427B1523A0043B2A2 /* KeyboardEnabledState.swift */,
 				3727766C27D8E38D00CC8CD8 /* TutorialView.swift */,
 				37178AA22B4DE03500748DD0 /* Extensions.swift */,
-				37AB663D28876ECB00741889 /* MoreView.swift */,
 			);
 			path = "Finale Keyboard";
 			sourceTree = "<group>";
@@ -348,6 +347,7 @@
 				375D074A29EA3D2100EA2980 /* ShortcutsView.swift */,
 				379E9FA127DA358000B9ECA6 /* LanguagesView.swift */,
 				37256A7827DB52ED0071180B /* DictionaryView.swift */,
+				37AB663D28876ECB00741889 /* MoreView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
