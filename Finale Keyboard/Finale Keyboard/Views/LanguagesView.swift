@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-struct LanguagesSettings: View {
+struct LanguagesView: View {
     @Binding var EN_enabled: Bool
     @Binding var RU_enabled: Bool
     

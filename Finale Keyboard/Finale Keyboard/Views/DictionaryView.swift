@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct DictionaryListView: View {
+struct DictionaryView: View {
     @State var userDictionary = [String]()
     @State private var searchText = ""
     

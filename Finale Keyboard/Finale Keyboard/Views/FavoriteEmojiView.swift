@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FavoriteEmoji: View {
+struct FavoriteEmojiView: View {
     @Binding var favoriteEmoji: [String]
     @FocusState private var focusCell: Int?
         

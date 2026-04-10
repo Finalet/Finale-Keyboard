@@ -32,7 +32,7 @@ struct ContentView: View {
                         .focused($shouldShowKeyboard)
                 }
                 Section(header: Text(Localize.preferencesTitle)) {
-                    ListNavigationLink(destination: FavoriteEmoji(favoriteEmoji: $favoriteEmoji)) {
+                    ListNavigationLink(destination: FavoriteEmojiView(favoriteEmoji: $favoriteEmoji)) {
                         Label(title: {
                             Text(Localize.favoriteEmojiRow)
                         }, icon: {
@@ -48,7 +48,7 @@ struct ContentView: View {
                                 .foregroundColor(.blue)
                         })
                     }
-                    ListNavigationLink(destination: LanguagesSettings(EN_enabled: $EN_enabled, RU_enabled: $RU_enabled)) {
+                    ListNavigationLink(destination: LanguagesView(EN_enabled: $EN_enabled, RU_enabled: $RU_enabled)) {
                         Label(title: {
                             Text(Localize.languagesRow)
                         }, icon: {
@@ -56,7 +56,7 @@ struct ContentView: View {
                                 .foregroundColor(.blue)
                         })
                     }
-                    ListNavigationLink(destination: DictionaryListView()) {
+                    ListNavigationLink(destination: DictionaryView()) {
                         Label(title: {
                             Text(Localize.dictionaryRow)
                         }, icon: {
