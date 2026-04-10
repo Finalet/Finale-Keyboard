@@ -24,7 +24,7 @@ class FinaleKeyboard: UIInputViewController {
         emptyView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(emptyView)
 
-        _heightConstraint = view.heightAnchor.constraint(equalToConstant: FinaleKeyboard.buttonHeight * (!FinaleKeyboard.isSpacebarEnabled ? 3 : 4))
+        _heightConstraint = view.heightAnchor.constraint(equalToConstant: FinaleKeyboard.rowHeight * FinaleKeyboard.rowsNumber)
         _heightConstraint?.priority = .required - 1
         _heightConstraint?.isActive = true
         
@@ -33,17 +33,14 @@ class FinaleKeyboard: UIInputViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if UIScreen.main.bounds.width < UIScreen.main.bounds.height {
-            _heightConstraint?.constant = FinaleKeyboard.buttonHeight * (!FinaleKeyboard.isSpacebarEnabled ? 3 : 4)
-        } else {
-            _heightConstraint?.constant = FinaleKeyboard.buttonHeight * (!FinaleKeyboard.isSpacebarEnabled ? 2 : 3)
-        }
+        _heightConstraint?.constant = FinaleKeyboard.rowHeight * FinaleKeyboard.rowsNumber
     }
     
     static var instance: FinaleKeyboard!
     
-    static let buttonHeight: CGFloat = 60.0
-    let emojiRowHeight = 38.0
+    static var rowHeight: CGFloat { return (UIScreen.main.bounds.width < UIScreen.main.bounds.height ? 60 : 40) * (FinaleKeyboard.isSpacebarEnabled ? 0.85 : 1) }
+    static var rowsNumber: CGFloat { return FinaleKeyboard.isSpacebarEnabled ? 4 : 3 }
+    static let emojiRowHeight = 38.0
     
     var emojiSearchRow: EmojiSearchRow?
     var keysView = UIView()
@@ -207,7 +204,7 @@ class FinaleKeyboard: UIInputViewController {
         keysViewBottomConstraint?.isActive = true
         
         middleRowStrip.backgroundColor = .gray.withAlphaComponent(0.5)
-        keysView.addSubview(middleRowStrip, anchors: [.leading(0), .trailing(0), .centerY(!FinaleKeyboard.isSpacebarEnabled ? 0 : -FinaleKeyboard.buttonHeight * 0.5), .heightMultiplier(!FinaleKeyboard.isSpacebarEnabled ? 0.3333 : 0.25)])
+        keysView.addSubview(middleRowStrip, anchors: [.leading(0), .trailing(0), .centerYMultiplier(FinaleKeyboard.isSpacebarEnabled ? 0.75 : 1), .heightMultiplier(!FinaleKeyboard.isSpacebarEnabled ? 0.3333 : 0.25)])
         
         keysView.addSubview(leadingBottomButton, anchors: [.leading(0), !FinaleKeyboard.isSpacebarEnabled ? .bottom(0) : nil])
         keysView.addSubview(trailingBottomButton, anchors: [.trailing(0), !FinaleKeyboard.isSpacebarEnabled ? .bottom(0) : nil])
@@ -323,7 +320,7 @@ class FinaleKeyboard: UIInputViewController {
         label.font = UIFont(name: "Gilroy-Medium", size: 11)
         
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.heightAnchor.constraint(equalToConstant: FinaleKeyboard.buttonHeight * 0.4).isActive = true
+        label.heightAnchor.constraint(equalToConstant: FinaleKeyboard.rowHeight * 0.4).isActive = true
         
         view.addSubview(label)
         return label
@@ -345,7 +342,7 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func CloseEmoji (hideEmojiSearchRow: Bool = false) {
-        keysViewTopConstraint?.constant = (emojiSearchRow == nil || hideEmojiSearchRow) ? 0 : emojiRowHeight
+        keysViewTopConstraint?.constant = (emojiSearchRow == nil || hideEmojiSearchRow) ? 0 : FinaleKeyboard.emojiRowHeight
         keysViewBottomConstraint?.constant = 0
         UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
             self.view.layoutIfNeeded()
@@ -369,7 +366,7 @@ class FinaleKeyboard: UIInputViewController {
             emojiSearchRow?.removeFromSuperview()
             emojiSearchRow = EmojiSearchRow()
             
-            self.view.addSubview(emojiSearchRow!, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .bottomToTop(keysView, 0), .height(emojiRowHeight)])
+            self.view.addSubview(emojiSearchRow!, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .bottomToTop(keysView, 0), .height(FinaleKeyboard.emojiRowHeight)])
             
             returnButton?.ChangeFunction(new: .Back)
         } else {
