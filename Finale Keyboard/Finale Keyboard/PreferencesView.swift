@@ -15,6 +15,7 @@ struct PreferencesView: View {
     @State var autocapitalizeWords = true
     
     @State var isSpacebarEnabled = false
+    @State var spacebarAutocorrect = false
     
     @State var isTypingHapticEnabled = false
     @State var isGesturesHapticEnabled = true
@@ -42,9 +43,15 @@ struct PreferencesView: View {
                 }
             }
             Section {
-                Toggle("Spacebar", isOn: $isSpacebarEnabled)
+                Toggle("Spacebar", isOn: $isSpacebarEnabled.animation())
                 .onChange(of: isSpacebarEnabled) { value in
                     OnChange()
+                }
+                if isSpacebarEnabled {
+                    Toggle("Spacebar Autocorrect", isOn: $spacebarAutocorrect)
+                    .onChange(of: spacebarAutocorrect) { value in
+                        OnChange()
+                    }
                 }
             }
             Section {
@@ -81,6 +88,7 @@ struct PreferencesView: View {
         userDefaults?.setValue(autocorrectGrammar, forKey: "FINALE_DEV_APP_autocorrectGrammar")
         userDefaults?.setValue(autocapitalizeWords, forKey: "FINALE_DEV_APP_autocapitalizeWords")
         userDefaults?.setValue(isSpacebarEnabled, forKey: "FINALE_DEV_APP_isSpacebarEnabled")
+        userDefaults?.setValue(spacebarAutocorrect, forKey: "FINALE_DEV_APP_spacebarAutocorrect")
         userDefaults?.setValue(isTypingHapticEnabled, forKey: "FINALE_DEV_APP_isTypingHapticEnabled")
         userDefaults?.setValue(isGesturesHapticEnabled, forKey: "FINALE_DEV_APP_isGesturesHapticEnabled")
     }
@@ -91,6 +99,7 @@ struct PreferencesView: View {
         autocorrectGrammar = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectGrammar") as? Bool ?? true
         autocapitalizeWords = userDefaults?.value(forKey: "FINALE_DEV_APP_autocapitalizeWords") as? Bool ?? true
         isSpacebarEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isSpacebarEnabled") as? Bool ?? false
+        spacebarAutocorrect = userDefaults?.value(forKey: "FINALE_DEV_APP_spacebarAutocorrect") as? Bool ?? false
         isTypingHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isTypingHapticEnabled") as? Bool ?? false
         isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
     }

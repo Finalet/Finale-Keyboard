@@ -14,8 +14,18 @@ class SpacebarButton: CharacterButton {
     init () {
         super.init(" ")
         self.titleLabel.text = "⎵"
+        self.titleLabel.font = UIFont.systemFont(ofSize: 32)
+        self.titleLabel.transform = CGAffineTransform(translationX: 0, y: -6)
     }
     
+    override func OnTapEnded(_ sender: UILongPressGestureRecognizer) {
+        if (!FinaleKeyboard.isSpacebarAutocorrectOn || didLongPress) {
+            return super.OnTapEnded(sender)
+        }
+
+        FinaleKeyboard.instance.SwipeRight()
+    }
+
     override func OnSwipe(direction: KeyboardButton.SwipeDirection) {
         if (direction == .Left || direction == .Right) {
             FinaleKeyboard.instance.ToggleLocale()
