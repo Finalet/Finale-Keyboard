@@ -12,10 +12,12 @@ struct SpacebarPurchaseView: View {
 
     @State var purchaseAlertPresented = false
     @State var gambleAlertPresented = false
-
+    @State var forFreeAlertPresented = false
+    
     @State var presentLootboxSheet = false
     
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
 
     var body: some View {
         ZStack {
@@ -74,11 +76,36 @@ struct SpacebarPurchaseView: View {
                     }
                     .alert("Is this a good life?", isPresented: $gambleAlertPresented, actions: {
                         Button("Sorry, I'll be better.") { }
-                        .keyboardShortcut(.defaultAction)
+                            .keyboardShortcut(.defaultAction)
                         Button("I'm addicted, I'll spin for $0.99.") { presentLootboxSheet = true }
-                        .keyboardShortcut(.cancelAction)
+                            .keyboardShortcut(.cancelAction)
                     }, message: {
-                        Text("Where you about to gamble again? Its only a 10% chance, go learn the swipe gestures instead. You'll thank me later.")
+                        Text("Are you about to gamble in an app? Its only a 10% chance, go learn the swipe gestures instead. You'll thank me later.")
+                    })
+                    .tint(nil)
+                    
+                    Button("Restore purchases") {}
+                        .frame(maxWidth: .infinity)
+                        .foregroundStyle(Color(uiColor:.systemGray2))
+                        .font(.footnote)
+                        .padding(.top, 32)
+                    
+                    Button(action: {
+                        forFreeAlertPresented = true
+                    }, label: {
+                        Text("Psss, come here, kitty. Still want your spacebar for free?")
+                            .multilineTextAlignment(.center)
+                            .foregroundStyle(Color(uiColor:.systemGray2))
+                            .font(.footnote)
+                    })
+                    .frame(maxWidth: .infinity)
+                    .alert("Uuugh, fine", isPresented: $forFreeAlertPresented, actions: {
+                        Button("I'll do as you say, boss.") { EmailGrant() }
+                            .keyboardShortcut(.defaultAction)
+                        Button("Fuck you, man.") { }
+                            .keyboardShortcut(.cancelAction)
+                    }, message: {
+                        Text("I guess... if you really can't be bothered to learn gestures...\n\nEmail me at grant@finaletodo.com with the worst insult towards yourself. If I like it, I'll see what I can do.")
                     })
                     .tint(nil)
                 }
@@ -95,6 +122,18 @@ struct SpacebarPurchaseView: View {
         }
         .interactiveDismissDisabled()
         .sheet(isPresented: $presentLootboxSheet) { SpacebarLootboxView() }
+    }
+
+    private func EmailGrant() {
+        var components = URLComponents()
+        components.scheme = "mailto"
+        components.path = "grant@finaletodo.com"
+        components.queryItems = [
+            URLQueryItem(name: "subject", value: "Please, please, please, I beg you, Grant, give me a spacebar."),
+        ]
+
+        guard let emailURL = components.url else { return }
+        openURL(emailURL)
     }
 }
 
@@ -195,17 +234,29 @@ struct OptionsDivider: View {
 
 struct DefaultButton: View {
     let label: String
-    let subLabel: String
+    let subLabel: String?
     let action: () -> Void
 
+    init(label: String, action: @escaping () -> Void) {
+        self.init(label: label, subLabel: nil, action: action)
+    }
+    
+    init(label: String, subLabel: String? = nil, action: @escaping () -> Void) {
+        self.label = label
+        self.subLabel = subLabel
+        self.action = action
+    }
+    
     var body: some View {
         Button(action: action) {
             VStack {
                 Text(label)
                     .font(.headline)
-                Text(subLabel)
-                    .opacity(0.6)
-                    .font(.subheadline)
+                if let subLabel = subLabel {
+                    Text(subLabel)
+                        .opacity(0.6)
+                        .font(.subheadline)
+                }
             }
             .padding(12)
             .frame(maxWidth: .infinity)
@@ -222,21 +273,33 @@ struct DefaultButton: View {
 
 struct OutlineButton: View {
     let label: String
-    let subLabel: String
+    let subLabel: String?
     let action: () -> Void
     
     @Environment(\.colorScheme) private var colorScheme
     
     var dark: Bool { return colorScheme == .dark }
 
+    init(label: String, action: @escaping () -> Void) {
+        self.init(label: label, subLabel: nil, action: action)
+    }
+    
+    init(label: String, subLabel: String? = nil, action: @escaping () -> Void) {
+        self.label = label
+        self.subLabel = subLabel
+        self.action = action
+    }
+    
     var body: some View {
         Button(action: action) {
             VStack {
                 Text(label)
                     .font(.headline)
-                Text(subLabel)
-                    .opacity(0.6)
-                    .font(.subheadline)
+                if let subLabel = subLabel {
+                    Text(subLabel)
+                        .opacity(0.6)
+                        .font(.subheadline)
+                }
             }
             .padding(12)
             .frame(maxWidth: .infinity)

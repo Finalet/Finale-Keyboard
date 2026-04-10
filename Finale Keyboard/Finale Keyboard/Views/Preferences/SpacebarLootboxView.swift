@@ -13,71 +13,108 @@ struct SpacebarLootboxView: View {
     let spacing: CGFloat = 16
     let spinDuration = 10.0
     let nItems = 50
-    let winProbability = 1.0
-
+    let winProbability = 0.1
+    
     @State var items: [Bool] = []
 
+    @State var spinWidth: Double?
     @State var offset: CGFloat = 0
-    @State var landed = false
 
-    var pitch: CGFloat { cellSize + spacing }
     var targetIndex: Int { max(items.count - 5, 0) }
-
+    
+    @State var landed = false
+    var didWin: Bool { items[targetIndex] == true }
+    
+    @State var showTitle = false
+    @State var showBottomButton = false
+    
+    @Environment(\.dismiss) private var dismiss
+    
     var body: some View {
-        VStack(spacing: 24) {
-            Spacer()
-            GeometryReader { geometry in
+        ZStack {
+            if showTitle {
                 VStack {
-                    HStack(spacing: spacing) {
-                        ForEach(items.indices, id: \.self) { index in
-                            LootboxCell(isSpacebar: items[index], isTarget: landed && index == targetIndex, cellSize: cellSize)
-                        }
+                    HStack {
+                        Text(didWin ? "Congrats, you got your spacebar" : "Sorry")
+                            .font(.system(size: 32, weight: .semibold))
+                            .multilineTextAlignment(.center)
                     }
-                    .offset(x: offset)
-                    .padding(.vertical, spacing * 2)
-                    .border(width: 1, edges: [.top, .bottom], color: Color(uiColor: .systemGray5))
+                    .padding(.vertical, 64)
+                    .padding(.horizontal, 16)
+                    Spacer()
                 }
-                .background(Color(uiColor: .secondarySystemBackground))
-                .onAppear {
-                    if items.isEmpty {
-                        items = (0..<nItems).map { i in Double.random(in: 0..<1) < winProbability }
-                        for i in (targetIndex - 3)...(targetIndex + 3) {
-                            if i == targetIndex { continue }
-                            items[i] = Double.random(in: 0..<1) < winProbability * 2
+            }
+            VStack {
+                GeometryReader { geometry in
+                    VStack {
+                        HStack(spacing: spacing) {
+                            ForEach(items.indices, id: \.self) { index in
+                                LootboxCell(isSpacebar: items[index], isTarget: landed && index == targetIndex, cellSize: cellSize)
+                            }
                         }
+                        .offset(x: offset)
+                        .padding(.vertical, spacing * 2)
+                        .border(width: 1, edges: [.top, .bottom], color: Color(uiColor: .systemGray5))
                     }
-                    start(width: geometry.size.width)
+                    .background(Color(uiColor: .secondarySystemBackground))
+                    .onAppear {
+                        spinWidth = geometry.size.width
+                        Start()
+                    }
                 }
             }
             .frame(height: cellSize + spacing * 4)
-            .overlay(
-                HStack {
+            .overlay(TargetCellHighlight(landed: landed))
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            
+            if showBottomButton {
+                VStack {
                     Spacer()
-                    VStack{
-                        Rectangle()
-                            .fill(landed ? Color.brand : Color(uiColor: .systemGray5))
-                            .frame(width: 2, height: 20)
-                        Spacer()
-                        Rectangle()
-                            .fill(landed ? Color.brand : Color(uiColor: .systemGray5))
-                            .frame(width: 2, height: 20)
+                    HStack {
+                        VStack (spacing: 16) {
+                            DefaultButton(label: didWin ? "Redeem prize" : "I want to try again.") {
+                                if didWin {  }
+                                else { Start() }
+                            }
+                            if !didWin {
+                                OutlineButton(label: "I give up, like I always do.") { dismiss() }
+                            }
+                        }
                     }
-                    Spacer()
+                    .padding(16)
                 }
-            )
-            Spacer()
+            }
+        }
+        .onChange(of: landed) { landed in
+            if !landed { return }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { withAnimation{ showTitle = true } }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { withAnimation{ showBottomButton = true } }
         }
         // .interactiveDismissDisabled()
     }
 
-    private func start(width: CGFloat) {
-        guard width > 0, nItems > 0 else { return }
+    func GenerateItems () {
+        items = (0..<nItems).map { i in Double.random(in: 0..<1) < winProbability }
+        for i in (targetIndex - 3)...(targetIndex + 3) {
+            if i == targetIndex { continue }
+            items[i] = Double.random(in: 0..<1) < winProbability * 2
+        }
+    }
+    
+    func Start() {
+        GenerateItems()
+        withAnimation {
+            landed = false
+            showTitle = false
+            showBottomButton = false
+        }
+        
+        guard let spinWidth = spinWidth, spinWidth > 0, nItems > 0 else { return }
 
-        let center = CGFloat(targetIndex) * pitch + cellSize / 2
-        let end = width / 2 - center
+        let center = CGFloat(targetIndex) * (cellSize + spacing) + cellSize / 2
+        let end = spinWidth / 2 - center
 
-        landed = false
-        offset = width + cellSize
+        offset = spinWidth + cellSize
 
         DispatchQueue.main.async {
             withAnimation(.timingCurve(0.25, 1, 0.36, 1, duration: spinDuration)) {
@@ -90,6 +127,10 @@ struct SpacebarLootboxView: View {
                 landed = true
             }
         }
+    }
+    
+    func SpinAgain() {
+        
     }
 }
 
@@ -123,12 +164,33 @@ private struct LootboxCell: View {
             .offset(y: showPrize ? -60 : 0)
             .scaleEffect(showPrize ? 3 : 1)
         }
-        .onChange(of: isTarget) { _, newValue in
-            if newValue {
+        .onChange(of: isTarget) { _, isTarget in
+            if isTarget {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                     withAnimation { self.showPrize = true }
                 }
+            } else {
+                self.showPrize = false
             }
+        }
+    }
+}
+
+struct TargetCellHighlight: View {
+    let landed: Bool
+    var body: some View {
+        HStack {
+            Spacer()
+            VStack{
+                Rectangle()
+                    .fill(landed ? Color.brand : Color(uiColor: .systemGray5))
+                    .frame(width: 2, height: 20)
+                Spacer()
+                Rectangle()
+                    .fill(landed ? Color.brand : Color(uiColor: .systemGray5))
+                    .frame(width: 2, height: 20)
+            }
+            Spacer()
         }
     }
 }
@@ -160,4 +222,3 @@ extension View {
 #Preview {
     SpacebarLootboxView()
 }
-
