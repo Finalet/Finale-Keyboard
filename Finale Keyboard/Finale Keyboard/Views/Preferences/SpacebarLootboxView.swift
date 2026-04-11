@@ -19,6 +19,9 @@ struct SpacebarLootboxView: View {
 
     @State var spinWidth: Double?
     @State var offset: CGFloat = 0
+    @State private var lastCenteredCellIndex: Int?
+
+    private let spinHaptics = UIImpactFeedbackGenerator(style: .medium)
 
     var targetIndex: Int { max(items.count - 5, 0) }
     
@@ -54,6 +57,7 @@ struct SpacebarLootboxView: View {
                             }
                         }
                         .offset(x: offset)
+                        .modifier(AnimatableOffsetObserver(value: offset, onChange: handleOffsetChange))
                         .padding(.vertical, spacing * 2)
                         .border(width: 1, edges: [.top, .bottom], color: Color(uiColor: .systemGray4))
                     }
@@ -75,7 +79,7 @@ struct SpacebarLootboxView: View {
                         VStack (spacing: 16) {
                             DefaultButton(label: didWin ? "Redeem prize" : "I want to try again.") {
                                 if didWin {
-                                    
+                                    dismiss()
                                 } else {
                                     Task { await iapManager.PurchaseSpacebarGamble(onSuccess: { Start() }) }
                                 }
@@ -89,12 +93,7 @@ struct SpacebarLootboxView: View {
                 }
             }
         }
-        .onChange(of: landed) { landed in
-            if !landed { return }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { withAnimation{ showTitle = true } }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) { withAnimation{ showBottomButton = true } }
-        }
-        // .interactiveDismissDisabled()
+        .interactiveDismissDisabled()
     }
 
     func GenerateItems () {
@@ -107,6 +106,9 @@ struct SpacebarLootboxView: View {
     
     func Start() {
         GenerateItems()
+        spinHaptics.prepare()
+        lastCenteredCellIndex = nil
+
         withAnimation {
             landed = false
             showTitle = false
@@ -127,14 +129,45 @@ struct SpacebarLootboxView: View {
         }
 
         DispatchQueue.main.asyncAfter(deadline: .now() + spinDuration) {
-            withAnimation {
-                landed = true
+            withAnimation { landed = true }
+            UINotificationFeedbackGenerator().notificationOccurred(.error)
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + spinDuration + 1.0) { withAnimation{ showTitle = true } }
+        DispatchQueue.main.asyncAfter(deadline: .now() + spinDuration + 2.0) { withAnimation{ showBottomButton = true } }
+    }
+
+    func handleOffsetChange(_ currentOffset: CGFloat) {
+        guard let spinWidth else { return }
+
+        let rawIndex = (spinWidth / 2 - currentOffset - cellSize / 2) / (cellSize + spacing)
+        let centeredIndex = Int(rawIndex.rounded())
+
+        guard items.indices.contains(centeredIndex), centeredIndex != lastCenteredCellIndex else { return }
+
+        lastCenteredCellIndex = centeredIndex
+        spinHaptics.impactOccurred()
+        spinHaptics.prepare()
+    }
+}
+
+private struct AnimatableOffsetObserver: AnimatableModifier {
+    var value: CGFloat
+    let onChange: (CGFloat) -> Void
+
+    var animatableData: CGFloat {
+        get { value }
+        set {
+            value = newValue
+            let callback = onChange
+            DispatchQueue.main.async {
+                callback(newValue)
             }
         }
     }
-    
-    func SpinAgain() {
-        
+
+    func body(content: Content) -> some View {
+        content
     }
 }
 
