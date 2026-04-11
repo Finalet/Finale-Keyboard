@@ -1,0 +1,72 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "EF3DE677",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "99.99",
+      "familyShareable" : false,
+      "internalID" : "6762026752",
+      "localizations" : [
+        {
+          "description" : "Can't learn gestures? I guess you can buy a spacebar.",
+          "displayName" : "The Spacebar",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "spacebar",
+      "referenceName" : "Spacebar",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "0.99",
+      "familyShareable" : false,
+      "internalID" : "6762026872",
+      "localizations" : [
+        {
+          "description" : "Can't type without a spacebar? Win it.",
+          "displayName" : "Spacebar Gamble",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "spacebar_gamble",
+      "referenceName" : "Spacebar Gamble",
+      "type" : "Consumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "1613395700",
+    "_askToBuyEnabled" : false,
+    "_billingGracePeriodEnabled" : false,
+    "_billingIssuesEnabled" : false,
+    "_developerTeamID" : "AYPPAXMRMG",
+    "_disableDialogs" : false,
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 797558854.24830198,
+    "_locale" : "en_US",
+    "_renewalBillingIssuesEnabled" : false,
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+
+    ],
+    "_timeRate" : 0
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

@@ -9,7 +9,7 @@ import SwiftUI
 import Keyboard
 
 struct ContentView: View {
-    
+    @StateObject private var iapManager = InAppPurchasesManager()
     @StateObject private var keyboardState = KeyboardEnabledState(bundleId: "com.Grant151.Finale-Keyboard.Keyboard")
     
     @State var favoriteEmoji = [String](repeating: "", count: 32)
@@ -110,6 +110,7 @@ struct ContentView: View {
         }
         .tint(.brand)
         .environmentObject(keyboardState)
+        .environmentObject(iapManager)
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear() {
             LoadEmojiArray()

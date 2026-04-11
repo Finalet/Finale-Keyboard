@@ -9,16 +9,15 @@ import Foundation
 import SwiftUI
 
 struct SpacebarPurchaseView: View {
-
-    @State var purchaseAlertPresented = false
-    @State var gambleAlertPresented = false
-    @State var forFreeAlertPresented = false
+    @EnvironmentObject var iapManager: InAppPurchasesManager
     
     @State var presentLootboxSheet = false
     
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.openURL) private var openURL
 
+    var purchasePrice: String { iapManager.spacebarProduct?.displayPrice ?? "$99" }
+    var gamblePrice: String { iapManager.spacebarGambleProduct?.displayPrice ?? "$0.99" }
+    
     var body: some View {
         ZStack {
             ScrollView {
@@ -40,8 +39,8 @@ struct SpacebarPurchaseView: View {
                     Text("As you might have noticed, we live in a K-shaped economy. Meaning, there is a divergence between the rich and the poor. The investor-class and the permanent under-class.")
                     Text("So, statistically, you are either filthy rich and don't care to waste money. Or, you are drowning in dept with gambling being your only hope for financial stability.")
                     Text("I'll give options for both.")
-                    Text("If you have more money than brains (duh, you can't even be bothered to learn the swipe-right gesture), you can buy The Spacebar outright for $99.")
-                    Text("Or, if you are poor with no end in sight, you can spin the wheel for $0.99 and get a 10% chance of winning The Spacebar.")
+                    Text("If you have more money than brains (duh, you can't even be bothered to learn the swipe-right gesture), you can buy The Spacebar outright for \(purchasePrice).")
+                    Text("Or, if you are poor with no end in sight, you can spin the wheel for \(gamblePrice) and get a 10% chance of winning The Spacebar.")
                     HStack {
                         Spacer()
                         Text("So, what will it be?")
@@ -53,61 +52,22 @@ struct SpacebarPurchaseView: View {
                     DefaultButton(label: "I am sorry.", subLabel: "I will learn the gestures.") {
                         dismiss()
                     }
+                    
                     OptionsDivider()
-                    OutlineButton(label: "I'm rich and useless.", subLabel: "I'll buy it for $99.") {
-                        purchaseAlertPresented = true
+                    
+                    PurchaseSpacebarButton(price: purchasePrice) {
+                        Task { await iapManager.PurchaseSpacebar(onSuccess: { dismiss() }) }
                     }
-                    .alert("Does it feel good to be rich?", isPresented: $purchaseAlertPresented, actions: {
-                        Button("Sorry, I'll be better.") {
-                            
-                        }
-                        .keyboardShortcut(.defaultAction)
-                        Button("I need to buy it for $99.") {
-                            
-                        }
-                        .keyboardShortcut(.cancelAction)
-                    }, message: {
-                        Text("Why are you wasting your money? Just go learn the swipe gestures, they are much better.")
-                    })
-                    .tint(nil)
-                    
-                    OutlineButton(label: "I'm poor because I gamble.", subLabel: "I'll spin for $0.99.") {
-                        gambleAlertPresented = true
+                    GambleSpacebarButton(price: gamblePrice) {
+                        Task { await iapManager.PurchaseSpacebarGamble(onSuccess: { presentLootboxSheet = true }) }
                     }
-                    .alert("Is this a good life?", isPresented: $gambleAlertPresented, actions: {
-                        Button("Sorry, I'll be better.") { }
-                            .keyboardShortcut(.defaultAction)
-                        Button("I'm addicted, I'll spin for $0.99.") { presentLootboxSheet = true }
-                            .keyboardShortcut(.cancelAction)
-                    }, message: {
-                        Text("Are you about to gamble in an app? Its only a 10% chance, go learn the swipe gestures instead. You'll thank me later.")
-                    })
-                    .tint(nil)
                     
-                    Button("Restore purchases") {}
-                        .frame(maxWidth: .infinity)
-                        .foregroundStyle(Color(uiColor:.systemGray2))
-                        .font(.footnote)
-                        .padding(.top, 32)
+                    RestorePurchasesButton() {
+                        Task { await iapManager.UpdatePurchaseStatus() }
+                    }
+                    .padding(.top, 64)
                     
-                    Button(action: {
-                        forFreeAlertPresented = true
-                    }, label: {
-                        Text("Psss, come here, kitty. Still want your spacebar for free?")
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(Color(uiColor:.systemGray2))
-                            .font(.footnote)
-                    })
-                    .frame(maxWidth: .infinity)
-                    .alert("Uuugh, fine", isPresented: $forFreeAlertPresented, actions: {
-                        Button("I'll do as you say, boss.") { EmailGrant() }
-                            .keyboardShortcut(.defaultAction)
-                        Button("Fuck you, man.") { }
-                            .keyboardShortcut(.cancelAction)
-                    }, message: {
-                        Text("I guess... if you really can't be bothered to learn gestures...\n\nEmail me at grant@finaletodo.com with the worst insult towards yourself. If I like it, I'll see what I can do.")
-                    })
-                    .tint(nil)
+                    RequestForFreeButton()
                 }
                 .padding()
             }
@@ -122,6 +82,89 @@ struct SpacebarPurchaseView: View {
         }
         .interactiveDismissDisabled()
         .sheet(isPresented: $presentLootboxSheet) { SpacebarLootboxView() }
+    }
+}
+
+struct PurchaseSpacebarButton: View {
+    @State var purchaseAlertPresented = false
+    
+    let price: String
+    let onContinue: () -> Void
+    
+    var body: some View {
+        OutlineButton(label: "I'm rich and useless.", subLabel: "I'll buy it for \(price).") {
+            purchaseAlertPresented = true
+        }
+        .alert("Does it feel good to be rich?", isPresented: $purchaseAlertPresented, actions: {
+            Button("Sorry, I'll be better.") {}
+            .keyboardShortcut(.defaultAction)
+            Button("I need to buy it for \(price).") { onContinue() }
+            .keyboardShortcut(.cancelAction)
+        }, message: {
+            Text("Why are you wasting your money? Just go learn the swipe gestures, they are much better.")
+        })
+        .tint(nil)
+    }
+}
+
+struct GambleSpacebarButton: View {
+    @State var gambleAlertPresented = false
+    
+    let price: String
+    let onContinue: () -> Void
+    
+    var body: some View {
+        OutlineButton(label: "I'm poor because I gamble.", subLabel: "I'll spin for \(price).") {
+            gambleAlertPresented = true
+        }
+        .alert("Is this a good life?", isPresented: $gambleAlertPresented, actions: {
+            Button("Sorry, I'll be better.") {}
+                .keyboardShortcut(.defaultAction)
+            Button("I'm addicted, I'll spin for \(price).") { onContinue() }
+                .keyboardShortcut(.cancelAction)
+        }, message: {
+            Text("Are you about to gamble in an app? Its only a 10% chance, go learn the swipe gestures instead. You'll thank me later.")
+        })
+        .tint(nil)
+    }
+}
+
+struct RestorePurchasesButton: View {
+    let onTap: () -> Void
+    
+    var body: some View {
+        Button("Restore purchases") { onTap() }
+            .frame(maxWidth: .infinity)
+            .foregroundStyle(Color(uiColor:.systemGray2))
+            .font(.footnote)
+    }
+}
+
+struct RequestForFreeButton: View {
+    
+    @State var forFreeAlertPresented = false
+    
+    @Environment(\.openURL) private var openURL
+    
+    var body: some View {
+        Button(action: {
+            forFreeAlertPresented = true
+        }, label: {
+            Text("Psss, come here, kitty. Still want your spacebar for free?")
+                .multilineTextAlignment(.center)
+                .foregroundStyle(Color(uiColor:.systemGray2))
+                .font(.footnote)
+        })
+        .frame(maxWidth: .infinity)
+        .alert("Uuugh, fine", isPresented: $forFreeAlertPresented, actions: {
+            Button("I'll do as you say, boss.") { EmailGrant() }
+                .keyboardShortcut(.defaultAction)
+            Button("Fuck you, man.") { }
+                .keyboardShortcut(.cancelAction)
+        }, message: {
+            Text("I guess... if you really can't be bothered to learn gestures...\n\nEmail me at grant@finaletodo.com with the worst insult towards yourself. If I like it, I'll see what I can do.")
+        })
+        .tint(nil)
     }
 
     private func EmailGrant() {

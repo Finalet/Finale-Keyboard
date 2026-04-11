@@ -28,6 +28,7 @@ struct SpacebarLootboxView: View {
     @State var showTitle = false
     @State var showBottomButton = false
     
+    @EnvironmentObject var iapManager: InAppPurchasesManager
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -54,7 +55,7 @@ struct SpacebarLootboxView: View {
                         }
                         .offset(x: offset)
                         .padding(.vertical, spacing * 2)
-                        .border(width: 1, edges: [.top, .bottom], color: Color(uiColor: .systemGray5))
+                        .border(width: 1, edges: [.top, .bottom], color: Color(uiColor: .systemGray4))
                     }
                     .background(Color(uiColor: .secondarySystemBackground))
                     .onAppear {
@@ -73,8 +74,11 @@ struct SpacebarLootboxView: View {
                     HStack {
                         VStack (spacing: 16) {
                             DefaultButton(label: didWin ? "Redeem prize" : "I want to try again.") {
-                                if didWin {  }
-                                else { Start() }
+                                if didWin {
+                                    
+                                } else {
+                                    Task { await iapManager.PurchaseSpacebarGamble(onSuccess: { Start() }) }
+                                }
                             }
                             if !didWin {
                                 OutlineButton(label: "I give up, like I always do.") { dismiss() }
@@ -183,11 +187,11 @@ struct TargetCellHighlight: View {
             Spacer()
             VStack{
                 Rectangle()
-                    .fill(landed ? Color.brand : Color(uiColor: .systemGray5))
+                    .fill(landed ? Color.brand : Color(uiColor: .systemGray4))
                     .frame(width: 2, height: 20)
                 Spacer()
                 Rectangle()
-                    .fill(landed ? Color.brand : Color(uiColor: .systemGray5))
+                    .fill(landed ? Color.brand : Color(uiColor: .systemGray4))
                     .frame(width: 2, height: 20)
             }
             Spacer()

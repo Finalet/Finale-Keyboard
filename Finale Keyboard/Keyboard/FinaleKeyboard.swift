@@ -64,10 +64,10 @@ class FinaleKeyboard: UIInputViewController {
     static var isAutoCorrectOn = true
     static var isAutoCorrectGrammarOn = true
     static var isAutoCapitalizeOn = true
+    static var isTypingHapticEnabled = true
+    static var isGesturesHapticEnabled = true
     static var isSpacebarEnabled = false
     static var isSpacebarAutocorrectOn = false
-    static var isTypingHapticEnabled = false
-    static var isGesturesHapticEnabled = true
     
     static var currentLocale = Locale.en_US
     static var enabledLocales = [Locale.en_US, Locale.ru_RU]
@@ -170,10 +170,10 @@ class FinaleKeyboard: UIInputViewController {
         FinaleKeyboard.isAutoCorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectWords") as? Bool ?? true
         FinaleKeyboard.isAutoCorrectGrammarOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectGrammar") as? Bool ?? true
         FinaleKeyboard.isAutoCapitalizeOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocapitalizeWords") as? Bool ?? true
+        FinaleKeyboard.isTypingHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isTypingHapticEnabled") as? Bool ?? true
+        FinaleKeyboard.isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
         FinaleKeyboard.isSpacebarEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isSpacebarEnabled") as? Bool ?? false
         FinaleKeyboard.isSpacebarAutocorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_spacebarAutocorrect") as? Bool ?? false
-        FinaleKeyboard.isTypingHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isTypingHapticEnabled") as? Bool ?? false
-        FinaleKeyboard.isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
         FinaleKeyboard.isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
         FinaleKeyboard.showTouchZones = userDefaults?.value(forKey: "FINALE_DEV_APP_showTouchZones") as? Bool ?? false
         FinaleKeyboard.maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? CGFloat ?? 0.6

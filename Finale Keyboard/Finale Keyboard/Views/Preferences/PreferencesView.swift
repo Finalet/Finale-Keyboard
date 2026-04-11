@@ -9,20 +9,18 @@ import Foundation
 import SwiftUI
 
 struct PreferencesView: View {
-    @State var autocorrectWords = true
-    @State var autocorrectGrammar = true
-    @State var autocapitalizeWords = true
+    @EnvironmentObject var iapManager: InAppPurchasesManager
+
+    @UseUserDefaultState("FINALE_DEV_APP_autocorrectWords", true) var autocorrectWords
+    @UseUserDefaultState("FINALE_DEV_APP_autocorrectGrammar", true) var autocorrectGrammar
+    @UseUserDefaultState("FINALE_DEV_APP_autocapitalizeWords", true) var autocapitalizeWords
     
+    @UseUserDefaultState("FINALE_DEV_APP_isTypingHapticEnabled", true) var isTypingHapticEnabled
+    @UseUserDefaultState("FINALE_DEV_APP_isGesturesHapticEnabled", true) var isGesturesHapticEnabled
+
+    @UseUserDefaultState("FINALE_DEV_APP_isSpacebarEnabled", false) var isSpacebarEnabled
+    @UseUserDefaultState("FINALE_DEV_APP_spacebarAutocorrect", false) var spacebarAutocorrect
     @State var showSpacebarPurchase = false
-    @State var isSpacebarEnabled = false
-    @State var spacebarAutocorrect = false
-    
-    @State var isTypingHapticEnabled = false
-    @State var isGesturesHapticEnabled = true
-    
-    let tintColor = Color(red: 0.33, green: 0.51, blue: 0.85)
-    
-    let suiteName = "group.finale-keyboard-cache"
     
     typealias Localize = Localization.PreferencesScreen
     
@@ -30,43 +28,25 @@ struct PreferencesView: View {
         List {
             Section {
                 Toggle(Localize.autocorrectWords, isOn: $autocorrectWords)
-                .onChange(of: autocorrectWords) { value in
-                    OnChange()
-                }
                 Toggle(Localize.autocorrectGrammar, isOn: $autocorrectGrammar)
-                .onChange(of: autocorrectGrammar) { value in
-                    OnChange()
-                }
                 Toggle(Localize.autocapitalizeWords, isOn: $autocapitalizeWords)
-                .onChange(of: autocapitalizeWords) { value in
-                    OnChange()
-                }
-            }
-            Section {
-                Toggle("Spacebar", isOn: $isSpacebarEnabled.animation())
-                .onChange(of: isSpacebarEnabled) { value in
-                    if value {
-                        isSpacebarEnabled = false
-                        showSpacebarPurchase = true
-                    } else {
-                        OnChange()
-                    }
-                }
-                if isSpacebarEnabled {
-                    Toggle("Spacebar Autocorrect", isOn: $spacebarAutocorrect)
-                    .onChange(of: spacebarAutocorrect) { value in
-                        OnChange()
-                    }
-                }
             }
             Section {
                 Toggle(Localize.gesturesHapticFeedback, isOn: $isGesturesHapticEnabled)
-                .onChange(of: isGesturesHapticEnabled) { value in
-                    OnChange()
-                }
                 Toggle(Localize.typingHapticFeedback, isOn: $isTypingHapticEnabled)
-                .onChange(of: isTypingHapticEnabled) { value in
-                    OnChange()
+            }
+            Section {
+                Toggle("Spacebar", isOn: $isSpacebarEnabled.animation())
+                    .onChange(of: isSpacebarEnabled) { _, value in
+                        if value && !iapManager.isSpacebarUnlocked {
+                            isSpacebarEnabled = false
+                            showSpacebarPurchase = true
+                        } else {
+                            isSpacebarEnabled = value
+                        }
+                    }
+                if isSpacebarEnabled {
+                    Toggle("Spacebar Autocorrect", isOn: $spacebarAutocorrect)
                 }
             }
             Section {
@@ -85,30 +65,74 @@ struct PreferencesView: View {
             SpacebarPurchaseView()
         }
         .navigationTitle(Localize.title)
-        .onAppear {
-            Load()
+        .environmentObject(iapManager)
+    }
+}
+
+@propertyWrapper
+struct UseUserDefaultState<Value>: DynamicProperty {
+    @State private var value: Value
+
+    private let key: String
+    private let defaultValue: Value
+    private let store: UserDefaults?
+
+    init(
+        _ key: String,
+        _ defaultValue: Value,
+        store: UserDefaults? = UserDefaults(suiteName: "group.finale-keyboard-cache")
+    ) {
+        self.key = key
+        self.defaultValue = defaultValue
+        self.store = store
+        _value = State(initialValue: store?.value(forKey: key) as? Value ?? defaultValue)
+    }
+
+    var wrappedValue: Value {
+        get {
+            self.value
+        }
+        nonmutating set {
+            self.value = newValue
+            self.store?.setValue(newValue, forKey: key)
         }
     }
-    
-    func OnChange () {
-        let userDefaults = UserDefaults(suiteName: suiteName)
-        userDefaults?.setValue(autocorrectWords, forKey: "FINALE_DEV_APP_autocorrectWords")
-        userDefaults?.setValue(autocorrectGrammar, forKey: "FINALE_DEV_APP_autocorrectGrammar")
-        userDefaults?.setValue(autocapitalizeWords, forKey: "FINALE_DEV_APP_autocapitalizeWords")
-        userDefaults?.setValue(isSpacebarEnabled, forKey: "FINALE_DEV_APP_isSpacebarEnabled")
-        userDefaults?.setValue(spacebarAutocorrect, forKey: "FINALE_DEV_APP_spacebarAutocorrect")
-        userDefaults?.setValue(isTypingHapticEnabled, forKey: "FINALE_DEV_APP_isTypingHapticEnabled")
-        userDefaults?.setValue(isGesturesHapticEnabled, forKey: "FINALE_DEV_APP_isGesturesHapticEnabled")
+
+    var projectedValue: Binding<Value> {
+        Binding(
+            get: { wrappedValue },
+            set: { newValue, transaction in
+                withTransaction(transaction) {
+                    wrappedValue = newValue
+                }
+            }
+        )
     }
-    
-    func Load () {
-        let userDefaults = UserDefaults(suiteName: suiteName)
-        autocorrectWords = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectWords") as? Bool ?? true
-        autocorrectGrammar = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectGrammar") as? Bool ?? true
-        autocapitalizeWords = userDefaults?.value(forKey: "FINALE_DEV_APP_autocapitalizeWords") as? Bool ?? true
-        isSpacebarEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isSpacebarEnabled") as? Bool ?? false
-        spacebarAutocorrect = userDefaults?.value(forKey: "FINALE_DEV_APP_spacebarAutocorrect") as? Bool ?? false
-        isTypingHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isTypingHapticEnabled") as? Bool ?? false
-        isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
+}
+
+
+@propertyWrapper
+struct UseUserDefault<Value> {
+    private let key: String
+    private let defaultValue: Value
+    private let store: UserDefaults?
+
+    init(
+        _ key: String,
+        _ defaultValue: Value,
+        store: UserDefaults? = UserDefaults(suiteName: "group.finale-keyboard-cache")
+    ) {
+        self.key = key
+        self.defaultValue = defaultValue
+        self.store = store
+    }
+
+    var wrappedValue: Value {
+        get {
+            self.store?.value(forKey: key) as? Value ?? defaultValue
+        }
+        nonmutating set {
+            self.store?.setValue(newValue, forKey: key)
+        }
     }
 }

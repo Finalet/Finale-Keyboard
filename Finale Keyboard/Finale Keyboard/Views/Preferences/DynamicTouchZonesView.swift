@@ -15,14 +15,14 @@ struct DynamicTouchZonesView: View {
     
     @State var testText = ""
     
-    @State var isDynamicTapZonesEnabled: Bool = false
-    @State var showTouchZones: Bool = false
-    @State var maxTouchZoneScale: Float = 0.3
-    @State var dynamicTapZoneProbabilityMultiplier: Float = 1.5
-    @State var dynamicKeyHighlighting: Bool = false
+    @UseUserDefaultState("FINALE_DEV_APP_isDynamicTapZonesEnabled", false) var isDynamicTapZonesEnabled: Bool
+    @UseUserDefaultState("FINALE_DEV_APP_showTouchZones", false) var showTouchZones: Bool
+    @UseUserDefaultState("FINALE_DEV_APP_maxTouchZoneScale", 0.3) var maxTouchZoneScale: Float
+    @UseUserDefaultState("FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier", 1.5) var dynamicTapZoneProbabilityMultiplier: Float
+    @UseUserDefaultState("FINALE_DEV_APP_dynamicKeyHighlighting", false) var dynamicKeyHighlighting: Bool
     
     @State var loadingStatus: String? = nil
-    @State var isDictionaryLoaded: Bool = false
+    @State var isDictionaryLoaded: Bool = Ngrams.shared.isNgramDictionaryLoaded
     
     @FocusState private var shouldShowKeyboard: Bool
     
@@ -32,12 +32,10 @@ struct DynamicTouchZonesView: View {
         List {
             Section (footer: Text(Localize.explanation)) {
                 Toggle(Localization.Actions.enable, isOn: $isDynamicTapZonesEnabled.animation())
-                    .onChange(of: isDynamicTapZonesEnabled) { value in
-                        OnChange()
-                    }
+                    .onChange(of: isDynamicTapZonesEnabled) { _, _ in OnChange() }
                 if isDynamicTapZonesEnabled {
-                    Toggle(Localize.highlightKeys, isOn: $dynamicKeyHighlighting.animation())
-                        .onChange(of: dynamicKeyHighlighting) { value in
+                    Toggle(Localize.highlightKeys, isOn: $dynamicKeyHighlighting)
+                        .onChange(of: dynamicKeyHighlighting) { _, value in
                             if value && showTouchZones { withAnimation { showTouchZones = false } }
                             OnChange()
                         }
@@ -77,7 +75,7 @@ struct DynamicTouchZonesView: View {
                 }
                 Section(header: Text(Localization.PreferencesScreen.Advanced.pageTitle)) {
                     Toggle(Localize.showTouchZones, isOn: $showTouchZones.animation())
-                        .onChange(of: showTouchZones) { value in
+                        .onChange(of: showTouchZones) { _, value in
                             if value && dynamicKeyHighlighting { withAnimation { dynamicKeyHighlighting = false } }
                             OnChange()
                         }
@@ -89,22 +87,15 @@ struct DynamicTouchZonesView: View {
                 }
                 Section (footer: Text(verbatim: "\(Localization.Misc.Default): 130%")) {
                     TextRow(label: Localize.maximumKeyScale, value: "\(100 + Int(maxTouchZoneScale*100))%")
-                    Slider(value: $maxTouchZoneScale, in: 0.1...2.0, step: 0.1) { _ in
-                        OnChange()
-                    }
+                    Slider(value: $maxTouchZoneScale, in: 0.1...2.0, step: 0.1) { _ in OnChange() }
                 }
                 Section (footer: Text(verbatim: "\(Localization.Misc.Default): 1.5")) {
                     TextRow(label: Localize.scaleMultiplier, value: "\(round(dynamicTapZoneProbabilityMultiplier*10)/10)")
-                    Slider(value: $dynamicTapZoneProbabilityMultiplier, in: 1.0...3.0, step: 0.1) { _ in
-                        OnChange()
-                    }
+                    Slider(value: $dynamicTapZoneProbabilityMultiplier, in: 1.0...3.0, step: 0.1) { _ in OnChange() }
                 }
             }
         }
         .navigationTitle(Localize.pageTitle)
-        .onAppear {
-            Load()
-        }
     }
     
     @ViewBuilder
@@ -119,23 +110,6 @@ struct DynamicTouchZonesView: View {
     
     func OnChange () {
         shouldShowKeyboard = false
-        let userDefaults = UserDefaults(suiteName: suiteName)
-        userDefaults?.setValue(isDynamicTapZonesEnabled, forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled")
-        userDefaults?.setValue(showTouchZones, forKey: "FINALE_DEV_APP_showTouchZones")
-        userDefaults?.setValue(maxTouchZoneScale, forKey: "FINALE_DEV_APP_maxTouchZoneScale")
-        userDefaults?.setValue(dynamicTapZoneProbabilityMultiplier, forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier")
-        userDefaults?.setValue(dynamicKeyHighlighting, forKey: "FINALE_DEV_APP_dynamicKeyHighlighting")
-    }
-    
-    func Load () {
-        isDictionaryLoaded = Ngrams.shared.isNgramDictionaryLoaded
-        
-        let userDefaults = UserDefaults(suiteName: suiteName)
-        isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
-        showTouchZones = userDefaults?.value(forKey: "FINALE_DEV_APP_showTouchZones") as? Bool ?? false
-        maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? Float ?? 0.3
-        dynamicTapZoneProbabilityMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier") as? Float ?? 1.5
-        dynamicKeyHighlighting = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicKeyHighlighting") as? Bool ?? false
     }
 }
 
