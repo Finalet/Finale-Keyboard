@@ -60,7 +60,7 @@ struct SpacebarLootboxView: View {
                         .offset(x: offset)
                         .modifier(AnimatableOffsetObserver(value: offset, onChange: OnOffsetChange))
                         .padding(.vertical, spacing * 2)
-                        .border(width: 1, edges: [.top, .bottom], color: Color(uiColor: .systemGray4))
+                        .border(width: 2, edges: [.top, .bottom], color: Color(uiColor: .systemGray4))
                     }
                     .background(Color(uiColor: .secondarySystemBackground))
                     .onAppear {
