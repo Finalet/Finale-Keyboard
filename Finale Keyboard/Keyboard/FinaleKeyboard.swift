@@ -436,11 +436,13 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func Copy () {
-        UIPasteboard.general.string = self.textDocumentProxy.selectedText
+        guard let selection = self.textDocumentProxy.selectedText else { return }
+        UIPasteboard.general.string = selection
     }
     
     func Paste (text: String? = nil) {
-        self.textDocumentProxy.insertText(text ?? UIPasteboard.general.string ?? "")
+        guard let pasteText = text ?? UIPasteboard.general.string else { return }
+        self.textDocumentProxy.insertText(pasteText)
         FadeoutSuggestions()
         CheckAutoCapitalization()
         ProcessDynamicTouchZones()
@@ -757,7 +759,7 @@ class FinaleKeyboard: UIInputViewController {
         
         if (suggestionsArrays[x].suggestions.count > 1) {
             var originalInput = ""
-            while !isPrevCharWhitespace() {
+            while !isAtWordStart() {
                 if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.last == nil) { break }
                 originalInput.insert(self.textDocumentProxy.documentContextBeforeInput?.last ?? Character(""), at: originalInput.startIndex)
                 self.textDocumentProxy.deleteBackward()
@@ -831,7 +833,7 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func getLastWord () -> String {
-        if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.count == 0 || !self.textDocumentProxy.hasText) { return "" }
+        guard let startContext = self.textDocumentProxy.documentContextBeforeInput, startContext.count > 0 else { return "" }
         
         var lastSpace = false
         if getLastChar() == " " {
@@ -841,9 +843,9 @@ class FinaleKeyboard: UIInputViewController {
         
         let output: String
         if let context = self.textDocumentProxy.documentContextBeforeInput {
-            let delimiters: [Character] = [" ", "\n", "\t"]
+            let breakingCharacters = CharacterSet.whitespacesAndNewlines.union(["\"", "(", "[", "{", "<", "#"])
             var startIndex = context.startIndex
-            if let lastDelimiterIndex = context.lastIndex(where: { delimiters.contains($0) }) {
+            if let lastDelimiterIndex = context.lastIndex(where: { breakingCharacters.contains($0.unicodeScalars.first ?? " ".unicodeScalars.first!) }) {
                 startIndex = context.index(after: lastDelimiterIndex)
             }
             output = String(context[startIndex...])
@@ -878,7 +880,7 @@ class FinaleKeyboard: UIInputViewController {
             }
         }
         //Delete Words
-        while !isPrevCharWhitespace() {
+        while !isAtWordStart() {
             if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.last == nil) { break }
             self.textDocumentProxy.deleteBackward()
         }
@@ -1116,30 +1118,28 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func getLastChar() -> String {
-        if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput == "") { return ""}
-        let text: String = self.textDocumentProxy.documentContextBeforeInput!
-        return String(text[text.index(text.endIndex, offsetBy: -1)])
+        guard let context = self.textDocumentProxy.documentContextBeforeInput, !context.isEmpty else { return "" }
+        return String(context.last ?? Character(""))
     }
     func getOneBeforeLastChar() -> String {
-        if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput == "") { return "" }
-        if (self.textDocumentProxy.documentContextBeforeInput!.count < 2) { return "" }
-        let text: String = self.textDocumentProxy.documentContextBeforeInput!
-        return String(text[text.index(text.endIndex, offsetBy: -2)])
+        guard let context = self.textDocumentProxy.documentContextBeforeInput, context.count >= 2 else { return "" }
+        return String(context[context.index(context.endIndex, offsetBy: -2)])
     }
     func getTwoBeforeLastChar() -> String {
-        if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput == "") { return "" }
-        if (self.textDocumentProxy.documentContextBeforeInput!.count < 3) { return "" }
-        let text: String = self.textDocumentProxy.documentContextBeforeInput!
-        return String(text[text.index(text.endIndex, offsetBy: -3)])
+        guard let context = self.textDocumentProxy.documentContextBeforeInput, context.count >= 3 else { return "" }
+        return String(context[context.index(context.endIndex, offsetBy: -3)])
     }
     func getStringBeforeCursor(length: Int) -> String? {
-        if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput == "") { return nil }
-        let text: String = self.textDocumentProxy.documentContextBeforeInput!
-        return String(text[text.index(text.endIndex, offsetBy: -min(length, text.count))..<text.endIndex])
+        guard let context = self.textDocumentProxy.documentContextBeforeInput, !context.isEmpty else { return nil }
+        return String(context[context.index(context.endIndex, offsetBy: -min(length, context.count))..<context.endIndex])
     }
-    func isPrevCharWhitespace() -> Bool {
-        let breakingCharacters: [Character] = [" ", "\n", "\t"]
-        return !self.textDocumentProxy.hasText || breakingCharacters.contains(self.textDocumentProxy.documentContextBeforeInput?.last ?? " ")
+    func isAtWordStart() -> Bool {
+        if !self.textDocumentProxy.hasText { return true }
+        let breakingCharacters = CharacterSet.whitespacesAndNewlines.union(["\"", "(", "[", "{", "<", "#"])
+        if let lastUnicodeChar = self.textDocumentProxy.documentContextBeforeInput?.last?.unicodeScalars.first {
+            return breakingCharacters.contains(lastUnicodeChar)
+        }
+        return true
     }
     
     func ToggleLocale () {
