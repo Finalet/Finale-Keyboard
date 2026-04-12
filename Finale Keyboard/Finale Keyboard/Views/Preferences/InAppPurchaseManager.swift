@@ -15,7 +15,7 @@ class InAppPurchasesManager: ObservableObject {
     private let spacebarGambleProductID = "spacebar_gamble"
     
     @Published var spacebarProduct: Product?
-    @UseUserDefault("FINALE_DEV_APP_isSpacebarUnlocked", false) var isSpacebarUnlocked
+    @UserDefault("FINALE_DEV_APP_isSpacebarUnlocked", false) var isSpacebarUnlocked
     
     @Published var spacebarGambleProduct: Product?
     
@@ -52,7 +52,7 @@ class InAppPurchasesManager: ObservableObject {
         }
     }
     
-    func UpdatePurchaseStatus() async{
+    func UpdatePurchaseStatus() async {
         if let result = await Transaction.latest(for: spacebarProductID), case .verified(let transaction) = result {
             isSpacebarUnlocked = transaction.revocationDate == nil
         } else {

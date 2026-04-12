@@ -11,29 +11,12 @@ import SwiftUI
 struct AdvancedView: View {
     typealias Localize = Localization.PreferencesScreen.Advanced
     
+    @UserDefaultState("FINALE_DEV_APP_learningWordsDictionary", [String:Int]()) var dictionary: [String:Int]
     let suiteName = "group.finale-keyboard-cache"
     
-    @State var wordsOneTimeUse: Int
-    @State var wordsTwoTimeUse: Int
-    @State var totalWords: Int
-    
-    init () {
-        let userDefaults = UserDefaults(suiteName: suiteName)
-        let learningWordsDictionary = userDefaults?.value(forKey: "FINALE_DEV_APP_learningWordsDictionary") as?  Dictionary<String, Int> ?? [String:Int]()
-        
-        var x = 0
-        var y = 0
-        for (_, value) in learningWordsDictionary {
-            if value == 1 {
-                x += 1
-            } else if value == 2 {
-                y += 1
-            }
-        }
-        wordsOneTimeUse = x
-        wordsTwoTimeUse = y
-        totalWords = learningWordsDictionary.count
-    }
+    var wordsOneTimeUse: Int { dictionary.count(where: { $0.value == 1 }) }
+    var wordsTwoTimeUse: Int { dictionary.count(where: { $0.value == 2 }) }
+    var totalWords: Int { dictionary.count }
     
     var body: some View {
         Form {
@@ -68,28 +51,7 @@ struct AdvancedView: View {
     }
     
     func CleanWords(nUses: Int) {
-        let userDefaults = UserDefaults(suiteName: suiteName)
-        
-        var learningWordsDictionary = userDefaults?.value(forKey: "FINALE_DEV_APP_learningWordsDictionary") as?  Dictionary<String, Int> ?? [String:Int]()
-        
-        for (key, value) in learningWordsDictionary {
-            if value == nUses {
-                learningWordsDictionary.removeValue(forKey: key)
-            }
-        }
-        
-        userDefaults?.setValue(learningWordsDictionary, forKey: "FINALE_DEV_APP_learningWordsDictionary")
-        
-        wordsOneTimeUse = 0
-        wordsTwoTimeUse = 0
-        totalWords = learningWordsDictionary.count
-        for (_, value) in learningWordsDictionary {
-            if value == 1 {
-                wordsOneTimeUse += 1
-            } else if value == 2 {
-                wordsTwoTimeUse += 1
-            }
-        }
+        self.dictionary = dictionary.filter({ $0.value != nUses })
     }
 }
 

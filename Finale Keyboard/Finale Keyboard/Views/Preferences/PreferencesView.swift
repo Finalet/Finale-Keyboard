@@ -11,15 +11,15 @@ import SwiftUI
 struct PreferencesView: View {
     @EnvironmentObject var iapManager: InAppPurchasesManager
 
-    @UseUserDefaultState("FINALE_DEV_APP_autocorrectWords", true) var autocorrectWords
-    @UseUserDefaultState("FINALE_DEV_APP_autocorrectGrammar", true) var autocorrectGrammar
-    @UseUserDefaultState("FINALE_DEV_APP_autocapitalizeWords", true) var autocapitalizeWords
+    @UserDefaultState("FINALE_DEV_APP_autocorrectWords", true) var autocorrectWords
+    @UserDefaultState("FINALE_DEV_APP_autocorrectGrammar", true) var autocorrectGrammar
+    @UserDefaultState("FINALE_DEV_APP_autocapitalizeWords", true) var autocapitalizeWords
     
-    @UseUserDefaultState("FINALE_DEV_APP_isTypingHapticEnabled", true) var isTypingHapticEnabled
-    @UseUserDefaultState("FINALE_DEV_APP_isGesturesHapticEnabled", true) var isGesturesHapticEnabled
+    @UserDefaultState("FINALE_DEV_APP_isTypingHapticEnabled", true) var isTypingHapticEnabled
+    @UserDefaultState("FINALE_DEV_APP_isGesturesHapticEnabled", true) var isGesturesHapticEnabled
 
-    @UseUserDefaultState("FINALE_DEV_APP_isSpacebarEnabled", false) var isSpacebarEnabled
-    @UseUserDefaultState("FINALE_DEV_APP_spacebarAutocorrect", false) var spacebarAutocorrect
+    @UserDefaultState("FINALE_DEV_APP_isSpacebarEnabled", false) var isSpacebarEnabled
+    @UserDefaultState("FINALE_DEV_APP_spacebarAutocorrect", false) var spacebarAutocorrect
     @State var showSpacebarPurchase = false
     
     typealias Localize = Localization.PreferencesScreen
@@ -73,7 +73,7 @@ struct PreferencesView: View {
 }
 
 @propertyWrapper
-struct UseUserDefaultState<Value>: DynamicProperty {
+struct UserDefaultState<Value>: DynamicProperty {
     @State private var value: Value
 
     private let key: String
@@ -93,7 +93,8 @@ struct UseUserDefaultState<Value>: DynamicProperty {
 
     var wrappedValue: Value {
         get {
-            self.value
+            DispatchQueue.main.async { value = self.store?.value(forKey: key) as? Value ?? defaultValue } // Reading this value from UserDefaults becasue otherwise it resets to `defaultValue` when view reappears.
+            return value
         }
         nonmutating set {
             self.value = newValue
@@ -115,7 +116,7 @@ struct UseUserDefaultState<Value>: DynamicProperty {
 
 
 @propertyWrapper
-struct UseUserDefault<Value> {
+struct UserDefault<Value> {
     private let key: String
     private let defaultValue: Value
     private let store: UserDefaults?
@@ -134,7 +135,7 @@ struct UseUserDefault<Value> {
         get {
             self.store?.value(forKey: key) as? Value ?? defaultValue
         }
-        nonmutating set {
+        set {
             self.store?.setValue(newValue, forKey: key)
         }
     }

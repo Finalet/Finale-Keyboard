@@ -15,11 +15,11 @@ struct DynamicTouchZonesView: View {
     
     @State var testText = ""
     
-    @UseUserDefaultState("FINALE_DEV_APP_isDynamicTapZonesEnabled", false) var isDynamicTapZonesEnabled: Bool
-    @UseUserDefaultState("FINALE_DEV_APP_showTouchZones", false) var showTouchZones: Bool
-    @UseUserDefaultState("FINALE_DEV_APP_maxTouchZoneScale", 0.3) var maxTouchZoneScale: Float
-    @UseUserDefaultState("FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier", 1.5) var dynamicTapZoneProbabilityMultiplier: Float
-    @UseUserDefaultState("FINALE_DEV_APP_dynamicKeyHighlighting", false) var dynamicKeyHighlighting: Bool
+    @UserDefaultState("FINALE_DEV_APP_isDynamicTapZonesEnabled", false) var isDynamicTapZonesEnabled: Bool
+    @UserDefaultState("FINALE_DEV_APP_showTouchZones", false) var showTouchZones: Bool
+    @UserDefaultState("FINALE_DEV_APP_maxTouchZoneScale", 0.3) var maxTouchZoneScale: Float
+    @UserDefaultState("FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier", 1.5) var dynamicTapZoneProbabilityMultiplier: Float
+    @UserDefaultState("FINALE_DEV_APP_dynamicKeyHighlighting", false) var dynamicKeyHighlighting: Bool
     
     @State var loadingStatus: String? = nil
     @State var isDictionaryLoaded: Bool = Ngrams.shared.isNgramDictionaryLoaded
