@@ -52,9 +52,13 @@ struct SpacebarPurchaseView: View {
                         Spacer()
                     }
                     .padding(.vertical, 16)
-                    DefaultButton(label: "I am sorry.", subLabel: "I will learn the gestures.") {
-                        dismiss()
-                    }
+
+                    DefaultButton(label: {
+                        Text("I am sorry")
+                        Text("I will learn gestures.")
+                            .opacity(0.6)
+                            .font(.subheadline)
+                    }) { dismiss() }
                     
                     OptionsDivider()
                     
@@ -103,9 +107,12 @@ struct PurchaseSpacebarButton: View {
     let onContinue: () -> Void
     
     var body: some View {
-        OutlineButton(label: "I'm rich and useless.", subLabel: "I'll buy it for \(price).") {
-            purchaseAlertPresented = true
-        }
+        DefaultButton(.outline, label: {
+            Text("I'm rich and useless.")
+            Text("I'll buy it for \(price).")
+                .opacity(0.6)
+                .font(.subheadline)
+        }) { purchaseAlertPresented = true  }
         .alert("Does it feel good to be rich?", isPresented: $purchaseAlertPresented, actions: {
             Button("Sorry, I'll be better.") {}
             .keyboardShortcut(.defaultAction)
@@ -126,9 +133,12 @@ struct GambleSpacebarButton: View {
     let onContinue: () -> Void
     
     var body: some View {
-        OutlineButton(label: "I'm poor because I gamble.", subLabel: "I'll spin for \(price).") {
-            gambleAlertPresented = true
-        }
+        DefaultButton(.outline, label: {
+            Text("I'm poor because I gamble.")
+            Text("I'll spin for \(price).")
+                .opacity(0.6)
+                .font(.subheadline)
+        }) { gambleAlertPresented = true }
         .alert("Is this a good life?", isPresented: $gambleAlertPresented, actions: {
             Button("Sorry, I'll be better.") {}
                 .keyboardShortcut(.defaultAction)
@@ -295,89 +305,6 @@ struct OptionsDivider: View {
         }
         .padding(16)
         .frame(maxWidth: .infinity)
-    }
-}
-
-struct DefaultButton: View {
-    let label: String
-    let subLabel: String?
-    let action: () -> Void
-
-    init(label: String, action: @escaping () -> Void) {
-        self.init(label: label, subLabel: nil, action: action)
-    }
-    
-    init(label: String, subLabel: String? = nil, action: @escaping () -> Void) {
-        self.label = label
-        self.subLabel = subLabel
-        self.action = action
-    }
-    
-    var body: some View {
-        Button(action: action) {
-            VStack {
-                Text(label)
-                    .font(.headline)
-                if let subLabel = subLabel {
-                    Text(subLabel)
-                        .opacity(0.6)
-                        .font(.subheadline)
-                }
-            }
-            .padding(12)
-            .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color.brand.shadow(.inner(color: .white.opacity(0.25), radius: 1, y: 3)))
-            )
-            .foregroundStyle(Color.white)
-            .cornerRadius(12)
-            .shadow(color: Color.brand.opacity(0.5), radius: 5, y: 5)
-        }
-    }
-}
-
-struct OutlineButton: View {
-    let label: String
-    let subLabel: String?
-    let action: () -> Void
-    
-    @Environment(\.colorScheme) private var colorScheme
-    
-    var dark: Bool { return colorScheme == .dark }
-
-    init(label: String, action: @escaping () -> Void) {
-        self.init(label: label, subLabel: nil, action: action)
-    }
-    
-    init(label: String, subLabel: String? = nil, action: @escaping () -> Void) {
-        self.label = label
-        self.subLabel = subLabel
-        self.action = action
-    }
-    
-    var body: some View {
-        Button(action: action) {
-            VStack {
-                Text(label)
-                    .font(.headline)
-                if let subLabel = subLabel {
-                    Text(subLabel)
-                        .opacity(0.6)
-                        .font(.subheadline)
-                }
-            }
-            .padding(12)
-            .frame(maxWidth: .infinity)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Color(uiColor: .systemGray6).shadow(.inner(color: .white.opacity(dark ? 0.2 : 0.5), radius: 1, y: 3)))
-                    .stroke(Color(uiColor: .systemGray3), lineWidth: dark ? 0 : 1)
-            )
-            .foregroundStyle(Color.primary)
-            .cornerRadius(12)
-            .shadow(color: .black.opacity(dark ? 0.5 : 0.1), radius: 2, y: 3)
-        }
     }
 }
 

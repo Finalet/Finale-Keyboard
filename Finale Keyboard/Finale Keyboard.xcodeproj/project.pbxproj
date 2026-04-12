@@ -71,6 +71,7 @@
 		863AF0DE2F8B46F600FA036E /* ReturnButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863AF0DD2F8B46F400FA036E /* ReturnButton.swift */; };
 		863BBCCA2F89C4BC00D828B4 /* StoreKit.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */; };
 		863BBCCC2F89C58A00D828B4 /* InAppPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863BBCCB2F89C58700D828B4 /* InAppPurchaseManager.swift */; };
+		86C4FD442F8C1A6A0086F12F /* DefaultButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C4FD432F8C1A670086F12F /* DefaultButton.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -161,6 +162,7 @@
 		863AF0DD2F8B46F400FA036E /* ReturnButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnButton.swift; sourceTree = "<group>"; };
 		863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKit.storekit; sourceTree = "<group>"; };
 		863BBCCB2F89C58700D828B4 /* InAppPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseManager.swift; sourceTree = "<group>"; };
+		86C4FD432F8C1A670086F12F /* DefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultButton.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -271,6 +273,7 @@
 		37A0ACF127A8694100578290 /* Finale Keyboard */ = {
 			isa = PBXGroup;
 			children = (
+				86C4FD422F8C1A610086F12F /* Components */,
 				861119EA2F8882C600F6F7EB /* Views */,
 				37178A792B4DAFF500748DD0 /* CoreData */,
 				37CE32872889FEF8002DAD2A /* Localization */,
@@ -376,6 +379,14 @@
 				861119F22F88871200F6F7EB /* SpacebarPurchaseView.swift */,
 			);
 			path = Preferences;
+			sourceTree = "<group>";
+		};
+		86C4FD422F8C1A610086F12F /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				86C4FD432F8C1A670086F12F /* DefaultButton.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -509,6 +520,7 @@
 				3743FC5527B1523A0043B2A2 /* KeyboardEnabledState.swift in Sources */,
 				37178A7B2B4DB00500748DD0 /* CoreData.swift in Sources */,
 				37A0ACF527A8694100578290 /* ContentView.swift in Sources */,
+				86C4FD442F8C1A6A0086F12F /* DefaultButton.swift in Sources */,
 				37178A7F2B4DB06B00748DD0 /* DataModel.xcdatamodeld in Sources */,
 				375D075029EA400B00EA2980 /* Locales.swift in Sources */,
 				863BBCCC2F89C58A00D828B4 /* InAppPurchaseManager.swift in Sources */,

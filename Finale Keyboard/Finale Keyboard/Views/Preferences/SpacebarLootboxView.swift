@@ -78,8 +78,8 @@ struct SpacebarLootboxView: View {
                     Spacer()
                     HStack {
                         VStack (spacing: 16) {
-                            DefaultButton(label: didWin ? "Enable spacebar" : "I want to try again.") {
-                                if didWin {
+                            DefaultButton(label: { Text(didWin ? "Enable spacebar" : "I want to try again.") }) {
+                                 if didWin {
                                     onSpacebarActivated()
                                     dismiss()
                                 } else {
@@ -87,7 +87,7 @@ struct SpacebarLootboxView: View {
                                 }
                             }
                             if !didWin {
-                                OutlineButton(label: "I give up, like I always do.") { dismiss() }
+                                DefaultButton(.outline, label: { Text("I give up, like I always do.") }) { dismiss() }
                             }
                         }
                     }
