@@ -9,21 +9,22 @@ import Foundation
 import SwiftUI
 
 struct SpacebarLootboxView: View {
+    let winProbability: Double
+    let onSpacebarActivated: () -> Void
+    
     let cellSize: CGFloat = 72
     let spacing: CGFloat = 16
     let spinDuration = 10.0
     let nItems = 50
-    let winProbability = 0.1
     
     @State var items: [Bool] = []
 
     @State var spinWidth: Double?
     @State var offset: CGFloat = 0
-    @State private var lastCenteredCellIndex: Int?
 
-    private let spinHaptics = UIImpactFeedbackGenerator(style: .medium)
+    @StateObject private var spinFeedback = SpinFeedbackController()
 
-    var targetIndex: Int { max(items.count - 5, 0) }
+    var targetIndex: Int { max(items.count - 10, 0) }
     
     @State var landed = false
     var didWin: Bool { items[targetIndex] == true }
@@ -57,7 +58,7 @@ struct SpacebarLootboxView: View {
                             }
                         }
                         .offset(x: offset)
-                        .modifier(AnimatableOffsetObserver(value: offset, onChange: handleOffsetChange))
+                        .modifier(AnimatableOffsetObserver(value: offset, onChange: OnOffsetChange))
                         .padding(.vertical, spacing * 2)
                         .border(width: 1, edges: [.top, .bottom], color: Color(uiColor: .systemGray4))
                     }
@@ -77,8 +78,9 @@ struct SpacebarLootboxView: View {
                     Spacer()
                     HStack {
                         VStack (spacing: 16) {
-                            DefaultButton(label: didWin ? "Redeem prize" : "I want to try again.") {
+                            DefaultButton(label: didWin ? "Enable spacebar" : "I want to try again.") {
                                 if didWin {
+                                    onSpacebarActivated()
                                     dismiss()
                                 } else {
                                     Task { await iapManager.PurchaseSpacebarGamble(onSuccess: { Start() }) }
@@ -106,8 +108,7 @@ struct SpacebarLootboxView: View {
     
     func Start() {
         GenerateItems()
-        spinHaptics.prepare()
-        lastCenteredCellIndex = nil
+        spinFeedback.reset()
 
         withAnimation {
             landed = false
@@ -123,7 +124,7 @@ struct SpacebarLootboxView: View {
         offset = spinWidth + cellSize
 
         DispatchQueue.main.async {
-            withAnimation(.timingCurve(0.25, 1, 0.36, 1, duration: spinDuration)) {
+            withAnimation(.timingCurve(0.25, 0.8, 0.36, 1, duration: spinDuration)) {
                 offset = end
             }
         }
@@ -137,17 +138,33 @@ struct SpacebarLootboxView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + spinDuration + 2.0) { withAnimation{ showBottomButton = true } }
     }
 
-    func handleOffsetChange(_ currentOffset: CGFloat) {
+    func OnOffsetChange(_ currentOffset: CGFloat) {
         guard let spinWidth else { return }
 
-        let rawIndex = (spinWidth / 2 - currentOffset - cellSize / 2) / (cellSize + spacing)
+        let rawIndex = (spinWidth / 2 - currentOffset - cellSize / 2 - cellSize * 0.5) / (cellSize + spacing)
         let centeredIndex = Int(rawIndex.rounded())
 
-        guard items.indices.contains(centeredIndex), centeredIndex != lastCenteredCellIndex else { return }
+        guard items.indices.contains(centeredIndex) else { return }
+
+        spinFeedback.impactIfNeeded(for: centeredIndex)
+    }
+}
+
+private final class SpinFeedbackController: ObservableObject {
+    private var lastCenteredCellIndex: Int?
+    private let haptics = UIImpactFeedbackGenerator(style: .medium)
+
+    func reset() {
+        lastCenteredCellIndex = nil
+        haptics.prepare()
+    }
+
+    func impactIfNeeded(for centeredIndex: Int) {
+        guard centeredIndex != lastCenteredCellIndex else { return }
 
         lastCenteredCellIndex = centeredIndex
-        spinHaptics.impactOccurred()
-        spinHaptics.prepare()
+        haptics.impactOccurred()
+        haptics.prepare()
     }
 }
 
@@ -189,7 +206,7 @@ private struct LootboxCell: View {
 
             Group {
                 if isSpacebar {
-                    Spacebar(glow: showPrize)
+                    Spacebar(animate: showPrize, glow: showPrize)
                         .frame(width: cellSize * 0.8, height: cellSize * 0.8)
                         .scaleEffect(cellSize * 0.8 / 200)
                         .rotationEffect(.degrees(showPrize ? 0 : -45))
@@ -257,5 +274,5 @@ extension View {
 }
 
 #Preview {
-    SpacebarLootboxView()
+    SpacebarLootboxView(winProbability: 0.1, onSpacebarActivated: {})
 }

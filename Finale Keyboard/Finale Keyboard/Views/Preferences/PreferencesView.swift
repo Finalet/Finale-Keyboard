@@ -62,7 +62,10 @@ struct PreferencesView: View {
             }
         }
         .sheet(isPresented: $showSpacebarPurchase) {
-            SpacebarPurchaseView()
+            SpacebarPurchaseView(onSpacebarActivated: {
+                iapManager.isSpacebarUnlocked = true
+                isSpacebarEnabled = true
+            })
         }
         .navigationTitle(Localize.title)
         .environmentObject(iapManager)

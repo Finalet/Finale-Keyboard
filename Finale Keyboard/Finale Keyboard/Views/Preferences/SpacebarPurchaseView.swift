@@ -9,6 +9,8 @@ import Foundation
 import SwiftUI
 
 struct SpacebarPurchaseView: View {
+    let onSpacebarActivated: () -> Void
+    
     @EnvironmentObject var iapManager: InAppPurchasesManager
     
     @State var presentLootboxSheet = false
@@ -17,6 +19,7 @@ struct SpacebarPurchaseView: View {
 
     var purchasePrice: String { iapManager.spacebarProduct?.displayPrice ?? "$99" }
     var gamblePrice: String { iapManager.spacebarGambleProduct?.displayPrice ?? "$0.99" }
+    let gambleWinProbability: Double = 0.1
     
     var body: some View {
         ZStack {
@@ -28,7 +31,7 @@ struct SpacebarPurchaseView: View {
                         .frame(maxWidth: .infinity)
                         .padding(.top, 32)
                     HStack (alignment: .center) {
-                        Spacebar(glow: true)
+                        Spacebar(animate: true, glow: true)
                     }
                     .padding(.vertical, 32)
                     .frame(maxWidth: .infinity)
@@ -40,7 +43,7 @@ struct SpacebarPurchaseView: View {
                     Text("So, statistically, you are either filthy rich and don't care to waste money. Or, you are drowning in dept with gambling being your only hope for financial stability.")
                     Text("I'll give options for both.")
                     Text("If you have more money than brains (duh, you can't even be bothered to learn the swipe-right gesture), you can buy The Spacebar outright for \(purchasePrice).")
-                    Text("Or, if you are poor with no end in sight, you can spin the wheel for \(gamblePrice) and get a 10% chance of winning The Spacebar.")
+                    Text("Or, if you are poor with no end in sight, you can spin the wheel for \(gamblePrice) and get a \(Int(round(gambleWinProbability * 100)))% chance of winning The Spacebar.")
                     HStack {
                         Spacer()
                         Text("So, what will it be?")
@@ -56,9 +59,12 @@ struct SpacebarPurchaseView: View {
                     OptionsDivider()
                     
                     PurchaseSpacebarButton(price: purchasePrice) {
-                        Task { await iapManager.PurchaseSpacebar(onSuccess: { dismiss() }) }
+                        Task { await iapManager.PurchaseSpacebar(onSuccess: {
+                            onSpacebarActivated()
+                            dismiss()
+                        }) }
                     }
-                    GambleSpacebarButton(price: gamblePrice) {
+                    GambleSpacebarButton(winProbability: gambleWinProbability, price: gamblePrice) {
                         Task { await iapManager.PurchaseSpacebarGamble(onSuccess: { presentLootboxSheet = true }) }
                     }
                     
@@ -81,7 +87,12 @@ struct SpacebarPurchaseView: View {
             .ignoresSafeArea()
         }
         .interactiveDismissDisabled()
-        .sheet(isPresented: $presentLootboxSheet) { SpacebarLootboxView() }
+        .sheet(isPresented: $presentLootboxSheet) {
+            SpacebarLootboxView(winProbability: gambleWinProbability, onSpacebarActivated: {
+                onSpacebarActivated()
+                dismiss()
+            })
+        }
     }
 }
 
@@ -108,6 +119,7 @@ struct PurchaseSpacebarButton: View {
 }
 
 struct GambleSpacebarButton: View {
+    let winProbability: Double
     @State var gambleAlertPresented = false
     
     let price: String
@@ -123,7 +135,7 @@ struct GambleSpacebarButton: View {
             Button("I'm addicted, I'll spin for \(price).") { onContinue() }
                 .keyboardShortcut(.cancelAction)
         }, message: {
-            Text("Are you about to gamble in an app? Its only a 10% chance, go learn the swipe gestures instead. You'll thank me later.")
+            Text("Are you about to gamble in an app? Its only a \(Int(round(winProbability * 100)))% chance, go learn the swipe gestures instead. You'll thank me later.")
         })
         .tint(nil)
     }
@@ -181,13 +193,14 @@ struct RequestForFreeButton: View {
 }
 
 struct Spacebar: View {
+    let animate: Bool
     let glow: Bool
     let width: CGFloat = 200
     static let rotationAmount: Double = 5
     let rotationDuration: Double = 2
     let height: CGFloat = 40
     
-    @State var rotationAngle: Angle = .degrees(-Spacebar.rotationAmount)
+    @State var rotationAngle: Angle = .degrees(0)
     
     var body: some View {
          ZStack {
@@ -210,11 +223,21 @@ struct Spacebar: View {
          .shadow(color: .black.opacity(0.02), radius: 10, y: 20)
          .rotation3DEffect(rotationAngle, axis: (x: 0, y: 1, z: 0))
          .onAppear {
-             withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
-                 rotationAngle = .degrees(Spacebar.rotationAmount)
-             }
+             ProcessAnimation(animate: animate)
+         }
+         .onChange(of: animate) { _, newValue in
+             ProcessAnimation(animate: newValue)
          }
      }
+    
+    func ProcessAnimation (animate: Bool) {
+        if (animate) {
+            rotationAngle = .degrees(-Spacebar.rotationAmount)
+            withAnimation(.easeInOut(duration: 2).repeatForever(autoreverses: true)) {
+                rotationAngle = .degrees(Spacebar.rotationAmount)
+            }
+        } else { rotationAngle = .degrees(0) }
+    }
 }
 
 struct BackgroundGlow: View {
@@ -370,5 +393,5 @@ extension View {
 }
 
 #Preview {
-    SpacebarPurchaseView()
+    SpacebarPurchaseView(onSpacebarActivated: {})
 }
