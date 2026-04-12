@@ -1096,9 +1096,10 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func getCorrectSuggestionArrayIndex() -> Int {
-        if (self.textDocumentProxy.documentContextBeforeInput == nil) { return -1 }
+        guard let context = self.textDocumentProxy.documentContextBeforeInput else { return -1 }
+        
         for i in 0..<suggestionsArrays.count {
-            if suggestionsArrays[i].positionIndex == self.textDocumentProxy.documentContextBeforeInput?.endIndex {
+            if suggestionsArrays[i].positionIndex == context.endIndex {
                 for i1 in 0..<suggestionsArrays[i].suggestions.count {
                     if suggestionsArrays[i].suggestions[i1] == getLastWord() {
                         return i
