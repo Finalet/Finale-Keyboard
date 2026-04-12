@@ -238,7 +238,6 @@ class FinaleKeyboard: UIInputViewController {
         characterButtons.forEach{ $0.value.removeFromSuperview() }
         characterButtons.removeAll()
         
-        
         BuildRow(characters: topRow, row: .Top)
         BuildRow(characters: middleRow, row: .Middle, prevRowFirstButton: characterButtons[topRow[0]])
         BuildRow(characters: bottomRow, row: .Bottom, prevRowFirstButton: characterButtons[middleRow[0]])
