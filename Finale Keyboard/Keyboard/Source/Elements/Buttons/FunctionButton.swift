@@ -37,7 +37,9 @@ class FunctionButton: KeyboardButton {
         iconView.image = function.icon
     }
     
-    override func OnTapBegin(_ sender: UILongPressGestureRecognizer) {}
+    override func OnTapBegin(_ sender: UILongPressGestureRecognizer) {
+        function.OnTapBegin()
+    }
     
     override func OnTapChanged(_ sender: UILongPressGestureRecognizer) {}
     

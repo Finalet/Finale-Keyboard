@@ -39,6 +39,14 @@ enum Function {
         }
     }
     
+    func OnTapBegin () {
+        switch self {
+            case .SymbolsToggle: FinaleKeyboard.instance.ToggleSymbolsView()
+            case .SymbolsToggleBack: FinaleKeyboard.instance.ToggleSymbolsView()
+            default: return
+        }
+    }
+
     func TapAction () {
         switch self {
         case .Shift: FinaleKeyboard.instance.ShiftAction()
@@ -47,10 +55,9 @@ enum Function {
         case .Caps: FinaleKeyboard.instance.ShiftAction()
         case .Backspace: FinaleKeyboard.instance.BackspaceAction()
         case .Back: FinaleKeyboard.instance.BackAction()
-        case .SymbolsToggle: FinaleKeyboard.instance.ToggleSymbolsView()
-        case .SymbolsToggleBack: FinaleKeyboard.instance.ToggleSymbolsView()
         case .EmojiToggle: FinaleKeyboard.instance.OpenEmoji()
         case .Return: FinaleKeyboard.instance.ReturnAction()
+        default: return
         }
     }
     
@@ -66,6 +73,8 @@ enum Function {
     func LongPressEndedAction () {
         switch self {
         case .Backspace: FinaleKeyboard.instance.HideShortcutPreviews()
+        case .SymbolsToggle: FinaleKeyboard.instance.ToggleSymbolsView()
+        case .SymbolsToggleBack: FinaleKeyboard.instance.ToggleSymbolsView()
         default: return
         }
     }
