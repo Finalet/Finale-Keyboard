@@ -77,11 +77,11 @@ class FunctionButton: KeyboardButton {
     override func HideCallout(direction: KeyboardButton.SwipeDirection? = nil) {
       UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .allowUserInteraction) { [self] in
             calloutView.alpha = 0
-            iconView.tintColor = .gray
+            iconView.tintColor = .systemGray
         }
     }
     
     func ToggleHighlight (_ isOn: Bool) {
-        iconView.tintColor = isOn ? .label : .gray
+        iconView.tintColor = isOn ? .label : .systemGray
     }
 }

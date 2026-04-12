@@ -11,11 +11,20 @@ import UIKit
 class SpacebarButton: CharacterButton {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
+    let iconView = UIImageView()
+    
     init () {
         super.init(" ")
-        self.titleLabel.text = "⎵"
-        self.titleLabel.font = UIFont.systemFont(ofSize: 32)
-        self.titleLabel.transform = CGAffineTransform(translationX: 0, y: -6)
+        self.titleLabel.removeFromSuperview()
+
+        iconView.tintColor = .label
+        iconView.contentMode = .scaleAspectFit
+        iconView.image = UIImage(systemName: "space", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold))
+        self.addSubview(iconView, anchors: [.widthMultiplier(1), .widthMultiplier(0.6), .centerX(0)])
+        
+        titleYConstraint?.isActive = false
+        titleYConstraint = iconView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+        titleYConstraint?.isActive = true
     }
     
     override func OnTapEnded(_ sender: UILongPressGestureRecognizer) {

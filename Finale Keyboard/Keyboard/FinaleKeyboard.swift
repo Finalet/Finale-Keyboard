@@ -38,7 +38,7 @@ class FinaleKeyboard: UIInputViewController {
     
     static var instance: FinaleKeyboard!
     
-    static var rowHeight: CGFloat { return (UIScreen.main.bounds.width < UIScreen.main.bounds.height ? 60 : 40) * (FinaleKeyboard.isSpacebarEnabled ? 0.85 : 1) }
+    static var rowHeight: CGFloat { return (UIScreen.main.bounds.width < UIScreen.main.bounds.height ? 60 : 40) * (FinaleKeyboard.isSpacebarEnabled ? 0.9 : 1) }
     static var rowsNumber: CGFloat { return FinaleKeyboard.isSpacebarEnabled ? 4 : 3 }
     static let emojiRowHeight = 38.0
     
@@ -57,7 +57,7 @@ class FinaleKeyboard: UIInputViewController {
     var toggleSymbolsButton: FunctionButton? = nil
     var toggleEmojiButton: FunctionButton? = nil
     var spaceButton: SpacebarButton? = nil
-    var returnButton: FunctionButton? = nil
+    var returnButton: ReturnButton? = nil
     
     static var isShift = false
     static var isCaps = false
@@ -293,7 +293,7 @@ class FinaleKeyboard: UIInputViewController {
         toggleSymbolsButton = FunctionButton(.SymbolsToggle)
         toggleEmojiButton = FunctionButton(.EmojiToggle)
         spaceButton = SpacebarButton()
-        returnButton = FunctionButton(.Return)
+        returnButton = ReturnButton()
         
         let sharedAnchors: [LayoutAnchor] = [.bottom(0), .topToBottom(leadingBottomButton, 0), .heightToHeight(leadingBottomButton, 0)]
         
