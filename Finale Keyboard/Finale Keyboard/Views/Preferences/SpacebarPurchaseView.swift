@@ -72,9 +72,7 @@ struct SpacebarPurchaseView: View {
                         Task { await iapManager.PurchaseSpacebarGamble(onSuccess: { presentLootboxSheet = true }) }
                     }
                     
-                    RestorePurchasesButton() {
-                        Task { await iapManager.UpdatePurchaseStatus() }
-                    }
+                    RestorePurchasesButton()
                     .padding(.top, 64)
                     
                     RequestForFreeButton()
@@ -152,13 +150,28 @@ struct GambleSpacebarButton: View {
 }
 
 struct RestorePurchasesButton: View {
-    let onTap: () -> Void
+    @EnvironmentObject var iapManager: InAppPurchasesManager
+    @Environment(\.dismiss) private var dismiss
     
+    @State var loading = false
+
     var body: some View {
-        Button("Restore purchases") { onTap() }
-            .frame(maxWidth: .infinity)
-            .foregroundStyle(Color(uiColor:.systemGray2))
-            .font(.footnote)
+        Button(action: {
+            loading = true
+            Task { 
+                await iapManager.UpdatePurchaseStatus()
+                if iapManager.isSpacebarUnlocked { dismiss() }
+                loading = false
+            } 
+        }, label: {
+            HStack {
+                if loading { ProgressView().tint(.gray).scaleEffect(0.75) }
+                Text("Restore purchases")
+            }
+        })
+        .frame(maxWidth: .infinity)
+        .foregroundStyle(Color(uiColor:.systemGray2))
+        .font(.footnote)
     }
 }
 
