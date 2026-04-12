@@ -12,13 +12,10 @@ struct ContentView: View {
     @StateObject private var iapManager = InAppPurchasesManager()
     @StateObject private var keyboardState = KeyboardEnabledState(bundleId: "com.Grant151.Finale-Keyboard.Keyboard")
     
-    @State var favoriteEmoji = [String](repeating: "", count: 32)
     @State var testText = ""
     
     @State var EN_enabled = true
     @State var RU_enabled = false
-    
-    let suiteName = "group.finale-keyboard-cache"
     
     @FocusState private var shouldShowKeyboard: Bool
     
@@ -32,7 +29,7 @@ struct ContentView: View {
                         .focused($shouldShowKeyboard)
                 }
                 Section(header: Text(Localize.preferencesTitle)) {
-                    ListNavigationLink(destination: FavoriteEmojiView(favoriteEmoji: $favoriteEmoji)) {
+                    ListNavigationLink(destination: FavoriteEmojiView()) {
                         Label(title: {
                             Text(Localize.favoriteEmojiRow)
                         }, icon: {
@@ -40,7 +37,7 @@ struct ContentView: View {
                                 .foregroundColor(.red)
                         })
                     }
-                    ListNavigationLink(destination: ShortcutsView(EN_enabled: $EN_enabled, RU_enabled: $RU_enabled)) {
+                    ListNavigationLink(destination: ShortcutsView()) {
                         Label(title: {
                             Text(Localize.shortcutsRow)
                         }, icon: {
@@ -48,7 +45,7 @@ struct ContentView: View {
                                 .foregroundColor(.blue)
                         })
                     }
-                    ListNavigationLink(destination: LanguagesView(EN_enabled: $EN_enabled, RU_enabled: $RU_enabled)) {
+                    ListNavigationLink(destination: LanguagesView()) {
                         Label(title: {
                             Text(Localize.languagesRow)
                         }, icon: {
@@ -112,26 +109,6 @@ struct ContentView: View {
         .environmentObject(keyboardState)
         .environmentObject(iapManager)
         .navigationViewStyle(StackNavigationViewStyle())
-        .onAppear() {
-            LoadEmojiArray()
-            LoadEnabledLocales()
-        }
-    }
-    
-    func LoadEmojiArray () {
-        let userDefaults = UserDefaults(suiteName: suiteName)
-        let array = userDefaults?.array(forKey: "FINALE_DEV_APP_favorite_emoji") as? [String]
-        if array == nil {
-            favoriteEmoji = [String](repeating: "", count: 32)
-        } else {
-            favoriteEmoji = array!
-        }
-    }
-    func LoadEnabledLocales () {
-        let userDefaults = UserDefaults(suiteName: suiteName)
-        
-        EN_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_en_locale_enabled") == nil ? true : userDefaults?.bool(forKey: "FINALE_DEV_APP_en_locale_enabled") ?? true
-        RU_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_ru_locale_enabled") == nil ? false : userDefaults?.bool(forKey: "FINALE_DEV_APP_ru_locale_enabled") ?? true
     }
     
     func OpenSettings() {

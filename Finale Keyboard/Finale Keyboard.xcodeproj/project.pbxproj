@@ -72,6 +72,7 @@
 		863BBCCA2F89C4BC00D828B4 /* StoreKit.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */; };
 		863BBCCC2F89C58A00D828B4 /* InAppPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863BBCCB2F89C58700D828B4 /* InAppPurchaseManager.swift */; };
 		86C4FD442F8C1A6A0086F12F /* DefaultButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C4FD432F8C1A670086F12F /* DefaultButton.swift */; };
+		86C4FD462F8C3F590086F12F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C4FD452F8C3F570086F12F /* OnboardingView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -163,6 +164,7 @@
 		863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKit.storekit; sourceTree = "<group>"; };
 		863BBCCB2F89C58700D828B4 /* InAppPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseManager.swift; sourceTree = "<group>"; };
 		86C4FD432F8C1A670086F12F /* DefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultButton.swift; sourceTree = "<group>"; };
+		86C4FD452F8C3F570086F12F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -357,6 +359,7 @@
 		861119EA2F8882C600F6F7EB /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				86C4FD452F8C3F570086F12F /* OnboardingView.swift */,
 				861119EB2F8882CE00F6F7EB /* Preferences */,
 				3743FC5627B158AD0043B2A2 /* FavoriteEmojiView.swift */,
 				375D074A29EA3D2100EA2980 /* ShortcutsView.swift */,
@@ -531,6 +534,7 @@
 				374C861A27DD74B8003BA47B /* PreferencesView.swift in Sources */,
 				861119F32F88872200F6F7EB /* SpacebarPurchaseView.swift in Sources */,
 				375D074B29EA3D2100EA2980 /* ShortcutsView.swift in Sources */,
+				86C4FD462F8C3F590086F12F /* OnboardingView.swift in Sources */,
 				37256A7927DB52ED0071180B /* DictionaryView.swift in Sources */,
 				37A0ACF327A8694100578290 /* Finale_KeyboardApp.swift in Sources */,
 				37178AA32B4DE03500748DD0 /* Extensions.swift in Sources */,

@@ -12,8 +12,8 @@ struct ShortcutsView: View {
     
     let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
         
-    @Binding var EN_enabled: Bool
-    @Binding var RU_enabled: Bool
+    @UserDefaultState("FINALE_DEV_APP_en_locale_enabled", true) var EN_enabled: Bool
+    @UserDefaultState("FINALE_DEV_APP_ru_locale_enabled", false) var RU_enabled: Bool
     
     @State private var restoreDefaults = false
     @State private var populateEmoji = false
@@ -330,11 +330,5 @@ struct ShortcutsView: View {
                     }
             }
         }
-    }
-}
-
-struct ShortcutsView_Preview: PreviewProvider {
-    static var previews: some View {
-        ShortcutsView(EN_enabled: .constant(true), RU_enabled: .constant(true))
     }
 }
