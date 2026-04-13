@@ -11,12 +11,14 @@ import SwiftUI
 struct DefaultButton<Label: View>: View {
     let style: DefaultButtonStyle
     let action: () -> Void
+    let disabled: Bool
     let label: () -> Label
 
-    init(_ style: DefaultButtonStyle = .primary, @ViewBuilder label: @escaping () -> Label, action: @escaping () -> Void = {}) {
-      self.style = style
-      self.action = action
-      self.label = label
+    init(_ style: DefaultButtonStyle = .primary, disabled: Bool = false, @ViewBuilder label: @escaping () -> Label, action: @escaping () -> Void = {}) {
+        self.style = style
+        self.action = action
+        self.disabled = disabled
+        self.label = label
     }
 
     @Environment(\.colorScheme) private var colorScheme
@@ -74,8 +76,10 @@ struct DefaultButton<Label: View>: View {
             )
             .foregroundStyle(foregroundColor)
             .cornerRadius(12)
-            .shadow(color: shadow.color, radius: shadow.radius, y: shadow.y)
+            .shadow(color: disabled ? .clear : shadow.color, radius: shadow.radius, y: shadow.y)
+            .opacity(disabled ? 0.5 : 1)
         }
+        .disabled(disabled)
     }
 }
 

@@ -9,13 +9,13 @@ import SwiftUI
 import Keyboard
 
 struct ContentView: View {
+    @UserDefaultState("FINALE_DEV_APP_finishedOnboarding", false) var finishedOnboarding: Bool
+    @State var showOnboarding = false
+    
     @StateObject private var iapManager = InAppPurchasesManager()
     @StateObject private var keyboardState = KeyboardEnabledState(bundleId: "com.Grant151.Finale-Keyboard.Keyboard")
     
     @State var testText = ""
-    
-    @State var EN_enabled = true
-    @State var RU_enabled = false
     
     @FocusState private var shouldShowKeyboard: Bool
     
@@ -104,7 +104,10 @@ struct ContentView: View {
             .simultaneousGesture(DragGesture().onChanged({ _ in
                 shouldShowKeyboard = false
             }))
+            .sheet(isPresented: $showOnboarding) { OnboardingView(finishedOnboarding: $finishedOnboarding) }
         }
+        .onAppear { showOnboarding = true }
+//        .onAppear { if !finishedOnboarding { showOnboarding = true } }
         .tint(.brand)
         .environmentObject(keyboardState)
         .environmentObject(iapManager)
