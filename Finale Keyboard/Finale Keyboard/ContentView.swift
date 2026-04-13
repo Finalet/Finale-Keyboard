@@ -17,8 +17,6 @@ struct ContentView: View {
     
     @State var testText = ""
     
-    @FocusState private var shouldShowKeyboard: Bool
-    
     typealias Localize = Localization.HomeScreen
     
     var body: some View {
@@ -26,7 +24,6 @@ struct ContentView: View {
             List {
                 Section(header: Text(Localize.inputFieldTitle)) {
                     TextField(Localize.inputFieldPlaceholder, text: $testText)
-                        .focused($shouldShowKeyboard)
                 }
                 Section(header: Text(Localize.preferencesTitle)) {
                     ListNavigationLink(destination: FavoriteEmojiView()) {
@@ -84,13 +81,21 @@ struct ContentView: View {
                     }
                 }
                 Section(header: Text(Localize.helpTitle)){
+                    ListNavigationLink(destination: GesturesGuideView()) {
+                        Label(title: {
+                            Text(Localize.gesturesGuideRow)
+                        }, icon: {
+                            Image(systemName: "hand.draw")
+                                .foregroundColor(.blue)
+                        })
+                    }
                     ListNavigationLink(destination: TutorialView()) {
                         Label(title: {
                             Text(Localize.gesturesGuideRow)
-                                }, icon: {
-                                    Image(systemName: "hand.draw")
-                                        .foregroundColor(.blue)
-                                } )
+                        }, icon: {
+                            Image(systemName: "hand.draw")
+                                .foregroundColor(.blue)
+                        })
                     }
                     ListNavigationButton(action: ContactDeveloper) {
                         Label(Localize.contactDeveloperRow, systemImage: "message")
@@ -101,13 +106,10 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Finale Keyboard")
-            .simultaneousGesture(DragGesture().onChanged({ _ in
-                shouldShowKeyboard = false
-            }))
+            .onAppear(perform: UIApplication.shared.addTapAnywhereToDismissKeyboard)
             .sheet(isPresented: $showOnboarding) { OnboardingView(finishedOnboarding: $finishedOnboarding) }
         }
-        .onAppear { showOnboarding = true }
-//        .onAppear { if !finishedOnboarding { showOnboarding = true } }
+        .onAppear { if !finishedOnboarding { showOnboarding = true } }
         .tint(.brand)
         .environmentObject(keyboardState)
         .environmentObject(iapManager)

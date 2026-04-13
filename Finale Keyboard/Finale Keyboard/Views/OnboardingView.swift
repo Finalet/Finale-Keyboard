@@ -127,32 +127,8 @@ struct SwipeRow: View {
             Text(label)
                 .font(.system(size: 14, weight: .medium))
             Spacer()
-            Swipe(direction)
+            SwipeGestureView(direction)
         }
-    }
-}
-
-struct Swipe: View {
-    let direction: SwipeDirection
-    
-    init(_ direction: SwipeDirection) {
-        self.direction = direction
-    }
-    
-    var body: some View {
-        Text("swipe \(direction.label)  \(direction.icon)")
-            .font(.system(size: 14, weight: .medium))
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(
-                ZStack {
-                    RoundedRectangle(cornerRadius: 6)
-                        .fill(Color.brand.opacity(0.1))
-                        .stroke(Color.brand.opacity(0.3), lineWidth: 1)
-                        .shadow(color: Color.brand, radius: 2, y: 2)
-                }
-            )
-            .foregroundStyle(Color.brand)
     }
 }
 
@@ -185,33 +161,6 @@ struct OnboardingBase<Content>: View where Content : View {
     }
 }
 
-enum SwipeDirection {
-    case up(String = "")
-    case right(String = "")
-    case down(String = "")
-    case left(String = "")
-    case vertical(String = "")
-    
-    var icon: String {
-        switch(self) {
-            case .up: return "↑"
-            case .right: return "→"
-            case .down: return "↓"
-            case .left: return "←"
-            case .vertical: return "⇅"
-        }
-    }
-    
-    var label: String {
-        switch (self) {
-            case .up(let label): return "up\(!label.isEmpty ? " \(label)" : "")"
-            case .right(let label): return "right\(!label.isEmpty ? " \(label)" : "")"
-            case .down(let label): return "down\(!label.isEmpty ? " \(label)" : "")"
-            case .left(let label): return "left\(!label.isEmpty ? " \(label)" : "")"
-            case .vertical(let label): return "up or down\(!label.isEmpty ? " \(label)" : "")"
-        }
-    }
-}
 
 #Preview {
     OnboardingView(finishedOnboarding: Binding.constant(false))
