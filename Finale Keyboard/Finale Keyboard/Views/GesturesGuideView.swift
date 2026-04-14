@@ -16,26 +16,26 @@ struct GesturesGuideView: View {
     var body: some View {
         List {
             Section (header: Text("Essential")) {
-                SwipeGestureRow(.right(), "Insert space or punctuation")
-                SwipeGestureRow(.vertical(), "Cycle through suggestions")
-                SwipeGestureRow(.left(), "Delete word")
-                SwipeGestureRow(.left("on backspace"), "Open emojis")
-                SwipeGestureRow(.right("on shift"), "Toggle symbols")
-                SwipeGestureRow(.up("on backspace"), "Return")
+                SwipeGestureRow(.right(), "Insert space or punctuation") { GesturesDetailedView(index: 0) }
+                SwipeGestureRow(.vertical(), "Cycle through suggestions")  { GesturesDetailedView(index: 1) }
+                SwipeGestureRow(.left(), "Delete word")  { GesturesDetailedView(index: 2) }
+                SwipeGestureRow(.left("on backspace"), "Open emojis")  { GesturesDetailedView(index: 3) }
+                SwipeGestureRow(.right("on shift"), "Toggle symbols")  { GesturesDetailedView(index: 4) }
+                SwipeGestureRow(.up("on backspace"), "Return")  { GesturesDetailedView(index: 5) }
             }
             Section (header: Text("Shortcuts")) { 
-                SwipeGestureRow(.down("on shortcut key"), "Use shortcut")
-                SwipeGestureRow(.hold("backspace"), "Peak shortcuts")
+                SwipeGestureRow(.down("on shortcut key"), "Use shortcut")  { GesturesDetailedView(index: 6) }
+                SwipeGestureRow(.hold("backspace"), "Peak shortcuts")  { GesturesDetailedView(index: 7) }
             }
             Section (header: Text("Miscellaneous")) {
-                SwipeGestureRow(.up("on shift"), "Change language")
-                SwipeGestureRow(.hold("shift"), "Toggle autocorrect")
-                SwipeGestureRow(.up("and hold"), "Continously type character")
+                SwipeGestureRow(.up("on shift"), "Change language")  { GesturesDetailedView(index: 8) }
+                SwipeGestureRow(.hold("shift"), "Toggle autocorrect")  { GesturesDetailedView(index: 9) }
+                SwipeGestureRow(.up("and hold"), "Continously type character")  { GesturesDetailedView(index: 10) }
             }
         }
         .navigationTitle(Localize.gesturesGuideRow)
         .toolbar {
-            ToolbarItemGroup(placement: .bottomBar) {
+            ToolbarItem(placement: .bottomBar) {
                 TextField(Localize.inputFieldPlaceholder, text: $tryText)
                     .fontWeight(.regular)
                     .padding(.horizontal, 16)
@@ -44,17 +44,19 @@ struct GesturesGuideView: View {
     }
 }
 
-struct SwipeGestureRow: View {
+struct SwipeGestureRow<Destination>: View where Destination: View {
     let direction: SwipeDirection
     let label: String
+    let destination: () -> Destination
     
-    init(_ direction: SwipeDirection, _ label: String) {
+    init(_ direction: SwipeDirection, _ label: String, @ViewBuilder _ destination: @escaping () -> Destination) {
         self.direction = direction
         self.label = label
+        self.destination = destination
     }
 
     var body: some View {
-        NavigationLink(destination: {}) {
+        NavigationLink(destination: { destination() }) {
             VStack (alignment: .leading, spacing: 10) {
                 Text(label)
                 SwipeGestureView(direction)
@@ -108,6 +110,37 @@ enum SwipeDirection {
     }
 }
 
+struct GesturesDetailedView: View {
+    @State var index: Int
+    @State var tryText: String = ""
+    @FocusState private var isInputFocused: Bool
+    
+    let images = ["Swipe right", "Swipe right punctuation", "Swipe up down", "Swipe left", "Emoji", "Symbols", "Languages", "Return", "Learn", "Move cursor", "Toggle autocorrect"]
+    
+    typealias Localize = Localization.HomeScreen
+    
+    var body: some View {
+        VStack (alignment: .leading) {
+            TabView(selection: $index) {
+                ForEach(0..<images.count, id: \.self) {
+                    Image(self.images[$0]).resizable().tag($0)
+                }
+            }
+            .aspectRatio(CGSize(width: 1, height: 1), contentMode: .fit)
+            .tabViewStyle(.page)
+            .indexViewStyle(.page(backgroundDisplayMode: .always))
+            
+            Spacer()
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .bottomBar) {
+                TextField(Localize.inputFieldPlaceholder, text: $tryText)
+                    .fontWeight(.regular)
+                    .padding(.horizontal, 16)
+            }
+        }
+    }
+}
 
 #Preview {
     GesturesGuideView()
