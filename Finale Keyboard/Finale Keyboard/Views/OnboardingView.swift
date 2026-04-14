@@ -14,6 +14,7 @@ struct OnboardingView: View {
     @StateObject private var keyboardState = KeyboardEnabledState(bundleId: "com.Grant151.Finale-Keyboard.Keyboard")
     typealias Localize = Localization.HomeScreen
     
+    @State var presentGesturesGuide = false
     @State var step: Int = 0
     @State var typingField: String = ""
     
@@ -68,10 +69,16 @@ struct OnboardingView: View {
                                     SwipeRow(direction: .vertical(), label: "Cycle suggestions")
                                     SwipeRow(direction: .left(), label: "Delete word")
                                     SwipeRow(direction: .left("on backspace"), label: "Use emoji")
-                                    Text("And many others...")
-                                        .frame(maxWidth: .infinity)
-                                        .foregroundStyle(.gray)
-                                        .font(.system(size: 14))
+                                    Button(action: { presentGesturesGuide = true }) {
+                                        HStack {
+                                            Text("View all gestures")
+                                            Image(systemName: "chevron.right")
+                                                .scaleEffect(0.8)
+                                        }
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .foregroundStyle(.gray)
+                                    .font(.system(size: 14))
                                 }
                                 
                                 TextField("Try typing here", text: $typingField)
@@ -94,6 +101,19 @@ struct OnboardingView: View {
                 }) {
                     if step == 3 { Done() }
                     else { Next() }
+                }
+            }
+            .sheet(isPresented: $presentGesturesGuide) {
+                NavigationStack {
+                    GesturesGuideView()
+                        .toolbar {
+                            ToolbarItem(placement: .topBarTrailing, content: {
+                                Button(action: { presentGesturesGuide = false }) {
+                                    Image(systemName: "xmark")
+                                }
+                                .tint(.primary)
+                            })
+                        }
                 }
             }
             .simultaneousGesture(TapGesture().onEnded({

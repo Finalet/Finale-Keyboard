@@ -89,14 +89,6 @@ struct ContentView: View {
                                 .foregroundColor(.blue)
                         })
                     }
-                    ListNavigationLink(destination: TutorialView()) {
-                        Label(title: {
-                            Text(Localize.gesturesGuideRow)
-                        }, icon: {
-                            Image(systemName: "hand.draw")
-                                .foregroundColor(.blue)
-                        })
-                    }
                     ListNavigationButton(action: ContactDeveloper) {
                         Label(Localize.contactDeveloperRow, systemImage: "message")
                     }

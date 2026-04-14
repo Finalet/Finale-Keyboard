@@ -8,39 +8,52 @@
 import Foundation
 import SwiftUI
 
+private let allGestures: [GestureGroup] = [
+    GestureGroup(name: "Essential", gestures: [
+        GestureExplanation("Insert space or punctuation", .right(), "Swipe right"),
+        GestureExplanation("Cycle through suggestions", .vertical(), "Swipe right"),
+        GestureExplanation("Delete word", .left(), "Swipe right"),
+        GestureExplanation("Open emojis", .left("on backspace"), "Swipe right"),
+        GestureExplanation("Toggle symbols", .right("on shift"), "Swipe right"),
+        GestureExplanation("Return", .up("on backspace"), "Swipe right"),
+    ]),
+    GestureGroup(name: "Shortcuts", gestures: [
+        GestureExplanation("Use shortcut", .down("on shortcut key"), "Swipe right"),
+        GestureExplanation("Peak shortcuts", .hold("backspace"), "Swipe right"),
+    ]),
+    GestureGroup(name: "Miscellaneous", gestures: [
+        GestureExplanation("Change language", .up("on shift"), "Swipe right"),
+        GestureExplanation("Learn new word", .up("when new word"), "Swipe right"),
+        GestureExplanation("Toggle autocorrect", .hold("shift"), "Swipe right"),
+        GestureExplanation("Continously type character", .up("and hold"), "Swipe right"),
+    ])
+]
+
 struct GesturesGuideView: View {
     typealias Localize = Localization.HomeScreen
         
-    @State var tryText: String = ""
-    
     var body: some View {
         List {
-            Section (header: Text("Essential")) {
-                SwipeGestureRow(.right(), "Insert space or punctuation") { GesturesDetailedView(index: 0) }
-                SwipeGestureRow(.vertical(), "Cycle through suggestions")  { GesturesDetailedView(index: 1) }
-                SwipeGestureRow(.left(), "Delete word")  { GesturesDetailedView(index: 2) }
-                SwipeGestureRow(.left("on backspace"), "Open emojis")  { GesturesDetailedView(index: 3) }
-                SwipeGestureRow(.right("on shift"), "Toggle symbols")  { GesturesDetailedView(index: 4) }
-                SwipeGestureRow(.up("on backspace"), "Return")  { GesturesDetailedView(index: 5) }
-            }
-            Section (header: Text("Shortcuts")) { 
-                SwipeGestureRow(.down("on shortcut key"), "Use shortcut")  { GesturesDetailedView(index: 6) }
-                SwipeGestureRow(.hold("backspace"), "Peak shortcuts")  { GesturesDetailedView(index: 7) }
-            }
-            Section (header: Text("Miscellaneous")) {
-                SwipeGestureRow(.up("on shift"), "Change language")  { GesturesDetailedView(index: 8) }
-                SwipeGestureRow(.hold("shift"), "Toggle autocorrect")  { GesturesDetailedView(index: 9) }
-                SwipeGestureRow(.up("and hold"), "Continously type character")  { GesturesDetailedView(index: 10) }
+            ForEach(allGestures) { group in
+                Section(header: Text(group.name)) {
+                    ForEach(group.gestures) { gesture in
+                        SwipeGestureRow(gesture.swipeGesture, gesture.gestureActionLabel) {
+                            GesturesDetailedView(index: gestureGlobalIndex(for: gesture.gestureActionLabel))
+                        }
+                    }
+                }
             }
         }
         .navigationTitle(Localize.gesturesGuideRow)
         .toolbar {
-            ToolbarItem(placement: .bottomBar) {
-                TextField(Localize.inputFieldPlaceholder, text: $tryText)
-                    .fontWeight(.regular)
-                    .padding(.horizontal, 16)
-            }
+            ToolbarInputField()
         }
+    }
+    
+    private func gestureGlobalIndex(for gestureActionLabel: String) -> Int {
+        allGestures
+            .flatMap(\.gestures)
+            .firstIndex(where: { $0.gestureActionLabel == gestureActionLabel }) ?? 0
     }
 }
 
@@ -89,6 +102,59 @@ struct SwipeGestureView: View {
     }
 }
 
+struct GesturesDetailedView: View {
+    @State var index: Int
+    @State var tryText: String = ""
+    
+    var gestures: [GestureExplanation] { allGestures.flatMap(\.gestures) }
+    var currentGesture: GestureExplanation { gestures[index] }
+    
+    typealias Localize = Localization.HomeScreen
+    
+    var body: some View {
+        VStack () {
+            TabView(selection: $index) {
+                ForEach(0..<gestures.count, id: \.self) { i in
+                    VStack {
+                        Image(gestures[i].imageName).resizable().tag(i)
+                        SwipeGestureView(gestures[i].swipeGesture)
+                    }
+                }
+            }
+            .aspectRatio(1.0, contentMode: .fit)
+            .tabViewStyle(.page)
+            .indexViewStyle(.page(backgroundDisplayMode: .always))
+            
+            Spacer()
+        }
+        .navigationTitle(currentGesture.gestureActionLabel)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarInputField()
+        }
+    }
+}
+
+struct GestureGroup: Identifiable {
+    var id: String { name }
+    
+    let name: String
+    let gestures: [GestureExplanation]
+}
+
+struct GestureExplanation: Identifiable {
+    var id: String { gestureActionLabel }
+    
+    init(_ gestureActionLabel: String, _ swipeGesture: SwipeDirection, _ imageName: String) {
+        self.gestureActionLabel = gestureActionLabel
+        self.swipeGesture = swipeGesture
+        self.imageName = imageName
+    }
+    
+    let gestureActionLabel: String
+    let swipeGesture: SwipeDirection
+    let imageName: String
+}
 
 enum SwipeDirection {
     case up(String = "")
@@ -106,38 +172,6 @@ enum SwipeDirection {
             case .left(let label): return "swipe left\(!label.isEmpty ? " \(label)" : "")  ←"
             case .vertical(let label): return "swipe up or down\(!label.isEmpty ? " \(label)" : "")  ⇅"
             case .hold(let label): return "hold\(!label.isEmpty ? " \(label)" : "")  ⦿"
-        }
-    }
-}
-
-struct GesturesDetailedView: View {
-    @State var index: Int
-    @State var tryText: String = ""
-    @FocusState private var isInputFocused: Bool
-    
-    let images = ["Swipe right", "Swipe right punctuation", "Swipe up down", "Swipe left", "Emoji", "Symbols", "Languages", "Return", "Learn", "Move cursor", "Toggle autocorrect"]
-    
-    typealias Localize = Localization.HomeScreen
-    
-    var body: some View {
-        VStack (alignment: .leading) {
-            TabView(selection: $index) {
-                ForEach(0..<images.count, id: \.self) {
-                    Image(self.images[$0]).resizable().tag($0)
-                }
-            }
-            .aspectRatio(CGSize(width: 1, height: 1), contentMode: .fit)
-            .tabViewStyle(.page)
-            .indexViewStyle(.page(backgroundDisplayMode: .always))
-            
-            Spacer()
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .bottomBar) {
-                TextField(Localize.inputFieldPlaceholder, text: $tryText)
-                    .fontWeight(.regular)
-                    .padding(.horizontal, 16)
-            }
         }
     }
 }

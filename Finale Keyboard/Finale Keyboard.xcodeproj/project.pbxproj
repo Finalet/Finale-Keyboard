@@ -21,7 +21,6 @@
 		3720638627AACEC100964120 /* Gilroy-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3720638527AACEB600964120 /* Gilroy-Medium.ttf */; };
 		3720638827AB2CAF00964120 /* Locales.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3720638727AB2CAF00964120 /* Locales.swift */; };
 		37256A7927DB52ED0071180B /* DictionaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37256A7827DB52ED0071180B /* DictionaryView.swift */; };
-		3727766D27D8E38D00CC8CD8 /* TutorialView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3727766C27D8E38D00CC8CD8 /* TutorialView.swift */; };
 		373D195529E647B700DC6DEF /* ElegantEmojiPicker in Frameworks */ = {isa = PBXBuildFile; productRef = 373D195429E647B700DC6DEF /* ElegantEmojiPicker */; };
 		3743FC5527B1523A0043B2A2 /* KeyboardEnabledState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3743FC5427B1523A0043B2A2 /* KeyboardEnabledState.swift */; };
 		3743FC5727B158AD0043B2A2 /* FavoriteEmojiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3743FC5627B158AD0043B2A2 /* FavoriteEmojiView.swift */; };
@@ -68,6 +67,7 @@
 		861119EF2F88838200F6F7EB /* PunctuationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861119EE2F88837B00F6F7EB /* PunctuationView.swift */; };
 		861119F12F8883BA00F6F7EB /* AdvancedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861119F02F8883B800F6F7EB /* AdvancedView.swift */; };
 		861119F32F88872200F6F7EB /* SpacebarPurchaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861119F22F88871200F6F7EB /* SpacebarPurchaseView.swift */; };
+		863606252F8EC0B6005C1106 /* ToolbarInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863606242F8EC0B2005C1106 /* ToolbarInputField.swift */; };
 		863AF0DE2F8B46F600FA036E /* ReturnButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863AF0DD2F8B46F400FA036E /* ReturnButton.swift */; };
 		863BBCCA2F89C4BC00D828B4 /* StoreKit.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */; };
 		863BBCCC2F89C58A00D828B4 /* InAppPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863BBCCB2F89C58700D828B4 /* InAppPurchaseManager.swift */; };
@@ -111,7 +111,6 @@
 		3720638527AACEB600964120 /* Gilroy-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gilroy-Medium.ttf"; sourceTree = "<group>"; };
 		3720638727AB2CAF00964120 /* Locales.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Locales.swift; sourceTree = "<group>"; };
 		37256A7827DB52ED0071180B /* DictionaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryView.swift; sourceTree = "<group>"; };
-		3727766C27D8E38D00CC8CD8 /* TutorialView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TutorialView.swift; sourceTree = "<group>"; };
 		3743FC5427B1523A0043B2A2 /* KeyboardEnabledState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardEnabledState.swift; sourceTree = "<group>"; };
 		3743FC5627B158AD0043B2A2 /* FavoriteEmojiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteEmojiView.swift; sourceTree = "<group>"; };
 		3743FC5827B168090043B2A2 /* Finale Keyboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Finale Keyboard.entitlements"; sourceTree = "<group>"; };
@@ -161,6 +160,7 @@
 		861119EE2F88837B00F6F7EB /* PunctuationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PunctuationView.swift; sourceTree = "<group>"; };
 		861119F02F8883B800F6F7EB /* AdvancedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedView.swift; sourceTree = "<group>"; };
 		861119F22F88871200F6F7EB /* SpacebarPurchaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacebarPurchaseView.swift; sourceTree = "<group>"; };
+		863606242F8EC0B2005C1106 /* ToolbarInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarInputField.swift; sourceTree = "<group>"; };
 		863AF0DD2F8B46F400FA036E /* ReturnButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnButton.swift; sourceTree = "<group>"; };
 		863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKit.storekit; sourceTree = "<group>"; };
 		863BBCCB2F89C58700D828B4 /* InAppPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseManager.swift; sourceTree = "<group>"; };
@@ -367,7 +367,6 @@
 				37AB663D28876ECB00741889 /* MoreView.swift */,
 				86C4FD452F8C3F570086F12F /* OnboardingView.swift */,
 				375D074A29EA3D2100EA2980 /* ShortcutsView.swift */,
-				3727766C27D8E38D00CC8CD8 /* TutorialView.swift */,
 				861119EB2F8882CE00F6F7EB /* Preferences */,
 			);
 			path = Views;
@@ -390,6 +389,7 @@
 		86C4FD422F8C1A610086F12F /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				863606242F8EC0B2005C1106 /* ToolbarInputField.swift */,
 				86C4FD432F8C1A670086F12F /* DefaultButton.swift */,
 			);
 			path = Components;
@@ -519,6 +519,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				863606252F8EC0B6005C1106 /* ToolbarInputField.swift in Sources */,
 				379E9FA227DA358000B9ECA6 /* LanguagesView.swift in Sources */,
 				8610184B2F897D2A007CA8F5 /* SpacebarLootboxView.swift in Sources */,
 				37CE328B2889FF41002DAD2A /* Localization.swift in Sources */,
@@ -534,7 +535,6 @@
 				861119EF2F88838200F6F7EB /* PunctuationView.swift in Sources */,
 				3743FC5727B158AD0043B2A2 /* FavoriteEmojiView.swift in Sources */,
 				861119F12F8883BA00F6F7EB /* AdvancedView.swift in Sources */,
-				3727766D27D8E38D00CC8CD8 /* TutorialView.swift in Sources */,
 				374C861A27DD74B8003BA47B /* PreferencesView.swift in Sources */,
 				861119F32F88872200F6F7EB /* SpacebarPurchaseView.swift in Sources */,
 				375D074B29EA3D2100EA2980 /* ShortcutsView.swift in Sources */,
