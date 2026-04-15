@@ -15,7 +15,7 @@ struct OnboardingView: View {
     typealias Localize = Localization.HomeScreen
     
     @State var presentGesturesGuide = false
-    @State var step: Int = 2
+    @State var step: Int = 0
     @State var typingField: String = ""
     
     var canContinue: Bool { step == 1 ? (keyboardState.isKeyboardEnabled && keyboardState.isFullAccessEnabled) : true  }
