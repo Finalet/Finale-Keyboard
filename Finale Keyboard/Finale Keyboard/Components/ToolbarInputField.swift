@@ -59,10 +59,10 @@ struct ToolbarTextFieldView: UIViewRepresentable {
 
     func makeUIView(context: Context) -> UITextField {
         
-        let textFIeld = UITextField(frame: .zero)
-        textFIeld.delegate = context.coordinator
-        textFIeld.placeholder = Localization.HomeScreen.inputFieldPlaceholder
-        return textFIeld
+        let textField = UITextField(frame: .zero)
+        textField.delegate = context.coordinator
+        textField.placeholder = Localization.HomeScreen.inputFieldPlaceholder
+        return textField
     }
 
     

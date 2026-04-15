@@ -10,22 +10,24 @@ import SwiftUI
 
 private let allGestures: [GestureGroup] = [
     GestureGroup(name: "Essential", gestures: [
-        GestureExplanation("Insert space or punctuation", .right(), "Swipe right"),
-        GestureExplanation("Cycle through suggestions", .vertical(), "Swipe right"),
-        GestureExplanation("Delete word", .left(), "Swipe right"),
-        GestureExplanation("Open emojis", .left("on backspace"), "Swipe right"),
-        GestureExplanation("Toggle symbols", .right("on shift"), "Swipe right"),
-        GestureExplanation("Return", .up("on backspace"), "Swipe right"),
+        GestureExplanation("Insert space and autocorrect word", .right(), "insert-space"),
+        GestureExplanation("Insert punctuation", .right("after space"), "insert-punctuation"),
+        GestureExplanation("Cycle through suggestions", .vertical(), "cycle-suggestions"),
+        GestureExplanation("Delete a word", .left(), "delete-word"),
+        GestureExplanation("Toggle symbols", .right("on 'shift'"), "toggle-symbols"),
+        GestureExplanation("Open emojis", .left("on 'backspace'"), "open-emojis"),
+        GestureExplanation("Return", .up("on 'backspace'"), "return"),
     ]),
     GestureGroup(name: "Shortcuts", gestures: [
-        GestureExplanation("Use shortcut", .down("on shortcut key"), "Swipe right"),
-        GestureExplanation("Peak shortcuts", .hold("backspace"), "Swipe right"),
+        GestureExplanation("Use a shortcut", .down("on shortcut key"), "use-shortcut"),
+        GestureExplanation("Peak shortcuts", .hold("'backspace'"), "peak-shortcuts"),
     ]),
     GestureGroup(name: "Miscellaneous", gestures: [
-        GestureExplanation("Change language", .up("on shift"), "Swipe right"),
-        GestureExplanation("Learn new word", .up("when new word"), "Swipe right"),
-        GestureExplanation("Toggle autocorrect", .hold("shift"), "Swipe right"),
-        GestureExplanation("Continously type character", .up("and hold"), "Swipe right"),
+        GestureExplanation("Change language", .up("on shift"), "change-language"),
+        GestureExplanation("Learn new word", .up("when new word"), "learn-word"),
+        GestureExplanation("Toggle autocorrect", .hold("'shift'"), "toggle-autocorrect"),
+        GestureExplanation("Move cursor", .hold("and slide anywhere"), "toggle-autocorrect"),
+        GestureExplanation("Continously type character", .up("and hold"), "continuesly-type"),
     ])
 ]
 
@@ -86,8 +88,8 @@ struct SwipeGestureView: View {
     }
     
     var body: some View {
-        Text(direction.label)
-            .font(.system(size: 14, weight: .medium))
+        Text("\(direction.label) \(direction.icon)")
+            .font(.monospaced(.system(size: 12, weight: .medium))())
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             .background(
@@ -112,21 +114,43 @@ struct GesturesDetailedView: View {
     typealias Localize = Localization.HomeScreen
     
     var body: some View {
-        VStack () {
-            TabView(selection: $index) {
-                ForEach(0..<gestures.count, id: \.self) { i in
-                    VStack {
-                        Image(gestures[i].imageName).resizable().tag(i)
-                        SwipeGestureView(gestures[i].swipeGesture)
+        VStack {
+            ZStack {
+                TabView(selection: $index) {
+                    ForEach(0..<gestures.count, id: \.self) { i in
+                        VStack {
+                            Image(gestures[i].imageName)
+                                .resizable()
+                                .aspectRatio(1, contentMode: .fit)
+                                .tag(i)
+                            
+                            Text("\(currentGesture.swipeGesture.label.firstUppercased) to \(currentGesture.gestureActionLabel.lowercased())")
+                                .multilineTextAlignment(.center)
+                                .fontWeight(.semibold)
+                                .font(.title2)
+                                .foregroundStyle(Color.brand)
+                                .shadow(color: Color.brand.opacity(0.25), radius: 2, y: 2)
+                                .padding(.horizontal, 16)
+                            
+                            Spacer()
+                        }
+                        .offset(y: -80)
                     }
                 }
+                .tabViewStyle(.page)
+                .indexViewStyle(.page(backgroundDisplayMode: .always))
+                
+                VStack {
+                    LinearGradient(colors: [Color(uiColor: .secondarySystemBackground), Color.clear], startPoint: .top, endPoint: .bottom)
+                        .frame(height: 10)
+                        .frame(maxWidth: .infinity)
+                    Spacer()
+                }
             }
-            .aspectRatio(1.0, contentMode: .fit)
-            .tabViewStyle(.page)
-            .indexViewStyle(.page(backgroundDisplayMode: .always))
-            
             Spacer()
         }
+        .background(Color(uiColor: .secondarySystemBackground))
+        .toolbarBackground(.foreground, for: .bottomBar)
         .navigationTitle(currentGesture.gestureActionLabel)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -164,18 +188,29 @@ enum SwipeDirection {
     case vertical(String = "")
     case hold(String = "")
     
+    var icon: String {
+        switch (self) {
+            case .up(_): return "↑"
+            case .right(_): return "→"
+            case .down(_): return "↓"
+            case .left(_): return "←"
+            case .vertical(_): return "⇅"
+            case .hold(_): return "⦿"
+        }
+    }
+    
     var label: String {
         switch (self) {
-            case .up(let label): return "swipe up\(!label.isEmpty ? " \(label)" : "")  ↑"
-            case .right(let label): return "swipe right\(!label.isEmpty ? " \(label)" : "")  →"
-            case .down(let label): return "swipe down\(!label.isEmpty ? " \(label)" : "")  ↓"
-            case .left(let label): return "swipe left\(!label.isEmpty ? " \(label)" : "")  ←"
-            case .vertical(let label): return "swipe up or down\(!label.isEmpty ? " \(label)" : "")  ⇅"
-            case .hold(let label): return "hold\(!label.isEmpty ? " \(label)" : "")  ⦿"
+            case .up(let label): return "swipe up\(!label.isEmpty ? " \(label)" : "")"
+            case .right(let label): return "swipe right\(!label.isEmpty ? " \(label)" : "")"
+            case .down(let label): return "swipe down\(!label.isEmpty ? " \(label)" : "")"
+            case .left(let label): return "swipe left\(!label.isEmpty ? " \(label)" : "")"
+            case .vertical(let label): return "swipe up or down\(!label.isEmpty ? " \(label)" : "")"
+            case .hold(let label): return "hold\(!label.isEmpty ? " \(label)" : "")"
         }
     }
 }
 
 #Preview {
-    GesturesGuideView()
+    GesturesDetailedView(index: 0)
 }
