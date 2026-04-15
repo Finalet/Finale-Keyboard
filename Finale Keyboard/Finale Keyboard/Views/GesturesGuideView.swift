@@ -87,6 +87,9 @@ struct SwipeGestureView: View {
         self.direction = direction
     }
     
+    @Environment(\.colorScheme) private var colorScheme
+    var dark: Bool { return colorScheme == .dark }
+    
     var body: some View {
         Text("\(direction.label) \(direction.icon)")
             .font(.monospaced(.system(size: 12, weight: .medium))())
@@ -95,9 +98,9 @@ struct SwipeGestureView: View {
             .background(
                 ZStack {
                     RoundedRectangle(cornerRadius: 6)
-                        .fill(Color.brand.opacity(0.1))
-                        .stroke(Color.brand.opacity(0.3), lineWidth: 1)
-                        .shadow(color: Color.brand, radius: 2, y: 2)
+                        .fill(Color.brand.mix(with: dark ? Color.black : Color.white, by: dark ? 0.7 : 0.8))
+                        .stroke(Color.brand.mix(with: dark ? Color.black : Color.white, by: 0.5), lineWidth: 1)
+                        .shadow(color: Color.brand.opacity(0.2), radius: 2, y: 1)
                 }
             )
             .foregroundStyle(Color.brand)
@@ -212,5 +215,7 @@ enum SwipeDirection {
 }
 
 #Preview {
-    GesturesDetailedView(index: 0)
+    NavigationStack {
+        GesturesGuideView()
+    }
 }
