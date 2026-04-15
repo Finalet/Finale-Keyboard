@@ -15,7 +15,7 @@ struct OnboardingView: View {
     typealias Localize = Localization.HomeScreen
     
     @State var presentGesturesGuide = false
-    @State var step: Int = 0
+    @State var step: Int = 2
     @State var typingField: String = ""
     
     var canContinue: Bool { step == 1 ? (keyboardState.isKeyboardEnabled && keyboardState.isFullAccessEnabled) : true  }
@@ -33,12 +33,20 @@ struct OnboardingView: View {
         NavigationStack {
             VStack (spacing: 32) {
                 if step == 0 {
-                    OnboardingBase(title: "Welcome to\nFinale Keyboard", description: "Gesture-based minimal keyboard.") {}
+                    OnboardingBase(title: "Welcome to\nFinale Keyboard", description: "Gesture-based minimal keyboard.") {
+                        VStack (spacing: 32) {
+                            VStack (spacing: 16) {
+                                FeatureRow(iconName: "keyboard", title: "Gesture-based", description: "Better way of typing with intuitive swipe gestures.")
+                                FeatureRow(iconName: "brain", title: "Smart", description: "Learns your vocabulary, adjusts key sizes predicting your next word, and runs an effecient shortcuts system.")
+                                FeatureRow(iconName: "keyboard", title: "Minimal", description: "Takes up less space on your screen, so you can focus on what's actually important.")
+                            }
+                        }
+                    }
                         .padding(.vertical, 32)
                 } else if step == 1 {
                     OnboardingBase(
                         title: "First, let's set things up",
-                        description: "Enable the keyboard and give it full access.") {
+                        description: "Enable Finale Keyboard and give it full access.") {
                             VStack(spacing: 32) {
                                 EnabledListItem(
                                     isEnabled: keyboardState.isKeyboardEnabled,
@@ -61,8 +69,8 @@ struct OnboardingView: View {
                         }
                 } else if step == 2 {
                     OnboardingBase(
-                        title: "Let's learn gestures",
-                        description: "Finale Keyboard is not a regular keyboard. While you type characters as usual, all other actions, like typing spaces, deleting words, or autocorrections are done with gestures.") {
+                        title: "Let's practice gestures",
+                        description: "While you type characters as usual, all other actions, like typing spaces, deleting words, or autocorrections are done with gestures.") {
                             VStack (spacing: 32) {
                                 VStack (spacing: 16) {
                                     SwipeRow(direction: .right(), label: "Insert space or punctuations")
@@ -93,11 +101,19 @@ struct OnboardingView: View {
                             }
                         }
                 } else if step == 3 {
-                    OnboardingBase(title: "That's all!", description: "Gestures might take a few days getting used to, but, once they become second nature, you won't want to type without them.") {}
+                    OnboardingBase(title: "You are all set", description: "Gestures might take a few days getting used to, but, once they become second nature, you'll refuse to type without them.\n\nFinale Keyboard has much more to offer. Feel free to explore these festures once you settle down.") {
+                        VStack (spacing: 32) {
+                            VStack (spacing: 16) {
+                                FeatureRow(iconName: "keyboard", title: "Shortcuts", description: "Type emojis, dates, contacts, or anything else with quick shortcuts.")
+                                FeatureRow(iconName: "heart", title: "Favorite emoji", description: "Save your most used emojis under your fingertips.")
+                                FeatureRow(iconName: "keyboard", title: "Dynamic touch zones", description: "Type faster with keys that predict your next word.")
+                            }
+                        }
+                    }
                 }
                 
                 DefaultButton(disabled: !canContinue, label: {
-                    Text(step == 3 ? "Done" : "Continue")
+                    Text(step == 0 ? "Let's get started" : step == 3 ? "Done" : "Continue")
                 }) {
                     if step == 3 { Done() }
                     else { Next() }
@@ -149,6 +165,33 @@ struct SwipeRow: View {
             Spacer()
             SwipeGestureView(direction)
         }
+    }
+}
+
+struct FeatureRow: View {
+    let iconName: String
+    let title: String
+    let description: String
+    
+    var body: some View {
+        HStack (alignment: .top, spacing: 8) {
+            Image(systemName: iconName)
+                .font(.system(size: 20))
+                .frame(width: 40)
+                .offset(y: 4)
+            VStack (alignment: .leading) {
+                Text(title)
+                    .fontWeight(.semibold)
+                    .font(.headline)
+                    .foregroundStyle(Color.brand)
+                Text(description)
+                    .font(.subheadline)
+                    .foregroundStyle(Color.gray)
+            }
+            Spacer()
+        }
+        .frame(maxWidth: .infinity)
+        .multilineTextAlignment(.leading)
     }
 }
 

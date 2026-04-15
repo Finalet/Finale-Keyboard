@@ -10,7 +10,7 @@ import Keyboard
 
 struct ContentView: View {
     @UserDefaultState("FINALE_DEV_APP_finishedOnboarding", false) var finishedOnboarding: Bool
-    @State var showOnboarding = false
+    @State var showOnboarding = true
     
     @StateObject private var iapManager = InAppPurchasesManager()
     @StateObject private var keyboardState = KeyboardEnabledState(bundleId: "com.Grant151.Finale-Keyboard.Keyboard")

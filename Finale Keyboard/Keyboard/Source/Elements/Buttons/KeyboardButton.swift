@@ -15,7 +15,7 @@ class KeyboardButton: NoClipTouchUIView {
     var touchZoneConstraints: [NSLayoutConstraint] = []
     
     var touchStartLocation: CGPoint?
-    let registerSwipeThreshold = 30.0
+    let registerSwipeThreshold = 50.0
     var registeredSwipe = false
     
     var longPressTimer: Timer?

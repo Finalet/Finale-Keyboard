@@ -24,9 +24,9 @@ private let allGestures: [GestureGroup] = [
     ]),
     GestureGroup(name: "Miscellaneous", gestures: [
         GestureExplanation("Change language", .up("on shift"), "change-language"),
-        GestureExplanation("Learn new word", .up("when new word"), "learn-word"),
+        GestureExplanation("Learn new word", .up(), "learn-word"),
         GestureExplanation("Toggle autocorrect", .hold("'shift'"), "toggle-autocorrect"),
-        GestureExplanation("Move cursor", .hold("and slide anywhere"), "toggle-autocorrect"),
+        GestureExplanation("Move cursor", .hold("and slide anywhere"), "move-cursor"),
         GestureExplanation("Continously type character", .up("and hold"), "continuesly-type"),
     ])
 ]
