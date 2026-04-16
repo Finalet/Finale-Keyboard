@@ -55,7 +55,7 @@ enum Function {
             case .Caps: FinaleKeyboard.instance.ShiftAction()
             case .Backspace: FinaleKeyboard.instance.BackspaceAction()
             case .Back: FinaleKeyboard.instance.BackAction()
-            case .EmojiToggle: FinaleKeyboard.instance.OpenEmoji()
+            case .EmojiToggle: FinaleKeyboard.currentViewType == .SearchEmoji ? FinaleKeyboard.instance.BackAction() : FinaleKeyboard.instance.OpenEmoji()
             case .Return: FinaleKeyboard.instance.ReturnAction()
             default: return
         }

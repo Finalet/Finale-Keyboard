@@ -566,6 +566,11 @@ class FinaleKeyboard: UIInputViewController {
         UpdateButtonsTitles()
     }
     func SpacebarAction() {
+        if let emojiSearchRow = emojiSearchRow {
+            emojiSearchRow.SwipeRight()
+            return
+        }
+        
         self.textDocumentProxy.insertText(" ")
         ResetSuggestions()
         CheckAutoCapitalization()
