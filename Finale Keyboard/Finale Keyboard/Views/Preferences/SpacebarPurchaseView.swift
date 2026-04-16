@@ -69,7 +69,7 @@ struct SpacebarPurchaseView: View {
                     }
                     
                     RestorePurchasesButton()
-                    .padding(.top, 64)
+                        .padding(.top, 64)
                     
                     RequestForFreeButton()
                 }
@@ -163,7 +163,7 @@ struct RestorePurchasesButton: View {
         Button(action: {
             loading = true
             Task { 
-                await iapManager.UpdatePurchaseStatus()
+                await iapManager.RestorePurchases()
                 if iapManager.isSpacebarUnlocked { dismiss() }
                 loading = false
             } 

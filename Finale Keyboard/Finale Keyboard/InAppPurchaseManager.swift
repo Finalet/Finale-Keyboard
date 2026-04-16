@@ -53,11 +53,21 @@ class InAppPurchasesManager: ObservableObject {
     }
     
     func UpdatePurchaseStatus() async {
-        if let result = await Transaction.latest(for: spacebarProductID), case .verified(let transaction) = result {
-            isSpacebarUnlocked = transaction.revocationDate == nil
-        } else {
-            isSpacebarUnlocked = false
+        isSpacebarUnlocked = false
+        
+        for await result in Transaction.currentEntitlements {
+            if case .verified(let transaction) = result,
+               transaction.productID == spacebarProductID,
+               transaction.revocationDate == nil {
+                isSpacebarUnlocked = true
+                return
+            }
         }
+    }
+
+    func RestorePurchases() async {
+        try? await AppStore.sync()
+        await UpdatePurchaseStatus()
     }
     
     func ListenForTransaction() async {
