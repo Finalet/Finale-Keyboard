@@ -129,7 +129,7 @@ struct GesturesStep: View {
                         SwipeRow(direction: .right(), label: Localize.insertSpaceOrPunctuations)
                         SwipeRow(direction: .vertical(), label: Localize.cycleSuggestions)
                         SwipeRow(direction: .left(), label: Localize.deleteWord)
-                        SwipeRow(direction: .left("on backspace"), label: Localize.useEmoji)
+                        SwipeRow(direction: .left(Localization.GesturesGuideScreen.Directions.onBackspace), label: Localize.useEmoji)
                         Button(action: { presentGesturesGuide = true }) {
                             HStack {
                                 Text(Localize.viewAllGestures)

@@ -18,7 +18,7 @@ struct PunctuationView: View {
     
     var body: some View {
         Form {
-            Section (footer: Text("Select punctuation and the order they are suggested when you swipe up or down.")) {
+            Section (footer: Text(Localize.footer)) {
                 ForEach(0..<6) { i in
                     Picker(getOptionTitle(i), selection: $punctuationArray[i+1]) {
                         ForEach(punctuationOptions, id: \.self) { option in

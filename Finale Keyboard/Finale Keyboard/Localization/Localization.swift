@@ -99,6 +99,7 @@ struct Localization {
         
         struct Punctuation {
             static var pageTitle = NSLocalizedString("preferences_punctuation_page_title", value: "Quick Punctuation", comment: "")
+            static var footer = NSLocalizedString("preferences_punctuation_footer", value: "Select punctuation and the order they are suggested when you swipe up or down.", comment: "")
             static var first = NSLocalizedString("preferences_punctuation_first", value: "First", comment: "")
             static var second = NSLocalizedString("preferences_punctuation_second", value: "Second", comment: "")
             static var third = NSLocalizedString("preferences_punctuation_third", value: "Third", comment: "")

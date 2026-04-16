@@ -380,6 +380,9 @@
 "preferences_punctuation_first" = "Первый";
 
 /* No comment provided by engineer. */
+"preferences_punctuation_footer" = "Выберите знаки препинания и порядок, в котором они будут предлагаться при свайпе вверх или вниз.";
+
+/* No comment provided by engineer. */
 "preferences_punctuation_fourth" = "Четвертый";
 
 /* No comment provided by engineer. */
