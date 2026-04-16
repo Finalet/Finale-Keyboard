@@ -38,6 +38,9 @@
 "home_contact_developer_row" = "Связаться с разработчиком";
 
 /* No comment provided by engineer. */
+"home_developer_title" = "Разработчик";
+
+/* No comment provided by engineer. */
 "home_dictionary_row" = "Словарь";
 
 /* No comment provided by engineer. */
@@ -54,6 +57,9 @@
 
 /* Short invitation to try the keyboard */
 "home_input_field_title" = "Попробуйте";
+
+/* No comment provided by engineer. */
+"home_message_me_row" = "Написать мне";
 
 /* No comment provided by engineer. */
 "home_keyboard_disabled_row" = "Клавиатура отключена";
@@ -78,6 +84,9 @@
 
 /* No comment provided by engineer. */
 "home_preferences_title" = "Настройки";
+
+/* No comment provided by engineer. */
+"home_profile_row" = "Профиль";
 
 /* No comment provided by engineer. */
 "home_setup_footer" = "Включите Finale Keyboard в системных настройках, а потом переключитесь на нее с помощью 🌐.";
@@ -246,4 +255,3 @@
 
 /* No comment provided by engineer. */
 "shortcuts_symbols" = "Символы";
-

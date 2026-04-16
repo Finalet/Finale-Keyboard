@@ -87,12 +87,12 @@ struct ContentView: View {
                         }
                     }
                 }
-                Section(header: Text("Developer")) {
+                Section(header: Text(Localize.developerTitle)) {
                     ListNavigationButton(action: OpenTwitter) {
-                        Label("Profile", systemImage: "person")
+                        Label(Localize.profileRow, systemImage: "person")
                     }
                     ListNavigationButton(action: ContactDeveloper) {
-                        Label("Message me", systemImage: "message")
+                        Label(Localize.messageMeRow, systemImage: "message")
                     }
                     ListNavigationLink(destination: MoreView()) {
                         Label(Localize.moreRow, systemImage: "ellipsis.circle")

@@ -31,6 +31,9 @@ struct Localization {
         
         static var helpTitle = NSLocalizedString("home_help_title", value: "Help", comment: "")
         static var gesturesGuideRow = NSLocalizedString("home_gestures_guide_row", value: "Gestures Guide", comment: "")
+        static var developerTitle = NSLocalizedString("home_developer_title", value: "Developer", comment: "")
+        static var profileRow = NSLocalizedString("home_profile_row", value: "Profile", comment: "")
+        static var messageMeRow = NSLocalizedString("home_message_me_row", value: "Message me", comment: "")
         static var contactDeveloperRow = NSLocalizedString("home_contact_developer_row", value: "Contact Developer", comment: "")
         static var moreRow = NSLocalizedString("home_more_row", value: "More", comment: "")
     }
