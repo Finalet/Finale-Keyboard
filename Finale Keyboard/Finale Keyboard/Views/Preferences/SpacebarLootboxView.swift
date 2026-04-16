@@ -35,12 +35,14 @@ struct SpacebarLootboxView: View {
     @EnvironmentObject var iapManager: InAppPurchasesManager
     @Environment(\.dismiss) private var dismiss
     
+    let localize = Localization.PreferencesScreen.SpacebarLootbox.self
+    
     var body: some View {
         ZStack {
             if showTitle {
                 VStack {
                     HStack {
-                        Text(didWin ? "Congrats, you got your spacebar" : "Sorry")
+                        Text(didWin ? localize.winTitle : localize.loseTitle)
                             .font(.system(size: 32, weight: .semibold))
                             .multilineTextAlignment(.center)
                     }
@@ -78,7 +80,7 @@ struct SpacebarLootboxView: View {
                     Spacer()
                     HStack {
                         VStack (spacing: 16) {
-                            DefaultButton(label: { Text(didWin ? "Enable spacebar" : "I want to try again.") }) {
+                            DefaultButton(label: { Text(didWin ? localize.enableSpacebar : localize.tryAgain) }) {
                                  if didWin {
                                     onSpacebarActivated()
                                     dismiss()
@@ -87,7 +89,7 @@ struct SpacebarLootboxView: View {
                                 }
                             }
                             if !didWin {
-                                DefaultButton(.outline, label: { Text("I give up, like I always do.") }) { dismiss() }
+                                DefaultButton(.outline, label: { Text(localize.giveUp) }) { dismiss() }
                             }
                         }
                     }

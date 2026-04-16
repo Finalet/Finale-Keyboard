@@ -38,12 +38,12 @@ struct PreferencesView: View {
             Section {
                 Toggle(Localize.spacebar, isOn: $isSpacebarEnabled.animation())
                     .onChange(of: isSpacebarEnabled) { _, value in
-//                        if value && !iapManager.isSpacebarUnlocked {
+                        if value && !iapManager.isSpacebarUnlocked {
                             isSpacebarEnabled = false
                             showSpacebarPurchase = true
-//                        } else {
-//                            isSpacebarEnabled = value
-//                        }
+                        } else {
+                            isSpacebarEnabled = value
+                        }
                     }
                 if isSpacebarEnabled {
                     Toggle(Localize.spacebarAutocorrect, isOn: $spacebarAutocorrect)

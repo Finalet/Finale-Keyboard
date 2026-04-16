@@ -163,6 +163,14 @@ struct Localization {
             static var requestForFreeAlertMessage = NSLocalizedString("preferences_spacebar_purchase_request_for_free_alert_message", value: "I guess... if you really can't be bothered to learn gestures...\n\nEmail me at grant@finaletodo.com with the worst insult towards yourself. If I like it, I'll see what I can do.", comment: "")
             static var requestForFreeEmailSubject = NSLocalizedString("preferences_spacebar_purchase_request_for_free_email_subject", value: "Please, please, please, I beg you, Grant, give me a spacebar.", comment: "")
         }
+
+        struct SpacebarLootbox {
+            static var winTitle = NSLocalizedString("preferences_spacebar_lootbox_win_title", value: "Congrats, you got your spacebar", comment: "")
+            static var loseTitle = NSLocalizedString("preferences_spacebar_lootbox_lose_title", value: "Sorry", comment: "")
+            static var enableSpacebar = NSLocalizedString("preferences_spacebar_lootbox_enable_spacebar", value: "Enable spacebar", comment: "")
+            static var tryAgain = NSLocalizedString("preferences_spacebar_lootbox_try_again", value: "I want to try again.", comment: "")
+            static var giveUp = NSLocalizedString("preferences_spacebar_lootbox_give_up", value: "I give up, like I always do.", comment: "")
+        }
     }
     
     struct GesturesGuideScreen {

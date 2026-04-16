@@ -479,6 +479,21 @@
 "preferences_spacebar_purchase_title" = "Ой-ой, кому-то понадобился пробел?";
 
 /* No comment provided by engineer. */
+"preferences_spacebar_lootbox_enable_spacebar" = "Включить пробел";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_lootbox_give_up" = "Я сдаюсь, как всегда.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_lootbox_lose_title" = "Как жаль.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_lootbox_try_again" = "Хочу попробовать еще раз.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_lootbox_win_title" = "Поздравляю, ты выбил свой пробел";
+
+/* No comment provided by engineer. */
 "preferences_typing_haptic" = "Тактильная отдача для клавиш";
 
 /* No comment provided by engineer. */
