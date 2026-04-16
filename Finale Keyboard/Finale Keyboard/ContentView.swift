@@ -106,7 +106,7 @@ struct ContentView: View {
         .environmentObject(iapManager)
         .navigationViewStyle(StackNavigationViewStyle())
         .onAppear(perform: UIApplication.shared.addTapAnywhereToDismissKeyboard)
-//        .onAppear { if !finishedOnboarding { showOnboarding = true } }
+        .onAppear { if !finishedOnboarding { showOnboarding = true } }
         .sheet(isPresented: $showOnboarding) { OnboardingView(onDone: { finishedOnboarding = true; showOnboarding = false }) }
     }
     
