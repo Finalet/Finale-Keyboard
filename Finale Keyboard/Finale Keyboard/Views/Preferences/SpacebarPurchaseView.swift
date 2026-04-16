@@ -35,15 +35,9 @@ struct SpacebarPurchaseView: View {
                     }
                     .padding(.vertical, 32)
                     .frame(maxWidth: .infinity)
-                    Text("Awwww, how cute..! You want a spacebar? You want to press a buttom to type a space?")
-                    Text("Everyone, look! This little tiny stupid todler can't type without their spacebar. Isn't that adorable?")
-                    Text("You can't learn simple swipe gestures? Moving your finger across the screen is too hard? Aw, of course, I should've known you don't have the hand-eye coordination for such advanced locomotion! You poor baby. You poor, stupid, slow, useless, moronic fucking baby.")
-                    Text("Fine. Okay. If you REALLY want your spacebar, I'll give it to you. I'll even be generous and give you a choice.")
-                    Text("As you might have noticed, we live in a K-shaped economy. Meaning, there is a divergence between the rich and the poor. The investor-class and the permanent under-class.")
-                    Text("So, statistically, you are either filthy rich and don't care to waste money. Or, you are drowning in dept with gambling being your only hope for financial stability.")
-                    Text("I'll give options for both.")
-                    Text("If you have more money than brains (duh, you can't even be bothered to learn the swipe-right gesture), you can buy The Spacebar outright for \(purchasePrice).")
-                    Text("Or, if you are poor with no end in sight, you can spin the wheel for \(gamblePrice) and get a \(Int(round(gambleWinProbability * 100)))% chance of winning The Spacebar.")
+                    
+                    Text("Awwww, how cute..! You want a spacebar? You want to press a buttom to type a space?\n\nEveryone, look! This little tiny stupid todler can't type without their spacebar. Isn't that adorable?\n\nYou can't learn simple swipe gestures? Moving your finger across the screen is too hard? Aw, of course, I should've known you don't have the hand-eye coordination for such advanced locomotion! You poor baby. You poor, stupid, slow, useless, moronic fucking baby.\n\nFine. Okay. If you REALLY want your spacebar, I'll give it to you. I'll even be generous and give you a choice.\n\nAs you might have noticed, we live in a K-shaped economy. Meaning, there is a divergence between the rich and the poor. The investor-class and the permanent under-class.\n\nSo, statistically, you are either filthy rich and don't care to waste money. Or, you are drowning in dept with gambling being your only hope for financial stability.\n\nI'll give options for both.\n\nIf you have more money than brains (duh, you can't even be bothered to learn the swipe-right gesture), you can buy The Spacebar outright for \(purchasePrice).\n\nOr, if you are poor with no end in sight, you can spin the wheel for \(gamblePrice) and get a \(Int(round(gambleWinProbability * 100)))% chance of winning The Spacebar.")
+                    
                     HStack {
                         Spacer()
                         Text("So, what will it be?")
@@ -334,4 +328,5 @@ extension View {
 
 #Preview {
     SpacebarPurchaseView(onSpacebarActivated: {})
+        .environmentObject(InAppPurchasesManager())
 }

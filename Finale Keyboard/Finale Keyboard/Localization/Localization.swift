@@ -94,6 +94,8 @@ struct Localization {
         static var autocapitalizeWords = NSLocalizedString("preferences_autocapitalize_words", value: "Autocapitalize Words", comment: "")
         static var typingHapticFeedback = NSLocalizedString("preferences_typing_haptic", value: "Typing Haptic Feedback", comment: "")
         static var gesturesHapticFeedback = NSLocalizedString("preferences_gestures_haptic", value: "Gestures Haptic Feedback", comment: "")
+        static var spacebar = NSLocalizedString("preferences_spacebar", value: "Spacebar", comment: "")
+        static var spacebarAutocorrect = NSLocalizedString("preferences_spacebar_autocorrect", value: "Spacebar Autocorrect", comment: "")
         
         struct Punctuation {
             static var pageTitle = NSLocalizedString("preferences_punctuation_page_title", value: "Quick Punctuation", comment: "")

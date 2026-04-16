@@ -401,6 +401,12 @@
 "preferences_punctuation_third" = "Третий";
 
 /* No comment provided by engineer. */
+"preferences_spacebar" = "Пробел";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_autocorrect" = "Автокоррекция пробелом";
+
+/* No comment provided by engineer. */
 "preferences_typing_haptic" = "Тактильная отдача для клавиш";
 
 /* No comment provided by engineer. */
