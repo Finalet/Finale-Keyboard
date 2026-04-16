@@ -289,6 +289,7 @@
 				37CE32872889FEF8002DAD2A /* Localization */,
 				3743FC5827B168090043B2A2 /* Finale Keyboard.entitlements */,
 				37A0ACF227A8694100578290 /* Finale_KeyboardApp.swift */,
+				863BBCCB2F89C58700D828B4 /* InAppPurchaseManager.swift */,
 				37A0ACF427A8694100578290 /* ContentView.swift */,
 				37A0ACF627A8694200578290 /* Assets.xcassets */,
 				37A0ACF827A8694200578290 /* Preview Content */,
@@ -382,7 +383,6 @@
 		861119EB2F8882CE00F6F7EB /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
-				863BBCCB2F89C58700D828B4 /* InAppPurchaseManager.swift */,
 				8610184A2F897D1E007CA8F5 /* SpacebarLootboxView.swift */,
 				861119F02F8883B800F6F7EB /* AdvancedView.swift */,
 				861119EE2F88837B00F6F7EB /* PunctuationView.swift */,
