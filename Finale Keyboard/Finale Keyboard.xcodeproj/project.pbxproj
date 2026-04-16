@@ -71,6 +71,7 @@
 		863AF0DE2F8B46F600FA036E /* ReturnButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863AF0DD2F8B46F400FA036E /* ReturnButton.swift */; };
 		863BBCCA2F89C4BC00D828B4 /* StoreKit.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */; };
 		863BBCCC2F89C58A00D828B4 /* InAppPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863BBCCB2F89C58700D828B4 /* InAppPurchaseManager.swift */; };
+		864948182F918AEE0002CAC0 /* Icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 864948172F918AEE0002CAC0 /* Icon.icon */; };
 		86B6EC642F8D466A00828DE0 /* GesturesGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B6EC632F8D466100828DE0 /* GesturesGuideView.swift */; };
 		86C4FD442F8C1A6A0086F12F /* DefaultButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C4FD432F8C1A670086F12F /* DefaultButton.swift */; };
 		86C4FD462F8C3F590086F12F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C4FD452F8C3F570086F12F /* OnboardingView.swift */; };
@@ -164,6 +165,7 @@
 		863AF0DD2F8B46F400FA036E /* ReturnButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnButton.swift; sourceTree = "<group>"; };
 		863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKit.storekit; sourceTree = "<group>"; };
 		863BBCCB2F89C58700D828B4 /* InAppPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseManager.swift; sourceTree = "<group>"; };
+		864948172F918AEE0002CAC0 /* Icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Icon.icon; sourceTree = "<group>"; };
 		86B6EC632F8D466100828DE0 /* GesturesGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GesturesGuideView.swift; sourceTree = "<group>"; };
 		86C4FD432F8C1A670086F12F /* DefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultButton.swift; sourceTree = "<group>"; };
 		86C4FD452F8C3F570086F12F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 				3743FC5427B1523A0043B2A2 /* KeyboardEnabledState.swift */,
 				37178AA22B4DE03500748DD0 /* Extensions.swift */,
 				863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */,
+				864948172F918AEE0002CAC0 /* Icon.icon */,
 			);
 			path = "Finale Keyboard";
 			sourceTree = "<group>";
@@ -488,6 +491,7 @@
 				37BCBE192B4E113900E6F82F /* russian-50000-n5-probabilities.json in Resources */,
 				37BCBE252B4E114600E6F82F /* english-30000-n4-probabilities.json in Resources */,
 				37BCBE212B4E114600E6F82F /* english-30000-n2-probabilities.json in Resources */,
+				864948182F918AEE0002CAC0 /* Icon.icon in Resources */,
 				37BCBE172B4E113900E6F82F /* russian-50000-n1-probabilities.json in Resources */,
 				37BCBE232B4E114600E6F82F /* english-30000-n3-probabilities.json in Resources */,
 				37BCBE1A2B4E113900E6F82F /* russian-50000-n4-probabilities.json in Resources */,
@@ -730,8 +734,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Icon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 48;
@@ -768,8 +773,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = Icon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 48;
