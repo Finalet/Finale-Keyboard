@@ -11,13 +11,9 @@ import SwiftUI
 struct OnboardingView: View {
     @Binding var finishedOnboarding: Bool
     
-    @StateObject private var keyboardState = KeyboardEnabledState(bundleId: "com.Grant151.Finale-Keyboard.Keyboard")
-    typealias Localize = Localization.HomeScreen
-    
-    @State var presentGesturesGuide = false
     @State var step: Int = 0
-    @State var typingField: String = ""
     
+    @StateObject private var keyboardState = KeyboardEnabledState(bundleId: "com.Grant151.Finale-Keyboard.Keyboard")
     var canContinue: Bool { step == 1 ? (keyboardState.isKeyboardEnabled && keyboardState.isFullAccessEnabled) : true  }
     
     @Environment(\.dismiss) private var dismiss
@@ -33,83 +29,13 @@ struct OnboardingView: View {
         NavigationStack {
             VStack (spacing: 32) {
                 if step == 0 {
-                    OnboardingBase(title: "Welcome to\nFinale Keyboard", description: "Gesture-based minimal keyboard.") {
-                        VStack (spacing: 32) {
-                            VStack (spacing: 16) {
-                                FeatureRow(iconName: "keyboard", title: "Gesture-based", description: "Better way of typing with intuitive swipe gestures.")
-                                FeatureRow(iconName: "brain", title: "Smart", description: "Learns your vocabulary, adjusts key sizes predicting your next word, and runs an effecient shortcuts system.")
-                                FeatureRow(iconName: "keyboard", title: "Minimal", description: "Takes up less space on your screen, so you can focus on what's actually important.")
-                            }
-                        }
-                    }
-                        .padding(.vertical, 32)
+                    WelcomeStep()
                 } else if step == 1 {
-                    OnboardingBase(
-                        title: "First, let's set things up",
-                        description: "Enable Finale Keyboard and give it full access.") {
-                            VStack(spacing: 32) {
-                                EnabledListItem(
-                                    isEnabled: keyboardState.isKeyboardEnabled,
-                                    enabledText: Localize.keyboardEnabledAlert,
-                                    disabledText: Localize.keyboardDisabledAlert)
-                                EnabledListItem(
-                                    isEnabled: keyboardState.isFullAccessEnabled,
-                                    enabledText: Localize.keyboardFullAccessEnabled,
-                                    disabledText: Localize.keyboardFullAccessDisabled)
-                                ListNavigationButton(action: OpenSettings) {
-                                    Label(Localize.systemSettingsRow, systemImage: "gearshape")
-                                }
-                            }
-                            .padding(16)
-                            .background(
-                                RoundedRectangle(cornerRadius: 16)
-                                    .fill(Color(uiColor: .secondarySystemBackground).shadow(.inner(color: .black.opacity(0.1), radius: 2)))
-                                    .stroke(Color(uiColor: .systemGray4), lineWidth: 1)
-                            )
-                        }
+                    SetupStep()
                 } else if step == 2 {
-                    OnboardingBase(
-                        title: "Let's practice gestures",
-                        description: "While you type characters as usual, all other actions, like typing spaces, deleting words, or autocorrections are done with gestures.") {
-                            VStack (spacing: 32) {
-                                VStack (spacing: 16) {
-                                    SwipeRow(direction: .right(), label: "Insert space or punctuations")
-                                    SwipeRow(direction: .vertical(), label: "Cycle suggestions")
-                                    SwipeRow(direction: .left(), label: "Delete word")
-                                    SwipeRow(direction: .left("on backspace"), label: "Use emoji")
-                                    Button(action: { presentGesturesGuide = true }) {
-                                        HStack {
-                                            Text("View all gestures")
-                                            Image(systemName: "chevron.right")
-                                                .scaleEffect(0.8)
-                                        }
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                    .foregroundStyle(.gray)
-                                    .font(.system(size: 14))
-                                }
-                                
-                                TextField("Try typing here", text: $typingField)
-                                    .multilineTextAlignment(.leading)
-                                    .padding(.vertical, 8)
-                                    .padding(.horizontal, 12)
-                                    .background(
-                                        RoundedRectangle(cornerRadius: 8)
-                                            .fill(Color(uiColor: .secondarySystemBackground).shadow(.inner(color: .black.opacity(0.1), radius: 2)))
-                                            .stroke(Color(uiColor: .systemGray4), lineWidth: 1)
-                                    )
-                            }
-                        }
+                    GesturesStep()
                 } else if step == 3 {
-                    OnboardingBase(title: "You are all set", description: "Gestures might take a few days getting used to, but, once they become second nature, you'll refuse to type without them.\n\nFinale Keyboard has much more to offer. Feel free to explore these festures once you settle down.") {
-                        VStack (spacing: 32) {
-                            VStack (spacing: 16) {
-                                FeatureRow(iconName: "keyboard", title: "Shortcuts", description: "Type emojis, dates, contacts, or anything else with quick shortcuts.")
-                                FeatureRow(iconName: "heart", title: "Favorite emoji", description: "Save your most used emojis under your fingertips.")
-                                FeatureRow(iconName: "keyboard", title: "Dynamic touch zones", description: "Type faster with keys that predict your next word.")
-                            }
-                        }
-                    }
+                    AllSetStep()
                 }
                 
                 DefaultButton(disabled: !canContinue, label: {
@@ -117,19 +43,6 @@ struct OnboardingView: View {
                 }) {
                     if step == 3 { Done() }
                     else { Next() }
-                }
-            }
-            .sheet(isPresented: $presentGesturesGuide) {
-                NavigationStack {
-                    GesturesGuideView()
-                        .toolbar {
-                            ToolbarItem(placement: .topBarTrailing, content: {
-                                Button(action: { presentGesturesGuide = false }) {
-                                    Image(systemName: "xmark")
-                                }
-                                .tint(.primary)
-                            })
-                        }
                 }
             }
             .simultaneousGesture(TapGesture().onEnded({
@@ -147,10 +60,124 @@ struct OnboardingView: View {
         }
         .interactiveDismissDisabled()
     }
+}
+
+struct WelcomeStep: View {
+    var body: some View {
+        OnboardingBase(title: "Welcome to\nFinale Keyboard", description: "Gesture-based minimal keyboard.") {
+            VStack (spacing: 32) {
+                VStack (spacing: 16) {
+                    FeatureRow(iconName: "hand.draw", title: "Gesture-based", description: "Better way of typing with intuitive swipe gestures.")
+                    FeatureRow(iconName: "keyboard", title: "Minimal", description: "Takes up less space on your screen, so you can focus on what's actually important.")
+                    FeatureRow(iconName: "sparkles", title: "Smart", description: "Learns your vocabulary, adjusts touch zones when predicting your next word, offers an effecient shortcuts system.")
+                }
+            }
+        }
+        .padding(.vertical, 32)
+    }
+}
+
+struct SetupStep: View {
+    
+    @StateObject private var keyboardState = KeyboardEnabledState(bundleId: "com.Grant151.Finale-Keyboard.Keyboard")
+    typealias Localize = Localization.HomeScreen
+    
+    var body: some View {
+        OnboardingBase(
+            title: "First, let's set things up",
+            description: "Enable Finale Keyboard and give it full access.") {
+                VStack(spacing: 32) {
+                    EnabledListItem(
+                        isEnabled: keyboardState.isKeyboardEnabled,
+                        enabledText: Localize.keyboardEnabledAlert,
+                        disabledText: Localize.keyboardDisabledAlert)
+                    EnabledListItem(
+                        isEnabled: keyboardState.isFullAccessEnabled,
+                        enabledText: Localize.keyboardFullAccessEnabled,
+                        disabledText: Localize.keyboardFullAccessDisabled)
+                    ListNavigationButton(action: OpenSettings) {
+                        Label(Localize.systemSettingsRow, systemImage: "gearshape")
+                    }
+                }
+                .padding(16)
+                .background(
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color(uiColor: .secondarySystemBackground).shadow(.inner(color: .black.opacity(0.1), radius: 2)))
+                        .stroke(Color(uiColor: .systemGray4), lineWidth: 1)
+                )
+            }
+    }
     
     func OpenSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+}
+
+struct GesturesStep: View {
+    @State var typingField: String = ""
+    @State var presentGesturesGuide = false
+    
+    var body: some View {
+        OnboardingBase(
+            title: "Let's practice gestures",
+            description: "While you type characters as usual, all other actions, like typing spaces, deleting words, or autocorrections are done with gestures.") {
+                VStack (spacing: 32) {
+                    VStack (spacing: 16) {
+                        SwipeRow(direction: .right(), label: "Insert space or punctuations")
+                        SwipeRow(direction: .vertical(), label: "Cycle suggestions")
+                        SwipeRow(direction: .left(), label: "Delete word")
+                        SwipeRow(direction: .left("on backspace"), label: "Use emoji")
+                        Button(action: { presentGesturesGuide = true }) {
+                            HStack {
+                                Text("View all gestures")
+                                Image(systemName: "chevron.right")
+                                    .scaleEffect(0.8)
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .foregroundStyle(.gray)
+                        .font(.system(size: 14))
+                    }
+                    
+                    TextField("Try typing here", text: $typingField)
+                        .multilineTextAlignment(.leading)
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 12)
+                        .background(
+                            RoundedRectangle(cornerRadius: 8)
+                                .fill(Color(uiColor: .secondarySystemBackground).shadow(.inner(color: .black.opacity(0.1), radius: 2)))
+                                .stroke(Color(uiColor: .systemGray4), lineWidth: 1)
+                        )
+                }
+            }
+            .sheet(isPresented: $presentGesturesGuide) {
+                NavigationStack {
+                    GesturesGuideView()
+                        .toolbar {
+                            ToolbarItem(placement: .topBarTrailing, content: {
+                                Button(action: { presentGesturesGuide = false }) {
+                                    Image(systemName: "xmark")
+                                }
+                                .tint(.primary)
+                            })
+                        }
+                }
+            }
+    }
+}
+
+struct AllSetStep: View {
+    var body: some View {
+        OnboardingBase(title: "You are all set", description: "Gestures might take a few days getting used to, but, once they become second nature, you'll refuse to type without them.\n\nFinale Keyboard has much more to offer. Feel free to explore these festures once you settle down.") {
+            VStack (spacing: 32) {
+                VStack (spacing: 16) {
+                    FeatureRow(iconName: "square.filled.on.square", title: "Shortcuts", description: "Type emojis, dates, contacts, or anything else with quick shortcuts.")
+                    FeatureRow(iconName: "heart", title: "Favorite emoji", description: "Save your most used emojis under your fingertips.")
+                    FeatureRow(iconName: "keyboard", title: "Dynamic touch zones", description: "Type faster with keys that predict your next word.")
+                }
+            }
+        }
     }
 }
 

@@ -39,7 +39,6 @@ struct ContentView: View {
                             Text(Localize.shortcutsRow)
                         }, icon: {
                             Image(systemName: "keyboard")
-                                .foregroundColor(.blue)
                         })
                     }
                     ListNavigationLink(destination: LanguagesView()) {
@@ -47,7 +46,6 @@ struct ContentView: View {
                             Text(Localize.languagesRow)
                         }, icon: {
                             Image(systemName: "globe")
-                                .foregroundColor(.blue)
                         })
                     }
                     ListNavigationLink(destination: DictionaryView()) {
@@ -55,7 +53,6 @@ struct ContentView: View {
                             Text(Localize.dictionaryRow)
                         }, icon: {
                             Image(systemName: "character.book.closed")
-                                .foregroundColor(.blue)
                         })
                     }
                     ListNavigationLink(destination: PreferencesView()) {
@@ -63,7 +60,6 @@ struct ContentView: View {
                             Text(Localize.preferencesRow)
                         }, icon: {
                             Image(systemName: "square.and.pencil")
-                                .foregroundColor(.blue)
                         })
                     }
                 }
@@ -86,7 +82,6 @@ struct ContentView: View {
                             Text(Localize.gesturesGuideRow)
                         }, icon: {
                             Image(systemName: "hand.draw")
-                                .foregroundColor(.blue)
                         })
                     }
                     ListNavigationButton(action: ContactDeveloper) {
