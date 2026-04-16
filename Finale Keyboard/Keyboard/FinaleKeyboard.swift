@@ -569,6 +569,7 @@ class FinaleKeyboard: UIInputViewController {
         self.textDocumentProxy.insertText(" ")
         ResetSuggestions()
         CheckAutoCapitalization()
+        ResetDynamicTouchZones()
     }
     func ReturnAction () {
         self.textDocumentProxy.insertText("\n")

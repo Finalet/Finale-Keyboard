@@ -28,8 +28,11 @@ class SpacebarButton: CharacterButton {
     }
     
     override func OnTapEnded(_ sender: UILongPressGestureRecognizer) {
-        if (!FinaleKeyboard.isSpacebarAutocorrectOn || didLongPress) {
+        if (didLongPress) {
             return super.OnTapEnded(sender)
+        }
+        if (!FinaleKeyboard.isSpacebarAutocorrectOn) {
+            return FinaleKeyboard.instance.SpacebarAction()
         }
 
         FinaleKeyboard.instance.SwipeRight()
