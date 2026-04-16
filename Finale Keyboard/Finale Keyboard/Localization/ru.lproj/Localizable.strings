@@ -407,6 +407,78 @@
 "preferences_spacebar_autocorrect" = "Автокоррекция пробелом";
 
 /* No comment provided by engineer. */
+"preferences_spacebar_purchase_alert_confirm_format" = "Мне нужно купить его за %1$@.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_alert_message" = "Зачем ты тратишь деньги впустую? Просто пойди и выучи свайпы, они гораздо лучше.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_alert_title" = "Приятно быть богатым?";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_body_format" = "Ооо, как мило..! Тебе нужен пробел? Хочешь нажимать кнопку, чтобы поставить пробел?\n\nЭй, все, смотрите! Этот крошечный тупой малыш не может печатать без своего пробела. Ну разве не прелесть?\n\nНе можешь освоить элементарные свайпы? Провести пальцем по экрану - это слишком сложно? Ах да, конечно, стоило догадаться, что у тебя не хватает координации рук и глаз для таких продвинутых движений! Эх ты, бедный ребенок. Бедный, тупой, медленный, бесполезный, идиотский, гребанный, блядь, ребенок.\n\nЛадно. Хорошо. Если тебе ПРЯМО ОЧЕНЬ нужен этот пробел - я тебе его дам. Я даже буду щедрым и дам тебе выбор.\n\nКак ты, возможно, заметил, мы живём в К-образной экономике. То есть разрыв между богатыми и бедными только растёт. Между классом инвесторов и вечным низшим классом.\n\nТак что статистически ты либо безумно богат и тебе не жалко выбрасывать деньги. Либо ты по уши в долгах, и азартные игры - твоя единственная надежда на финансовую стабильность.\n\nЯ дам варианты для обоих случаев.\n\nЕсли у тебя денег больше, чем мозгов (еще бы, ты же даже не можешь освоить свайп вправо), можешь просто купить Пробел за %1$@.\n\nА если ты беден без всякой надежды, можешь крутить колесо за %2$@ и получить %3$d%% шанс выиграть Пробел.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_button_subtitle_format" = "Куплю Пробел за %1$@.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_button_title" = "Я богатый и бесполезный.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_choice_prompt" = "Ну так, что же ты выберешь?";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_gamble_alert_confirm_format" = "Я зависим, кручу за %1$@.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_gamble_alert_message_format" = "Ты что, собрался открывать лутбокс в приложении клавиатуры?! Шанс всего %1$d%%, лучше иди учи свайпы. Потом еще спасибо скажешь.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_gamble_alert_title" = "Разве это хорошая жизнь?";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_gamble_button_subtitle_format" = "Крутану за %1$@.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_gamble_button_title" = "Я бедный, потому что люблю азартные игры.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_learn_gestures_subtitle" = "Я выучу жесты.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_learn_gestures_title" = "Извините.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_or" = "или";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_request_for_free_alert_confirm" = "Сделаю, как скажете, босс.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_request_for_free_alert_dismiss" = "Иди нахуй.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_request_for_free_alert_message" = "Ну ладно... если тебе и правда настолько лень учить жесты...\n\nНапиши мне на grant@finaletodo.com с самым жестким оскорблением в свой адрес. Если мне понравится, я посмотрю, что я смогу сделать.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_request_for_free_alert_title" = "Уф, ладно";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_request_for_free_email_subject" = "Пожалуйста, пожалуйста, пожалуйста, умоляю, Грант, дай мне пробел.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_request_for_free_title" = "Псс, иди сюда, котик. Все еще хочешь свой пробел бесплатно?";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_restore_purchases" = "Восстановить покупки";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_sorry_ill_be_better" = "Извините, я исправлюсь.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_title" = "Ой-ой, кому-то понадобился пробел?";
+
+/* No comment provided by engineer. */
 "preferences_typing_haptic" = "Тактильная отдача для клавиш";
 
 /* No comment provided by engineer. */

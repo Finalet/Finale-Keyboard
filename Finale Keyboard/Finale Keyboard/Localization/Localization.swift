@@ -136,6 +136,33 @@ struct Localization {
             static var cleanWordsOneUse = NSLocalizedString("preferences_advanced_clean_words_one_use", value: "Clean 1 use words", comment: "")
             static var cleanWordsTwoUse = NSLocalizedString("preferences_advanced_clean_words_two_use", value: "Clean 2 use words", comment: "")
         }
+
+        struct SpacebarPurchase {
+            static var title = NSLocalizedString("preferences_spacebar_purchase_title", value: "Uh oh, someone wants a spacebar?", comment: "")
+            static var bodyFormat = NSLocalizedString("preferences_spacebar_purchase_body_format", value: "Awwww, how cute..! You want a spacebar? You want to press a buttom to type a space?\n\nEveryone, look! This little tiny stupid todler can't type without their spacebar. Isn't that adorable?\n\nYou can't learn simple swipe gestures? Moving your finger across the screen is too hard? Aw, of course, I should've known you don't have the hand-eye coordination for such advanced locomotion! You poor baby. You poor, stupid, slow, useless, moronic fucking baby.\n\nFine. Okay. If you REALLY want your spacebar, I'll give it to you. I'll even be generous and give you a choice.\n\nAs you might have noticed, we live in a K-shaped economy. Meaning, there is a divergence between the rich and the poor. The investor-class and the permanent under-class.\n\nSo, statistically, you are either filthy rich and don't care to waste money. Or, you are drowning in dept with gambling being your only hope for financial stability.\n\nI'll give options for both.\n\nIf you have more money than brains (duh, you can't even be bothered to learn the swipe-right gesture), you can buy The Spacebar outright for %1$@.\n\nOr, if you are poor with no end in sight, you can spin the wheel for %2$@ and get a %3$d%% chance of winning The Spacebar.", comment: "")
+            static var choicePrompt = NSLocalizedString("preferences_spacebar_purchase_choice_prompt", value: "So, what will it be?", comment: "")
+            static var learnGesturesTitle = NSLocalizedString("preferences_spacebar_purchase_learn_gestures_title", value: "I am sorry", comment: "")
+            static var learnGesturesSubtitle = NSLocalizedString("preferences_spacebar_purchase_learn_gestures_subtitle", value: "I will learn gestures.", comment: "")
+            static var orDivider = NSLocalizedString("preferences_spacebar_purchase_or", value: "or", comment: "")
+            static var purchaseButtonTitle = NSLocalizedString("preferences_spacebar_purchase_button_title", value: "I'm rich and useless.", comment: "")
+            static var purchaseButtonSubtitleFormat = NSLocalizedString("preferences_spacebar_purchase_button_subtitle_format", value: "I'll buy it for %1$@.", comment: "")
+            static var purchaseAlertTitle = NSLocalizedString("preferences_spacebar_purchase_alert_title", value: "Does it feel good to be rich?", comment: "")
+            static var sorryIllBeBetter = NSLocalizedString("preferences_spacebar_purchase_sorry_ill_be_better", value: "Sorry, I'll be better.", comment: "")
+            static var purchaseAlertConfirmFormat = NSLocalizedString("preferences_spacebar_purchase_alert_confirm_format", value: "I need to buy it for %1$@.", comment: "")
+            static var purchaseAlertMessage = NSLocalizedString("preferences_spacebar_purchase_alert_message", value: "Why are you wasting your money? Just go learn the swipe gestures, they are much better.", comment: "")
+            static var gambleButtonTitle = NSLocalizedString("preferences_spacebar_purchase_gamble_button_title", value: "I'm poor because I gamble.", comment: "")
+            static var gambleButtonSubtitleFormat = NSLocalizedString("preferences_spacebar_purchase_gamble_button_subtitle_format", value: "I'll spin for %1$@.", comment: "")
+            static var gambleAlertTitle = NSLocalizedString("preferences_spacebar_purchase_gamble_alert_title", value: "Is this a good life?", comment: "")
+            static var gambleAlertConfirmFormat = NSLocalizedString("preferences_spacebar_purchase_gamble_alert_confirm_format", value: "I'm addicted, I'll spin for %1$@.", comment: "")
+            static var gambleAlertMessageFormat = NSLocalizedString("preferences_spacebar_purchase_gamble_alert_message_format", value: "Are you about to open lootboxes in a keyboard app?! Its only a %1$d%% chance, go learn the swipe gestures instead. You'll thank me later.", comment: "")
+            static var restorePurchases = NSLocalizedString("preferences_spacebar_purchase_restore_purchases", value: "Restore purchases", comment: "")
+            static var requestForFreeTitle = NSLocalizedString("preferences_spacebar_purchase_request_for_free_title", value: "Psss, come here, kitty. Still want your spacebar for free?", comment: "")
+            static var requestForFreeAlertTitle = NSLocalizedString("preferences_spacebar_purchase_request_for_free_alert_title", value: "Uuugh, fine", comment: "")
+            static var requestForFreeAlertConfirm = NSLocalizedString("preferences_spacebar_purchase_request_for_free_alert_confirm", value: "I'll do as you say, boss.", comment: "")
+            static var requestForFreeAlertDismiss = NSLocalizedString("preferences_spacebar_purchase_request_for_free_alert_dismiss", value: "Fuck you, man.", comment: "")
+            static var requestForFreeAlertMessage = NSLocalizedString("preferences_spacebar_purchase_request_for_free_alert_message", value: "I guess... if you really can't be bothered to learn gestures...\n\nEmail me at grant@finaletodo.com with the worst insult towards yourself. If I like it, I'll see what I can do.", comment: "")
+            static var requestForFreeEmailSubject = NSLocalizedString("preferences_spacebar_purchase_request_for_free_email_subject", value: "Please, please, please, I beg you, Grant, give me a spacebar.", comment: "")
+        }
     }
     
     struct GesturesGuideScreen {

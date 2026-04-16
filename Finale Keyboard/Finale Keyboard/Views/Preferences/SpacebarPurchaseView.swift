@@ -8,6 +8,8 @@
 import Foundation
 import SwiftUI
 
+private let SpacebarPurchaseLocalize = Localization.PreferencesScreen.SpacebarPurchase.self
+
 struct SpacebarPurchaseView: View {
     let onSpacebarActivated: () -> Void
     
@@ -25,7 +27,7 @@ struct SpacebarPurchaseView: View {
         ZStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 16) {
-                    Text("Uh oh, someone wants a spacebar?")
+                    Text(SpacebarPurchaseLocalize.title)
                         .font(.system(size: 28, weight: .bold))
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity)
@@ -36,11 +38,11 @@ struct SpacebarPurchaseView: View {
                     .padding(.vertical, 32)
                     .frame(maxWidth: .infinity)
                     
-                    Text("Awwww, how cute..! You want a spacebar? You want to press a buttom to type a space?\n\nEveryone, look! This little tiny stupid todler can't type without their spacebar. Isn't that adorable?\n\nYou can't learn simple swipe gestures? Moving your finger across the screen is too hard? Aw, of course, I should've known you don't have the hand-eye coordination for such advanced locomotion! You poor baby. You poor, stupid, slow, useless, moronic fucking baby.\n\nFine. Okay. If you REALLY want your spacebar, I'll give it to you. I'll even be generous and give you a choice.\n\nAs you might have noticed, we live in a K-shaped economy. Meaning, there is a divergence between the rich and the poor. The investor-class and the permanent under-class.\n\nSo, statistically, you are either filthy rich and don't care to waste money. Or, you are drowning in dept with gambling being your only hope for financial stability.\n\nI'll give options for both.\n\nIf you have more money than brains (duh, you can't even be bothered to learn the swipe-right gesture), you can buy The Spacebar outright for \(purchasePrice).\n\nOr, if you are poor with no end in sight, you can spin the wheel for \(gamblePrice) and get a \(Int(round(gambleWinProbability * 100)))% chance of winning The Spacebar.")
+                    Text(String(format: SpacebarPurchaseLocalize.bodyFormat, purchasePrice, gamblePrice, Int(round(gambleWinProbability * 100))))
                     
                     HStack {
                         Spacer()
-                        Text("So, what will it be?")
+                        Text(SpacebarPurchaseLocalize.choicePrompt)
                             .font(.system(size: 20, weight: .semibold))
                             .multilineTextAlignment(.center)
                         Spacer()
@@ -48,8 +50,8 @@ struct SpacebarPurchaseView: View {
                     .padding(.vertical, 16)
 
                     DefaultButton(label: {
-                        Text("I am sorry")
-                        Text("I will learn gestures.")
+                        Text(SpacebarPurchaseLocalize.learnGesturesTitle)
+                        Text(SpacebarPurchaseLocalize.learnGesturesSubtitle)
                             .opacity(0.6)
                             .font(.subheadline)
                     }) { dismiss() }
@@ -100,18 +102,22 @@ struct PurchaseSpacebarButton: View {
     
     var body: some View {
         DefaultButton(.outline, label: {
-            Text("I'm rich and useless.")
-            Text("I'll buy it for \(price).")
+            Text(SpacebarPurchaseLocalize.purchaseButtonTitle)
+            Text(String(format: SpacebarPurchaseLocalize.purchaseButtonSubtitleFormat, price))
                 .opacity(0.6)
                 .font(.subheadline)
         }) { purchaseAlertPresented = true  }
-        .alert("Does it feel good to be rich?", isPresented: $purchaseAlertPresented, actions: {
-            Button("Sorry, I'll be better.") {}
+        .alert(Text(SpacebarPurchaseLocalize.purchaseAlertTitle), isPresented: $purchaseAlertPresented, actions: {
+            Button(action: {}) {
+                Text(SpacebarPurchaseLocalize.sorryIllBeBetter)
+            }
             .keyboardShortcut(.defaultAction)
-            Button("I need to buy it for \(price).") { onContinue() }
+            Button(action: { onContinue() }) {
+                Text(String(format: SpacebarPurchaseLocalize.purchaseAlertConfirmFormat, price))
+            }
             .keyboardShortcut(.cancelAction)
         }, message: {
-            Text("Why are you wasting your money? Just go learn the swipe gestures, they are much better.")
+            Text(SpacebarPurchaseLocalize.purchaseAlertMessage)
         })
         .tint(nil)
     }
@@ -126,18 +132,22 @@ struct GambleSpacebarButton: View {
     
     var body: some View {
         DefaultButton(.outline, label: {
-            Text("I'm poor because I gamble.")
-            Text("I'll spin for \(price).")
+            Text(SpacebarPurchaseLocalize.gambleButtonTitle)
+            Text(String(format: SpacebarPurchaseLocalize.gambleButtonSubtitleFormat, price))
                 .opacity(0.6)
                 .font(.subheadline)
         }) { gambleAlertPresented = true }
-        .alert("Is this a good life?", isPresented: $gambleAlertPresented, actions: {
-            Button("Sorry, I'll be better.") {}
+        .alert(Text(SpacebarPurchaseLocalize.gambleAlertTitle), isPresented: $gambleAlertPresented, actions: {
+            Button(action: {}) {
+                Text(SpacebarPurchaseLocalize.sorryIllBeBetter)
+            }
                 .keyboardShortcut(.defaultAction)
-            Button("I'm addicted, I'll spin for \(price).") { onContinue() }
+            Button(action: { onContinue() }) {
+                Text(String(format: SpacebarPurchaseLocalize.gambleAlertConfirmFormat, price))
+            }
                 .keyboardShortcut(.cancelAction)
         }, message: {
-            Text("Are you about to gamble in an app? Its only a \(Int(round(winProbability * 100)))% chance, go learn the swipe gestures instead. You'll thank me later.")
+            Text(String(format: SpacebarPurchaseLocalize.gambleAlertMessageFormat, Int(round(winProbability * 100))))
         })
         .tint(nil)
     }
@@ -160,7 +170,7 @@ struct RestorePurchasesButton: View {
         }, label: {
             HStack {
                 if loading { ProgressView().tint(.gray).scaleEffect(0.75) }
-                Text("Restore purchases")
+                Text(SpacebarPurchaseLocalize.restorePurchases)
             }
         })
         .frame(maxWidth: .infinity)
@@ -179,19 +189,23 @@ struct RequestForFreeButton: View {
         Button(action: {
             forFreeAlertPresented = true
         }, label: {
-            Text("Psss, come here, kitty. Still want your spacebar for free?")
+            Text(SpacebarPurchaseLocalize.requestForFreeTitle)
                 .multilineTextAlignment(.center)
                 .foregroundStyle(Color(uiColor:.systemGray2))
                 .font(.footnote)
         })
         .frame(maxWidth: .infinity)
-        .alert("Uuugh, fine", isPresented: $forFreeAlertPresented, actions: {
-            Button("I'll do as you say, boss.") { EmailGrant() }
+        .alert(Text(SpacebarPurchaseLocalize.requestForFreeAlertTitle), isPresented: $forFreeAlertPresented, actions: {
+            Button(action: { EmailGrant() }) {
+                Text(SpacebarPurchaseLocalize.requestForFreeAlertConfirm)
+            }
                 .keyboardShortcut(.defaultAction)
-            Button("Fuck you, man.") { }
+            Button(action: {}) {
+                Text(SpacebarPurchaseLocalize.requestForFreeAlertDismiss)
+            }
                 .keyboardShortcut(.cancelAction)
         }, message: {
-            Text("I guess... if you really can't be bothered to learn gestures...\n\nEmail me at grant@finaletodo.com with the worst insult towards yourself. If I like it, I'll see what I can do.")
+            Text(SpacebarPurchaseLocalize.requestForFreeAlertMessage)
         })
         .tint(nil)
     }
@@ -201,7 +215,7 @@ struct RequestForFreeButton: View {
         components.scheme = "mailto"
         components.path = "grant@finaletodo.com"
         components.queryItems = [
-            URLQueryItem(name: "subject", value: "Please, please, please, I beg you, Grant, give me a spacebar."),
+            URLQueryItem(name: "subject", value: SpacebarPurchaseLocalize.requestForFreeEmailSubject),
         ]
 
         guard let emailURL = components.url else { return }
@@ -302,7 +316,7 @@ struct OptionsDivider: View {
                 .frame(height: 1)
                 .frame(maxWidth: .infinity)
                 .foregroundStyle(Color(uiColor: .systemGray3))
-            Text("or")
+            Text(SpacebarPurchaseLocalize.orDivider)
                 .foregroundStyle(.gray)
                 .font(.subheadline)
             Rectangle()
