@@ -2,7 +2,13 @@
 "actions_clear" = "Отчистить";
 
 /* No comment provided by engineer. */
+"actions_continue" = "Продолжить";
+
+/* No comment provided by engineer. */
 "actions_delete" = "Удалить";
+
+/* No comment provided by engineer. */
+"actions_done" = "Готово";
 
 /* No comment provided by engineer. */
 "actions_enable" = "Включить";
@@ -132,6 +138,75 @@
 
 /* No comment provided by engineer. */
 "ngram_writing_n_to_database" = "Запись %D-грамм…";
+
+/* No comment provided by engineer. */
+"onboarding_all_set_description" = "Чтобы привыкнуть к жестам, может понадобиться несколько дней, но когда они войдут в привычку, вы уже не захотите печатать без них.\n\nУ Finale Keyboard есть еще много возможностей, которые вы можете изучить, как только освоитесь в клавиатуре.";
+
+/* No comment provided by engineer. */
+"onboarding_all_set_dynamic_touch_zones_description" = "Печатайте быстрее с клавишами, которые предсказывают ваше следующее слово.";
+
+/* No comment provided by engineer. */
+"onboarding_all_set_favorite_emoji_description" = "Сохраните самые используемые эмодзи у себя под рукой.";
+
+/* No comment provided by engineer. */
+"onboarding_all_set_shortcuts_description" = "Печатайте эмодзи, даты, контакты и что угодно еще с помощью быстрых ярлыков.";
+
+/* No comment provided by engineer. */
+"onboarding_all_set_title" = "Все готово";
+
+/* No comment provided by engineer. */
+"onboarding_gestures_cycle_suggestions" = "Листать предложения";
+
+/* No comment provided by engineer. */
+"onboarding_gestures_delete_word" = "Удалить слово";
+
+/* No comment provided by engineer. */
+"onboarding_gestures_description" = "Буквы вводятся как обычно, а все остальные действия, например вставка пробелов, удаление слов и автокоррекция, выполняются жестами.";
+
+/* No comment provided by engineer. */
+"onboarding_gestures_insert_space_or_punctuations" = "Пробел или знак препинания";
+
+/* No comment provided by engineer. */
+"onboarding_gestures_title" = "Давайте попробуем жесты";
+
+/* No comment provided by engineer. */
+"onboarding_gestures_open_emojis" = "Открыть эмодзи";
+
+/* No comment provided by engineer. */
+"onboarding_gestures_view_all" = "Посмотреть все жесты";
+
+/* No comment provided by engineer. */
+"onboarding_get_started" = "Давайте начнем";
+
+/* No comment provided by engineer. */
+"onboarding_setup_description" = "Включите Finale Keyboard и дайте ей полный доступ.";
+
+/* No comment provided by engineer. */
+"onboarding_setup_title" = "Сначала давайте все настроим";
+
+/* No comment provided by engineer. */
+"onboarding_welcome_description" = "Минималистичная клавиатура основанная на жестах.";
+
+/* No comment provided by engineer. */
+"onboarding_welcome_gesture_based_description" = "Более удобный способ печатать с помощью интуитивных свайпов.";
+
+/* No comment provided by engineer. */
+"onboarding_welcome_gesture_based_title" = "Основана на жестах";
+
+/* No comment provided by engineer. */
+"onboarding_welcome_minimal_description" = "Занимает меньше места на экране, чтобы вы могли сосредоточиться на том, что действительно важно.";
+
+/* No comment provided by engineer. */
+"onboarding_welcome_minimal_title" = "Минималистичная";
+
+/* No comment provided by engineer. */
+"onboarding_welcome_smart_description" = "Запоминает ваш словарь, динамически подстраивает зоны касания для следующего слова и использует удобную систему ярлыков.";
+
+/* No comment provided by engineer. */
+"onboarding_welcome_smart_title" = "Умная";
+
+/* No comment provided by engineer. */
+"onboarding_welcome_title" = "Добро пожаловать в\nFinale Keyboard";
 
 /* No comment provided by engineer. */
 "preferences_advanced_clean_words_one_use" = "Удалить слова с 1 исп.";

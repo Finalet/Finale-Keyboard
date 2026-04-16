@@ -45,6 +45,8 @@ struct Localization {
         static var clear = NSLocalizedString("actions_clear", value: "Clear", comment: "")
         static var export = NSLocalizedString("actions_export", value: "Export", comment: "")
         static var Import = NSLocalizedString("actions_import", value: "Import", comment: "")
+        static var done = NSLocalizedString("actions_done", value: "Done", comment: "")
+        static var continueButton = NSLocalizedString("actions_continue", value: "Continue", comment: "")
     }
     
     struct Misc {
@@ -136,6 +138,49 @@ struct Localization {
     
     struct GesturesGuideScreen {
         static var inputFieldPlaceholder = HomeScreen.inputFieldPlaceholder
+    }
+
+    struct OnboardingScreen {
+        static var getStarted = NSLocalizedString("onboarding_get_started", value: "Let's get started", comment: "")
+
+        struct WelcomeStep {
+            static var title = NSLocalizedString("onboarding_welcome_title", value: "Welcome to\nFinale Keyboard", comment: "")
+            static var description = NSLocalizedString("onboarding_welcome_description", value: "Gesture-based minimal keyboard.", comment: "")
+
+            static var gestureBasedTitle = NSLocalizedString("onboarding_welcome_gesture_based_title", value: "Gesture-based", comment: "")
+            static var gestureBasedDescription = NSLocalizedString("onboarding_welcome_gesture_based_description", value: "Better way of typing with intuitive swipe gestures.", comment: "")
+
+            static var minimalTitle = NSLocalizedString("onboarding_welcome_minimal_title", value: "Minimal", comment: "")
+            static var minimalDescription = NSLocalizedString("onboarding_welcome_minimal_description", value: "Takes up less space on your screen, so you can focus on what's actually important.", comment: "")
+
+            static var smartTitle = NSLocalizedString("onboarding_welcome_smart_title", value: "Smart", comment: "")
+            static var smartDescription = NSLocalizedString("onboarding_welcome_smart_description", value: "Learns your vocabulary, dynamically adjusts touch zones for your next word, and includes an effecient shortcuts system.", comment: "")
+        }
+
+        struct SetupStep {
+            static var title = NSLocalizedString("onboarding_setup_title", value: "First, let's set things up", comment: "")
+            static var description = NSLocalizedString("onboarding_setup_description", value: "Enable Finale Keyboard and give it full access.", comment: "")
+        }
+
+        struct GesturesStep {
+            static var title = NSLocalizedString("onboarding_gestures_title", value: "Let's practice gestures", comment: "")
+            static var description = NSLocalizedString("onboarding_gestures_description", value: "While you type characters as usual, all other actions, like inserting spaces, deleting words, or autocorrections are done with gestures.", comment: "")
+
+            static var insertSpaceOrPunctuations = NSLocalizedString("onboarding_gestures_insert_space_or_punctuations", value: "Insert space or punctuations", comment: "")
+            static var cycleSuggestions = NSLocalizedString("onboarding_gestures_cycle_suggestions", value: "Cycle suggestions", comment: "")
+            static var deleteWord = NSLocalizedString("onboarding_gestures_delete_word", value: "Delete word", comment: "")
+            static var useEmoji = NSLocalizedString("onboarding_gestures_open_emojis", value: "Open emojis", comment: "")
+            static var viewAllGestures = NSLocalizedString("onboarding_gestures_view_all", value: "View all gestures", comment: "")
+        }
+
+        struct AllSetStep {
+            static var title = NSLocalizedString("onboarding_all_set_title", value: "You are all set", comment: "")
+            static var description = NSLocalizedString("onboarding_all_set_description", value: "Gestures might take a few days to get used to, but, once they become second nature, you'll refuse to type without them.\n\nFinale Keyboard has much more to offer. Feel free to explore these festures once you settle down.", comment: "")
+
+            static var shortcutsDescription = NSLocalizedString("onboarding_all_set_shortcuts_description", value: "Type emojis, dates, contacts, or anything else with quick shortcuts.", comment: "")
+            static var favoriteEmojiDescription = NSLocalizedString("onboarding_all_set_favorite_emoji_description", value: "Save your most used emojis under your fingertips.", comment: "")
+            static var dynamicTouchZonesDescription = NSLocalizedString("onboarding_all_set_dynamic_touch_zones_description", value: "Type faster with keys that predict your next word.", comment: "")
+        }
     }
     
 }
