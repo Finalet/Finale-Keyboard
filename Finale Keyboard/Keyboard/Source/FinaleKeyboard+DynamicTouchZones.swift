@@ -15,7 +15,7 @@ extension FinaleKeyboard {
         
         ResetDynamicTouchZones()
         
-        if let lastNSubstring = getStringBeforeCursor(length: maxNgram), let lastSubstring = lastNSubstring.split(separator: " ").last {
+        if let lastNSubstring = getStringBeforeCursor(length: maxNgram), !CharacterSet.whitespacesAndNewlines.contains(lastNSubstring.last?.unicodeScalars.first ?? " "), let lastSubstring = lastNSubstring.split(separator: " ").last {
             let lastString = String(lastSubstring).lowercased()
             if lastString.count < minNgram { return }
             
