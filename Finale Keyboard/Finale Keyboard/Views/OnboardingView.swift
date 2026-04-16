@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftUI
+import UIKit
 
 struct OnboardingView: View {
     let onDone: () -> Void
@@ -62,7 +63,7 @@ struct WelcomeStep: View {
     typealias Localize = Localization.OnboardingScreen.WelcomeStep
 
     var body: some View {
-        OnboardingBase(title: Localize.title, description: Localize.description) {
+        OnboardingBase(title: Localize.title, description: Localize.description, showAppIcon: true) {
             VStack (spacing: 32) {
                 VStack (spacing: 16) {
                     FeatureRow(iconName: "hand.draw", title: Localize.gestureBasedTitle, description: Localize.gestureBasedDescription)
@@ -227,18 +228,46 @@ struct FeatureRow: View {
 }
 
 struct OnboardingBase<Content>: View where Content : View {
+    
     let title: String
     let description: String
+    let showAppIcon: Bool
     let content: () -> Content
     
-    init(title: String, description: String, @ViewBuilder content: @escaping () -> Content) {
+    @Environment(\.colorScheme) private var colorScheme
+    var dark: Bool { return colorScheme == .dark }
+    
+    init(title: String, description: String, showAppIcon: Bool = false, @ViewBuilder content: @escaping () -> Content) {
         self.title = title
         self.description = description
+        self.showAppIcon = showAppIcon
         self.content = content
+    }
+    
+    private var appIconImage: UIImage? {
+        guard
+            let icons = Bundle.main.infoDictionary?["CFBundleIcons"] as? [String: Any],
+            let primaryIcon = icons["CFBundlePrimaryIcon"] as? [String: Any],
+            let iconFiles = primaryIcon["CFBundleIconFiles"] as? [String],
+            let iconFileName = iconFiles.last
+        else {
+            return nil
+        }
+        
+        return UIImage(named: iconFileName)
     }
     
     var body: some View {
         VStack (spacing: 32) {
+            if showAppIcon, let appIconImage {
+                Image(uiImage: appIconImage)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 88, height: 88)
+                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .shadow(color: Color.black.opacity(dark ? 1 : 0.25), radius: 12, y: 8)
+            }
+            
             Text(title)
                 .font(.system(size: 32, weight: .bold))
             
