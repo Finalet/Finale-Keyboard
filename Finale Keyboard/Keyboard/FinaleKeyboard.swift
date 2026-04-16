@@ -1152,7 +1152,7 @@ class FinaleKeyboard: UIInputViewController {
         let index = ((FinaleKeyboard.enabledLocales.firstIndex(of: FinaleKeyboard.currentLocale) ?? 0) + 1) % FinaleKeyboard.enabledLocales.count
         FinaleKeyboard.currentLocale = FinaleKeyboard.enabledLocales[index]
         
-        BuildKeyboardView(viewType: .Characters, updateViewType: false)
+        BuildKeyboardView(viewType: .Characters, updateViewType: FinaleKeyboard.currentViewType != .SearchEmoji)
         ResetSuggestions()
         
         UserDefaults.standard.set(FinaleKeyboard.currentLocale.rawValue, forKey: "FINALE_DEV_APP_CurrentLocale")
