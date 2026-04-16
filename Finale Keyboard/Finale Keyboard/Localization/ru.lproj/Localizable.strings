@@ -107,6 +107,102 @@
 "home_system_settings_row" = "Системные настройки";
 
 /* No comment provided by engineer. */
+"gestures_guide_change_language" = "Сменить язык";
+
+/* No comment provided by engineer. */
+"gestures_guide_continously_type_character" = "Непрерывно печатать символ";
+
+/* No comment provided by engineer. */
+"gestures_guide_cycle_through_suggestions" = "Листать предложения";
+
+/* No comment provided by engineer. */
+"gestures_guide_delete_a_word" = "Удалить слово";
+
+/* No comment provided by engineer. */
+"gestures_guide_gesture_explanation_format" = "%@, чтобы %@";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_after_space" = "после пробела";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_and_hold" = "с удержанием";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_and_slide_anywhere" = "и вести в любую сторону";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_backspace_quoted" = "'backspace'";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_hold" = "зажать";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_on_backspace" = "на backspace";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_on_backspace_quoted" = "на 'backspace'";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_on_shift" = "на 'shift'";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_on_shortcut_key" = "на клавише с ярлыком";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_shift_quoted" = "'shift'";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_swipe_down" = "свайп вниз";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_swipe_left" = "свайп влево";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_swipe_right" = "свайп вправо";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_swipe_up" = "свайп вверх";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_swipe_up_or_down" = "свайп вверх или вниз";
+
+/* No comment provided by engineer. */
+"gestures_guide_insert_punctuation" = "Поставить знак препинания";
+
+/* No comment provided by engineer. */
+"gestures_guide_insert_space_and_autocorrect_word" = "Поставить пробел и исправить слово";
+
+/* No comment provided by engineer. */
+"gestures_guide_learn_new_word" = "Выучить новое слово";
+
+/* No comment provided by engineer. */
+"gestures_guide_move_cursor" = "Переместить курсор";
+
+/* No comment provided by engineer. */
+"gestures_guide_open_emojis" = "Открыть эмодзи";
+
+/* No comment provided by engineer. */
+"gestures_guide_peak_shortcuts" = "Показать ярлыки";
+
+/* No comment provided by engineer. */
+"gestures_guide_return" = "Перейти на новую строку";
+
+/* No comment provided by engineer. */
+"gestures_guide_section_essential" = "Основное";
+
+/* No comment provided by engineer. */
+"gestures_guide_section_miscellaneous" = "Дополнительно";
+
+/* No comment provided by engineer. */
+"gestures_guide_toggle_autocorrect" = "Включить / выключить автокоррекцию";
+
+/* No comment provided by engineer. */
+"gestures_guide_toggle_symbols" = "Переключиться на символы";
+
+/* No comment provided by engineer. */
+"gestures_guide_use_a_shortcut" = "Использовать ярлык";
+
+/* No comment provided by engineer. */
 "languages_english" = "Английский";
 
 /* No comment provided by engineer. */

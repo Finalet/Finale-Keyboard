@@ -137,7 +137,51 @@ struct Localization {
     }
     
     struct GesturesGuideScreen {
+        static var title = HomeScreen.gesturesGuideRow
         static var inputFieldPlaceholder = HomeScreen.inputFieldPlaceholder
+        static var gestureExplanationFormat = NSLocalizedString("gestures_guide_gesture_explanation_format", value: "%@ to %@", comment: "")
+
+        struct Sections {
+            static var essential = NSLocalizedString("gestures_guide_section_essential", value: "Essential", comment: "")
+            static var shortcuts = Shortcuts.title
+            static var miscellaneous = NSLocalizedString("gestures_guide_section_miscellaneous", value: "Miscellaneous", comment: "")
+        }
+
+        struct Gestures {
+            static var insertSpaceAndAutocorrectWord = NSLocalizedString("gestures_guide_insert_space_and_autocorrect_word", value: "Insert space and autocorrect word", comment: "")
+            static var insertPunctuation = NSLocalizedString("gestures_guide_insert_punctuation", value: "Insert punctuation", comment: "")
+            static var cycleThroughSuggestions = NSLocalizedString("gestures_guide_cycle_through_suggestions", value: "Cycle through suggestions", comment: "")
+            static var deleteAWord = NSLocalizedString("gestures_guide_delete_a_word", value: "Delete a word", comment: "")
+            static var toggleSymbols = NSLocalizedString("gestures_guide_toggle_symbols", value: "Toggle symbols", comment: "")
+            static var openEmojis = NSLocalizedString("gestures_guide_open_emojis", value: "Open emojis", comment: "")
+            static var Return = NSLocalizedString("gestures_guide_return", value: "Return", comment: "")
+            static var useAShortcut = NSLocalizedString("gestures_guide_use_a_shortcut", value: "Use a shortcut", comment: "")
+            static var peakShortcuts = NSLocalizedString("gestures_guide_peak_shortcuts", value: "Peak shortcuts", comment: "")
+            static var changeLanguage = NSLocalizedString("gestures_guide_change_language", value: "Change language", comment: "")
+            static var learnNewWord = NSLocalizedString("gestures_guide_learn_new_word", value: "Learn new word", comment: "")
+            static var toggleAutocorrect = NSLocalizedString("gestures_guide_toggle_autocorrect", value: "Toggle autocorrect", comment: "")
+            static var moveCursor = NSLocalizedString("gestures_guide_move_cursor", value: "Move cursor", comment: "")
+            static var continouslyTypeCharacter = NSLocalizedString("gestures_guide_continously_type_character", value: "Continously type character", comment: "")
+        }
+
+        struct Directions {
+            static var swipeUp = NSLocalizedString("gestures_guide_direction_swipe_up", value: "swipe up", comment: "")
+            static var swipeRight = NSLocalizedString("gestures_guide_direction_swipe_right", value: "swipe right", comment: "")
+            static var swipeDown = NSLocalizedString("gestures_guide_direction_swipe_down", value: "swipe down", comment: "")
+            static var swipeLeft = NSLocalizedString("gestures_guide_direction_swipe_left", value: "swipe left", comment: "")
+            static var swipeUpOrDown = NSLocalizedString("gestures_guide_direction_swipe_up_or_down", value: "swipe up or down", comment: "")
+            static var hold = NSLocalizedString("gestures_guide_direction_hold", value: "hold", comment: "")
+
+            static var afterSpace = NSLocalizedString("gestures_guide_direction_after_space", value: "after space", comment: "")
+            static var onBackspaceQuoted = NSLocalizedString("gestures_guide_direction_on_backspace_quoted", value: "on 'backspace'", comment: "")
+            static var onBackspace = NSLocalizedString("gestures_guide_direction_on_backspace", value: "on backspace", comment: "")
+            static var onShortcutKey = NSLocalizedString("gestures_guide_direction_on_shortcut_key", value: "on shortcut key", comment: "")
+            static var backspaceQuoted = NSLocalizedString("gestures_guide_direction_backspace_quoted", value: "'backspace'", comment: "")
+            static var onShift = NSLocalizedString("gestures_guide_direction_on_shift", value: "on 'shift'", comment: "")
+            static var shiftQuoted = NSLocalizedString("gestures_guide_direction_shift_quoted", value: "'shift'", comment: "")
+            static var andSlideAnywhere = NSLocalizedString("gestures_guide_direction_and_slide_anywhere", value: "and slide anywhere", comment: "")
+            static var andHold = NSLocalizedString("gestures_guide_direction_and_hold", value: "and hold", comment: "")
+        }
     }
 
     struct OnboardingScreen {

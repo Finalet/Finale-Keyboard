@@ -8,31 +8,34 @@
 import Foundation
 import SwiftUI
 
+private let GestureLocalize = Localization.GesturesGuideScreen.Gestures.self
+private let DirectionLocalize = Localization.GesturesGuideScreen.Directions.self
+
 private let allGestures: [GestureGroup] = [
-    GestureGroup(name: "Essential", gestures: [
-        GestureExplanation("Insert space and autocorrect word", .right(), "insert-space"),
-        GestureExplanation("Insert punctuation", .right("after space"), "insert-punctuation"),
-        GestureExplanation("Cycle through suggestions", .vertical(), "cycle-suggestions"),
-        GestureExplanation("Delete a word", .left(), "delete-word"),
-        GestureExplanation("Toggle symbols", .right("on 'shift'"), "toggle-symbols"),
-        GestureExplanation("Open emojis", .left("on 'backspace'"), "open-emojis"),
-        GestureExplanation("Return", .up("on 'backspace'"), "return"),
+    GestureGroup(name: Localization.GesturesGuideScreen.Sections.essential, gestures: [
+        GestureExplanation(GestureLocalize.insertSpaceAndAutocorrectWord, .right(), "insert-space"),
+        GestureExplanation(GestureLocalize.insertPunctuation, .right(DirectionLocalize.afterSpace), "insert-punctuation"),
+        GestureExplanation(GestureLocalize.cycleThroughSuggestions, .vertical(), "cycle-suggestions"),
+        GestureExplanation(GestureLocalize.deleteAWord, .left(), "delete-word"),
+        GestureExplanation(GestureLocalize.toggleSymbols, .right(DirectionLocalize.onShift), "toggle-symbols"),
+        GestureExplanation(GestureLocalize.openEmojis, .left(DirectionLocalize.onBackspaceQuoted), "open-emojis"),
+        GestureExplanation(GestureLocalize.Return, .up(DirectionLocalize.onBackspaceQuoted), "return"),
     ]),
-    GestureGroup(name: "Shortcuts", gestures: [
-        GestureExplanation("Use a shortcut", .down("on shortcut key"), "use-shortcut"),
-        GestureExplanation("Peak shortcuts", .hold("'backspace'"), "peak-shortcuts"),
+    GestureGroup(name: Localization.GesturesGuideScreen.Sections.shortcuts, gestures: [
+        GestureExplanation(GestureLocalize.useAShortcut, .down(DirectionLocalize.onShortcutKey), "use-shortcut"),
+        GestureExplanation(GestureLocalize.peakShortcuts, .hold(DirectionLocalize.backspaceQuoted), "peak-shortcuts"),
     ]),
-    GestureGroup(name: "Miscellaneous", gestures: [
-        GestureExplanation("Change language", .up("on shift"), "change-language"),
-        GestureExplanation("Learn new word", .up(), "learn-word"),
-        GestureExplanation("Toggle autocorrect", .hold("'shift'"), "toggle-autocorrect"),
-        GestureExplanation("Move cursor", .hold("and slide anywhere"), "move-cursor"),
-        GestureExplanation("Continously type character", .up("and hold"), "continuesly-type"),
+    GestureGroup(name: Localization.GesturesGuideScreen.Sections.miscellaneous, gestures: [
+        GestureExplanation(GestureLocalize.changeLanguage, .up(DirectionLocalize.onShift), "change-language"),
+        GestureExplanation(GestureLocalize.learnNewWord, .up(), "learn-word"),
+        GestureExplanation(GestureLocalize.toggleAutocorrect, .hold(DirectionLocalize.shiftQuoted), "toggle-autocorrect"),
+        GestureExplanation(GestureLocalize.moveCursor, .hold(DirectionLocalize.andSlideAnywhere), "move-cursor"),
+        GestureExplanation(GestureLocalize.continouslyTypeCharacter, .up(DirectionLocalize.andHold), "continuesly-type"),
     ])
 ]
 
 struct GesturesGuideView: View {
-    typealias Localize = Localization.HomeScreen
+    typealias Localize = Localization.GesturesGuideScreen
         
     var body: some View {
         List {
@@ -46,7 +49,7 @@ struct GesturesGuideView: View {
                 }
             }
         }
-        .navigationTitle(Localize.gesturesGuideRow)
+        .navigationTitle(Localize.title)
         .toolbar {
             ToolbarInputField()
         }
@@ -114,7 +117,7 @@ struct GesturesDetailedView: View {
     var gestures: [GestureExplanation] { allGestures.flatMap(\.gestures) }
     var currentGesture: GestureExplanation { gestures[index] }
     
-    typealias Localize = Localization.HomeScreen
+    typealias Localize = Localization.GesturesGuideScreen
     
     var body: some View {
         VStack {
@@ -127,7 +130,7 @@ struct GesturesDetailedView: View {
                                 .aspectRatio(1, contentMode: .fit)
                                 .tag(i)
                             
-                            Text("\(currentGesture.swipeGesture.label.firstUppercased) to \(currentGesture.gestureActionLabel.lowercased())")
+                            Text(String(format: Localize.gestureExplanationFormat, currentGesture.swipeGesture.label.firstUppercased, currentGesture.gestureActionLabel.lowercased()))
                                 .multilineTextAlignment(.center)
                                 .fontWeight(.semibold)
                                 .font(.title2)
@@ -204,12 +207,12 @@ enum SwipeDirection {
     
     var label: String {
         switch (self) {
-            case .up(let label): return "swipe up\(!label.isEmpty ? " \(label)" : "")"
-            case .right(let label): return "swipe right\(!label.isEmpty ? " \(label)" : "")"
-            case .down(let label): return "swipe down\(!label.isEmpty ? " \(label)" : "")"
-            case .left(let label): return "swipe left\(!label.isEmpty ? " \(label)" : "")"
-            case .vertical(let label): return "swipe up or down\(!label.isEmpty ? " \(label)" : "")"
-            case .hold(let label): return "hold\(!label.isEmpty ? " \(label)" : "")"
+            case .up(let label): return "\(DirectionLocalize.swipeUp)\(!label.isEmpty ? " \(label)" : "")"
+            case .right(let label): return "\(DirectionLocalize.swipeRight)\(!label.isEmpty ? " \(label)" : "")"
+            case .down(let label): return "\(DirectionLocalize.swipeDown)\(!label.isEmpty ? " \(label)" : "")"
+            case .left(let label): return "\(DirectionLocalize.swipeLeft)\(!label.isEmpty ? " \(label)" : "")"
+            case .vertical(let label): return "\(DirectionLocalize.swipeUpOrDown)\(!label.isEmpty ? " \(label)" : "")"
+            case .hold(let label): return "\(DirectionLocalize.hold)\(!label.isEmpty ? " \(label)" : "")"
         }
     }
 }
