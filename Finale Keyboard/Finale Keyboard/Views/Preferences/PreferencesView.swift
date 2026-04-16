@@ -51,13 +51,25 @@ struct PreferencesView: View {
             }
             Section {
                 ListNavigationLink(destination: DynamicTouchZonesView()) {
-                    Text(Localize.DynamicTouchZones.pageTitle)
+                    Label(title: {
+                        Text(Localize.DynamicTouchZones.pageTitle)
+                    }, icon: {
+                        Image(systemName: "rectangle.and.hand.point.up.left")
+                    })
                 }
                 ListNavigationLink(destination: PunctuationView()) {
-                    Text(Localize.Punctuation.pageTitle)
+                    Label(title: {
+                        Text(Localize.Punctuation.pageTitle)
+                    }, icon: {
+                        Image(systemName: "exclamationmark.questionmark")
+                    })
                 }
                 ListNavigationLink(destination: AdvancedView()) {
-                    Text(Localize.Advanced.pageTitle)
+                    Label(title: {
+                        Text(Localize.Advanced.pageTitle)
+                    }, icon: {
+                        Image(systemName: "gearshape.2")
+                    })
                 }
             }
         }
@@ -139,4 +151,8 @@ struct UserDefault<Value> {
             self.store?.setValue(newValue, forKey: key)
         }
     }
+}
+
+#Preview {
+    PreferencesView()
 }

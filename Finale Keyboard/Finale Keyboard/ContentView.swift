@@ -10,7 +10,7 @@ import Keyboard
 
 struct ContentView: View {
     @UserDefaultState("FINALE_DEV_APP_finishedOnboarding", false) var finishedOnboarding: Bool
-    @State var showOnboarding = true
+    @State var showOnboarding = false
     
     @StateObject private var iapManager = InAppPurchasesManager()
     @StateObject private var keyboardState = KeyboardEnabledState(bundleId: "com.Grant151.Finale-Keyboard.Keyboard")
@@ -63,6 +63,15 @@ struct ContentView: View {
                         })
                     }
                 }
+                Section(header: Text(Localize.helpTitle)){
+                    ListNavigationLink(destination: GesturesGuideView()) {
+                        Label(title: {
+                            Text(Localize.gesturesGuideRow)
+                        }, icon: {
+                            Image(systemName: "hand.draw")
+                        })
+                    }
+                }
                 Section(header: Text(Localize.setupTitle), footer: Text(Localize.setupFooter)) {
                     EnabledListItem(
                         isEnabled: keyboardState.isKeyboardEnabled,
@@ -72,20 +81,18 @@ struct ContentView: View {
                         isEnabled: keyboardState.isFullAccessEnabled,
                         enabledText: Localize.keyboardFullAccessEnabled,
                         disabledText: Localize.keyboardFullAccessDisabled)
-                    ListNavigationButton(action: OpenSettings) {
-                        Label(Localize.systemSettingsRow, systemImage: "gearshape")
+                    if !keyboardState.isKeyboardEnabled || !keyboardState.isFullAccessEnabled {
+                        ListNavigationButton(action: OpenSettings) {
+                            Label(Localize.systemSettingsRow, systemImage: "gearshape")
+                        }
                     }
                 }
-                Section(header: Text(Localize.helpTitle)){
-                    ListNavigationLink(destination: GesturesGuideView()) {
-                        Label(title: {
-                            Text(Localize.gesturesGuideRow)
-                        }, icon: {
-                            Image(systemName: "hand.draw")
-                        })
+                Section(header: Text("Developer")) {
+                    ListNavigationButton(action: OpenTwitter) {
+                        Label("Profile", systemImage: "person")
                     }
                     ListNavigationButton(action: ContactDeveloper) {
-                        Label(Localize.contactDeveloperRow, systemImage: "message")
+                        Label("Message me", systemImage: "message")
                     }
                     ListNavigationLink(destination: MoreView()) {
                         Label(Localize.moreRow, systemImage: "ellipsis.circle")
@@ -93,14 +100,14 @@ struct ContentView: View {
                 }
             }
             .navigationTitle("Finale Keyboard")
-            .onAppear(perform: UIApplication.shared.addTapAnywhereToDismissKeyboard)
-            .sheet(isPresented: $showOnboarding) { OnboardingView(finishedOnboarding: $finishedOnboarding) }
         }
-        .onAppear { if !finishedOnboarding { showOnboarding = true } }
         .tint(.brand)
         .environmentObject(keyboardState)
         .environmentObject(iapManager)
         .navigationViewStyle(StackNavigationViewStyle())
+        .onAppear(perform: UIApplication.shared.addTapAnywhereToDismissKeyboard)
+//        .onAppear { if !finishedOnboarding { showOnboarding = true } }
+        .sheet(isPresented: $showOnboarding) { OnboardingView(onDone: { finishedOnboarding = true; showOnboarding = false }) }
     }
     
     func OpenSettings() {
@@ -108,10 +115,11 @@ struct ContentView: View {
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
     }
     
+    func OpenTwitter() {
+        if let url = URL(string: "https://twitter.com/grantogany") { UIApplication.shared.open(url) }
+    }
     func ContactDeveloper() {
-        if let url = URL(string: "https://twitter.com/grantogany") {
-            UIApplication.shared.open(url)
-        }
+        if let url = URL(string: "mailto:grant@finaletodo.com") { UIApplication.shared.open(url) }
     }
 }
 
@@ -220,4 +228,8 @@ public struct ListNavigationLink<Content: View, Destination: View>: View {
             ListItem(content: content)
         }
     }
+}
+
+#Preview {
+    ContentView()
 }

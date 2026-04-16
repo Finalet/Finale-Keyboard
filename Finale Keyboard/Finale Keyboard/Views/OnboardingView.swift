@@ -9,21 +9,16 @@ import Foundation
 import SwiftUI
 
 struct OnboardingView: View {
-    @Binding var finishedOnboarding: Bool
+    let onDone: () -> Void
     
     @State var step: Int = 0
     
     @StateObject private var keyboardState = KeyboardEnabledState(bundleId: "com.Grant151.Finale-Keyboard.Keyboard")
     var canContinue: Bool { step == 1 ? (keyboardState.isKeyboardEnabled && keyboardState.isFullAccessEnabled) : true  }
     
-    @Environment(\.dismiss) private var dismiss
-    
     func Next() { withAnimation { step += 1 } }
     func Back() { withAnimation { step -= 1 } }
-    func Done() {
-        finishedOnboarding = true
-        dismiss()
-    }
+    func Done() { onDone() }
     
     var body: some View {
         NavigationStack {
@@ -69,7 +64,7 @@ struct WelcomeStep: View {
                 VStack (spacing: 16) {
                     FeatureRow(iconName: "hand.draw", title: "Gesture-based", description: "Better way of typing with intuitive swipe gestures.")
                     FeatureRow(iconName: "keyboard", title: "Minimal", description: "Takes up less space on your screen, so you can focus on what's actually important.")
-                    FeatureRow(iconName: "sparkles", title: "Smart", description: "Learns your vocabulary, adjusts touch zones when predicting your next word, offers an effecient shortcuts system.")
+                    FeatureRow(iconName: "sparkles", title: "Smart", description: "Learns your vocabulary, dynamically adjusts touch zones for your next word, and includes an effecient shortcuts system.")
                 }
             }
         }
@@ -95,8 +90,10 @@ struct SetupStep: View {
                         isEnabled: keyboardState.isFullAccessEnabled,
                         enabledText: Localize.keyboardFullAccessEnabled,
                         disabledText: Localize.keyboardFullAccessDisabled)
-                    ListNavigationButton(action: OpenSettings) {
-                        Label(Localize.systemSettingsRow, systemImage: "gearshape")
+                    if !keyboardState.isKeyboardEnabled || !keyboardState.isFullAccessEnabled {
+                        ListNavigationButton(action: OpenSettings) {
+                            Label(Localize.systemSettingsRow, systemImage: "gearshape")
+                        }
                     }
                 }
                 .padding(16)
@@ -121,7 +118,7 @@ struct GesturesStep: View {
     var body: some View {
         OnboardingBase(
             title: "Let's practice gestures",
-            description: "While you type characters as usual, all other actions, like typing spaces, deleting words, or autocorrections are done with gestures.") {
+            description: "While you type characters as usual, all other actions, like inserting spaces, deleting words, or autocorrections are done with gestures.") {
                 VStack (spacing: 32) {
                     VStack (spacing: 16) {
                         SwipeRow(direction: .right(), label: "Insert space or punctuations")
@@ -169,7 +166,7 @@ struct GesturesStep: View {
 
 struct AllSetStep: View {
     var body: some View {
-        OnboardingBase(title: "You are all set", description: "Gestures might take a few days getting used to, but, once they become second nature, you'll refuse to type without them.\n\nFinale Keyboard has much more to offer. Feel free to explore these festures once you settle down.") {
+        OnboardingBase(title: "You are all set", description: "Gestures might take a few days to get used to, but, once they become second nature, you'll refuse to type without them.\n\nFinale Keyboard has much more to offer. Feel free to explore these festures once you settle down.") {
             VStack (spacing: 32) {
                 VStack (spacing: 16) {
                     FeatureRow(iconName: "square.filled.on.square", title: "Shortcuts", description: "Type emojis, dates, contacts, or anything else with quick shortcuts.")
@@ -253,5 +250,5 @@ struct OnboardingBase<Content>: View where Content : View {
 
 
 #Preview {
-    OnboardingView(finishedOnboarding: Binding.constant(false))
+    OnboardingView(onDone: {})
 }

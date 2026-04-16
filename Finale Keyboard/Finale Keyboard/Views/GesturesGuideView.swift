@@ -99,8 +99,8 @@ struct SwipeGestureView: View {
                 ZStack {
                     RoundedRectangle(cornerRadius: 6)
                         .fill(Color.brand.mix(with: dark ? Color.black : Color.white, by: dark ? 0.7 : 0.8))
-                        .stroke(Color.brand.mix(with: dark ? Color.black : Color.white, by: 0.5), lineWidth: 1)
-                        .shadow(color: Color.brand.opacity(0.2), radius: 2, y: 1)
+                        .stroke(Color.brand.mix(with: dark ? Color.black : Color.white, by: dark ? 0.5 : 0.6), lineWidth: 1)
+                        .shadow(color: Color.brand.opacity(0.2), radius: dark ? 1 : 2, y: 1)
                 }
             )
             .foregroundStyle(Color.brand)
