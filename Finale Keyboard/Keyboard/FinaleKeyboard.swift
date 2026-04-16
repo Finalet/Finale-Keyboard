@@ -601,7 +601,7 @@ class FinaleKeyboard: UIInputViewController {
         } else {
             if ((context?.count ?? 0) < 2) {
                 ResetSuggestionsLabels()
-                SwipeSpacebar()
+                SwipeRightSpacebar()
                 canEditPrevPunctuation = false
                 return
             }
@@ -665,6 +665,11 @@ class FinaleKeyboard: UIInputViewController {
         EditPreviousWord(upOrDown: 1)
     }
     
+    func SwipeRightSpacebar () {
+        pickedSuggestionIndex = 0
+        InsertPunctuation(index: pickedSuggestionIndex)
+    }
+    
     func UseUserDictionary () {
         let x = getCorrectSuggestionArrayIndex()
         if x < 0 { return }
@@ -690,11 +695,6 @@ class FinaleKeyboard: UIInputViewController {
         }
         SaveUserDictionary()
         if showNotification { ShowNotification(text: "Forgot \"" + word + "\"") }
-    }
-    
-    func SwipeSpacebar () {
-        pickedSuggestionIndex = 0
-        InsertPunctuation(index: pickedSuggestionIndex)
     }
     
     func GenerateAutocorrections() {
