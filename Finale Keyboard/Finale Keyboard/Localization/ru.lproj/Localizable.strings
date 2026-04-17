@@ -2,7 +2,13 @@
 "actions_clear" = "Отчистить";
 
 /* No comment provided by engineer. */
+"actions_continue" = "Продолжить";
+
+/* No comment provided by engineer. */
 "actions_delete" = "Удалить";
+
+/* No comment provided by engineer. */
+"actions_done" = "Готово";
 
 /* No comment provided by engineer. */
 "actions_enable" = "Включить";
@@ -38,6 +44,9 @@
 "home_contact_developer_row" = "Связаться с разработчиком";
 
 /* No comment provided by engineer. */
+"home_developer_title" = "Разработчик";
+
+/* No comment provided by engineer. */
 "home_dictionary_row" = "Словарь";
 
 /* No comment provided by engineer. */
@@ -54,6 +63,9 @@
 
 /* Short invitation to try the keyboard */
 "home_input_field_title" = "Попробуйте";
+
+/* No comment provided by engineer. */
+"home_message_me_row" = "Написать мне";
 
 /* No comment provided by engineer. */
 "home_keyboard_disabled_row" = "Клавиатура отключена";
@@ -80,6 +92,9 @@
 "home_preferences_title" = "Настройки";
 
 /* No comment provided by engineer. */
+"home_profile_row" = "Профиль";
+
+/* No comment provided by engineer. */
 "home_setup_footer" = "Включите Finale Keyboard в системных настройках, а потом переключитесь на нее с помощью 🌐.";
 
 /* No comment provided by engineer. */
@@ -90,6 +105,102 @@
 
 /* No comment provided by engineer. */
 "home_system_settings_row" = "Системные настройки";
+
+/* No comment provided by engineer. */
+"gestures_guide_change_language" = "Сменить язык";
+
+/* No comment provided by engineer. */
+"gestures_guide_continously_type_character" = "Непрерывно печатать символ";
+
+/* No comment provided by engineer. */
+"gestures_guide_cycle_through_suggestions" = "Листать предложения";
+
+/* No comment provided by engineer. */
+"gestures_guide_delete_a_word" = "Удалить слово";
+
+/* No comment provided by engineer. */
+"gestures_guide_gesture_explanation_format" = "%@, чтобы %@";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_after_space" = "после пробела";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_and_hold" = "с удержанием";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_and_slide_anywhere" = "и вести в любую сторону";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_backspace_quoted" = "'backspace'";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_hold" = "зажать";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_on_backspace" = "на backspace";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_on_backspace_quoted" = "на 'backspace'";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_on_shift" = "на 'shift'";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_on_shortcut_key" = "на клавише с ярлыком";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_shift_quoted" = "'shift'";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_swipe_down" = "свайп вниз";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_swipe_left" = "свайп влево";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_swipe_right" = "свайп вправо";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_swipe_up" = "свайп вверх";
+
+/* No comment provided by engineer. */
+"gestures_guide_direction_swipe_up_or_down" = "свайп вверх или вниз";
+
+/* No comment provided by engineer. */
+"gestures_guide_insert_punctuation" = "Поставить знак препинания";
+
+/* No comment provided by engineer. */
+"gestures_guide_insert_space_and_autocorrect_word" = "Поставить пробел и исправить слово";
+
+/* No comment provided by engineer. */
+"gestures_guide_learn_new_word" = "Выучить новое слово";
+
+/* No comment provided by engineer. */
+"gestures_guide_move_cursor" = "Переместить курсор";
+
+/* No comment provided by engineer. */
+"gestures_guide_open_emojis" = "Открыть эмодзи";
+
+/* No comment provided by engineer. */
+"gestures_guide_peak_shortcuts" = "Показать ярлыки";
+
+/* No comment provided by engineer. */
+"gestures_guide_return" = "Перейти на новую строку";
+
+/* No comment provided by engineer. */
+"gestures_guide_section_essential" = "Основное";
+
+/* No comment provided by engineer. */
+"gestures_guide_section_miscellaneous" = "Дополнительно";
+
+/* No comment provided by engineer. */
+"gestures_guide_toggle_autocorrect" = "Включить / выключить автокоррекцию";
+
+/* No comment provided by engineer. */
+"gestures_guide_toggle_symbols" = "Переключиться на символы";
+
+/* No comment provided by engineer. */
+"gestures_guide_use_a_shortcut" = "Использовать ярлык";
 
 /* No comment provided by engineer. */
 "languages_english" = "Английский";
@@ -123,6 +234,75 @@
 
 /* No comment provided by engineer. */
 "ngram_writing_n_to_database" = "Запись %D-грамм…";
+
+/* No comment provided by engineer. */
+"onboarding_all_set_description" = "Чтобы привыкнуть к жестам, может понадобиться несколько дней, но когда они войдут в привычку, вы уже не захотите печатать без них.\n\nУ Finale Keyboard есть еще много возможностей, которые вы можете изучить, как только освоитесь в клавиатуре.";
+
+/* No comment provided by engineer. */
+"onboarding_all_set_dynamic_touch_zones_description" = "Печатайте быстрее с клавишами, которые предсказывают ваше следующее слово.";
+
+/* No comment provided by engineer. */
+"onboarding_all_set_favorite_emoji_description" = "Сохраните самые используемые эмодзи у себя под рукой.";
+
+/* No comment provided by engineer. */
+"onboarding_all_set_shortcuts_description" = "Печатайте эмодзи, даты, контакты и что угодно еще с помощью быстрых ярлыков.";
+
+/* No comment provided by engineer. */
+"onboarding_all_set_title" = "Все готово";
+
+/* No comment provided by engineer. */
+"onboarding_gestures_cycle_suggestions" = "Листать предложения";
+
+/* No comment provided by engineer. */
+"onboarding_gestures_delete_word" = "Удалить слово";
+
+/* No comment provided by engineer. */
+"onboarding_gestures_description" = "Буквы вводятся как обычно, а все остальные действия, например вставка пробелов, удаление слов и автокоррекция, выполняются жестами.";
+
+/* No comment provided by engineer. */
+"onboarding_gestures_insert_space_or_punctuations" = "Пробел или знак препинания";
+
+/* No comment provided by engineer. */
+"onboarding_gestures_title" = "Давайте попробуем жесты";
+
+/* No comment provided by engineer. */
+"onboarding_gestures_open_emojis" = "Открыть эмодзи";
+
+/* No comment provided by engineer. */
+"onboarding_gestures_view_all" = "Посмотреть все жесты";
+
+/* No comment provided by engineer. */
+"onboarding_get_started" = "Давайте начнем";
+
+/* No comment provided by engineer. */
+"onboarding_setup_description" = "Включите Finale Keyboard и дайте ей полный доступ.";
+
+/* No comment provided by engineer. */
+"onboarding_setup_title" = "Сначала давайте все настроим";
+
+/* No comment provided by engineer. */
+"onboarding_welcome_description" = "Минималистичная клавиатура основанная на жестах.";
+
+/* No comment provided by engineer. */
+"onboarding_welcome_gesture_based_description" = "Более удобный способ печатать с помощью интуитивных свайпов.";
+
+/* No comment provided by engineer. */
+"onboarding_welcome_gesture_based_title" = "Основана на жестах";
+
+/* No comment provided by engineer. */
+"onboarding_welcome_minimal_description" = "Занимает меньше места на экране, чтобы вы могли сосредоточиться на том, что действительно важно.";
+
+/* No comment provided by engineer. */
+"onboarding_welcome_minimal_title" = "Минималистичная";
+
+/* No comment provided by engineer. */
+"onboarding_welcome_smart_description" = "Запоминает ваш словарь, динамически подстраивает зоны касания для следующего слова и использует удобную систему ярлыков.";
+
+/* No comment provided by engineer. */
+"onboarding_welcome_smart_title" = "Умная";
+
+/* No comment provided by engineer. */
+"onboarding_welcome_title" = "Добро пожаловать в\nFinale Keyboard";
 
 /* No comment provided by engineer. */
 "preferences_advanced_clean_words_one_use" = "Удалить слова с 1 исп.";
@@ -200,6 +380,9 @@
 "preferences_punctuation_first" = "Первый";
 
 /* No comment provided by engineer. */
+"preferences_punctuation_footer" = "Выберите знаки препинания и порядок, в котором они будут предлагаться при свайпе вверх или вниз.";
+
+/* No comment provided by engineer. */
 "preferences_punctuation_fourth" = "Четвертый";
 
 /* No comment provided by engineer. */
@@ -219,6 +402,99 @@
 
 /* No comment provided by engineer. */
 "preferences_punctuation_third" = "Третий";
+
+/* No comment provided by engineer. */
+"preferences_spacebar" = "Пробел";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_autocorrect" = "Автокоррекция пробелом";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_alert_confirm_format" = "Мне нужно купить его за %1$@.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_alert_message" = "Зачем ты тратишь деньги впустую? Просто пойди и выучи свайпы, они гораздо лучше.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_alert_title" = "Приятно быть богатым?";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_body_format" = "Ооо, как мило..! Тебе нужен пробел? Хочешь нажимать кнопку, чтобы поставить пробел?\n\nЭй, все, смотрите! Этот крошечный тупой малыш не может печатать без своего пробела. Ну разве не прелесть?\n\nНе можешь освоить элементарные свайпы? Провести пальцем по экрану - это слишком сложно? Ах да, конечно, стоило догадаться, что у тебя не хватает координации рук и глаз для таких продвинутых движений! Эх ты, бедный ребенок. Бедный, тупой, медленный, бесполезный, идиотский, гребанный, блядь, ребенок.\n\nЛадно. Хорошо. Если тебе ПРЯМО ОЧЕНЬ нужен этот пробел - я тебе его дам. Я даже буду щедрым и дам тебе выбор.\n\nКак ты, возможно, заметил, мы живём в К-образной экономике. То есть разрыв между богатыми и бедными только растёт. Между классом инвесторов и вечным низшим классом.\n\nТак что статистически ты либо безумно богат и тебе не жалко выбрасывать деньги. Либо ты по уши в долгах, и азартные игры - твоя единственная надежда на финансовую стабильность.\n\nЯ дам варианты для обоих случаев.\n\nЕсли у тебя денег больше, чем мозгов (еще бы, ты же даже не можешь освоить свайп вправо), можешь просто купить Пробел за %1$@.\n\nА если ты беден без всякой надежды, можешь крутить колесо за %2$@ и получить %3$d%% шанс выиграть Пробел.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_button_subtitle_format" = "Куплю Пробел за %1$@.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_button_title" = "Я богатый и бесполезный.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_choice_prompt" = "Ну так, что же ты выберешь?";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_gamble_alert_confirm_format" = "Я зависим, кручу за %1$@.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_gamble_alert_message_format" = "Ты что, собрался открывать лутбокс в приложении клавиатуры?! Шанс всего %1$d%%, лучше иди учи свайпы. Потом еще спасибо скажешь.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_gamble_alert_title" = "Разве это хорошая жизнь?";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_gamble_button_subtitle_format" = "Крутану за %1$@.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_gamble_button_title" = "Я бедный, потому что люблю азартные игры.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_learn_gestures_subtitle" = "Я выучу жесты.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_learn_gestures_title" = "Извините меня.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_or" = "или";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_request_for_free_alert_confirm" = "Сделаю, как скажете, босс.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_request_for_free_alert_dismiss" = "Иди нахуй.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_request_for_free_alert_message" = "Ну ладно... если тебе и правда настолько лень учить жесты...\n\nНапиши мне на grant@finaletodo.com с самым жестким оскорблением в свой адрес. Если мне понравится, я посмотрю, что я смогу сделать.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_request_for_free_alert_title" = "Уф, ладно";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_request_for_free_email_subject" = "Пожалуйста, пожалуйста, пожалуйста, умоляю, Грант, дай мне пробел.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_request_for_free_title" = "Псс, иди сюда, котик. Все еще хочешь свой пробел бесплатно?";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_restore_purchases" = "Восстановить покупки";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_sorry_ill_be_better" = "Извините, я исправлюсь.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_purchase_title" = "Ой-ой, кому-то понадобился пробел?";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_lootbox_enable_spacebar" = "Включить пробел";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_lootbox_give_up" = "Я сдаюсь, как всегда.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_lootbox_lose_title" = "Как жаль.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_lootbox_try_again" = "Хочу попробовать еще раз.";
+
+/* No comment provided by engineer. */
+"preferences_spacebar_lootbox_win_title" = "Поздравляю, ты выбил свой пробел";
 
 /* No comment provided by engineer. */
 "preferences_typing_haptic" = "Тактильная отдача для клавиш";
@@ -246,4 +522,3 @@
 
 /* No comment provided by engineer. */
 "shortcuts_symbols" = "Символы";
-

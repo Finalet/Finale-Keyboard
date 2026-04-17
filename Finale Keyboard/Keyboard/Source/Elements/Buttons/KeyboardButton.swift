@@ -14,7 +14,8 @@ class KeyboardButton: NoClipTouchUIView {
     let touchZone: UIView = UIView()
     var touchZoneConstraints: [NSLayoutConstraint] = []
     
-    var registerSwipeSensitivity = 0.5
+    var touchStartLocation: CGPoint?
+    let registerSwipeThreshold = 50.0
     var registeredSwipe = false
     
     var longPressTimer: Timer?
@@ -47,6 +48,7 @@ class KeyboardButton: NoClipTouchUIView {
     
     @objc func Touch (_ sender: UILongPressGestureRecognizer) {
         if sender.state == .began {
+            touchStartLocation = sender.location(in: self)
             ShowCallout()
             OnTapBegin(sender)
             longPressTimer = Timer.scheduledTimer(withTimeInterval: longPressDelay, repeats: false) { _ in
@@ -65,6 +67,7 @@ class KeyboardButton: NoClipTouchUIView {
             CancelLongPress()
             
             registeredSwipe = false
+            touchStartLocation = nil
         } else {
             OnTapChanged(sender)
             if !didLongPress {
@@ -74,21 +77,20 @@ class KeyboardButton: NoClipTouchUIView {
     }
     
     func EvaluateSwipe (touchLocation: CGPoint) {
-        if registeredSwipe { return }
+        guard !registeredSwipe, let touchStartLocation = touchStartLocation else { return }
         
-        if (touchLocation.x > frame.size.width + frame.size.width * (1-registerSwipeSensitivity)) {
-            RegisterSwipe(direction: .Right)
-        } else if (touchLocation.x < 0 - frame.size.width * (1-registerSwipeSensitivity)) {
-            RegisterSwipe(direction: .Left)
-        } else if (touchLocation.y > frame.size.height + frame.size.height * (1-registerSwipeSensitivity)) {
-            RegisterSwipe(direction: .Down)
-        } else if (touchLocation.y < 0 - frame.size.height * (1-registerSwipeSensitivity)) {
-            RegisterSwipe(direction: .Up)
-        }
+        let deltaX = touchLocation.x - touchStartLocation.x
+        let detlaY = touchLocation.y - touchStartLocation.y
+        
+        if (deltaX > registerSwipeThreshold) { RegisterSwipe(direction: .Right) }
+        else if (deltaX < -registerSwipeThreshold) { RegisterSwipe(direction: .Left) }
+        else if (detlaY > registerSwipeThreshold) { RegisterSwipe(direction: .Down) }
+        else if (detlaY < -registerSwipeThreshold) { RegisterSwipe(direction: .Up) }
     }
     
     private func RegisterSwipe (direction: SwipeDirection) {
         registeredSwipe = true
+        touchStartLocation = nil
         FinaleKeyboard.instance.MiddleRowReactAnimation()
         HapticFeedback.GestureImpactOccurred()
         CancelLongPress()

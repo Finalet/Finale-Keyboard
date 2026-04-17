@@ -137,10 +137,10 @@ extension LayoutAnchor {
 
 // MARK: - Conveniences
 extension UIView {
-    func addSubview(_ subview: UIView, anchors: [LayoutAnchor]) {
+    func addSubview(_ subview: UIView, anchors: [LayoutAnchor?]) {
         subview.translatesAutoresizingMaskIntoConstraints = false
         addSubview(subview)
-        subview.activate(anchors: anchors, relativeTo: self)
+        subview.activate(anchors: anchors.compactMap{ $0 }, relativeTo: self)
     }
 
     func activate(anchors: [LayoutAnchor], relativeTo item: UIView? = nil) {

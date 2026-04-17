@@ -46,7 +46,7 @@ class EmojiSearchRow: UIView, UICollectionViewDataSource, UICollectionViewDelega
         layout.minimumLineSpacing = padding
         layout.minimumInteritemSpacing = padding
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: FinaleKeyboard.instance.emojiRowHeight-padding, height: FinaleKeyboard.instance.emojiRowHeight-padding)
+        layout.itemSize = CGSize(width: FinaleKeyboard.emojiRowHeight-padding, height: FinaleKeyboard.emojiRowHeight-padding)
         
         self.addSubview(containerView, anchors: [.trailing(0), .top(0), .bottom(-padding), .leadingToTrailing(searchLabel, 0)])
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)

@@ -24,7 +24,7 @@ class FinaleKeyboard: UIInputViewController {
         emptyView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(emptyView)
 
-        _heightConstraint = view.heightAnchor.constraint(equalToConstant: FinaleKeyboard.buttonHeight*3)
+        _heightConstraint = view.heightAnchor.constraint(equalToConstant: FinaleKeyboard.rowHeight * FinaleKeyboard.rowsNumber)
         _heightConstraint?.priority = .required - 1
         _heightConstraint?.isActive = true
         
@@ -33,17 +33,14 @@ class FinaleKeyboard: UIInputViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if UIScreen.main.bounds.width < UIScreen.main.bounds.height {
-            _heightConstraint?.constant = FinaleKeyboard.buttonHeight*3
-        } else {
-            _heightConstraint?.constant = FinaleKeyboard.buttonHeight*2
-        }
+        _heightConstraint?.constant = FinaleKeyboard.rowHeight * FinaleKeyboard.rowsNumber
     }
     
     static var instance: FinaleKeyboard!
     
-    static let buttonHeight: CGFloat = 60.0
-    let emojiRowHeight = 38.0
+    static var rowHeight: CGFloat { return (UIScreen.main.bounds.width < UIScreen.main.bounds.height ? 60 : 40) * (FinaleKeyboard.isSpacebarEnabled ? 0.9 : 1) }
+    static var rowsNumber: CGFloat { return FinaleKeyboard.isSpacebarEnabled ? 4 : 3 }
+    static let emojiRowHeight = 38.0
     
     var emojiSearchRow: EmojiSearchRow?
     var keysView = UIView()
@@ -57,13 +54,20 @@ class FinaleKeyboard: UIInputViewController {
     var leadingBottomButton: FunctionButton = FunctionButton(.Shift)
     var trailingBottomButton: FunctionButton = FunctionButton(.Backspace)
     
+    var toggleSymbolsButton: FunctionButton? = nil
+    var toggleEmojiButton: FunctionButton? = nil
+    var spaceButton: SpacebarButton? = nil
+    var returnButton: ReturnButton? = nil
+    
     static var isShift = false
     static var isCaps = false
     static var isAutoCorrectOn = true
     static var isAutoCorrectGrammarOn = true
     static var isAutoCapitalizeOn = true
-    static var isTypingHapticEnabled = false
-    static var isGesturesHapticEnabled = false
+    static var isTypingHapticEnabled = true
+    static var isGesturesHapticEnabled = true
+    static var isSpacebarEnabled = false
+    static var isSpacebarAutocorrectOn = false
     
     static var currentLocale = Locale.en_US
     static var enabledLocales = [Locale.en_US, Locale.ru_RU]
@@ -166,8 +170,10 @@ class FinaleKeyboard: UIInputViewController {
         FinaleKeyboard.isAutoCorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectWords") as? Bool ?? true
         FinaleKeyboard.isAutoCorrectGrammarOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectGrammar") as? Bool ?? true
         FinaleKeyboard.isAutoCapitalizeOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocapitalizeWords") as? Bool ?? true
-        FinaleKeyboard.isTypingHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isTypingHapticEnabled") as? Bool ?? false
+        FinaleKeyboard.isTypingHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isTypingHapticEnabled") as? Bool ?? true
         FinaleKeyboard.isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
+        FinaleKeyboard.isSpacebarEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isSpacebarEnabled") as? Bool ?? false
+        FinaleKeyboard.isSpacebarAutocorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_spacebarAutocorrect") as? Bool ?? false
         FinaleKeyboard.isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
         FinaleKeyboard.showTouchZones = userDefaults?.value(forKey: "FINALE_DEV_APP_showTouchZones") as? Bool ?? false
         FinaleKeyboard.maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? CGFloat ?? 0.6
@@ -200,26 +206,30 @@ class FinaleKeyboard: UIInputViewController {
         keysViewBottomConstraint?.isActive = true
         
         middleRowStrip.backgroundColor = .gray.withAlphaComponent(0.5)
-        keysView.addSubview(middleRowStrip, anchors: [.leading(0), .trailing(0), .centerY(0), .heightMultiplier(0.3333)])
+        keysView.addSubview(middleRowStrip, anchors: [.leading(0), .trailing(0), .centerYMultiplier(FinaleKeyboard.isSpacebarEnabled ? 0.75 : 1), .heightMultiplier(!FinaleKeyboard.isSpacebarEnabled ? 0.3333 : 0.25)])
         
-        keysView.addSubview(leadingBottomButton, anchors: [.leading(0), .bottom(0)])
-        keysView.addSubview(trailingBottomButton, anchors: [.trailing(0), .bottom(0)])
+        keysView.addSubview(leadingBottomButton, anchors: [.leading(0), !FinaleKeyboard.isSpacebarEnabled ? .bottom(0) : nil])
+        keysView.addSubview(trailingBottomButton, anchors: [.trailing(0), !FinaleKeyboard.isSpacebarEnabled ? .bottom(0) : nil])
+        
+        if FinaleKeyboard.isSpacebarEnabled { BuildSpaceRow() }
     }
     
     func BuildKeyboardView (viewType: ViewType, updateViewType: Bool = true) {
         if viewType == .Characters {
             BuildKeyboardView(topRow: FinaleKeyboard.currentLocale.topRow, middleRow: FinaleKeyboard.currentLocale.middleRow, bottomRow: FinaleKeyboard.currentLocale.bottomRow)
             leadingBottomButton.ChangeFunction(new: FinaleKeyboard.isCaps ? .Caps : .Shift)
-            trailingBottomButton.ChangeFunction(new: .Backspace)
+            toggleSymbolsButton?.ChangeFunction(new: .SymbolsToggle)
             CheckAutoCapitalization()
         } else if viewType == .Symbols {
             BuildKeyboardView(topRow: Symbols.Symbols.topRow, middleRow: Symbols.Symbols.middleRow, bottomRow: Symbols.Symbols.bottomRow)
             leadingBottomButton.ChangeFunction(new: .SymbolsShift)
-            trailingBottomButton.ChangeFunction(new: .Backspace)
+            leadingBottomButton.ToggleHighlight(false)
+            toggleSymbolsButton?.ChangeFunction(new: .SymbolsToggleBack)
         } else if viewType == .ExtraSymbols {
             BuildKeyboardView(topRow: Symbols.ExtraSymbols.topRow, middleRow: Symbols.ExtraSymbols.middleRow, bottomRow: Symbols.ExtraSymbols.bottomRow)
             leadingBottomButton.ChangeFunction(new: .ExtraSymbolsShift)
-            trailingBottomButton.ChangeFunction(new: .Backspace)
+            leadingBottomButton.ToggleHighlight(false)
+            toggleSymbolsButton?.ChangeFunction(new: .SymbolsToggleBack)
         }
         if updateViewType { FinaleKeyboard.currentViewType = viewType }
     }
@@ -227,7 +237,6 @@ class FinaleKeyboard: UIInputViewController {
     func BuildKeyboardView (topRow: [String], middleRow: [String], bottomRow: [String]) {
         characterButtons.forEach{ $0.value.removeFromSuperview() }
         characterButtons.removeAll()
-        
         
         BuildRow(characters: topRow, row: .Top)
         BuildRow(characters: middleRow, row: .Middle, prevRowFirstButton: characterButtons[topRow[0]])
@@ -242,7 +251,7 @@ class FinaleKeyboard: UIInputViewController {
             var anchors: [LayoutAnchor] = []
             if i == 0 { // The first key is responsible for vertical anchors.
                 if row == .Top { anchors.append(.top(0)) }
-                else if row == .Bottom { anchors.append(.bottom(0)) }
+                else if row == .Bottom { anchors.append(.bottomToBottom(leadingBottomButton, 0)) }
                 
                 if let prevRowFirstButton = prevRowFirstButton {
                     anchors.append(contentsOf: [.topToBottom(prevRowFirstButton, 0), .heightToHeight(prevRowFirstButton, 0)])
@@ -279,6 +288,20 @@ class FinaleKeyboard: UIInputViewController {
         }
     }
     
+    func BuildSpaceRow () {
+        toggleSymbolsButton = FunctionButton(.SymbolsToggle)
+        toggleEmojiButton = FunctionButton(.EmojiToggle)
+        spaceButton = SpacebarButton()
+        returnButton = ReturnButton()
+        
+        let sharedAnchors: [LayoutAnchor] = [.bottom(0), .topToBottom(leadingBottomButton, 0), .heightToHeight(leadingBottomButton, 0)]
+        
+        keysView.addSubview(toggleSymbolsButton!, anchors: [.leading(0), .width(50)] + sharedAnchors)
+        keysView.addSubview(toggleEmojiButton!, anchors: [.leadingToTrailing(toggleSymbolsButton!, 0), .widthToWidth(toggleSymbolsButton!, 0)] + sharedAnchors)
+        keysView.addSubview(spaceButton!, anchors: [.leadingToTrailing(toggleEmojiButton!, 0)] + sharedAnchors)
+        keysView.addSubview(returnButton!, anchors: [.leadingToTrailing(spaceButton!, 0), .widthToWidthMultiplier(toggleSymbolsButton!, 2), .topToBottom(trailingBottomButton, 0), .trailing(0)] + sharedAnchors)
+    }
+    
     func SuggestionsView () {
         for _ in 0...maxSuggestions-1 {
             suggestionLabels.append(SuggestionView())
@@ -298,7 +321,7 @@ class FinaleKeyboard: UIInputViewController {
         label.font = UIFont(name: "Gilroy-Medium", size: 11)
         
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.heightAnchor.constraint(equalToConstant: FinaleKeyboard.buttonHeight * 0.4).isActive = true
+        label.heightAnchor.constraint(equalToConstant: FinaleKeyboard.rowHeight * 0.4).isActive = true
         
         view.addSubview(label)
         return label
@@ -320,7 +343,7 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func CloseEmoji (hideEmojiSearchRow: Bool = false) {
-        keysViewTopConstraint?.constant = (emojiSearchRow == nil || hideEmojiSearchRow) ? 0 : emojiRowHeight
+        keysViewTopConstraint?.constant = (emojiSearchRow == nil || hideEmojiSearchRow) ? 0 : FinaleKeyboard.emojiRowHeight
         keysViewBottomConstraint?.constant = 0
         UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
             self.view.layoutIfNeeded()
@@ -344,12 +367,15 @@ class FinaleKeyboard: UIInputViewController {
             emojiSearchRow?.removeFromSuperview()
             emojiSearchRow = EmojiSearchRow()
             
-            self.view.addSubview(emojiSearchRow!, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .bottomToTop(keysView, 0), .height(emojiRowHeight)])
+            self.view.addSubview(emojiSearchRow!, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .bottomToTop(keysView, 0), .height(FinaleKeyboard.emojiRowHeight)])
             
+            returnButton?.ChangeFunction(new: .Back)
         } else {
             hideEmojiSearchRow = true
             
             FinaleKeyboard.currentViewType = .Characters
+            
+            returnButton?.ChangeFunction(new: .Return)
         }
         
         CloseEmoji(hideEmojiSearchRow: hideEmojiSearchRow)
@@ -409,11 +435,13 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func Copy () {
-        UIPasteboard.general.string = self.textDocumentProxy.selectedText
+        guard let selection = self.textDocumentProxy.selectedText else { return }
+        UIPasteboard.general.string = selection
     }
     
     func Paste (text: String? = nil) {
-        self.textDocumentProxy.insertText(text ?? UIPasteboard.general.string ?? "")
+        guard let pasteText = text ?? UIPasteboard.general.string else { return }
+        self.textDocumentProxy.insertText(pasteText)
         FadeoutSuggestions()
         CheckAutoCapitalization()
         ProcessDynamicTouchZones()
@@ -537,6 +565,17 @@ class FinaleKeyboard: UIInputViewController {
         leadingBottomButton.ChangeFunction(new: .Caps)
         UpdateButtonsTitles()
     }
+    func SpacebarAction() {
+        if let emojiSearchRow = emojiSearchRow {
+            emojiSearchRow.SwipeRight()
+            return
+        }
+        
+        self.textDocumentProxy.insertText(" ")
+        ResetSuggestions()
+        CheckAutoCapitalization()
+        ResetDynamicTouchZones()
+    }
     func ReturnAction () {
         self.textDocumentProxy.insertText("\n")
         ResetSuggestions()
@@ -567,7 +606,7 @@ class FinaleKeyboard: UIInputViewController {
         } else {
             if ((context?.count ?? 0) < 2) {
                 ResetSuggestionsLabels()
-                Spacebar()
+                SwipeRightSpacebar()
                 canEditPrevPunctuation = false
                 return
             }
@@ -631,6 +670,11 @@ class FinaleKeyboard: UIInputViewController {
         EditPreviousWord(upOrDown: 1)
     }
     
+    func SwipeRightSpacebar () {
+        pickedSuggestionIndex = 0
+        InsertPunctuation(index: pickedSuggestionIndex)
+    }
+    
     func UseUserDictionary () {
         let x = getCorrectSuggestionArrayIndex()
         if x < 0 { return }
@@ -656,11 +700,6 @@ class FinaleKeyboard: UIInputViewController {
         }
         SaveUserDictionary()
         if showNotification { ShowNotification(text: "Forgot \"" + word + "\"") }
-    }
-    
-    func Spacebar () {
-        pickedSuggestionIndex = 0
-        InsertPunctuation(index: pickedSuggestionIndex)
     }
     
     func GenerateAutocorrections() {
@@ -725,7 +764,7 @@ class FinaleKeyboard: UIInputViewController {
         
         if (suggestionsArrays[x].suggestions.count > 1) {
             var originalInput = ""
-            while !isPrevCharWhitespace() {
+            while !isAtWordStart() {
                 if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.last == nil) { break }
                 originalInput.insert(self.textDocumentProxy.documentContextBeforeInput?.last ?? Character(""), at: originalInput.startIndex)
                 self.textDocumentProxy.deleteBackward()
@@ -799,7 +838,7 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func getLastWord () -> String {
-        if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.count == 0 || !self.textDocumentProxy.hasText) { return "" }
+        guard let startContext = self.textDocumentProxy.documentContextBeforeInput, startContext.count > 0 else { return "" }
         
         var lastSpace = false
         if getLastChar() == " " {
@@ -809,9 +848,9 @@ class FinaleKeyboard: UIInputViewController {
         
         let output: String
         if let context = self.textDocumentProxy.documentContextBeforeInput {
-            let delimiters: [Character] = [" ", "\n", "\t"]
+            let breakingCharacters = CharacterSet.whitespacesAndNewlines.union(["\"", "(", "[", "{", "<", "#"])
             var startIndex = context.startIndex
-            if let lastDelimiterIndex = context.lastIndex(where: { delimiters.contains($0) }) {
+            if let lastDelimiterIndex = context.lastIndex(where: { breakingCharacters.contains($0.unicodeScalars.first ?? " ".unicodeScalars.first!) }) {
                 startIndex = context.index(after: lastDelimiterIndex)
             }
             output = String(context[startIndex...])
@@ -846,7 +885,7 @@ class FinaleKeyboard: UIInputViewController {
             }
         }
         //Delete Words
-        while !isPrevCharWhitespace() {
+        while !isAtWordStart() {
             if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.last == nil) { break }
             self.textDocumentProxy.deleteBackward()
         }
@@ -1062,9 +1101,10 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func getCorrectSuggestionArrayIndex() -> Int {
-        if (self.textDocumentProxy.documentContextBeforeInput == nil) { return -1 }
+        guard let context = self.textDocumentProxy.documentContextBeforeInput else { return -1 }
+        
         for i in 0..<suggestionsArrays.count {
-            if suggestionsArrays[i].positionIndex == self.textDocumentProxy.documentContextBeforeInput?.endIndex {
+            if suggestionsArrays[i].positionIndex == context.endIndex {
                 for i1 in 0..<suggestionsArrays[i].suggestions.count {
                     if suggestionsArrays[i].suggestions[i1] == getLastWord() {
                         return i
@@ -1084,37 +1124,35 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func getLastChar() -> String {
-        if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput == "") { return ""}
-        let text: String = self.textDocumentProxy.documentContextBeforeInput!
-        return String(text[text.index(text.endIndex, offsetBy: -1)])
+        guard let context = self.textDocumentProxy.documentContextBeforeInput, !context.isEmpty else { return "" }
+        return String(context.last ?? Character(""))
     }
     func getOneBeforeLastChar() -> String {
-        if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput == "") { return "" }
-        if (self.textDocumentProxy.documentContextBeforeInput!.count < 2) { return "" }
-        let text: String = self.textDocumentProxy.documentContextBeforeInput!
-        return String(text[text.index(text.endIndex, offsetBy: -2)])
+        guard let context = self.textDocumentProxy.documentContextBeforeInput, context.count >= 2 else { return "" }
+        return String(context[context.index(context.endIndex, offsetBy: -2)])
     }
     func getTwoBeforeLastChar() -> String {
-        if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput == "") { return "" }
-        if (self.textDocumentProxy.documentContextBeforeInput!.count < 3) { return "" }
-        let text: String = self.textDocumentProxy.documentContextBeforeInput!
-        return String(text[text.index(text.endIndex, offsetBy: -3)])
+        guard let context = self.textDocumentProxy.documentContextBeforeInput, context.count >= 3 else { return "" }
+        return String(context[context.index(context.endIndex, offsetBy: -3)])
     }
     func getStringBeforeCursor(length: Int) -> String? {
-        if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput == "") { return nil }
-        let text: String = self.textDocumentProxy.documentContextBeforeInput!
-        return String(text[text.index(text.endIndex, offsetBy: -min(length, text.count))..<text.endIndex])
+        guard let context = self.textDocumentProxy.documentContextBeforeInput, !context.isEmpty else { return nil }
+        return String(context[context.index(context.endIndex, offsetBy: -min(length, context.count))..<context.endIndex])
     }
-    func isPrevCharWhitespace() -> Bool {
-        let breakingCharacters: [Character] = [" ", "\n", "\t"]
-        return !self.textDocumentProxy.hasText || breakingCharacters.contains(self.textDocumentProxy.documentContextBeforeInput?.last ?? " ")
+    func isAtWordStart() -> Bool {
+        if !self.textDocumentProxy.hasText { return true }
+        let breakingCharacters = CharacterSet.whitespacesAndNewlines.union(["\"", "(", "[", "{", "<", "#"])
+        if let lastUnicodeChar = self.textDocumentProxy.documentContextBeforeInput?.last?.unicodeScalars.first {
+            return breakingCharacters.contains(lastUnicodeChar)
+        }
+        return true
     }
     
     func ToggleLocale () {
         let index = ((FinaleKeyboard.enabledLocales.firstIndex(of: FinaleKeyboard.currentLocale) ?? 0) + 1) % FinaleKeyboard.enabledLocales.count
         FinaleKeyboard.currentLocale = FinaleKeyboard.enabledLocales[index]
         
-        BuildKeyboardView(viewType: .Characters, updateViewType: false)
+        BuildKeyboardView(viewType: .Characters, updateViewType: FinaleKeyboard.currentViewType != .SearchEmoji)
         ResetSuggestions()
         
         UserDefaults.standard.set(FinaleKeyboard.currentLocale.rawValue, forKey: "FINALE_DEV_APP_CurrentLocale")
