@@ -161,7 +161,7 @@ struct Localization {
             static var requestForFreeAlertTitle = NSLocalizedString("preferences_spacebar_purchase_request_for_free_alert_title", value: "Uuugh, fine", comment: "")
             static var requestForFreeAlertConfirm = NSLocalizedString("preferences_spacebar_purchase_request_for_free_alert_confirm", value: "I'll do as you say, boss.", comment: "")
             static var requestForFreeAlertDismiss = NSLocalizedString("preferences_spacebar_purchase_request_for_free_alert_dismiss", value: "Fuck you, man.", comment: "")
-            static var requestForFreeAlertMessage = NSLocalizedString("preferences_spacebar_purchase_request_for_free_alert_message", value: "I guess... if you really can't be bothered to learn gestures...\n\nEmail me at grant@finaletodo.com with the worst insult towards yourself. If I like it, I'll see what I can do.", comment: "")
+            static var requestForFreeAlertMessage = NSLocalizedString("preferences_spacebar_purchase_request_for_free_alert_message", value: "I guess... if you really can't be bothered to learn gestures...\n\nEmail me at grant@finaletodo.com with an original insult towards yourself. If I like it, I'll tell you a hidden way to unlock spacebar for free.", comment: "")
             static var requestForFreeEmailSubject = NSLocalizedString("preferences_spacebar_purchase_request_for_free_email_subject", value: "Please, please, please, I beg you, Grant, give me a spacebar.", comment: "")
         }
 
