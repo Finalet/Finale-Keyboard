@@ -23,5 +23,8 @@ class Defaults {
         "\(Locale.es_ES.languageCode):x" : "Cut",
         "\(Locale.es_ES.languageCode):c" : "Copy",
         "\(Locale.es_ES.languageCode):v" : "Paste",
+        "\(Locale.de_DE.languageCode):x" : "Cut",
+        "\(Locale.de_DE.languageCode):c" : "Copy",
+        "\(Locale.de_DE.languageCode):v" : "Paste",
     ]
 }
