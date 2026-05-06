@@ -11,129 +11,114 @@ import CoreData
 class Ngrams {
     static let shared = Ngrams()
     
-    func LoadNgramsToCoreData(onProgressChange: @escaping (_ status: String, _ isDone: Bool) -> ()) {
+    func LoadNgramsToCoreData(locale: Locale, onProgressChange: @escaping (_ status: String, _ isDone: Bool) -> ()) {
         DispatchQueue.global(qos: .userInitiated).async {
-            onProgressChange(Ngrams.Localize.startedLoading, false)
-            let startTime = Date().timeIntervalSinceReferenceDate
+            DispatchQueue.main.async { onProgressChange(Ngrams.Localize.startedLoading, false) }
             
-            var eng: [Dictionary<String, [CharacterProbabilityJSON]>] = []
-            var rus: [Dictionary<String, [CharacterProbabilityJSON]>] = []
-
+            var dict: [Dictionary<String, [CharacterProbability]>] = []
+            
             for n in 1...5 {
-                onProgressChange(String(format: Ngrams.Localize.loadingNDictionary, n), false)
+                DispatchQueue.main.async { onProgressChange(String(format: Ngrams.Localize.loadingNDictionary, n), false) }
                 
-                let dataEn = (try? Data(contentsOf: Bundle.main.url(forResource: "english-30000-n\(n)-probabilities", withExtension: "json")!))!
-                let entriesEn = try! JSONDecoder().decode([String:[CharacterProbabilityJSON]].self, from: dataEn)
-                eng.append(entriesEn)
-
-                let dataRu = (try? Data(contentsOf: Bundle.main.url(forResource: "russian-50000-n\(n)-probabilities", withExtension: "json")!))!
-                let entriesRu = try! JSONDecoder().decode([String:[CharacterProbabilityJSON]].self, from: dataRu)
-                rus.append(entriesRu)
+                let jsonFileName = self.getNgramJsonFileName(locale, n)
+                
+                guard let file = Bundle.main.url(forResource: jsonFileName, withExtension: "json"), let data = try? Data(contentsOf: file) else { continue }
+                guard let entries = try? JSONDecoder().decode([String:[CharacterProbability]].self, from: data) else { continue }
+                
+                dict.append(entries)
             }
             
             DispatchQueue.main.async {
-                let context = CoreData.shared.persistentContainer.newBackgroundContext()
-                context.automaticallyMergesChangesFromParent = true
-                context.perform {
-                    let ngramDictionary = NgramDictionary(context: context)
-                    
-                    for n in 0..<eng.count {
-                        onProgressChange(String(format: Ngrams.Localize.writingNToDatabase, n), false)
-                        eng[n].forEach { (key: String, value: [CharacterProbabilityJSON]) in
-                            ngramDictionary.addToEng(self.createNgram(ngram: key, probabilities: value, context: context))
+                let backgroundContext = CoreData.shared.persistentContainer.newBackgroundContext()
+                backgroundContext.automaticallyMergesChangesFromParent = true
+                
+                backgroundContext.perform {
+                    for n in 0..<dict.count {
+                        DispatchQueue.main.async { onProgressChange(String(format: Ngrams.Localize.writingNToDatabase, n + 1), false) }
+                        
+                        dict[n].forEach { (ngram: String, probabilities: [CharacterProbability]) in
+                            self.createNgramObject(locale: locale, ngram: ngram, probabilities: probabilities, context: backgroundContext)
                         }
-                        rus[n].forEach { (key: String, value: [CharacterProbabilityJSON]) in
-                            ngramDictionary.addToRu(self.createNgram(ngram: key, probabilities: value, context: context))
-                        }
+                        
+                        try? backgroundContext.save()
                     }
                     
-                    do {
-                        onProgressChange(Ngrams.Localize.savingDatabase, false)
-                        try context.save()
-                    } catch let error as NSError {
-                        print("Error saving context")
-                        print(error)
-                    }
-                    
-                    let endTime = Date().timeIntervalSinceReferenceDate
-                    onProgressChange("", true)
+                    DispatchQueue.main.async {  onProgressChange("", true) }
                 }
             }
         }
     }
     
-    func createNgram(ngram: String, probabilities: [CharacterProbabilityJSON], context: NSManagedObjectContext) -> Ngram {
-        let nGram = Ngram(context: context)
-        nGram.ngram = ngram
+    func createNgramObject(locale: Locale, ngram: String, probabilities: [CharacterProbability], context: NSManagedObjectContext) {
+        guard let probabilitiesData = try? JSONEncoder().encode(probabilities) else { return }
         
-        for charProb in probabilities {
-            let charProbability = CharacterProbability(context: context)
-            charProbability.character = charProb.character
-            charProbability.probability = Float(charProb.probability)
+        let ngramObject = Ngram(context: context)
+        ngramObject.locale = locale.languageCode
+        ngramObject.ngram = ngram
+        ngramObject.probabilities = probabilitiesData
+    }
+    
+    func DeleteNgramsFromCoreData(forLocale: Locale, onProgressChange: @escaping (_ status: String, _ isDone: Bool) -> ()) {
+        DispatchQueue.main.async { onProgressChange(Ngrams.Localize.deletingDictionary, false) }
+        
+        let backgroundContext = CoreData.shared.persistentContainer.newBackgroundContext()
+        
+        backgroundContext.perform {
+            let fetch = Ngram.fetchRequest()
+            fetch.predicate = NSPredicate(format: "locale == %@", forLocale.languageCode)
             
-            nGram.addToCharacterProbabilities(charProbability)
-        }
-        return nGram
-    }
-    
-    func DeleteAllNgrams (onProgressChange: @escaping (_ status: String, _ isDone: Bool) -> ()) {
-        onProgressChange(Ngrams.Localize.deletingDictionary, false)
-        let context = CoreData.shared.persistentContainer.newBackgroundContext()
-        context.automaticallyMergesChangesFromParent = true
-        context.perform {
-            let fetch = NgramDictionary.fetchRequest()
-            fetch.returnsObjectsAsFaults = false
-            do {
-                let results = try context.fetch(fetch)
-                for result in results {
-                    context.delete(result)
+            if let results = try? backgroundContext.fetch(fetch) {
+                for object in results {
+                    backgroundContext.delete(object)
                 }
-                try context.save()
-                onProgressChange("", true)
-            } catch let error {
-                print("Failed to delete all data.", error)
             }
+            
+            try? backgroundContext.save()
+            
+            DispatchQueue.main.async { onProgressChange("", true) }
         }
     }
     
-    func getCharacterProbabilities(_ str: String, callback: @escaping ([CharacterProbabilityJSON]?) -> ()) {
+    func getCharacterProbabilities(_ ngram: String, locale: Locale, callback: @escaping ([CharacterProbability]?) -> ()) {
         let backgroundContext = CoreData.shared.persistentContainer.newBackgroundContext()
         backgroundContext.perform {
             let fetch = Ngram.fetchRequest()
-            fetch.predicate = NSPredicate(format: "ngram = %@", str)
-            do {
-                let result = try backgroundContext.fetch(fetch).first
-                
-                let probabilities = (result?.characterProbabilities?.array as? [CharacterProbability])?.compactMap {
-                    guard let character = $0.character else { return nil as CharacterProbabilityJSON? }
-                    return CharacterProbabilityJSON(character: character, probability: CGFloat($0.probability))
-                }
-                
-                DispatchQueue.main.async {
-                    callback(probabilities)
-                }
-            } catch let error as NSError {
-                print("[\(str)] Failed to fetch ngram.")
-                print(error)
-                DispatchQueue.main.async {
-                    callback(nil)
-                }
+            fetch.predicate = NSPredicate(format: "locale == %@ AND ngram == %@", locale.languageCode, ngram)
+            fetch.fetchLimit = 1
+            
+            let result = try? backgroundContext.fetch(fetch).first
+            
+            guard let binaryData = result?.probabilities, let decodedProbabilities = try? JSONDecoder().decode([CharacterProbability].self, from: binaryData) else {
+                DispatchQueue.main.async { callback(nil) }
+                return
             }
+            
+            DispatchQueue.main.async { callback(decodedProbabilities) }
+            return
         }
     }
     
-    var isNgramDictionaryLoaded: Bool {
-        let fetch = NgramDictionary.fetchRequest()
-        do {
-            let results = try CoreData.shared.context.fetch(fetch)
-            return results.count > 0
-        } catch let error as NSError {
-            print(error)
-            return false
-        }
+    func isLocaleLoadedIntoCoreData (_ locale: Locale) -> Bool {
+        let fetch = Ngram.fetchRequest()
+        fetch.predicate = NSPredicate(format: "locale == %@", locale.languageCode)
+        fetch.fetchLimit = 1
+        
+        let result = try? CoreData.shared.context.fetch(fetch)
+        
+        return result?.count ?? 0 > 0
     }
     
-    struct CharacterProbabilityJSON: Codable {
+    func getNgramJsonFileName (_ forLocale: Locale, _ n: Int) -> String {
+        let fileName: String
+        switch forLocale {
+        case .en_US: fileName = "english-30000-n%D-probabilities"
+        case .ru_RU: fileName = "russian-50000-n%D-probabilities"
+        case .es_ES: fileName = "spanish-30000-n%D-probabilities"
+        }
+        return String(format: fileName, n)
+    }
+    
+    struct CharacterProbability: Codable {
         let character: String
         let probability: CGFloat
     }
@@ -142,7 +127,6 @@ class Ngrams {
         static var startedLoading = NSLocalizedString("ngram_loading_status_started", value: "Started loading n-grams", comment: "")
         static var loadingNDictionary = NSLocalizedString("ngram_loading_n_dictionary", value: "Loading %D-gram dictionary...", comment: "")
         static var writingNToDatabase = NSLocalizedString("ngram_writing_n_to_database", value: "Writing %D-gram to database...", comment: "")
-        static var savingDatabase = NSLocalizedString("ngram_saving_database", value: "Saving the database...", comment: "")
         static var deletingDictionary = NSLocalizedString("ngram_deleting_ngrams", value: "Deleting dictionary...", comment: "")
     }
 }

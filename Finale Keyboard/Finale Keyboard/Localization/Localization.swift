@@ -55,6 +55,10 @@ struct Localization {
         static var deleting = NSLocalizedString("misc_deleting", value: "Deleting", comment: "")
     }
     
+    struct Status {
+        static var loaded = NSLocalizedString("status_loaded", value: "Loaded", comment: "")
+    }
+    
     struct FavoriteEmojiScreen {
         static var title = HomeScreen.favoriteEmojiRow
         static var footer = NSLocalizedString("favorite_emoji_footer", value: "Pick emoji that are going to show up first in the emoji keyboard.", comment: "")
@@ -76,6 +80,7 @@ struct Localization {
         static var title = NSLocalizedString("languages_title", value: "Languages", comment: "")
         static var english = NSLocalizedString("languages_english", value: "English", comment: "")
         static var russian = NSLocalizedString("languages_russian", value: "Russian", comment: "")
+        static var spanish = NSLocalizedString("languages_spanish", value: "Spanish", comment: "")
     }
     
     struct DictionaryScreen {
@@ -116,13 +121,12 @@ struct Localization {
             
             static var explanation = NSLocalizedString("preferences_dynamic_touch_zones_explanation", value: "When enabled, Finale Keyboard will try to predict what key you will tap next and slightly increase its tap zone.", comment: "")
             static var highlightKeys = NSLocalizedString("preferences_dynamic_touch_zones_highlight_keys", value: "Highlight keys", comment: "")
+            static var dictionaries = NSLocalizedString("preferences_dynamic_touch_zones_dictionaries", value: "Dictionaries", comment: "")
             static var dictionaryRequired = NSLocalizedString("preferences_dynamic_touch_zones_dictionary_required", value: "Dictionary is required for dynamic touch zones to work.", comment: "")
             static var showTouchZones = NSLocalizedString("preferences_dynamic_touch_zones_show_touch_zones", value: "Show touch zones", comment: "")
             static var maximumKeyScale = NSLocalizedString("preferences_dynamic_touch_zones_max_key_scale", value: "Maximum key scale", comment: "")
             static var scaleMultiplier = NSLocalizedString("preferences_dynamic_touch_zones_scale_multiplier", value: "Scale multiplier", comment: "")
             static var loadingDurationWarning = NSLocalizedString("preferences_dynamic_touch_zones_loading_duration_warning", value: "%@ can take up to a minute. Do not leave this page until it is done.", comment: "")
-            static var dictionaryLoaded = NSLocalizedString("preferences_dynamic_touch_zones_dict_loaded", value: "Dictionary loaded", comment: "")
-            static var dictionaryNotLoaded = NSLocalizedString("preferences_dynamic_touch_zones_dict_not_loaded", value: "Dictionary not loaded", comment: "")
             static var keyProbability = NSLocalizedString("preferences_dynamic_touch_zones_dict_key_probability", value: "Key probability", comment: "")
             static var touchZoneScale = NSLocalizedString("preferences_dynamic_touch_zones_dict_touch_zone_scale", value: "Touch zone scale", comment: "")
         }

@@ -14,6 +14,7 @@ struct ShortcutsView: View {
         
     @UserDefaultState("FINALE_DEV_APP_en_locale_enabled", true) var EN_enabled: Bool
     @UserDefaultState("FINALE_DEV_APP_ru_locale_enabled", false) var RU_enabled: Bool
+    @UserDefaultState("FINALE_DEV_APP_es_locale_enabled", false) var ES_enabled: Bool
     
     @State private var restoreDefaults = false
     @State private var populateEmoji = false
@@ -33,6 +34,10 @@ struct ShortcutsView: View {
                 
                 if RU_enabled {
                     KeyboardView(locale: .ru_RU, title: Localization.LanguagesScreen.russian.uppercased(), restoreDefaults: $restoreDefaults, populateEmoji: $populateEmoji)
+                }
+                
+                if ES_enabled {
+                    KeyboardView(locale: .es_ES, title: Localization.LanguagesScreen.spanish.uppercased(), restoreDefaults: $restoreDefaults, populateEmoji: $populateEmoji)
                 }
                 
                 KeyboardView(symbols: true, title: Loc.symbols.uppercased(), restoreDefaults: $restoreDefaults, populateEmoji: $populateEmoji)
@@ -143,9 +148,9 @@ struct ShortcutsView: View {
         @State var locale: Locale?
         @State var symbols = false
         
-        @State var topRow: [String]
-        @State var middleRow: [String]
-        @State var bottomRow: [String]
+        @State var topRowShortcuts: [String]
+        @State var middleRowShortcuts: [String]
+        @State var bottomRowShortcuts: [String]
         
         @Binding var restoreDefaults: Bool
         @Binding var populateEmoji: Bool
@@ -157,21 +162,21 @@ struct ShortcutsView: View {
             self._populateEmoji = populateEmoji
             self._symbols = State(initialValue: symbols)
             
-            self._topRow = State(initialValue: [String](repeating: "", count: (locale?.topRow ?? (symbols ? Symbols.Symbols.topRow : Symbols.ExtraSymbols.topRow)).count))
-            self._middleRow = State(initialValue: [String](repeating: "", count: (locale?.middleRow ?? (symbols ? Symbols.Symbols.middleRow : Symbols.ExtraSymbols.middleRow)).count))
-            self._bottomRow = State(initialValue: [String](repeating: "", count: (locale?.bottomRow ?? (symbols ? Symbols.Symbols.bottomRow : Symbols.ExtraSymbols.bottomRow)).count))
+            self._topRowShortcuts = State(initialValue: [String](repeating: "", count: (locale?.topRow ?? (symbols ? Symbols.Symbols.topRow : Symbols.ExtraSymbols.topRow)).count))
+            self._middleRowShortcuts = State(initialValue: [String](repeating: "", count: (locale?.middleRow ?? (symbols ? Symbols.Symbols.middleRow : Symbols.ExtraSymbols.middleRow)).count))
+            self._bottomRowShortcuts = State(initialValue: [String](repeating: "", count: (locale?.bottomRow ?? (symbols ? Symbols.Symbols.bottomRow : Symbols.ExtraSymbols.bottomRow)).count))
         }
         
-        var topRowArray: [String] {
-            locale?.topRow ?? (symbols ? Symbols.Symbols.topRow : Symbols.ExtraSymbols.topRow)
+        var topRowDictKeys: [String] {
+            (locale?.topRow ?? (symbols ? Symbols.Symbols.topRow : Symbols.ExtraSymbols.topRow)).map({ getDictKey(forShortcutKey: $0) })
         }
         
-        var middleRowArray: [String] {
-            locale?.middleRow ?? (symbols ? Symbols.Symbols.middleRow : Symbols.ExtraSymbols.middleRow)
+        var middleRowDictKeys: [String] {
+            (locale?.middleRow ?? (symbols ? Symbols.Symbols.middleRow : Symbols.ExtraSymbols.middleRow)).map({ getDictKey(forShortcutKey: $0) })
         }
         
-        var bottomRowArray: [String] {
-            locale?.bottomRow ?? (symbols ? Symbols.Symbols.bottomRow : Symbols.ExtraSymbols.bottomRow)
+        var bottomRowDictKeys: [String] {
+            (locale?.bottomRow ?? (symbols ? Symbols.Symbols.bottomRow : Symbols.ExtraSymbols.bottomRow)).map({ getDictKey(forShortcutKey: $0) })
         }
         
         var body: some View {
@@ -179,19 +184,19 @@ struct ShortcutsView: View {
                 Title(title: title)
                 
                 HStack {
-                    ForEach(0..<topRow.count, id: \.self) { i in
-                        Key(placeholder: topRowArray[i], value: $topRow[i], onEndFocus: Save)
+                    ForEach(0..<topRowShortcuts.count, id: \.self) { i in
+                        Key(placeholder: getShortcutKeyFromDictKey(dictKey: topRowDictKeys[i]), value: $topRowShortcuts[i], onEndFocus: Save)
                     }
                 }
                 HStack {
-                    ForEach(0..<middleRow.count, id: \.self) { i in
-                        Key(placeholder: middleRowArray[i], value: $middleRow[i], onEndFocus: Save)
+                    ForEach(0..<middleRowShortcuts.count, id: \.self) { i in
+                        Key(placeholder: getShortcutKeyFromDictKey(dictKey: middleRowDictKeys[i]), value: $middleRowShortcuts[i], onEndFocus: Save)
                     }
                 }
                 if locale != nil || symbols {
                     HStack {
-                        ForEach(0..<bottomRow.count, id: \.self) { i in
-                            Key(placeholder: bottomRowArray[i], value: $bottomRow[i], onEndFocus: Save)
+                        ForEach(0..<bottomRowShortcuts.count, id: \.self) { i in
+                            Key(placeholder: getShortcutKeyFromDictKey(dictKey: bottomRowDictKeys[i]), value: $bottomRowShortcuts[i], onEndFocus: Save)
                         }
                     }
                     .padding(.horizontal, 40)
@@ -200,10 +205,10 @@ struct ShortcutsView: View {
             .onAppear {
                 Load()
             }
-            .onChange(of: restoreDefaults) { _ in
+            .onChange(of: restoreDefaults) { _, _ in
                 Load()
             }
-            .onChange(of: populateEmoji) { _ in
+            .onChange(of: populateEmoji) { _, _ in
                 PopulateFavoriteEmoji()
             }
         }
@@ -211,41 +216,46 @@ struct ShortcutsView: View {
         func Save () {
             var dict = userDefaults?.value(forKey: "FINALE_DEV_APP_shortcuts") as? [String : String] ?? Defaults.shortcuts
             
-            ParseArray(array: &topRow, keys: topRowArray, dict: &dict)
-            ParseArray(array: &middleRow, keys: middleRowArray, dict: &dict)
-            ParseArray(array: &bottomRow, keys: bottomRowArray, dict: &dict)
+            SaveShortcutsToDictionary(shortcuts: &topRowShortcuts, keys: topRowDictKeys, dict: &dict)
+            SaveShortcutsToDictionary(shortcuts: &middleRowShortcuts, keys: middleRowDictKeys, dict: &dict)
+            SaveShortcutsToDictionary(shortcuts: &bottomRowShortcuts, keys: bottomRowDictKeys, dict: &dict)
             
             userDefaults?.setValue(dict, forKey: "FINALE_DEV_APP_shortcuts")
         }
         
-        func ParseArray (array: inout [String], keys: [String], dict: inout [String : String]) {
-            for i in 0..<array.count {
-                if array[i] == "" {
-                    dict.removeValue(forKey: String(keys[i]))
+        func SaveShortcutsToDictionary(shortcuts: inout [String], keys: [String], dict: inout [String : String]) {
+            for i in 0..<shortcuts.count {
+                shortcuts[i] = shortcuts[i].trimmingCharacters(in: .whitespaces)
+                
+                let key = keys[i]
+                let value = shortcuts[i]
+                
+                if value.isEmpty {
+                    dict.removeValue(forKey: key)
                 } else {
-                    while let first = array[i].first, first == " " {
-                        array[i].removeFirst()
-                    }
-                    while let last = array[i].last, last == " " {
-                        array[i].removeLast()
-                    }
-                    
-                    dict[keys[i]] = array[i]
+                    dict.updateValue(value, forKey: key)
+                }
+                
+                // With the 2.1.0 update, the dictionary stores unique shortcuts for each locale. Previously, the key was just "w". Now, the key is "en_US:w", to make sure there are no collisions with different languages.
+                // So, to keep the dictionary clean, we remove the old, not anymore used, keys, like "W".
+                let keyWithoutLocale = getShortcutKeyFromDictKey(dictKey: key)
+                if keyWithoutLocale != key {
+                    dict.removeValue(forKey: keyWithoutLocale)
                 }
             }
         }
         
         func Load () {
-            topRow = [String](repeating: "", count: topRowArray.count)
-            middleRow = [String](repeating: "", count: middleRowArray.count)
-            bottomRow = [String](repeating: "", count: bottomRowArray.count)
+            topRowShortcuts = [String](repeating: "", count: topRowDictKeys.count)
+            middleRowShortcuts = [String](repeating: "", count: middleRowDictKeys.count)
+            bottomRowShortcuts = [String](repeating: "", count: bottomRowDictKeys.count)
             for (key, value) in userDefaults?.value(forKey: "FINALE_DEV_APP_shortcuts") as? [String:String] ?? Defaults.shortcuts {
-                if let topRowIndex = topRowArray.firstIndex(of: key) {
-                    topRow[topRowIndex] = value
-                } else if let middleRowIndex = middleRowArray.firstIndex(of: key) {
-                    middleRow[middleRowIndex] = value
-                } else if let bottomRowIndex = bottomRowArray.firstIndex(of: key) {
-                    bottomRow[bottomRowIndex] = value
+                if let topRowIndex = topRowDictKeys.firstIndex(of: key) {
+                    topRowShortcuts[topRowIndex] = value
+                } else if let middleRowIndex = middleRowDictKeys.firstIndex(of: key) {
+                    middleRowShortcuts[middleRowIndex] = value
+                } else if let bottomRowIndex = bottomRowDictKeys.firstIndex(of: key) {
+                    bottomRowShortcuts[bottomRowIndex] = value
                 }
             }
         }
@@ -257,47 +267,57 @@ struct ShortcutsView: View {
             if favoriteEmoji.count < 32 { return }
             
             let topLeft1Emoji = favoriteEmoji[0]
-            if topLeft1Emoji != "" { topRow[0] = topLeft1Emoji }
+            if topLeft1Emoji != "" { topRowShortcuts[0] = topLeft1Emoji }
             
             let topLeft2Emoji = favoriteEmoji[1]
-            if topLeft2Emoji != "" { topRow[1] = topLeft2Emoji }
+            if topLeft2Emoji != "" { topRowShortcuts[1] = topLeft2Emoji }
             
             let topLeft3Emoji = favoriteEmoji[2]
-            if topLeft3Emoji != "" { topRow[2] = topLeft3Emoji }
+            if topLeft3Emoji != "" { topRowShortcuts[2] = topLeft3Emoji }
             
             let topLeft4Emoji = favoriteEmoji[3]
-            if topLeft4Emoji != "" { topRow[3] = topLeft4Emoji }
+            if topLeft4Emoji != "" { topRowShortcuts[3] = topLeft4Emoji }
             
             let topLeft5Emoji = favoriteEmoji[4]
-            if topLeft5Emoji != "" { topRow[4] = topLeft5Emoji }
+            if topLeft5Emoji != "" { topRowShortcuts[4] = topLeft5Emoji }
             
             let midLeft1Emoji = favoriteEmoji[8]
-            if midLeft1Emoji != "" { middleRow[0] = midLeft1Emoji }
+            if midLeft1Emoji != "" { middleRowShortcuts[0] = midLeft1Emoji }
             
             let midLeft2Emoji = favoriteEmoji[9]
-            if midLeft2Emoji != "" { middleRow[1] = midLeft2Emoji }
+            if midLeft2Emoji != "" { middleRowShortcuts[1] = midLeft2Emoji }
             
             let midLeft3Emoji = favoriteEmoji[10]
-            if midLeft3Emoji != "" { middleRow[2] = midLeft3Emoji }
+            if midLeft3Emoji != "" { middleRowShortcuts[2] = midLeft3Emoji }
             
             let midLeft4Emoji = favoriteEmoji[11]
-            if midLeft4Emoji != "" { middleRow[3] = midLeft4Emoji }
+            if midLeft4Emoji != "" { middleRowShortcuts[3] = midLeft4Emoji }
             
             let midLeft5Emoji = favoriteEmoji[12]
-            if midLeft5Emoji != "" { middleRow[4] = midLeft5Emoji }
+            if midLeft5Emoji != "" { middleRowShortcuts[4] = midLeft5Emoji }
             
             let topRight1Emoji = favoriteEmoji[7]
-            if topRight1Emoji != "" { topRow[topRowArray.count-1] = topRight1Emoji }
+            if topRight1Emoji != "" { topRowShortcuts[topRowDictKeys.count-1] = topRight1Emoji }
             
             let middleRight1Emoji = favoriteEmoji[15]
-            if middleRight1Emoji != "" { middleRow[middleRowArray.count-1] = middleRight1Emoji }
+            if middleRight1Emoji != "" { middleRowShortcuts[middleRowDictKeys.count-1] = middleRight1Emoji }
             
             Save()
         }
         
+        func getDictKey(forShortcutKey: String) -> String {
+            return (locale != nil ? "\(locale!.languageCode):" : "") + forShortcutKey
+        }
+        func getShortcutKeyFromDictKey(dictKey: String) -> String {
+            if dictKey.count > 3 && dictKey.contains(":") {
+                return String(dictKey.split(separator: ":").last!)
+            }
+            return dictKey
+        }
+        
         struct Key: View {
             
-            @State var placeholder: String
+            let placeholder: String
             @Binding var value: String
             
             @FocusState private var isFocused: Bool
@@ -321,7 +341,7 @@ struct ShortcutsView: View {
                     }
                     .layoutPriority(value.count == 0 ? 1 : 2)
                     .focused($isFocused)
-                    .onChange(of: isFocused) { isFocused in
+                    .onChange(of: isFocused) { _, isFocused in
                         if !isFocused {
                             onEndFocus()
                         } else {

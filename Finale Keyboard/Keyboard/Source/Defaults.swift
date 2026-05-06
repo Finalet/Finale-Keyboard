@@ -12,7 +12,16 @@ class Defaults {
     static let punctuation = [" ", ".", ",", "?", "!", ":", ";"]
     
     static let shortcuts: [String : String] = [
-        "е" : "ё",
-        "ь" : "ъ",
+        "\(Locale.ru_RU.languageCode):е" : "ё",
+        "\(Locale.ru_RU.languageCode):ь" : "ъ",
+        "\(Locale.ru_RU.languageCode):ч" : "Cut",
+        "\(Locale.ru_RU.languageCode):с" : "Copy",
+        "\(Locale.ru_RU.languageCode):м" : "Paste",
+        "\(Locale.en_US.languageCode):x" : "Cut",
+        "\(Locale.en_US.languageCode):c" : "Copy",
+        "\(Locale.en_US.languageCode):v" : "Paste",
+        "\(Locale.es_ES.languageCode):x" : "Cut",
+        "\(Locale.es_ES.languageCode):c" : "Copy",
+        "\(Locale.es_ES.languageCode):v" : "Paste",
     ]
 }

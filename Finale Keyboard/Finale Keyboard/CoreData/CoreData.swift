@@ -16,9 +16,9 @@ class CoreData {
     }
     
     lazy var persistentContainer: NSPersistentContainer = {
-        let storeURL = URL.storeURL(for: "group.finale-keyboard-cache", databaseName: "DataModel")
+        let storeURL = URL.storeURL(for: "group.finale-keyboard-cache", databaseName: "CoreDataModel")
         let storeDescription = NSPersistentStoreDescription(url: storeURL)
-        let container = NSPersistentContainer(name: "DataModel")
+        let container = NSPersistentContainer(name: "CoreDataModel")
         container.persistentStoreDescriptions = [storeDescription]
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {

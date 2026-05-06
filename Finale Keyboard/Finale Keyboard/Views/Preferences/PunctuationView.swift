@@ -14,7 +14,7 @@ struct PunctuationView: View {
     
     @UserDefaultState("FINALE_DEV_APP_punctuationArray", Defaults.punctuation) var punctuationArray: [String]
     
-    let punctuationOptions = [".", ",", "?", "!", ":", ";", "-", "@", "*", "\"", "/", "\\", "|", "(", ")", "[", "]", "{", "}"]
+    let punctuationOptions = [".", ",", "?", "!", ":", ";", "-", "@", "*", "¿", "¡", "\"", "/", "\\", "|", "(", ")", "[", "]", "{", "}"]
     
     var body: some View {
         Form {

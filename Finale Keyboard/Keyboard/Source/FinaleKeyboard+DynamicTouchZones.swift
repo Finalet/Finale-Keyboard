@@ -19,7 +19,7 @@ extension FinaleKeyboard {
             let lastString = String(lastSubstring).lowercased()
             if lastString.count < minNgram { return }
             
-            Ngrams.shared.getCharacterProbabilities(lastString) { probabilities in
+            Ngrams.shared.getCharacterProbabilities(lastString, locale: FinaleKeyboard.currentLocale) { probabilities in
                 guard let probabilities = probabilities else { return }
                 
                 for probability in probabilities.reversed() {

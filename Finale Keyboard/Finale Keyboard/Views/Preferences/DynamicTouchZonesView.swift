@@ -21,8 +21,10 @@ struct DynamicTouchZonesView: View {
     @UserDefaultState("FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier", 1.5) var dynamicTapZoneProbabilityMultiplier: Float
     @UserDefaultState("FINALE_DEV_APP_dynamicKeyHighlighting", false) var dynamicKeyHighlighting: Bool
     
-    @State var loadingStatus: String? = nil
-    @State var isDictionaryLoaded: Bool = Ngrams.shared.isNgramDictionaryLoaded
+    @State var showDictionariesList: Bool = false
+    @State var anyDictLoaded: Bool = false
+    @State var loading: Bool = false
+    @State var deleting: Bool = false
     
     @FocusState private var shouldShowKeyboard: Bool
     
@@ -41,38 +43,32 @@ struct DynamicTouchZonesView: View {
                         }
                 }
             }
+            
             if isDynamicTapZonesEnabled {
-                Section (footer: Text(loadingStatus == nil ? !isDictionaryLoaded ? Localize.dictionaryRequired : "" : String(format: Localize.loadingDurationWarning, !isDictionaryLoaded ? Localization.Misc.loading : Localization.Misc.deleting))) {
-                    HStack{
-                        if loadingStatus == nil {
-                            Image(systemName: isDictionaryLoaded ? "checkmark" : "exclamationmark.triangle")
-                                .foregroundColor(isDictionaryLoaded ? .green : .red)
-                        } else {
-                            ProgressView()
-                                .tint(.gray)
-                                .padding(.trailing, 4)
-                        }
-                        Text(loadingStatus ?? (isDictionaryLoaded ? Localize.dictionaryLoaded : Localize.dictionaryNotLoaded))
-                            .foregroundColor(loadingStatus != nil ? .gray : isDictionaryLoaded ? .green : .red)
-                        Spacer()
-                        Button(action: {
-                            if !isDictionaryLoaded {
-                                Ngrams.shared.LoadNgramsToCoreData() { status, isDone in
-                                    loadingStatus = isDone ? nil : status
-                                    if isDone { isDictionaryLoaded = Ngrams.shared.isNgramDictionaryLoaded }
-                                }
-                            } else {
-                                Ngrams.shared.DeleteAllNgrams() { status, isDone in
-                                    loadingStatus = isDone ? nil : status
-                                    if isDone { isDictionaryLoaded = Ngrams.shared.isNgramDictionaryLoaded }
-                                }
+                Section(footer: Text(dictionariesFooterText)) {
+                    Button(action: {
+                        withAnimation { showDictionariesList.toggle() }
+                    }, label: {
+                        HStack {
+                            if !anyDictLoaded {
+                                Image(systemName: "exclamationmark.triangle")
                             }
-                        }, label: {
-                            Text(loadingStatus == nil ? (!isDictionaryLoaded ? Localization.Actions.load : Localization.Actions.delete) : "")
-                        })
-                        .disabled(loadingStatus != nil)
+                            Text(Localize.dictionaries)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .rotationEffect(showDictionariesList ? .degrees(90) : .zero)
+                        }
+                        .foregroundColor(anyDictLoaded ? .primary : .red)
+                    })
+                    if showDictionariesList {
+                        LocaleDictionary(locale: .en_US, onLoad: OnDictLoadChange, onDelete: OnDictDeleteChange)
+                        LocaleDictionary(locale: .ru_RU, onLoad: OnDictLoadChange, onDelete: OnDictDeleteChange)
+                        LocaleDictionary(locale: .es_ES, onLoad: OnDictLoadChange, onDelete: OnDictDeleteChange)
                     }
                 }
+                .opacity(disableDictionariesInteractions ? 0.5 : 1)
+                .disabled(disableDictionariesInteractions)
+                
                 Section(header: Text(Localization.PreferencesScreen.Advanced.pageTitle)) {
                     Toggle(Localize.showTouchZones, isOn: $showTouchZones.animation())
                         .onChange(of: showTouchZones) { _, value in
@@ -96,6 +92,9 @@ struct DynamicTouchZonesView: View {
             }
         }
         .navigationTitle(Localize.pageTitle)
+        .onAppear {
+            CheckDictionaries(animted: false)
+        }
     }
     
     @ViewBuilder
@@ -110,6 +109,103 @@ struct DynamicTouchZonesView: View {
     
     func OnChange () {
         shouldShowKeyboard = false
+    }
+    
+    func CheckDictionaries(animted: Bool = true) {
+        let anyLoaded = Locale.allCases.contains(where: { Ngrams.shared.isLocaleLoadedIntoCoreData($0) })
+        if animted {
+            withAnimation { anyDictLoaded = anyLoaded }
+        } else {
+            anyDictLoaded = anyLoaded
+        }
+    }
+    
+    func OnDictLoadChange(isDone: Bool) {
+        withAnimation { loading = !isDone }
+        if isDone { CheckDictionaries() }
+    }
+    func OnDictDeleteChange(isDone: Bool) {
+        withAnimation { deleting = !isDone }
+        if isDone { CheckDictionaries() }
+    }
+    
+    var dictionariesFooterText: String {
+        if loading {
+            return String(format: Localize.loadingDurationWarning, Localization.Misc.loading)
+        } else if deleting {
+            return String(format: Localize.loadingDurationWarning, Localization.Misc.deleting)
+        }
+        return Localize.dictionaryRequired
+    }
+    var disableDictionariesInteractions: Bool { loading || deleting }
+}
+
+struct LocaleDictionary: View {
+    let locale: Locale
+    let onLoad: (_: Bool) -> Void
+    let onDelete: (_: Bool) -> Void
+    
+    @State var loadingStatus: String? = nil
+    
+    var dictLoaded: Bool {
+        return Ngrams.shared.isLocaleLoadedIntoCoreData(locale)
+    }
+    
+    var localeLabel: String {
+        switch locale {
+        case .en_US: Localization.LanguagesScreen.english
+        case .ru_RU: Localization.LanguagesScreen.russian
+        case .es_ES: Localization.LanguagesScreen.spanish
+        }
+    }
+    
+    var loading: Bool { loadingStatus != nil }
+    
+    typealias Localize = Localization.PreferencesScreen.DynamicTouchZones
+    
+    var body: some View {
+        Button(action: {
+            if dictLoaded { DeleteDictionary() }
+            else { LoadDictionary() }
+        }, label: {
+            HStack {
+                Text(localeLabel)
+                    .foregroundColor(loading ? .gray : .primary)
+                Spacer()
+                if loading {
+                    ProgressView()
+                        .tint(.gray)
+                        .scaleEffect(0.8)
+                }
+                Group {
+                    if let loadingStatus = loadingStatus {
+                        Text(loadingStatus)
+                    } else {
+                        Image(systemName: dictLoaded ? "checkmark" : "square.and.arrow.down")
+                    }
+                }
+                .foregroundColor(loading ? .gray : dictLoaded ? .green : .brand)
+                .font(loading ? .footnote : .body)
+                    
+            }
+            .padding(.leading, 16)
+        })
+        .disabled(loading)
+    }
+    
+    func LoadDictionary () {
+        onLoad(false)
+        Ngrams.shared.LoadNgramsToCoreData(locale: locale) { status, isDone in
+            loadingStatus = isDone ? nil : status
+            if isDone { onLoad(true) }
+        }
+    }
+    func DeleteDictionary() {
+        onDelete(false)
+        Ngrams.shared.DeleteNgramsFromCoreData(forLocale: locale) { status, isDone in
+            loadingStatus = isDone ? nil : status
+            if isDone { onDelete(true) }
+        }
     }
 }
 
@@ -160,4 +256,8 @@ struct ScaleGraph: View {
         .chartXScale(domain: [0, 100])
         .aspectRatio(1.7, contentMode: .fill)
     }
+}
+
+#Preview {
+    DynamicTouchZonesView()
 }

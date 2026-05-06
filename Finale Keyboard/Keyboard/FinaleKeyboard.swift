@@ -70,7 +70,7 @@ class FinaleKeyboard: UIInputViewController {
     static var isSpacebarAutocorrectOn = false
     
     static var currentLocale = Locale.en_US
-    static var enabledLocales = [Locale.en_US, Locale.ru_RU]
+    static var enabledLocales = [Locale.en_US]
     static var currentViewType = ViewType.Characters
     
     var pickedPunctuationIndex = 0
@@ -163,9 +163,11 @@ class FinaleKeyboard: UIInputViewController {
     func LoadPreferences () {
         let EN_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_en_locale_enabled") as? Bool ?? true
         let RU_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_ru_locale_enabled") as? Bool ?? false
+        let ES_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_es_locale_enabled") as? Bool ?? false
         FinaleKeyboard.enabledLocales.removeAll()
         if EN_enabled { FinaleKeyboard.enabledLocales.append(Locale.en_US) }
         if RU_enabled { FinaleKeyboard.enabledLocales.append(Locale.ru_RU) }
+        if ES_enabled { FinaleKeyboard.enabledLocales.append(Locale.es_ES) }
         
         FinaleKeyboard.isAutoCorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectWords") as? Bool ?? true
         FinaleKeyboard.isAutoCorrectGrammarOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectGrammar") as? Bool ?? true
@@ -1148,8 +1150,9 @@ class FinaleKeyboard: UIInputViewController {
         return true
     }
     
-    func ToggleLocale () {
-        let index = ((FinaleKeyboard.enabledLocales.firstIndex(of: FinaleKeyboard.currentLocale) ?? 0) + 1) % FinaleKeyboard.enabledLocales.count
+    func ToggleLocale (backwards: Bool = false) {
+        var index = ((FinaleKeyboard.enabledLocales.firstIndex(of: FinaleKeyboard.currentLocale) ?? 0) + (backwards ? -1 : 1)) % FinaleKeyboard.enabledLocales.count
+        if index < 0 { index += FinaleKeyboard.enabledLocales.count }
         FinaleKeyboard.currentLocale = FinaleKeyboard.enabledLocales[index]
         
         BuildKeyboardView(viewType: .Characters, updateViewType: FinaleKeyboard.currentViewType != .SearchEmoji)

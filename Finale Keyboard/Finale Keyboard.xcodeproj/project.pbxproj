@@ -12,8 +12,6 @@
 		370B056B28B3F1080062000A /* Defaults.swift in Sources */ = {isa = PBXBuildFile; fileRef = 370B056928B3F0EF0062000A /* Defaults.swift */; };
 		37178A7B2B4DB00500748DD0 /* CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37178A7A2B4DB00500748DD0 /* CoreData.swift */; };
 		37178A7C2B4DB05100748DD0 /* CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37178A7A2B4DB00500748DD0 /* CoreData.swift */; };
-		37178A7F2B4DB06B00748DD0 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 37178A7D2B4DB06B00748DD0 /* DataModel.xcdatamodeld */; };
-		37178A802B4DB06B00748DD0 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 37178A7D2B4DB06B00748DD0 /* DataModel.xcdatamodeld */; };
 		37178A822B4DC50600748DD0 /* Ngrams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37178A812B4DC50600748DD0 /* Ngrams.swift */; };
 		37178A832B4DC50600748DD0 /* Ngrams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37178A812B4DC50600748DD0 /* Ngrams.swift */; };
 		37178AA32B4DE03500748DD0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 37178AA22B4DE03500748DD0 /* Extensions.swift */; };
@@ -72,9 +70,16 @@
 		863BBCCA2F89C4BC00D828B4 /* StoreKit.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */; };
 		863BBCCC2F89C58A00D828B4 /* InAppPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863BBCCB2F89C58700D828B4 /* InAppPurchaseManager.swift */; };
 		864948182F918AEE0002CAC0 /* Icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 864948172F918AEE0002CAC0 /* Icon.icon */; };
+		867CCCFA2FAABDBB002EDD1B /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 867CCCF82FAABDBB002EDD1B /* CoreDataModel.xcdatamodeld */; };
+		867CCCFB2FAABDBB002EDD1B /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 867CCCF82FAABDBB002EDD1B /* CoreDataModel.xcdatamodeld */; };
 		86B6EC642F8D466A00828DE0 /* GesturesGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B6EC632F8D466100828DE0 /* GesturesGuideView.swift */; };
 		86C4FD442F8C1A6A0086F12F /* DefaultButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C4FD432F8C1A670086F12F /* DefaultButton.swift */; };
 		86C4FD462F8C3F590086F12F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C4FD452F8C3F570086F12F /* OnboardingView.swift */; };
+		86F96E6D2FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F96E692FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json */; };
+		86F96E6E2FAA7FDC007BF1CA /* spanish-30000-n4-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F96E6A2FAA7FDC007BF1CA /* spanish-30000-n4-probabilities.json */; };
+		86F96E6F2FAA7FDC007BF1CA /* spanish-30000-n1-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F96E672FAA7FDC007BF1CA /* spanish-30000-n1-probabilities.json */; };
+		86F96E702FAA7FDC007BF1CA /* spanish-30000-n2-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F96E682FAA7FDC007BF1CA /* spanish-30000-n2-probabilities.json */; };
+		86F96E712FAA7FDC007BF1CA /* spanish-30000-n5-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F96E6B2FAA7FDC007BF1CA /* spanish-30000-n5-probabilities.json */; };
 		86FC50CB2F91976000083250 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 86FC50CA2F91976000083250 /* StoreKit.framework */; };
 /* End PBXBuildFile section */
 
@@ -106,7 +111,6 @@
 		3709029527B2F54000213BDD /* DefaultDictionary.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = DefaultDictionary.json; sourceTree = "<group>"; };
 		370B056928B3F0EF0062000A /* Defaults.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Defaults.swift; sourceTree = "<group>"; };
 		37178A7A2B4DB00500748DD0 /* CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreData.swift; sourceTree = "<group>"; };
-		37178A7E2B4DB06B00748DD0 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
 		37178A812B4DC50600748DD0 /* Ngrams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ngrams.swift; sourceTree = "<group>"; };
 		37178AA22B4DE03500748DD0 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		371F496727ADA92F00686BC7 /* EmojiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiView.swift; sourceTree = "<group>"; };
@@ -167,9 +171,15 @@
 		863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKit.storekit; sourceTree = "<group>"; };
 		863BBCCB2F89C58700D828B4 /* InAppPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseManager.swift; sourceTree = "<group>"; };
 		864948172F918AEE0002CAC0 /* Icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Icon.icon; sourceTree = "<group>"; };
+		867CCCF92FAABDBB002EDD1B /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
 		86B6EC632F8D466100828DE0 /* GesturesGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GesturesGuideView.swift; sourceTree = "<group>"; };
 		86C4FD432F8C1A670086F12F /* DefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultButton.swift; sourceTree = "<group>"; };
 		86C4FD452F8C3F570086F12F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		86F96E672FAA7FDC007BF1CA /* spanish-30000-n1-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "spanish-30000-n1-probabilities.json"; sourceTree = "<group>"; };
+		86F96E682FAA7FDC007BF1CA /* spanish-30000-n2-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "spanish-30000-n2-probabilities.json"; sourceTree = "<group>"; };
+		86F96E692FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "spanish-30000-n3-probabilities.json"; sourceTree = "<group>"; };
+		86F96E6A2FAA7FDC007BF1CA /* spanish-30000-n4-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "spanish-30000-n4-probabilities.json"; sourceTree = "<group>"; };
+		86F96E6B2FAA7FDC007BF1CA /* spanish-30000-n5-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "spanish-30000-n5-probabilities.json"; sourceTree = "<group>"; };
 		86FC50CA2F91976000083250 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -198,8 +208,8 @@
 			children = (
 				37D686762B4B639300833DCA /* NGrams */,
 				37178A7A2B4DB00500748DD0 /* CoreData.swift */,
-				37178A7D2B4DB06B00748DD0 /* DataModel.xcdatamodeld */,
 				37178A812B4DC50600748DD0 /* Ngrams.swift */,
+				867CCCF82FAABDBB002EDD1B /* CoreDataModel.xcdatamodeld */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -335,6 +345,7 @@
 		37D686762B4B639300833DCA /* NGrams */ = {
 			isa = PBXGroup;
 			children = (
+				86F96E6C2FAA7FDC007BF1CA /* Spanish */,
 				37D6868C2B4C615400833DCA /* Russian */,
 				37D686812B4B63E800833DCA /* English */,
 			);
@@ -400,6 +411,18 @@
 				86C4FD432F8C1A670086F12F /* DefaultButton.swift */,
 			);
 			path = Components;
+			sourceTree = "<group>";
+		};
+		86F96E6C2FAA7FDC007BF1CA /* Spanish */ = {
+			isa = PBXGroup;
+			children = (
+				86F96E672FAA7FDC007BF1CA /* spanish-30000-n1-probabilities.json */,
+				86F96E682FAA7FDC007BF1CA /* spanish-30000-n2-probabilities.json */,
+				86F96E692FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json */,
+				86F96E6A2FAA7FDC007BF1CA /* spanish-30000-n4-probabilities.json */,
+				86F96E6B2FAA7FDC007BF1CA /* spanish-30000-n5-probabilities.json */,
+			);
+			path = Spanish;
 			sourceTree = "<group>";
 		};
 		86FC50C92F91976000083250 /* Frameworks */ = {
@@ -501,6 +524,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				37BCBE192B4E113900E6F82F /* russian-50000-n5-probabilities.json in Resources */,
+				86F96E6D2FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json in Resources */,
+				86F96E6E2FAA7FDC007BF1CA /* spanish-30000-n4-probabilities.json in Resources */,
+				86F96E6F2FAA7FDC007BF1CA /* spanish-30000-n1-probabilities.json in Resources */,
+				86F96E702FAA7FDC007BF1CA /* spanish-30000-n2-probabilities.json in Resources */,
+				86F96E712FAA7FDC007BF1CA /* spanish-30000-n5-probabilities.json in Resources */,
 				37BCBE252B4E114600E6F82F /* english-30000-n4-probabilities.json in Resources */,
 				37BCBE212B4E114600E6F82F /* english-30000-n2-probabilities.json in Resources */,
 				864948182F918AEE0002CAC0 /* Icon.icon in Resources */,
@@ -545,10 +573,10 @@
 				37178A7B2B4DB00500748DD0 /* CoreData.swift in Sources */,
 				37A0ACF527A8694100578290 /* ContentView.swift in Sources */,
 				86C4FD442F8C1A6A0086F12F /* DefaultButton.swift in Sources */,
-				37178A7F2B4DB06B00748DD0 /* DataModel.xcdatamodeld in Sources */,
 				375D075029EA400B00EA2980 /* Locales.swift in Sources */,
 				863BBCCC2F89C58A00D828B4 /* InAppPurchaseManager.swift in Sources */,
 				861119EF2F88838200F6F7EB /* PunctuationView.swift in Sources */,
+				867CCCFB2FAABDBB002EDD1B /* CoreDataModel.xcdatamodeld in Sources */,
 				3743FC5727B158AD0043B2A2 /* FavoriteEmojiView.swift in Sources */,
 				861119F12F8883BA00F6F7EB /* AdvancedView.swift in Sources */,
 				374C861A27DD74B8003BA47B /* PreferencesView.swift in Sources */,
@@ -583,8 +611,8 @@
 				37D686752B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift in Sources */,
 				37A0AD0727A869BA00578290 /* FinaleKeyboard.swift in Sources */,
 				37991F3229E9964400900BC9 /* FunctionButton.swift in Sources */,
-				37178A802B4DB06B00748DD0 /* DataModel.xcdatamodeld in Sources */,
 				375A62CF29E8E80F007E6065 /* PageControl.swift in Sources */,
+				867CCCFA2FAABDBB002EDD1B /* CoreDataModel.xcdatamodeld in Sources */,
 				375A62D129E8F3E4007E6065 /* EmojiSearchRow.swift in Sources */,
 				3720638827AB2CAF00964120 /* Locales.swift in Sources */,
 				863AF0DE2F8B46F600FA036E /* ReturnButton.swift in Sources */,
@@ -927,13 +955,13 @@
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
-		37178A7D2B4DB06B00748DD0 /* DataModel.xcdatamodeld */ = {
+		867CCCF82FAABDBB002EDD1B /* CoreDataModel.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				37178A7E2B4DB06B00748DD0 /* DataModel.xcdatamodel */,
+				867CCCF92FAABDBB002EDD1B /* CoreDataModel.xcdatamodel */,
 			);
-			currentVersion = 37178A7E2B4DB06B00748DD0 /* DataModel.xcdatamodel */;
-			path = DataModel.xcdatamodeld;
+			currentVersion = 867CCCF92FAABDBB002EDD1B /* CoreDataModel.xcdatamodel */;
+			path = CoreDataModel.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

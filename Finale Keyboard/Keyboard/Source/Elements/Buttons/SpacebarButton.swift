@@ -39,9 +39,8 @@ class SpacebarButton: CharacterButton {
     }
 
     override func OnSwipe(direction: KeyboardButton.SwipeDirection) {
-        if (direction == .Left || direction == .Right) {
-            FinaleKeyboard.instance.ToggleLocale()
-        }
+        if direction == .Left { FinaleKeyboard.instance.ToggleLocale() }
+        else if direction == .Right { FinaleKeyboard.instance.ToggleLocale(backwards: true) }
     }
     
     override func OnSwipeHoldRepeating(direction: KeyboardButton.SwipeDirection) {
