@@ -129,7 +129,7 @@ class CharacterButton: KeyboardButton {
     }
     
     func ShowShortcutPreview () {
-        if let shortcut = FinaleKeyboard.instance.shortcuts[String(character)] {
+        if let shortcut = getShortcut() {
             shortcutPreviewLabel = UILabel()
             shortcutPreviewLabel?.text = shortcut
             shortcutPreviewLabel?.font = titleLabel.font.withSize(titleLabel.font.pointSize * (shortcut.isEmoji ? 1 : 0.8))
@@ -158,7 +158,7 @@ class CharacterButton: KeyboardButton {
     
     @discardableResult
     func TypeShortcut () -> Bool {
-        if let shortcut = FinaleKeyboard.instance.shortcuts[String(character)] {
+        if let shortcut = getShortcut() {
             if shortcut.isEmoji { FinaleKeyboard.instance.TypeEmoji(emoji: shortcut) }
             else if shortcut == "Cut" { FinaleKeyboard.instance.Cut() }
             else if shortcut == "Copy" { FinaleKeyboard.instance.Copy() }
@@ -193,5 +193,9 @@ class CharacterButton: KeyboardButton {
         } completion: { _ in
             label.removeFromSuperview()
         }
+    }
+    
+    func getShortcut () -> String? {
+        return FinaleKeyboard.instance.shortcuts[FinaleKeyboard.currentLocale.languageCode + ":" + String(character)] ?? FinaleKeyboard.instance.shortcuts[String(character)]
     }
 }
