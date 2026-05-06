@@ -163,6 +163,7 @@ class CharacterButton: KeyboardButton {
             else if shortcut == "Cut" { FinaleKeyboard.instance.Cut() }
             else if shortcut == "Copy" { FinaleKeyboard.instance.Copy() }
             else if shortcut == "Paste" { FinaleKeyboard.instance.Paste() }
+            else if shortcut.count == 1 { FinaleKeyboard.instance.Paste(text: shortcut) }
             else { FinaleKeyboard.instance.Paste(text: "\(shortcut) ") }
             AnimateShortcutCallout(title: shortcut)
             HapticFeedback.TypingImpactOccurred()

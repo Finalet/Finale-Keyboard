@@ -41,7 +41,7 @@ struct ShortcutsView: View {
                     KeyboardView(locale: .es_ES, title: Localization.LanguagesScreen.spanish.uppercased(), restoreDefaults: $restoreDefaults, populateEmoji: $populateEmoji)
                 }
                 
-                if ES_enabled {
+                if DE_enabled {
                     KeyboardView(locale: .de_DE, title: Localization.LanguagesScreen.german.uppercased(), restoreDefaults: $restoreDefaults, populateEmoji: $populateEmoji)
                 }
                 
