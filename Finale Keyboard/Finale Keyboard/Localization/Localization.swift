@@ -81,6 +81,7 @@ struct Localization {
         static var english = NSLocalizedString("languages_english", value: "English", comment: "")
         static var russian = NSLocalizedString("languages_russian", value: "Russian", comment: "")
         static var spanish = NSLocalizedString("languages_spanish", value: "Spanish", comment: "")
+        static var german = NSLocalizedString("languages_german", value: "German", comment: "")
     }
     
     struct DictionaryScreen {
