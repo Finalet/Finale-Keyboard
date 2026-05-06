@@ -1150,8 +1150,9 @@ class FinaleKeyboard: UIInputViewController {
         return true
     }
     
-    func ToggleLocale () {
-        let index = ((FinaleKeyboard.enabledLocales.firstIndex(of: FinaleKeyboard.currentLocale) ?? 0) + 1) % FinaleKeyboard.enabledLocales.count
+    func ToggleLocale (backwards: Bool = false) {
+        var index = ((FinaleKeyboard.enabledLocales.firstIndex(of: FinaleKeyboard.currentLocale) ?? 0) + (backwards ? -1 : 1)) % FinaleKeyboard.enabledLocales.count
+        if index < 0 { index += FinaleKeyboard.enabledLocales.count }
         FinaleKeyboard.currentLocale = FinaleKeyboard.enabledLocales[index]
         
         BuildKeyboardView(viewType: .Characters, updateViewType: FinaleKeyboard.currentViewType != .SearchEmoji)
