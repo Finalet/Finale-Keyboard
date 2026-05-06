@@ -7,26 +7,30 @@
 
 import Foundation
 
-enum Locale: Int {
+enum Locale: Int, CaseIterable {
     case en_US
     case ru_RU
+    case es_ES
     
     var topRow: [String] {
         switch self {
         case .en_US: return ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"]
         case .ru_RU: return ["й", "ц", "у" , "к", "е", "н", "г", "ш", "щ", "з", "х"]
+        case .es_ES: return ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"]
         }
     }
     var middleRow: [String] {
         switch self {
         case .en_US: return ["a", "s", "d", "f",  "g", "h", "j", "k", "l"]
         case .ru_RU: return ["ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э"]
+        case .es_ES: return ["a", "s", "d", "f",  "g", "h", "j", "k", "l", "ñ"]
         }
     }
     var bottomRow: [String] {
         switch self {
         case .en_US: return ["z", "x", "c", "v", "b", "n", "m"]
         case .ru_RU: return ["я", "ч", "с", "м", "и", "т", "ь", "б", "ю"]
+        case .es_ES: return ["z", "x", "c", "v", "b", "n", "m"]
         }
     }
 }
