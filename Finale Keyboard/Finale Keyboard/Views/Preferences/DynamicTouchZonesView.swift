@@ -61,9 +61,9 @@ struct DynamicTouchZonesView: View {
                         .foregroundColor(anyDictLoaded ? .primary : .red)
                     })
                     if showDictionariesList {
-                        LocaleDictionary(locale: .en_US, onLoad: OnDictLoadChange, onDelete: OnDictDeleteChange)
-                        LocaleDictionary(locale: .ru_RU, onLoad: OnDictLoadChange, onDelete: OnDictDeleteChange)
-                        LocaleDictionary(locale: .es_ES, onLoad: OnDictLoadChange, onDelete: OnDictDeleteChange)
+                        ForEach(Locale.allCases, id: \.self) { locale in
+                            LocaleDictionary(locale: locale, onLoad: OnDictLoadChange, onDelete: OnDictDeleteChange)
+                        }
                     }
                 }
                 .opacity(disableDictionariesInteractions ? 0.5 : 1)
@@ -156,6 +156,7 @@ struct LocaleDictionary: View {
         case .en_US: Localization.LanguagesScreen.english
         case .ru_RU: Localization.LanguagesScreen.russian
         case .es_ES: Localization.LanguagesScreen.spanish
+        case .de_DE: Localization.LanguagesScreen.german
         }
     }
     

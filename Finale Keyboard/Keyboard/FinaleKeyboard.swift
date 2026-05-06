@@ -164,10 +164,12 @@ class FinaleKeyboard: UIInputViewController {
         let EN_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_en_locale_enabled") as? Bool ?? true
         let RU_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_ru_locale_enabled") as? Bool ?? false
         let ES_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_es_locale_enabled") as? Bool ?? false
+        let DE_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_de_locale_enabled") as? Bool ?? false
         FinaleKeyboard.enabledLocales.removeAll()
         if EN_enabled { FinaleKeyboard.enabledLocales.append(Locale.en_US) }
         if RU_enabled { FinaleKeyboard.enabledLocales.append(Locale.ru_RU) }
         if ES_enabled { FinaleKeyboard.enabledLocales.append(Locale.es_ES) }
+        if DE_enabled { FinaleKeyboard.enabledLocales.append(Locale.de_DE) }
         
         FinaleKeyboard.isAutoCorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectWords") as? Bool ?? true
         FinaleKeyboard.isAutoCorrectGrammarOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectGrammar") as? Bool ?? true

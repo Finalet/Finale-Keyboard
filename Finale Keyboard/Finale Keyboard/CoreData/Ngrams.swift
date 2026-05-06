@@ -114,6 +114,7 @@ class Ngrams {
         case .en_US: fileName = "english-30000-n%D-probabilities"
         case .ru_RU: fileName = "russian-50000-n%D-probabilities"
         case .es_ES: fileName = "spanish-30000-n%D-probabilities"
+        case .de_DE: fileName = "german-30000-n%D-probabilities"
         }
         return String(format: fileName, n)
     }

@@ -15,6 +15,7 @@ struct ShortcutsView: View {
     @UserDefaultState("FINALE_DEV_APP_en_locale_enabled", true) var EN_enabled: Bool
     @UserDefaultState("FINALE_DEV_APP_ru_locale_enabled", false) var RU_enabled: Bool
     @UserDefaultState("FINALE_DEV_APP_es_locale_enabled", false) var ES_enabled: Bool
+    @UserDefaultState("FINALE_DEV_APP_de_locale_enabled", false) var DE_enabled: Bool
     
     @State private var restoreDefaults = false
     @State private var populateEmoji = false
@@ -38,6 +39,10 @@ struct ShortcutsView: View {
                 
                 if ES_enabled {
                     KeyboardView(locale: .es_ES, title: Localization.LanguagesScreen.spanish.uppercased(), restoreDefaults: $restoreDefaults, populateEmoji: $populateEmoji)
+                }
+                
+                if DE_enabled {
+                    KeyboardView(locale: .de_DE, title: Localization.LanguagesScreen.german.uppercased(), restoreDefaults: $restoreDefaults, populateEmoji: $populateEmoji)
                 }
                 
                 KeyboardView(symbols: true, title: Loc.symbols.uppercased(), restoreDefaults: $restoreDefaults, populateEmoji: $populateEmoji)

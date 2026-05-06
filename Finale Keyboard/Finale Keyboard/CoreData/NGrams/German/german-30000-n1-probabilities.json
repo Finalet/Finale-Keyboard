@@ -1,0 +1,646 @@
+{
+  "a": [
+    {
+      "character": "n",
+      "probability": 0.17
+    },
+    {
+      "character": "u",
+      "probability": 0.14
+    },
+    {
+      "character": "l",
+      "probability": 0.105
+    },
+    {
+      "character": "r",
+      "probability": 0.094
+    },
+    {
+      "character": "t",
+      "probability": 0.088
+    }
+  ],
+  "b": [
+    {
+      "character": "e",
+      "probability": 0.449
+    },
+    {
+      "character": "a",
+      "probability": 0.128
+    },
+    {
+      "character": "i",
+      "probability": 0.071
+    },
+    {
+      "character": "r",
+      "probability": 0.065
+    },
+    {
+      "character": "u",
+      "probability": 0.061
+    }
+  ],
+  "c": [
+    {
+      "character": "h",
+      "probability": 0.867
+    },
+    {
+      "character": "k",
+      "probability": 0.097
+    },
+    {
+      "character": "o",
+      "probability": 0.011
+    },
+    {
+      "character": "e",
+      "probability": 0.007
+    },
+    {
+      "character": "a",
+      "probability": 0.006
+    }
+  ],
+  "d": [
+    {
+      "character": "e",
+      "probability": 0.418
+    },
+    {
+      "character": "i",
+      "probability": 0.152
+    },
+    {
+      "character": "u",
+      "probability": 0.075
+    },
+    {
+      "character": "a",
+      "probability": 0.072
+    },
+    {
+      "character": "r",
+      "probability": 0.054
+    }
+  ],
+  "e": [
+    {
+      "character": "r",
+      "probability": 0.277
+    },
+    {
+      "character": "n",
+      "probability": 0.239
+    },
+    {
+      "character": "i",
+      "probability": 0.122
+    },
+    {
+      "character": "l",
+      "probability": 0.066
+    },
+    {
+      "character": "s",
+      "probability": 0.054
+    }
+  ],
+  "f": [
+    {
+      "character": "e",
+      "probability": 0.193
+    },
+    {
+      "character": "t",
+      "probability": 0.141
+    },
+    {
+      "character": "a",
+      "probability": 0.117
+    },
+    {
+      "character": "r",
+      "probability": 0.092
+    },
+    {
+      "character": "i",
+      "probability": 0.07
+    }
+  ],
+  "g": [
+    {
+      "character": "e",
+      "probability": 0.52
+    },
+    {
+      "character": "s",
+      "probability": 0.097
+    },
+    {
+      "character": "r",
+      "probability": 0.082
+    },
+    {
+      "character": "a",
+      "probability": 0.055
+    },
+    {
+      "character": "i",
+      "probability": 0.053
+    }
+  ],
+  "h": [
+    {
+      "character": "e",
+      "probability": 0.219
+    },
+    {
+      "character": "a",
+      "probability": 0.145
+    },
+    {
+      "character": "r",
+      "probability": 0.098
+    },
+    {
+      "character": "t",
+      "probability": 0.098
+    },
+    {
+      "character": "l",
+      "probability": 0.074
+    }
+  ],
+  "i": [
+    {
+      "character": "n",
+      "probability": 0.161
+    },
+    {
+      "character": "e",
+      "probability": 0.154
+    },
+    {
+      "character": "s",
+      "probability": 0.125
+    },
+    {
+      "character": "t",
+      "probability": 0.124
+    },
+    {
+      "character": "c",
+      "probability": 0.087
+    }
+  ],
+  "j": [
+    {
+      "character": "a",
+      "probability": 0.323
+    },
+    {
+      "character": "u",
+      "probability": 0.27
+    },
+    {
+      "character": "e",
+      "probability": 0.195
+    },
+    {
+      "character": "ä",
+      "probability": 0.105
+    },
+    {
+      "character": "o",
+      "probability": 0.08
+    }
+  ],
+  "k": [
+    {
+      "character": "e",
+      "probability": 0.205
+    },
+    {
+      "character": "o",
+      "probability": 0.144
+    },
+    {
+      "character": "a",
+      "probability": 0.126
+    },
+    {
+      "character": "t",
+      "probability": 0.123
+    },
+    {
+      "character": "r",
+      "probability": 0.084
+    }
+  ],
+  "l": [
+    {
+      "character": "i",
+      "probability": 0.185
+    },
+    {
+      "character": "e",
+      "probability": 0.18
+    },
+    {
+      "character": "a",
+      "probability": 0.128
+    },
+    {
+      "character": "l",
+      "probability": 0.111
+    },
+    {
+      "character": "t",
+      "probability": 0.074
+    }
+  ],
+  "m": [
+    {
+      "character": "e",
+      "probability": 0.239
+    },
+    {
+      "character": "a",
+      "probability": 0.16
+    },
+    {
+      "character": "i",
+      "probability": 0.153
+    },
+    {
+      "character": "m",
+      "probability": 0.109
+    },
+    {
+      "character": "o",
+      "probability": 0.058
+    }
+  ],
+  "n": [
+    {
+      "character": "g",
+      "probability": 0.198
+    },
+    {
+      "character": "d",
+      "probability": 0.145
+    },
+    {
+      "character": "t",
+      "probability": 0.099
+    },
+    {
+      "character": "s",
+      "probability": 0.087
+    },
+    {
+      "character": "e",
+      "probability": 0.086
+    }
+  ],
+  "o": [
+    {
+      "character": "r",
+      "probability": 0.212
+    },
+    {
+      "character": "n",
+      "probability": 0.191
+    },
+    {
+      "character": "l",
+      "probability": 0.112
+    },
+    {
+      "character": "s",
+      "probability": 0.073
+    },
+    {
+      "character": "m",
+      "probability": 0.063
+    }
+  ],
+  "p": [
+    {
+      "character": "r",
+      "probability": 0.193
+    },
+    {
+      "character": "e",
+      "probability": 0.142
+    },
+    {
+      "character": "a",
+      "probability": 0.126
+    },
+    {
+      "character": "o",
+      "probability": 0.115
+    },
+    {
+      "character": "i",
+      "probability": 0.095
+    }
+  ],
+  "q": [
+    {
+      "character": "u",
+      "probability": 1
+    }
+  ],
+  "r": [
+    {
+      "character": "e",
+      "probability": 0.177
+    },
+    {
+      "character": "a",
+      "probability": 0.11
+    },
+    {
+      "character": "i",
+      "probability": 0.093
+    },
+    {
+      "character": "t",
+      "probability": 0.086
+    },
+    {
+      "character": "s",
+      "probability": 0.064
+    }
+  ],
+  "s": [
+    {
+      "character": "t",
+      "probability": 0.227
+    },
+    {
+      "character": "c",
+      "probability": 0.2
+    },
+    {
+      "character": "e",
+      "probability": 0.107
+    },
+    {
+      "character": "s",
+      "probability": 0.081
+    },
+    {
+      "character": "i",
+      "probability": 0.066
+    }
+  ],
+  "t": [
+    {
+      "character": "e",
+      "probability": 0.246
+    },
+    {
+      "character": "i",
+      "probability": 0.14
+    },
+    {
+      "character": "a",
+      "probability": 0.093
+    },
+    {
+      "character": "r",
+      "probability": 0.092
+    },
+    {
+      "character": "s",
+      "probability": 0.08
+    }
+  ],
+  "u": [
+    {
+      "character": "n",
+      "probability": 0.34
+    },
+    {
+      "character": "s",
+      "probability": 0.14
+    },
+    {
+      "character": "r",
+      "probability": 0.081
+    },
+    {
+      "character": "m",
+      "probability": 0.066
+    },
+    {
+      "character": "f",
+      "probability": 0.063
+    }
+  ],
+  "v": [
+    {
+      "character": "e",
+      "probability": 0.626
+    },
+    {
+      "character": "o",
+      "probability": 0.214
+    },
+    {
+      "character": "i",
+      "probability": 0.097
+    },
+    {
+      "character": "a",
+      "probability": 0.048
+    },
+    {
+      "character": "ö",
+      "probability": 0.008
+    }
+  ],
+  "w": [
+    {
+      "character": "e",
+      "probability": 0.4
+    },
+    {
+      "character": "a",
+      "probability": 0.21
+    },
+    {
+      "character": "i",
+      "probability": 0.201
+    },
+    {
+      "character": "o",
+      "probability": 0.079
+    },
+    {
+      "character": "ä",
+      "probability": 0.04
+    }
+  ],
+  "x": [
+    {
+      "character": "i",
+      "probability": 0.244
+    },
+    {
+      "character": "p",
+      "probability": 0.234
+    },
+    {
+      "character": "t",
+      "probability": 0.167
+    },
+    {
+      "character": "e",
+      "probability": 0.144
+    },
+    {
+      "character": "u",
+      "probability": 0.048
+    }
+  ],
+  "y": [
+    {
+      "character": "s",
+      "probability": 0.192
+    },
+    {
+      "character": "m",
+      "probability": 0.162
+    },
+    {
+      "character": "l",
+      "probability": 0.101
+    },
+    {
+      "character": "c",
+      "probability": 0.078
+    },
+    {
+      "character": "p",
+      "probability": 0.071
+    }
+  ],
+  "z": [
+    {
+      "character": "e",
+      "probability": 0.35
+    },
+    {
+      "character": "u",
+      "probability": 0.184
+    },
+    {
+      "character": "i",
+      "probability": 0.179
+    },
+    {
+      "character": "w",
+      "probability": 0.053
+    },
+    {
+      "character": "a",
+      "probability": 0.045
+    }
+  ],
+  "ß": [
+    {
+      "character": "e",
+      "probability": 0.548
+    },
+    {
+      "character": "i",
+      "probability": 0.096
+    },
+    {
+      "character": "b",
+      "probability": 0.072
+    },
+    {
+      "character": "n",
+      "probability": 0.041
+    },
+    {
+      "character": "t",
+      "probability": 0.026
+    }
+  ],
+  "ä": [
+    {
+      "character": "n",
+      "probability": 0.163
+    },
+    {
+      "character": "t",
+      "probability": 0.134
+    },
+    {
+      "character": "r",
+      "probability": 0.126
+    },
+    {
+      "character": "h",
+      "probability": 0.11
+    },
+    {
+      "character": "u",
+      "probability": 0.079
+    }
+  ],
+  "ö": [
+    {
+      "character": "r",
+      "probability": 0.269
+    },
+    {
+      "character": "s",
+      "probability": 0.139
+    },
+    {
+      "character": "h",
+      "probability": 0.088
+    },
+    {
+      "character": "l",
+      "probability": 0.078
+    },
+    {
+      "character": "n",
+      "probability": 0.071
+    }
+  ],
+  "ü": [
+    {
+      "character": "b",
+      "probability": 0.176
+    },
+    {
+      "character": "c",
+      "probability": 0.16
+    },
+    {
+      "character": "r",
+      "probability": 0.137
+    },
+    {
+      "character": "h",
+      "probability": 0.136
+    },
+    {
+      "character": "n",
+      "probability": 0.107
+    }
+  ]
+}
