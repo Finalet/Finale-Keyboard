@@ -23,6 +23,8 @@ struct DynamicTouchZonesView: View {
     
     @State var showDictionariesList: Bool = false
     @State var anyDictLoaded: Bool = false
+    @State var loading: Bool = false
+    @State var deleting: Bool = false
     
     @FocusState private var shouldShowKeyboard: Bool
     
@@ -41,8 +43,9 @@ struct DynamicTouchZonesView: View {
                         }
                 }
             }
+            
             if isDynamicTapZonesEnabled {
-                Section(footer: Text(Localize.dictionaryRequired)) {
+                Section(footer: Text(dictionariesFooterText)) {
                     Button(action: {
                         withAnimation { showDictionariesList.toggle() }
                     }, label: {
@@ -58,11 +61,14 @@ struct DynamicTouchZonesView: View {
                         .foregroundColor(anyDictLoaded ? .primary : .red)
                     })
                     if showDictionariesList {
-                        LocaleDictionary(locale: .en_US) { CheckDictionaries() }
-                        LocaleDictionary(locale: .ru_RU) { CheckDictionaries() }
-                        LocaleDictionary(locale: .es_ES) { CheckDictionaries() }
+                        LocaleDictionary(locale: .en_US, onLoad: OnDictLoadChange, onDelete: OnDictDeleteChange)
+                        LocaleDictionary(locale: .ru_RU, onLoad: OnDictLoadChange, onDelete: OnDictDeleteChange)
+                        LocaleDictionary(locale: .es_ES, onLoad: OnDictLoadChange, onDelete: OnDictDeleteChange)
                     }
                 }
+                .opacity(disableDictionariesInteractions ? 0.5 : 1)
+                .disabled(disableDictionariesInteractions)
+                
                 Section(header: Text(Localization.PreferencesScreen.Advanced.pageTitle)) {
                     Toggle(Localize.showTouchZones, isOn: $showTouchZones.animation())
                         .onChange(of: showTouchZones) { _, value in
@@ -113,11 +119,31 @@ struct DynamicTouchZonesView: View {
             anyDictLoaded = anyLoaded
         }
     }
+    
+    func OnDictLoadChange(isDone: Bool) {
+        withAnimation { loading = !isDone }
+        if isDone { CheckDictionaries() }
+    }
+    func OnDictDeleteChange(isDone: Bool) {
+        withAnimation { deleting = !isDone }
+        if isDone { CheckDictionaries() }
+    }
+    
+    var dictionariesFooterText: String {
+        if loading {
+            return String(format: Localize.loadingDurationWarning, Localization.Misc.loading)
+        } else if deleting {
+            return String(format: Localize.loadingDurationWarning, Localization.Misc.deleting)
+        }
+        return Localize.dictionaryRequired
+    }
+    var disableDictionariesInteractions: Bool { loading || deleting }
 }
 
 struct LocaleDictionary: View {
     let locale: Locale
-    let onDictChange: () -> Void
+    let onLoad: (_: Bool) -> Void
+    let onDelete: (_: Bool) -> Void
     
     @State var loadingStatus: String? = nil
     
@@ -150,13 +176,17 @@ struct LocaleDictionary: View {
                     ProgressView()
                         .tint(.gray)
                         .scaleEffect(0.8)
-                } else if dictLoaded {
-                    Image(systemName: "checkmark")
-                        .foregroundColor(.green)
                 }
-                Text(loadingStatus ?? (dictLoaded ? Localization.Status.loaded : Localization.Actions.load))
-                    .foregroundColor(loading ? .gray : dictLoaded ? .green : .brand)
-                    .font(loading ? .footnote : .body)
+                Group {
+                    if let loadingStatus = loadingStatus {
+                        Text(loadingStatus)
+                    } else {
+                        Image(systemName: dictLoaded ? "checkmark" : "square.and.arrow.down")
+                    }
+                }
+                .foregroundColor(loading ? .gray : dictLoaded ? .green : .brand)
+                .font(loading ? .footnote : .body)
+                    
             }
             .padding(.leading, 16)
         })
@@ -164,19 +194,17 @@ struct LocaleDictionary: View {
     }
     
     func LoadDictionary () {
+        onLoad(false)
         Ngrams.shared.LoadNgramsToCoreData(locale: locale) { status, isDone in
             loadingStatus = isDone ? nil : status
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                if isDone { onDictChange() }
-            }
+            if isDone { onLoad(true) }
         }
     }
     func DeleteDictionary() {
+        onDelete(false)
         Ngrams.shared.DeleteNgramsFromCoreData(forLocale: locale) { status, isDone in
             loadingStatus = isDone ? nil : status
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                if isDone { onDictChange() }
-            }
+            if isDone { onDelete(true) }
         }
     }
 }

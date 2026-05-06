@@ -13,12 +13,12 @@ class Ngrams {
     
     func LoadNgramsToCoreData(locale: Locale, onProgressChange: @escaping (_ status: String, _ isDone: Bool) -> ()) {
         DispatchQueue.global(qos: .userInitiated).async {
-            onProgressChange(Ngrams.Localize.startedLoading, false)
+            DispatchQueue.main.async { onProgressChange(Ngrams.Localize.startedLoading, false) }
             
             var dict: [Dictionary<String, [CharacterProbability]>] = []
             
             for n in 1...5 {
-                onProgressChange(String(format: Ngrams.Localize.loadingNDictionary, n), false)
+                DispatchQueue.main.async { onProgressChange(String(format: Ngrams.Localize.loadingNDictionary, n), false) }
                 
                 let jsonFileName = self.getNgramJsonFileName(locale, n)
                 
@@ -34,7 +34,7 @@ class Ngrams {
                 
                 backgroundContext.perform {
                     for n in 0..<dict.count {
-                        onProgressChange(String(format: Ngrams.Localize.writingNToDatabase, n + 1), false)
+                        DispatchQueue.main.async { onProgressChange(String(format: Ngrams.Localize.writingNToDatabase, n + 1), false) }
                         
                         dict[n].forEach { (ngram: String, probabilities: [CharacterProbability]) in
                             self.createNgramObject(locale: locale, ngram: ngram, probabilities: probabilities, context: backgroundContext)
@@ -43,7 +43,7 @@ class Ngrams {
                         try? backgroundContext.save()
                     }
                     
-                    onProgressChange("", true)
+                    DispatchQueue.main.async {  onProgressChange("", true) }
                 }
             }
         }
@@ -59,7 +59,7 @@ class Ngrams {
     }
     
     func DeleteNgramsFromCoreData(forLocale: Locale, onProgressChange: @escaping (_ status: String, _ isDone: Bool) -> ()) {
-        onProgressChange(Ngrams.Localize.deletingDictionary, false)
+        DispatchQueue.main.async { onProgressChange(Ngrams.Localize.deletingDictionary, false) }
         
         let backgroundContext = CoreData.shared.persistentContainer.newBackgroundContext()
         
@@ -75,7 +75,7 @@ class Ngrams {
             
             try? backgroundContext.save()
             
-            onProgressChange("", true)
+            DispatchQueue.main.async { onProgressChange("", true) }
         }
     }
     
