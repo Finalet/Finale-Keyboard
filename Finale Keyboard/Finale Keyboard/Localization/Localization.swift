@@ -57,7 +57,6 @@ struct Localization {
     
     struct Status {
         static var loaded = NSLocalizedString("status_loaded", value: "Loaded", comment: "")
-        static var notLoaded = NSLocalizedString("status_not_loaded", value: "Not loaded", comment: "")
     }
     
     struct FavoriteEmojiScreen {

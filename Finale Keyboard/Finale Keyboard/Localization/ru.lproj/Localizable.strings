@@ -233,9 +233,6 @@
 "ngram_loading_status_started" = "Загрузка началась";
 
 /* No comment provided by engineer. */
-"ngram_saving_database" = "Сохранение словаря…";
-
-/* No comment provided by engineer. */
 "ngram_writing_n_to_database" = "Запись %D-грамм…";
 
 /* No comment provided by engineer. */
@@ -339,12 +336,6 @@
 
 /* No comment provided by engineer. */
 "preferences_dynamic_touch_zones_dict_key_probability" = "Вероятность клавиши";
-
-/* No comment provided by engineer. */
-"preferences_dynamic_touch_zones_dict_loaded" = "Словарь загружен";
-
-/* No comment provided by engineer. */
-"preferences_dynamic_touch_zones_dict_not_loaded" = "Словарь не загружен";
 
 /* No comment provided by engineer. */
 "preferences_dynamic_touch_zones_dict_touch_zone_scale" = "Размер клавиши";
@@ -501,12 +492,6 @@
 
 /* No comment provided by engineer. */
 "preferences_typing_haptic" = "Тактильная отдача для клавиш";
-
-/* No comment provided by engineer. */
-"Probability" = "Вероятность";
-
-/* No comment provided by engineer. */
-"Scale" = "Размер";
 
 /* No comment provided by engineer. */
 "shortcuts_extra_symbols" = "Больше символов";

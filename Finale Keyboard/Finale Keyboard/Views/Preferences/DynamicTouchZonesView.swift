@@ -126,11 +126,10 @@ struct LocaleDictionary: View {
     }
     
     var localeLabel: String {
-        switch locale.rawValue {
-        case 0: Localization.LanguagesScreen.english
-        case 1: Localization.LanguagesScreen.russian
-        case 2: Localization.LanguagesScreen.spanish
-        default: "Unknown"
+        switch locale {
+        case .en_US: Localization.LanguagesScreen.english
+        case .ru_RU: Localization.LanguagesScreen.russian
+        case .es_ES: Localization.LanguagesScreen.spanish
         }
     }
     
