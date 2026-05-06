@@ -121,6 +121,7 @@ struct Localization {
             
             static var explanation = NSLocalizedString("preferences_dynamic_touch_zones_explanation", value: "When enabled, Finale Keyboard will try to predict what key you will tap next and slightly increase its tap zone.", comment: "")
             static var highlightKeys = NSLocalizedString("preferences_dynamic_touch_zones_highlight_keys", value: "Highlight keys", comment: "")
+            static var dictionaries = NSLocalizedString("preferences_dynamic_touch_zones_dictionaries", value: "Dictionaries", comment: "")
             static var dictionaryRequired = NSLocalizedString("preferences_dynamic_touch_zones_dictionary_required", value: "Dictionary is required for dynamic touch zones to work.", comment: "")
             static var showTouchZones = NSLocalizedString("preferences_dynamic_touch_zones_show_touch_zones", value: "Show touch zones", comment: "")
             static var maximumKeyScale = NSLocalizedString("preferences_dynamic_touch_zones_max_key_scale", value: "Maximum key scale", comment: "")

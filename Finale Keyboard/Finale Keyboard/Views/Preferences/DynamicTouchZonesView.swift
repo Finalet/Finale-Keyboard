@@ -50,7 +50,7 @@ struct DynamicTouchZonesView: View {
                             if !anyDictLoaded {
                                 Image(systemName: "exclamationmark.triangle")
                             }
-                            Text("Dictionaries")
+                            Text(Localize.dictionaries)
                             Spacer()
                             Image(systemName: "chevron.right")
                                 .rotationEffect(showDictionariesList ? .degrees(90) : .zero)
