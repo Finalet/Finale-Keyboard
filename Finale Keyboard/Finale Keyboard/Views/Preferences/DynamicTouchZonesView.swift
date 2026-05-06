@@ -21,8 +21,8 @@ struct DynamicTouchZonesView: View {
     @UserDefaultState("FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier", 1.5) var dynamicTapZoneProbabilityMultiplier: Float
     @UserDefaultState("FINALE_DEV_APP_dynamicKeyHighlighting", false) var dynamicKeyHighlighting: Bool
     
-    @State var loadingStatus: String? = nil
-    @State var isDictionaryLoaded: Bool = Ngrams.shared.isNgramDictionaryLoaded
+    @State var showDictionariesList: Bool = false
+    @State var anyDictLoaded: Bool = false
     
     @FocusState private var shouldShowKeyboard: Bool
     
@@ -42,35 +42,25 @@ struct DynamicTouchZonesView: View {
                 }
             }
             if isDynamicTapZonesEnabled {
-                Section (footer: Text(loadingStatus == nil ? !isDictionaryLoaded ? Localize.dictionaryRequired : "" : String(format: Localize.loadingDurationWarning, !isDictionaryLoaded ? Localization.Misc.loading : Localization.Misc.deleting))) {
-                    HStack{
-                        if loadingStatus == nil {
-                            Image(systemName: isDictionaryLoaded ? "checkmark" : "exclamationmark.triangle")
-                                .foregroundColor(isDictionaryLoaded ? .green : .red)
-                        } else {
-                            ProgressView()
-                                .tint(.gray)
-                                .padding(.trailing, 4)
-                        }
-                        Text(loadingStatus ?? (isDictionaryLoaded ? Localize.dictionaryLoaded : Localize.dictionaryNotLoaded))
-                            .foregroundColor(loadingStatus != nil ? .gray : isDictionaryLoaded ? .green : .red)
-                        Spacer()
-                        Button(action: {
-                            if !isDictionaryLoaded {
-                                Ngrams.shared.LoadNgramsToCoreData() { status, isDone in
-                                    loadingStatus = isDone ? nil : status
-                                    if isDone { isDictionaryLoaded = Ngrams.shared.isNgramDictionaryLoaded }
-                                }
-                            } else {
-                                Ngrams.shared.DeleteAllNgrams() { status, isDone in
-                                    loadingStatus = isDone ? nil : status
-                                    if isDone { isDictionaryLoaded = Ngrams.shared.isNgramDictionaryLoaded }
-                                }
+                Section(footer: Text(Localize.dictionaryRequired)) {
+                    Button(action: {
+                        withAnimation { showDictionariesList.toggle() }
+                    }, label: {
+                        HStack {
+                            if !anyDictLoaded {
+                                Image(systemName: "exclamationmark.triangle")
                             }
-                        }, label: {
-                            Text(loadingStatus == nil ? (!isDictionaryLoaded ? Localization.Actions.load : Localization.Actions.delete) : "")
-                        })
-                        .disabled(loadingStatus != nil)
+                            Text("Dictionaries")
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .rotationEffect(showDictionariesList ? .degrees(90) : .zero)
+                        }
+                        .foregroundColor(anyDictLoaded ? .primary : .red)
+                    })
+                    if showDictionariesList {
+                        LocaleDictionary(locale: .en_US) { CheckDictionaries() }
+                        LocaleDictionary(locale: .ru_RU) { CheckDictionaries() }
+                        LocaleDictionary(locale: .es_ES) { CheckDictionaries() }
                     }
                 }
                 Section(header: Text(Localization.PreferencesScreen.Advanced.pageTitle)) {
@@ -96,6 +86,9 @@ struct DynamicTouchZonesView: View {
             }
         }
         .navigationTitle(Localize.pageTitle)
+        .onAppear {
+            CheckDictionaries(animted: false)
+        }
     }
     
     @ViewBuilder
@@ -110,6 +103,82 @@ struct DynamicTouchZonesView: View {
     
     func OnChange () {
         shouldShowKeyboard = false
+    }
+    
+    func CheckDictionaries(animted: Bool = true) {
+        let anyLoaded = Locale.allCases.contains(where: { Ngrams.shared.isLocaleLoadedIntoCoreData($0) })
+        if animted {
+            withAnimation { anyDictLoaded = anyLoaded }
+        } else {
+            anyDictLoaded = anyLoaded
+        }
+    }
+}
+
+struct LocaleDictionary: View {
+    let locale: Locale
+    let onDictChange: () -> Void
+    
+    @State var loadingStatus: String? = nil
+    
+    var dictLoaded: Bool {
+        return Ngrams.shared.isLocaleLoadedIntoCoreData(locale)
+    }
+    
+    var localeLabel: String {
+        switch locale.rawValue {
+        case 0: Localization.LanguagesScreen.english
+        case 1: Localization.LanguagesScreen.russian
+        case 2: Localization.LanguagesScreen.spanish
+        default: "Unknown"
+        }
+    }
+    
+    var loading: Bool { loadingStatus != nil }
+    
+    typealias Localize = Localization.PreferencesScreen.DynamicTouchZones
+    
+    var body: some View {
+        Button(action: {
+            if dictLoaded { DeleteDictionary() }
+            else { LoadDictionary() }
+        }, label: {
+            HStack {
+                Text(localeLabel)
+                    .foregroundColor(loading ? .gray : .primary)
+                Spacer()
+                if loading {
+                    ProgressView()
+                        .tint(.gray)
+                        .scaleEffect(0.8)
+                } else if dictLoaded {
+                    Image(systemName: "checkmark")
+                        .foregroundColor(.green)
+                }
+                Text(loadingStatus ?? (dictLoaded ? Localization.Status.loaded : Localization.Actions.load))
+                    .foregroundColor(loading ? .gray : dictLoaded ? .green : .brand)
+                    .font(loading ? .footnote : .body)
+            }
+            .padding(.leading, 16)
+        })
+        .disabled(loading)
+    }
+    
+    func LoadDictionary () {
+        Ngrams.shared.LoadNgramsToCoreData(locale: locale) { status, isDone in
+            loadingStatus = isDone ? nil : status
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                if isDone { onDictChange() }
+            }
+        }
+    }
+    func DeleteDictionary() {
+        Ngrams.shared.DeleteNgramsFromCoreData(forLocale: locale) { status, isDone in
+            loadingStatus = isDone ? nil : status
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                if isDone { onDictChange() }
+            }
+        }
     }
 }
 
@@ -160,4 +229,8 @@ struct ScaleGraph: View {
         .chartXScale(domain: [0, 100])
         .aspectRatio(1.7, contentMode: .fill)
     }
+}
+
+#Preview {
+    DynamicTouchZonesView()
 }

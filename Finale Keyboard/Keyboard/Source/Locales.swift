@@ -12,6 +12,14 @@ enum Locale: Int, CaseIterable {
     case ru_RU
     case es_ES
     
+    var languageCode: String {
+        switch self {
+        case .en_US: return "en_US"
+        case .ru_RU: return "ru_RU"
+        case .es_ES: return "es_ES"
+        }
+    }
+    
     var topRow: [String] {
         switch self {
         case .en_US: return ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"]

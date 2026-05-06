@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24837" systemVersion="25E253" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="Ngram" representedClassName="Ngram" syncable="YES" codeGenerationType="class">
+        <attribute name="locale" attributeType="String"/>
+        <attribute name="ngram" attributeType="String"/>
+        <attribute name="probabilities" attributeType="Binary"/>
+        <fetchIndex name="byLocaleAndNgram">
+            <fetchIndexElement property="locale" type="Binary" order="ascending"/>
+            <fetchIndexElement property="ngram" type="Binary" order="ascending"/>
+        </fetchIndex>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="locale"/>
+                <constraint value="ngram"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
+    </entity>
+</model>
