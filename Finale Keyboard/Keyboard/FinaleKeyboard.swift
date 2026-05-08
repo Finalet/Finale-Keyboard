@@ -115,6 +115,7 @@ class FinaleKeyboard: UIInputViewController {
     let maxNgram = 5
     
     let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
+    let spellChecker = SpellCheck(locale: .en_US)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -126,8 +127,21 @@ class FinaleKeyboard: UIInputViewController {
         SuggestionsView()
         InitSuggestionsArray()
         InitDictionary()
+
+        TestChecker(word: "hrllo", correctResults: "hello")
+        TestChecker(word: "helllo", correctResults: "hello")
+        TestChecker(word: "jrkko", correctResults: "hello")
+        TestChecker(word: "jrkkp", correctResults: "hello")
+        TestChecker(word: "grkko", correctResults: "hello")
+        TestChecker(word: "grkkp", correctResults: "hello")
     }
     
+    func TestChecker(word: String, correctResults: String) {
+        let results = spellChecker.correct(word: word)
+        let isSuccess = results.first == correctResults
+        print("\(isSuccess ? "✅" : "❌") \(word) -> \(results.first!) (expected: \(correctResults)). All results: \(results)")
+    }
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         SaveLearningWordsDictionary()
