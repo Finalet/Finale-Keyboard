@@ -127,19 +127,96 @@ class FinaleKeyboard: UIInputViewController {
         SuggestionsView()
         InitSuggestionsArray()
         InitDictionary()
-
-        TestChecker(word: "hrllo", correctResults: "hello")
-        TestChecker(word: "helllo", correctResults: "hello")
-        TestChecker(word: "jrkko", correctResults: "hello")
-        TestChecker(word: "jrkkp", correctResults: "hello")
-        TestChecker(word: "grkko", correctResults: "hello")
-        TestChecker(word: "grkkp", correctResults: "hello")
     }
     
-    func TestChecker(word: String, correctResults: String) {
-        let results = spellChecker.correct(word: word)
-        let isSuccess = results.first == correctResults
-        print("\(isSuccess ? "✅" : "❌") \(word) -> \(results.first!) (expected: \(correctResults)). All results: \(results)")
+    func RunTest() {
+        let roundTimeTo = 100000.0
+        
+        let testSubjects: [(misspelled: String, correct: String)] = [
+            ("hrllo", "hello"),
+            ("grkkp", "hello"),
+            ("jrkkp", "hello"),
+            ("proscute", "prosecute"),
+            ("agter", "after"),
+            ("afyer", "after"),
+            ("improvig", "improving"),
+            ("bexause", "because"),
+            ("allpcations", "allocations"),
+            ("navigation", "navigation"),
+            ("surgave", "surface"),
+            ("praxticing", "practicing"),
+            ("rithm", "rhythm"),
+            ("adjist", "adjust"),
+            ("ti", "to"),
+            ("nit", "not"),
+            ("recieve", "receive"),
+            ("adress", "address"),
+            ("wich", "which"),
+            ("becuase", "because"),
+            ("freind", "friend"),
+            ("goverment", "government"),
+            ("enviroment", "environment"),
+            ("langauge", "language"),
+            ("acheive", "achieve"),
+            ("acommodate", "accommodate"),
+            ("watre", "water"),
+            ("tabel", "table"),
+            ("famliy", "family"),
+            ("littel", "little"),
+            ("succesful", "successful"),
+            ("begining", "beginning"),
+            ("thier", "their"),
+            ("realy", "really"),
+            ("adresss", "address"),
+            ("enviornment", "environment"),
+            ("wierdo", "weirdo"),
+            ("algorihtm", "algorithm"),
+            ("mesage", "message"),
+            ("messgae", "message"),
+            ("nuber", "number"),
+            ("qestion", "question"),
+            ("quikc", "quick"),
+            ("anser", "answer"),
+            ("chekc", "check"),
+            ("retrun", "return"),
+            ("pritn", "print"),
+            ("fucntion", "function"),
+            ("strign", "string"),
+            ("modle", "model"),
+            ("compuer", "computer")
+        ].sorted(by: { $0.correct.count < $1.correct.count })
+
+        
+        var results: [(misspelled: String, correct: String, ACresult: [String], timeTook: TimeInterval)] = []
+
+        for subject in testSubjects {
+            let startTime = Date()
+            
+            let corrections = spellChecker.correct(word: subject.misspelled)
+            
+            results.append((subject.misspelled, subject.correct, corrections, Date().timeIntervalSince(startTime)))
+        }
+
+        let totalCorrect = results.filter { $0.ACresult.first == $0.correct }.count
+        let totalTime = results.reduce(0) { $0 + $1.timeTook }
+        let averageTime = totalTime / Double(results.count)
+        
+        print ("📝 Autocorrect results 📝")
+        print ("")
+        print ("- Correct: \((totalCorrect * 100) / results.count)% (\(totalCorrect)/\(results.count))")
+        print ("- Average time: \(round(averageTime * roundTimeTo) / roundTimeTo) seconds")
+        print ("- Total time: \(round(totalTime * roundTimeTo) / roundTimeTo) seconds")
+        print ("")
+        
+        print ("❌ Failed")
+        for result in results.filter({ $0.ACresult.first != $0.correct }) {
+            print("\t- \(result.misspelled) -> \(result.ACresult.first!) (correct: \(result.correct)) | Best candidates: \(result.ACresult) | Took: \(round(result.timeTook * roundTimeTo) / roundTimeTo) seconds")
+        }
+        
+        print ("✅ Succeeded")
+        for result in results.filter({ $0.ACresult.first == $0.correct }) {
+            print("\t- \(result.misspelled) -> \(result.ACresult.first!) | Best candidates: \(result.ACresult) | Took: \(round(result.timeTook * roundTimeTo) / roundTimeTo) seconds")
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -603,47 +680,49 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func SwipeRight () {
-        if let emojiSearchRow = emojiSearchRow {
-            emojiSearchRow.SwipeRight()
-            return
-        }
+        RunTest()
         
-        let context = self.textDocumentProxy.documentContextBeforeInput
-        if context == nil {
-            ResetSuggestionsLabels()
-            pickedPunctuationIndex = 0
-            InsertPunctuation(index: pickedPunctuationIndex)
-        } else if context?.last != " " {
-            ResetSuggestionsLabels()
-            if (FinaleKeyboard.isAutoCorrectOn) {
-                GenerateAutocorrections()
-                CheckUserDictionary()
-                ReplaceWithSuggestion(ignoreSpace: false, instant: true)
-            } else {
-                self.textDocumentProxy.insertText(" ")
-            }
-            canEditPrevPunctuation = false
-        } else {
-            if ((context?.count ?? 0) < 2) {
-                ResetSuggestionsLabels()
-                SwipeRightSpacebar()
-                canEditPrevPunctuation = false
-                return
-            }
-            
-            var index = 1
-            let oneBeforeLastChar = getOneBeforeLastChar()
-            if isPunctuation(char: oneBeforeLastChar) {
-                index = punctuationArray.firstIndex(of: oneBeforeLastChar) ?? 1
-            } else {
-                ResetSuggestionsLabels()
-            }
-            
-            InsertPunctuation(index: index)
-        }
-        CheckAutoCapitalization()
-        ResetDynamicTouchZones()
-        if FinaleKeyboard.currentViewType != .Characters { BuildKeyboardView(viewType: .Characters) }
+//        if let emojiSearchRow = emojiSearchRow {
+//            emojiSearchRow.SwipeRight()
+//            return
+//        }
+//        
+//        let context = self.textDocumentProxy.documentContextBeforeInput
+//        if context == nil {
+//            ResetSuggestionsLabels()
+//            pickedPunctuationIndex = 0
+//            InsertPunctuation(index: pickedPunctuationIndex)
+//        } else if context?.last != " " {
+//            ResetSuggestionsLabels()
+//            if (FinaleKeyboard.isAutoCorrectOn) {
+//                GenerateAutocorrections()
+//                CheckUserDictionary()
+//                ReplaceWithSuggestion(ignoreSpace: false, instant: true)
+//            } else {
+//                self.textDocumentProxy.insertText(" ")
+//            }
+//            canEditPrevPunctuation = false
+//        } else {
+//            if ((context?.count ?? 0) < 2) {
+//                ResetSuggestionsLabels()
+//                SwipeRightSpacebar()
+//                canEditPrevPunctuation = false
+//                return
+//            }
+//            
+//            var index = 1
+//            let oneBeforeLastChar = getOneBeforeLastChar()
+//            if isPunctuation(char: oneBeforeLastChar) {
+//                index = punctuationArray.firstIndex(of: oneBeforeLastChar) ?? 1
+//            } else {
+//                ResetSuggestionsLabels()
+//            }
+//            
+//            InsertPunctuation(index: index)
+//        }
+//        CheckAutoCapitalization()
+//        ResetDynamicTouchZones()
+//        if FinaleKeyboard.currentViewType != .Characters { BuildKeyboardView(viewType: .Characters) }
     }
     func SwipeDown () {
         if FinaleKeyboard.currentViewType == .SearchEmoji { return }
