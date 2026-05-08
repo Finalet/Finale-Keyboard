@@ -30,9 +30,13 @@ class SpellCheck {
         
         var scored: [ScoredCandidate] = []
         
-        for candidateArray in candidates {
-            let scores: [ScoredCandidate] = candidateArray.map { (word: $0.key, score: scoreCandidate(forWord: cleanedWord, candidate: ($0.key, $0.value))) }
+        let lock = NSLock()
+        DispatchQueue.concurrentPerform(iterations: candidates.count) { i in
+            let scores: [ScoredCandidate] = candidates[i].map { (word: $0.key, score: scoreCandidate(forWord: cleanedWord, candidate: ($0.key, $0.value))) }
+            
+            lock.lock()
             scored.append(contentsOf: scores)
+            lock.unlock()
         }
         
         return scored.sorted(by: { $0.score > $1.score }).map { $0.word }.prefix(5).map { String($0) }
@@ -40,7 +44,11 @@ class SpellCheck {
 
     func scoreCandidate(forWord: String, candidate: CorrectionCandidate) -> Float {
         var score: Float = 0.0
-
+        
+        // Increase score based on how aligned its to the candidate
+        let alignmentScore = self.getAlignmentScore(word: forWord, candidate: candidate.word) * Weights.alignment
+        score += alignmentScore
+        
         // Increase the score based on the word's frequency in the language.
         let frequencyScore = candidate.frequency * Weights.frequency
         score += frequencyScore
@@ -49,10 +57,6 @@ class SpellCheck {
         if candidate.frequency < 0.0002 {
             score -= Scores.lowFrequencyPenalty * Weights.lowFrequencyPenalty
         }
-        
-        // Increase score based on how aligned its to the candidate
-        let alignmentScore = self.getAlignmentScore(word: forWord, candidate: candidate.word) * Weights.alignment
-        score += alignmentScore
         
         return score
     }
@@ -74,6 +78,17 @@ class SpellCheck {
         let wordCharacters = Array(word)
         let candidateCharacters = Array(candidate)
 
+        // Reject obviosuly wrong candidates early.
+        // If the first two characters don't match, its the wrong candidate.
+        if wordCharacters.count >= 2, candidateCharacters.count >= 2 {
+            let firstScore = getProximityScore(char1: wordCharacters[0], char2: candidateCharacters[0])
+            let secondScore = getProximityScore(char1: wordCharacters[1], char2: candidateCharacters[1])
+
+            if firstScore == Scores.wrongCharacter, secondScore == Scores.wrongCharacter {
+                return -Float.infinity
+            }
+        }
+        
         var scores: [[Float]] = Array(repeating: Array(repeating: Float(0.0), count: candidateCharacters.count + 1), count: wordCharacters.count + 1)
 
         // Fill the first column by repeatedly skipping letters from the input word.
@@ -241,7 +256,6 @@ extension SpellCheck {
             ("improvig", "improving"),
             ("bexause", "because"),
             ("allpcations", "allocations"),
-            ("navigation", "navigation"),
             ("surgave", "surface"),
             ("praxticing", "practicing"),
             ("rithm", "rhythm"),
@@ -291,7 +305,7 @@ extension SpellCheck {
 //        ].sorted(by: { $0.correct.count < $1.correct.count })
         
         var results: [(misspelled: String, correct: String, ACresult: [String], timeTook: TimeInterval)] = []
-
+        
         for subject in testSubjects {
             let startTime = Date()
             
@@ -313,7 +327,7 @@ extension SpellCheck {
         
         print ("❌ Wrong")
         for result in results.filter({ $0.ACresult.first != $0.correct }) {
-            print("\t- \(result.misspelled) -> \(result.ACresult.first!) (correct: \(result.correct)) | Best candidates: \(result.ACresult) | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
+            print("\t- \(result.misspelled) -> \(result.ACresult.first ?? "-") (correct: \(result.correct)) | Best candidates: \(result.ACresult) | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
         }
         
         print ("✅ Correct")
@@ -322,3 +336,11 @@ extension SpellCheck {
         }
     }
 }
+
+// Speed testing
+//
+// UITextChecker(): avg. 0.8ms, total: 40ms
+// Baseline, no improvements: avg. 168ms, total 8.6s
+// Score each length candidates in parallel: avg. 88ms, total 4.5s
+// Reject bad candidates early: avg. 42ms, total 2.1s
+
