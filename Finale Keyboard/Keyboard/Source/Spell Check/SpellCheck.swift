@@ -47,16 +47,12 @@ class SpellCheck {
         
         // Penalize candidates that are very unlikely
         if candidate.frequency < 0.0002 {
-            score -= Scores.lowFrequencyPenalty * Weights.lowFrequency
+            score -= Scores.lowFrequencyPenalty * Weights.lowFrequencyPenalty
         }
         
         // Increase score based on how aligned its to the candidate
         let alignmentScore = self.getAlignmentScore(word: forWord, candidate: candidate.word) * Weights.alignment
         score += alignmentScore
-        
-//        if ["ti", "to", "it"].contains(candidate.word) {
-//            print("Candidate '\(candidate.word)': freq. \(frequencyScore) + low freq. penanlty \(candidate.frequency < 0.0002 ? -Scores.lowFrequencyPenalty * Weights.lowFrequency : 0) + align. \(alignmentScore) = \(score)")
-//        }
         
         return score
     }
@@ -216,7 +212,7 @@ extension SpellCheck {
 
     enum Weights {
         static let frequency: Float = 0.11
-        static let lowFrequency: Float = 1
+        static let lowFrequencyPenalty: Float = 1
         static let alignment: Float = 1
     }
     
