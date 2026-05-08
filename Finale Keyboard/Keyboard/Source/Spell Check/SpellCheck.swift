@@ -23,44 +23,120 @@ class SpellCheck {
     }
 
     func correct(word: String) -> [String] {
-        let candidates = self.dictionary[word.count]
-        let scored: [CorrectionCandidate] = candidates?.compactMap { key, _ in
-            return (word: key, score: scoreCandidate(forWord: word, candidate: key))
-        } ?? []
+        let cleanedWord = cleanWord(word)
+        if cleanedWord.isEmpty { return [] }
+        
+        let candidates = getCandidates(forWord: cleanedWord)
+        
+        var scored: [ScoredCandidate] = []
+        
+        for candidateArray in candidates {
+            let scores: [ScoredCandidate] = candidateArray.map { (word: $0.key, score: scoreCandidate(forWord: cleanedWord, candidate: ($0.key, $0.value))) }
+            scored.append(contentsOf: scores)
+        }
+        
         return scored.sorted(by: { $0.score > $1.score }).map { $0.word }.prefix(5).map { String($0) }
     }
 
-    func scoreCandidate(forWord: String, candidate: String) -> Float {
+    func scoreCandidate(forWord: String, candidate: CorrectionCandidate) -> Float {
         var score: Float = 0.0
 
-        // Increase the score based on the word's frequency in the language
-        score += (self.dictionary[forWord.count]?[candidate] ?? 0.0) * Weights.frequency
+        // Increase the score based on the word's frequency in the language.
+        let frequencyScore = candidate.frequency * Weights.frequency
+        score += frequencyScore
         
-        // Increase score based on how close each character is
-        for (char1, char2) in zip(forWord, candidate) {
-            score += getProximityScore(char1: char1, char2: char2) * Weights.proximity
+        // Penalize candidates that are very unlikely
+        if candidate.frequency < 0.0002 {
+            score -= Scores.lowFrequencyPenalty * Weights.lowFrequency
         }
+        
+        // Increase score based on how aligned its to the candidate
+        let alignmentScore = self.getAlignmentScore(word: forWord, candidate: candidate.word) * Weights.alignment
+        score += alignmentScore
+        
+//        if ["ti", "to", "it"].contains(candidate.word) {
+//            print("Candidate '\(candidate.word)': freq. \(frequencyScore) + low freq. penanlty \(candidate.frequency < 0.0002 ? -Scores.lowFrequencyPenalty * Weights.lowFrequency : 0) + align. \(alignmentScore) = \(score)")
+//        }
+        
         return score
     }
-
+    
     func getProximityScore(char1: Character, char2: Character) -> Float {
         guard let index1 = getMatrixIndex(char1), let index2 = getMatrixIndex(char2) else {
-            return Weights.wrongCharacter
+            return Scores.wrongCharacter
         }
         
         let distance = proximityMatrix[index1][index2]
         
-        if distance < 0.13 { return 1 }
-        if distance < 0.2 { return 0.6 }
-        return 0
+        if distance == 0 { return Scores.matchBonus }
+        if distance < 0.13 { return Scores.matchBonus * 0.5 }
+        if distance < 0.2 { return Scores.matchBonus * 0.25 }
+        return Scores.wrongCharacter
+    }
+    
+    private func getAlignmentScore(word: String, candidate: String) -> Float {
+        let wordCharacters = Array(word)
+        let candidateCharacters = Array(candidate)
+
+        var scores: [[Float]] = Array(repeating: Array(repeating: Float(0.0), count: candidateCharacters.count + 1), count: wordCharacters.count + 1)
+
+        // Fill the first column by repeatedly skipping letters from the input word.
+        // This handles cases where the typed word has extra characters.
+        for i in 1...wordCharacters.count {
+            scores[i][0] = scores[i - 1][0] - Scores.characterSkipPenalty
+        }
+
+        // Fill the first row by repeatedly skipping letters from the candidate.
+        // This handles cases where the typed word is missing characters.
+        for j in 1...candidateCharacters.count {
+            scores[0][j] = scores[0][j - 1] - Scores.characterSkipPenalty
+        }
+
+        // Fill the rest of the grid by choosing the best alignment move at each point.
+        for i in 1...wordCharacters.count {
+            for j in 1...candidateCharacters.count {
+                let wordCharacter = wordCharacters[i - 1]
+                let candidateCharacter = candidateCharacters[j - 1]
+
+                // Align the two current letters.
+                let substitutionScore = scores[i - 1][j - 1] + getProximityScore(char1: wordCharacter, char2: candidateCharacter)
+
+                // Skip one typed letter.
+                let skippedWordScore = scores[i - 1][j] - Scores.characterSkipPenalty
+
+                // Skip one candidate letter.
+                let skippedCandidateScore = scores[i][j - 1] - Scores.characterSkipPenalty
+
+                var transpositionScore = -Float.infinity
+                if i > 1, j > 1, wordCharacters[i - 2] == candidateCharacters[j - 1], wordCharacters[i - 1] == candidateCharacters[j - 2] {
+                    transpositionScore = scores[i - 2][j - 2] + Scores.matchBonus * 2 - Scores.transpositionPenalty
+                }
+
+                scores[i][j] = max(substitutionScore, skippedWordScore, skippedCandidateScore, transpositionScore)
+            }
+        }
+        
+        let rawScore = scores[wordCharacters.count][candidateCharacters.count]
+        let normalizedScore = rawScore / max(Float(word.count) * Scores.matchBonus, 1)
+        
+        return normalizedScore
     }
 
+    private func getCandidates(forWord: String) -> [WordFrequencyDictionary] {
+        return [self.dictionary[forWord.count - 1], self.dictionary[forWord.count], self.dictionary[forWord.count + 1]].compactMap { $0 }
+    }
+    
     private func cleanWord(_ word: String) -> String {
         return word.lowercased().filter { $0.isLetter }
     }
 
     private static func loadDictionary(forLocale: Locale) -> WordDictionary {
-        let jsonFileName = "english"
+        let jsonFileName: String
+        switch forLocale {
+        case .en_US: jsonFileName = "english"
+        default: return [:]
+        }
+        
         guard let file = Bundle.main.url(forResource: jsonFileName, withExtension: "json"), let data = try? Data(contentsOf: file), let entries = try? JSONDecoder().decode(WordDictionary.self, from: data) else {
             return [:]
         }
@@ -128,9 +204,10 @@ class SpellCheck {
 
 // Types
 extension SpellCheck {
-    typealias WordDictionary = [Int: WordFrequency]
-    typealias WordFrequency = [String: Float]
-    typealias CorrectionCandidate = (word: String, score: Float)
+    typealias WordDictionary = [Int: WordFrequencyDictionary]
+    typealias WordFrequencyDictionary = [String: Float]
+    typealias CorrectionCandidate = (word: String, frequency: Float)
+    typealias ScoredCandidate = (word: String, score: Float)
     
     struct CharacterProximity {
         let character: Character
@@ -138,8 +215,114 @@ extension SpellCheck {
     }
 
     enum Weights {
-        static let frequency: Float = 2
-        static let proximity: Float = 1
+        static let frequency: Float = 0.11
+        static let lowFrequency: Float = 1
+        static let alignment: Float = 1
+    }
+    
+    enum Scores {
         static let wrongCharacter: Float = -1
+        static let matchBonus: Float = 1.0
+        static let characterSkipPenalty: Float = 0.75
+        static let transpositionPenalty: Float = 0.5
+        static let lowFrequencyPenalty: Float = 0.25
+    }
+}
+
+
+// Tests
+extension SpellCheck {
+    func RunTest() {
+        let roundTimeTo = 100.0
+        
+        let testSubjects: [(misspelled: String, correct: String)] = [
+            ("hrllo", "hello"),
+            ("grkkp", "hello"),
+            ("jrkkp", "hello"),
+            ("proscute", "prosecute"),
+            ("agter", "after"),
+            ("afyer", "after"),
+            ("improvig", "improving"),
+            ("bexause", "because"),
+            ("allpcations", "allocations"),
+            ("navigation", "navigation"),
+            ("surgave", "surface"),
+            ("praxticing", "practicing"),
+            ("rithm", "rhythm"),
+            ("adjist", "adjust"),
+            ("ti", "to"),
+            ("nit", "not"),
+            ("recieve", "receive"),
+            ("adress", "address"),
+            ("wich", "which"),
+            ("becuase", "because"),
+            ("freind", "friend"),
+            ("goverment", "government"),
+            ("enviroment", "environment"),
+            ("langauge", "language"),
+            ("acheive", "achieve"),
+            ("acommodate", "accommodate"),
+            ("watre", "water"),
+            ("tabel", "table"),
+            ("famliy", "family"),
+            ("littel", "little"),
+            ("succesful", "successful"),
+            ("begining", "beginning"),
+            ("thier", "their"),
+            ("realy", "really"),
+            ("adresss", "address"),
+            ("enviornment", "environment"),
+            ("wierdo", "weirdo"),
+            ("algorihtm", "algorithm"),
+            ("mesage", "message"),
+            ("messgae", "message"),
+            ("nuber", "number"),
+            ("qestion", "question"),
+            ("quikc", "quick"),
+            ("anser", "answer"),
+            ("chekc", "check"),
+            ("retrun", "return"),
+            ("pritn", "print"),
+            ("fucntion", "function"),
+            ("strign", "string"),
+            ("modle", "model"),
+            ("compuer", "computer")
+        ].sorted(by: { $0.correct.count < $1.correct.count })
+
+        
+//        let testSubjects: [(misspelled: String, correct: String)] = [
+//            ("ti", "to")
+//        ].sorted(by: { $0.correct.count < $1.correct.count })
+        
+        var results: [(misspelled: String, correct: String, ACresult: [String], timeTook: TimeInterval)] = []
+
+        for subject in testSubjects {
+            let startTime = Date()
+            
+            let corrections = correct(word: subject.misspelled)
+            
+            results.append((subject.misspelled, subject.correct, corrections, Date().timeIntervalSince(startTime)))
+        }
+
+        let totalCorrect = results.filter { $0.ACresult.first == $0.correct }.count
+        let totalTime = results.reduce(0) { $0 + $1.timeTook }
+        let averageTime = totalTime / Double(results.count)
+        
+        print ("📝 Autocorrect results 📝")
+        print ("")
+        print ("- Correct: \((totalCorrect * 100) / results.count)% (\(totalCorrect)/\(results.count))")
+        print ("- Average time: \(round(averageTime * roundTimeTo * 1000) / roundTimeTo) ms")
+        print ("- Total time: \(round(totalTime * roundTimeTo * 1000) / roundTimeTo) ms")
+        print ("")
+        
+        print ("❌ Wrong")
+        for result in results.filter({ $0.ACresult.first != $0.correct }) {
+            print("\t- \(result.misspelled) -> \(result.ACresult.first!) (correct: \(result.correct)) | Best candidates: \(result.ACresult) | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
+        }
+        
+        print ("✅ Correct")
+        for result in results.filter({ $0.ACresult.first == $0.correct }) {
+            print("\t- \(result.misspelled) -> \(result.ACresult.first!) | Best candidates: \(result.ACresult) | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
+        }
     }
 }
