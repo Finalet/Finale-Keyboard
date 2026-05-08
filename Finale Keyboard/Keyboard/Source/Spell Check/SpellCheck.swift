@@ -46,7 +46,7 @@ class SpellCheck {
         var score: Float = 0.0
         
         // Increase score based on how aligned its to the candidate
-        let alignmentScore = self.getAlignmentScore(word: forWord, candidate: candidate.word) * Weights.alignment
+        let alignmentScore = self.getAlignmentScore(word: forWord, candidate: candidate.word, minimumUsefulScore: 0.5) * Weights.alignment
         score += alignmentScore
         
         // Increase the score based on the word's frequency in the language.
@@ -74,7 +74,7 @@ class SpellCheck {
         return Scores.wrongCharacter
     }
     
-    private func getAlignmentScore(word: String, candidate: String) -> Float {
+    private func getAlignmentScore(word: String, candidate: String, minimumUsefulScore: Float? = nil) -> Float {
         let wordCharacters = Array(word)
         let candidateCharacters = Array(candidate)
 
@@ -124,6 +124,19 @@ class SpellCheck {
                 }
 
                 scores[i][j] = max(substitutionScore, skippedWordScore, skippedCandidateScore, transpositionScore)
+            }
+            
+            if let minimumUsefulScore {
+                let bestScoreInRow = scores[i].max() ?? -Float.infinity
+                let remainingCharacters = wordCharacters.count - i
+
+                let bestPossibleRawScore = bestScoreInRow + Float(remainingCharacters) * Scores.matchBonus
+
+                let bestPossibleNormalizedScore = bestPossibleRawScore / max(Float(word.count) * Scores.matchBonus, 1)
+
+                if bestPossibleNormalizedScore < minimumUsefulScore {
+                    return -Float.infinity
+                }
             }
         }
         
@@ -343,4 +356,5 @@ extension SpellCheck {
 // Baseline, no improvements: avg. 168ms, total 8.6s
 // Score each length candidates in parallel: avg. 88ms, total 4.5s
 // Reject bad candidates early: avg. 42ms, total 2.1s
+// Reject candidates who can't reach minimum useful score: avg. 28ms, total 1.3s
 
