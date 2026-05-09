@@ -115,7 +115,7 @@ class FinaleKeyboard: UIInputViewController {
     let maxNgram = 5
     
     let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
-    let spellChecker = SpellCheck(locale: .en_US)
+    var spellChecker = SpellCheck(locale: .en_US)
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -732,7 +732,7 @@ class FinaleKeyboard: UIInputViewController {
         AppendSuggestionFromDictionary(dict: defaultDictionary, lastWord: lastWord)
         
         if misspelledRange.location != NSNotFound {
-            suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: checker.guesses(forWordRange: misspelledRange, in: lastWord, language: "\(FinaleKeyboard.currentLocale)") ?? [String]())
+            suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: spellChecker.correct(word: lastWord))
             while suggestionsArrays[nextSuggestionArray].suggestions.count > maxSuggestions { suggestionsArrays[nextSuggestionArray].suggestions.removeLast() }
         }
         
@@ -1161,6 +1161,7 @@ class FinaleKeyboard: UIInputViewController {
         var index = ((FinaleKeyboard.enabledLocales.firstIndex(of: FinaleKeyboard.currentLocale) ?? 0) + (backwards ? -1 : 1)) % FinaleKeyboard.enabledLocales.count
         if index < 0 { index += FinaleKeyboard.enabledLocales.count }
         FinaleKeyboard.currentLocale = FinaleKeyboard.enabledLocales[index]
+        spellChecker = SpellCheck(locale: FinaleKeyboard.currentLocale)
         
         BuildKeyboardView(viewType: .Characters, updateViewType: FinaleKeyboard.currentViewType != .SearchEmoji)
         ResetSuggestions()
