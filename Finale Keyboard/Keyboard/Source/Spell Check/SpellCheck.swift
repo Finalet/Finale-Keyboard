@@ -11,7 +11,6 @@ import UIKit
 class SpellCheck {
     
     let locale: Locale
-    let dictionary: WordDictionary
     
     private let keyboardMatrix: KeyboardMatrix
     private let candidateFilter: CandidateBitsetFilter
@@ -20,15 +19,17 @@ class SpellCheck {
     init (locale: Locale) {
         self.locale = locale
         self.keyboardMatrix = KeyboardMatrix(locale: locale)
-        self.dictionary = SpellCheck.loadDictionary(forLocale: locale, keyboardMatrix: self.keyboardMatrix)
+        
+        let dictionary = SpellCheck.loadDictionary(forLocale: locale, keyboardMatrix: self.keyboardMatrix)
+        
         self.candidateFilter = CandidateBitsetFilter(dictionary: dictionary, proximityMatrix: self.keyboardMatrix.proximityMatrix, proximityMatrixSize: self.keyboardMatrix.proximityMatrixSize)
         self.candidateScorer = CandidateScorer(proximityMatrix: self.keyboardMatrix.proximityMatrix, proximityMatrixSize: self.keyboardMatrix.proximityMatrixSize)
     }
 
-    func correct(word: String, nSuggestions: Int = 5) -> [String] {
+    func suggestions(forWord: String, nSuggestions: Int = 5) -> [String] {
         guard nSuggestions > 0 else { return [] }
 
-        let cleanedWord = cleanWord(word)
+        let cleanedWord = cleanWord(forWord)
         if cleanedWord.isEmpty { return [] }
         
         let wordMatrixIndexes = keyboardMatrix.matrixIndexes(forWord: cleanedWord)
@@ -57,6 +58,13 @@ class SpellCheck {
         }
         
         return topCandidates.map { $0.word }
+    }
+
+    func isMisspelled(word: String) -> Bool {
+        let cleanedWord = cleanWord(word)
+        if cleanedWord.isEmpty { return false }
+
+        return !candidateFilter.containsWord(cleanedWord)
     }
 
     private func cleanWord(_ word: String) -> String {
@@ -642,6 +650,28 @@ extension SpellCheck {
 
             return candidates
         }
+
+        func containsWord(_ word: String) -> Bool {
+            guard let lengthIndex = lengthIndexes[word.count] else { return false }
+
+            var low = lengthIndex.candidates.startIndex
+            var high = lengthIndex.candidates.endIndex
+
+            while low < high {
+                let mid = low + (high - low) / 2
+                let candidateWord = lengthIndex.candidates[mid].word
+
+                if candidateWord == word {
+                    return true
+                } else if candidateWord < word {
+                    low = mid + 1
+                } else {
+                    high = mid
+                }
+            }
+
+            return false
+        }
     }
 }
 
@@ -714,7 +744,7 @@ extension SpellCheck {
         for subject in testSubjects {
             let startTime = Date()
             
-            let corrections = correct(word: subject.misspelled)
+            let corrections = suggestions(forWord: subject.misspelled)
             
             results.append((subject.misspelled, subject.correct, corrections, Date().timeIntervalSince(startTime)))
         }

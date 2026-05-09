@@ -717,9 +717,6 @@ class FinaleKeyboard: UIInputViewController {
         let lastWord = getLastWord()
         let isCaps = lastWord.uppercased() == lastWord
         
-        let checker = UITextChecker()
-        let misspelledRange = checker.rangeOfMisspelledWord(in: !isCaps ? lastWord : lastWord.lowercased(), range: NSMakeRange(0, lastWord.count), startingAt: 0, wrap: true, language: "\(FinaleKeyboard.currentLocale)")
-       
         if (suggestionsArrays[nextSuggestionArray].suggestions.count != 0) {
             suggestionsArrays[nextSuggestionArray].suggestions.removeAll()
             suggestionsArrays[nextSuggestionArray].lastPickedSuggestionIndex = 1
@@ -731,8 +728,8 @@ class FinaleKeyboard: UIInputViewController {
         
         AppendSuggestionFromDictionary(dict: defaultDictionary, lastWord: lastWord)
         
-        if misspelledRange.location != NSNotFound {
-            suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: spellChecker.correct(word: lastWord))
+        if spellChecker.isMisspelled(word: lastWord) {
+            suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: spellChecker.suggestions(forWord: lastWord))
             while suggestionsArrays[nextSuggestionArray].suggestions.count > maxSuggestions { suggestionsArrays[nextSuggestionArray].suggestions.removeLast() }
         }
         
