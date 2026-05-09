@@ -37,35 +37,47 @@ class SpellCheck {
         
         let wordMatrixIndexes = getMatrixIndexes(forWord: cleanedWord)
         let candidates = candidateFilter.candidates(for: wordMatrixIndexes)
+
+        let refinedCandidateCount = max(Search.nRefinedCandidates, nSuggestions)
+        var refinedCandidates: [RankedCandidate] = []
+        refinedCandidates.reserveCapacity(refinedCandidateCount)
+
+        for candidate in candidates {
+            let score = fastScoreCandidate(wordMatrixIndexes: wordMatrixIndexes, candidate: candidate)
+            if score.isFinite {
+                insertTopCandidate((candidate: candidate, score: score), into: &refinedCandidates, maxCount: refinedCandidateCount) { $0.score }
+            }
+        }
         
         var alignmentWorkspace = AlignmentWorkspace()
         var topCandidates: [ScoredCandidate] = []
         topCandidates.reserveCapacity(nSuggestions)
         
-        for candidate in candidates {
-            let score = scoreCandidate(wordMatrixIndexes: wordMatrixIndexes, candidate: candidate, workspace: &alignmentWorkspace)
+        for refinedCandidate in refinedCandidates {
+            let score = scoreCandidate(wordMatrixIndexes: wordMatrixIndexes, candidate: refinedCandidate.candidate, workspace: &alignmentWorkspace)
             if score.isFinite {
-                insertScoredCandidate((word: candidate.word, score: score), into: &topCandidates, maxCount: nSuggestions)
+                insertTopCandidate((word: refinedCandidate.candidate.word, score: score), into: &topCandidates, maxCount: nSuggestions) { $0.score }
             }
         }
         
         return topCandidates.map { $0.word }
     }
 
-    private func insertScoredCandidate(_ candidate: ScoredCandidate, into topCandidates: inout [ScoredCandidate], maxCount: Int) {
+    private func insertTopCandidate<T>(_ candidate: T, into topCandidates: inout [T], maxCount: Int, score: (T) -> Float) {
         guard maxCount > 0 else { return }
 
         var insertIndex: Int
+        let candidateScore = score(candidate)
         if topCandidates.count < maxCount {
             topCandidates.append(candidate)
             insertIndex = topCandidates.count - 1
         } else {
-            guard let last = topCandidates.last, candidate.score > last.score else { return }
+            guard let last = topCandidates.last, candidateScore > score(last) else { return }
             topCandidates[topCandidates.count - 1] = candidate
             insertIndex = topCandidates.count - 1
         }
 
-        while insertIndex > 0, topCandidates[insertIndex].score > topCandidates[insertIndex - 1].score {
+        while insertIndex > 0, score(topCandidates[insertIndex]) > score(topCandidates[insertIndex - 1]) {
             topCandidates.swapAt(insertIndex, insertIndex - 1)
             insertIndex -= 1
         }
@@ -78,11 +90,20 @@ class SpellCheck {
     }
 
     private func scoreCandidate(wordMatrixIndexes: [MatrixIndex], candidate: CorrectionCandidate, workspace: inout AlignmentWorkspace) -> Float {
-        var score: Float = 0.0
-        
         // Increase score based on how aligned its to the candidate
-        let alignmentScore = self.getAlignmentScore(wordMatrixIndexes: wordMatrixIndexes, candidateMatrixIndexes: candidate.matrixIndexes, minimumUsefulScore: 0.5, workspace: &workspace) * Weights.alignment
-        score += alignmentScore
+        let alignmentScore = self.getAlignmentScore(wordMatrixIndexes: wordMatrixIndexes, candidateMatrixIndexes: candidate.matrixIndexes, minimumUsefulScore: Scores.minimumUsefulAlignmentScore, workspace: &workspace)
+        return scoreCandidate(candidate: candidate, alignmentScore: alignmentScore)
+    }
+
+    private func fastScoreCandidate(wordMatrixIndexes: [MatrixIndex], candidate: CorrectionCandidate) -> Float {
+        let alignmentScore = fastAlignmentScore(wordMatrixIndexes: wordMatrixIndexes, candidateMatrixIndexes: candidate.matrixIndexes)
+        guard alignmentScore >= Scores.minimumUsefulAlignmentScore else { return -Float.infinity }
+
+        return scoreCandidate(candidate: candidate, alignmentScore: alignmentScore)
+    }
+
+    private func scoreCandidate(candidate: CorrectionCandidate, alignmentScore: Float) -> Float {
+        var score = alignmentScore * Weights.alignment
         
         // Increase the score based on the word's frequency in the language.
         let frequencyScore = candidate.frequency * Weights.frequency
@@ -102,6 +123,82 @@ class SpellCheck {
         }
 
         return proximityMatrix[Int(index1) * proximityMatrixSize + Int(index2)]
+    }
+
+    private func fastAlignmentScore(wordMatrixIndexes: [MatrixIndex], candidateMatrixIndexes: [MatrixIndex]) -> Float {
+        let wordLength = wordMatrixIndexes.count
+        let candidateLength = candidateMatrixIndexes.count
+
+        guard abs(wordLength - candidateLength) <= 1 else { return -Float.infinity }
+
+        let rawScore: Float
+        if wordLength == candidateLength {
+            rawScore = fastSameLengthScore(wordMatrixIndexes: wordMatrixIndexes, candidateMatrixIndexes: candidateMatrixIndexes)
+        } else if candidateLength == wordLength - 1 {
+            rawScore = fastSkippedWordScore(wordMatrixIndexes: wordMatrixIndexes, candidateMatrixIndexes: candidateMatrixIndexes)
+        } else {
+            rawScore = fastSkippedCandidateScore(wordMatrixIndexes: wordMatrixIndexes, candidateMatrixIndexes: candidateMatrixIndexes)
+        }
+
+        return rawScore / max(Float(wordLength) * Scores.matchBonus, 1)
+    }
+
+    private func fastSameLengthScore(wordMatrixIndexes: [MatrixIndex], candidateMatrixIndexes: [MatrixIndex]) -> Float {
+        var directScore: Float = 0
+
+        for index in wordMatrixIndexes.indices {
+            directScore += getProximityScore(index1: wordMatrixIndexes[index], index2: candidateMatrixIndexes[index])
+        }
+
+        var bestScore = directScore
+        guard wordMatrixIndexes.count > 1 else { return bestScore }
+
+        for index in 0..<(wordMatrixIndexes.count - 1) {
+            guard wordMatrixIndexes[index] == candidateMatrixIndexes[index + 1], wordMatrixIndexes[index + 1] == candidateMatrixIndexes[index] else { continue }
+
+            let directPairScore = getProximityScore(index1: wordMatrixIndexes[index], index2: candidateMatrixIndexes[index])
+                + getProximityScore(index1: wordMatrixIndexes[index + 1], index2: candidateMatrixIndexes[index + 1])
+            let transpositionScore = directScore - directPairScore + Scores.matchBonus * 2 - Scores.transpositionPenalty
+            bestScore = max(bestScore, transpositionScore)
+        }
+
+        return bestScore
+    }
+
+    private func fastSkippedWordScore(wordMatrixIndexes: [MatrixIndex], candidateMatrixIndexes: [MatrixIndex]) -> Float {
+        var bestScore = -Float.infinity
+
+        for skippedWordPosition in wordMatrixIndexes.indices {
+            var rawScore = -Scores.characterSkipPenalty
+            var candidatePosition = 0
+
+            for wordPosition in wordMatrixIndexes.indices where wordPosition != skippedWordPosition {
+                rawScore += getProximityScore(index1: wordMatrixIndexes[wordPosition], index2: candidateMatrixIndexes[candidatePosition])
+                candidatePosition += 1
+            }
+
+            bestScore = max(bestScore, rawScore)
+        }
+
+        return bestScore
+    }
+
+    private func fastSkippedCandidateScore(wordMatrixIndexes: [MatrixIndex], candidateMatrixIndexes: [MatrixIndex]) -> Float {
+        var bestScore = -Float.infinity
+
+        for skippedCandidatePosition in candidateMatrixIndexes.indices {
+            var rawScore = -Scores.characterSkipPenalty
+            var wordPosition = 0
+
+            for candidatePosition in candidateMatrixIndexes.indices where candidatePosition != skippedCandidatePosition {
+                rawScore += getProximityScore(index1: wordMatrixIndexes[wordPosition], index2: candidateMatrixIndexes[candidatePosition])
+                wordPosition += 1
+            }
+
+            bestScore = max(bestScore, rawScore)
+        }
+
+        return bestScore
     }
     
     private func getAlignmentScore(wordMatrixIndexes: [MatrixIndex], candidateMatrixIndexes: [MatrixIndex], minimumUsefulScore: Float? = nil, workspace: inout AlignmentWorkspace) -> Float {
@@ -282,6 +379,7 @@ extension SpellCheck {
     typealias WordFrequencyDictionary = [CorrectionCandidate]
     typealias CorrectionCandidate = (word: String, frequency: Float, matrixIndexes: [MatrixIndex])
     typealias ScoredCandidate = (word: String, score: Float)
+    typealias RankedCandidate = (candidate: CorrectionCandidate, score: Float)
 
     private struct AlignmentWorkspace {
         var previousPreviousRow: [Float] = []
@@ -315,9 +413,11 @@ extension SpellCheck {
         static let characterSkipPenalty: Float = 0.75
         static let transpositionPenalty: Float = 0.5
         static let lowFrequencyPenalty: Float = 0.25
+        static let minimumUsefulAlignmentScore: Float = 0.5
     }
 
     enum Search {
+        static let nRefinedCandidates = 16
         static let maxStructuralEdits = 1
         static let maxWrongSubstitutions = 1
     }
