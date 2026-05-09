@@ -12,20 +12,17 @@ class SpellCheck {
     
     let locale: Locale
     let dictionary: WordDictionary
-    let matrixIndexMap: [MatrixIndex]
     
+    private let keyboardMatrix: KeyboardMatrix
     private let candidateFilter: CandidateBitsetFilter
     private let candidateScorer: CandidateScorer
 
     init (locale: Locale) {
         self.locale = locale
-        let matrixIndexMap = SpellCheck.getMatrixIndexMap(locale: locale)
-        self.matrixIndexMap = matrixIndexMap
-        let dictionary = SpellCheck.loadDictionary(forLocale: locale, indexMap: matrixIndexMap)
-        self.dictionary = dictionary
-        let proximityMatrix = SpellCheck.getProximityMatrix(locale: locale, indexMap: matrixIndexMap)
-        self.candidateFilter = CandidateBitsetFilter(dictionary: dictionary, proximityMatrix: proximityMatrix.scores, proximityMatrixSize: proximityMatrix.size)
-        self.candidateScorer = CandidateScorer(proximityMatrix: proximityMatrix.scores, proximityMatrixSize: proximityMatrix.size)
+        self.keyboardMatrix = KeyboardMatrix(locale: locale)
+        self.dictionary = SpellCheck.loadDictionary(forLocale: locale, keyboardMatrix: self.keyboardMatrix)
+        self.candidateFilter = CandidateBitsetFilter(dictionary: dictionary, proximityMatrix: self.keyboardMatrix.proximityMatrix, proximityMatrixSize: self.keyboardMatrix.proximityMatrixSize)
+        self.candidateScorer = CandidateScorer(proximityMatrix: self.keyboardMatrix.proximityMatrix, proximityMatrixSize: self.keyboardMatrix.proximityMatrixSize)
     }
 
     func correct(word: String, nSuggestions: Int = 5) -> [String] {
@@ -34,7 +31,7 @@ class SpellCheck {
         let cleanedWord = cleanWord(word)
         if cleanedWord.isEmpty { return [] }
         
-        let wordMatrixIndexes = getMatrixIndexes(forWord: cleanedWord)
+        let wordMatrixIndexes = keyboardMatrix.matrixIndexes(forWord: cleanedWord)
         let candidates = candidateFilter.candidates(for: wordMatrixIndexes)
         
         let refinedCandidateCount = max(Search.nRefinedCandidates, nSuggestions)
@@ -62,6 +59,10 @@ class SpellCheck {
         return topCandidates.map { $0.word }
     }
 
+    private func cleanWord(_ word: String) -> String {
+        return word.lowercased().filter { $0.isLetter }
+    }
+    
     private func insertTopCandidate<T>(_ candidate: T, into topCandidates: inout [T], maxCount: Int, score: (T) -> Float) {
         guard maxCount > 0 else { return }
 
@@ -82,11 +83,7 @@ class SpellCheck {
         }
     }
 
-    private func cleanWord(_ word: String) -> String {
-        return word.lowercased().filter { $0.isLetter }
-    }
-
-    private static func loadDictionary(forLocale: Locale, indexMap: [MatrixIndex]) -> WordDictionary {
+    private static func loadDictionary(forLocale: Locale, keyboardMatrix: KeyboardMatrix) -> WordDictionary {
         let jsonFileName: String
         switch forLocale {
         case .en_US: jsonFileName = "english"
@@ -98,89 +95,10 @@ class SpellCheck {
         }
         return entries.mapValues { words in
             words.map { entry in
-                return (word: entry.key, frequency: entry.value, matrixIndexes: SpellCheck.getMatrixIndexes(forWord: entry.key, indexMap: indexMap))
+                return (word: entry.key, frequency: entry.value, matrixIndexes: keyboardMatrix.matrixIndexes(forWord: entry.key))
             }
         }
     } 
-
-    private func getMatrixIndexes(forWord word: String) -> [MatrixIndex] {
-        return SpellCheck.getMatrixIndexes(forWord: word, indexMap: matrixIndexMap)
-    }
-
-    private static func getMatrixIndexes(forWord word: String, indexMap: [MatrixIndex]) -> [MatrixIndex] {
-        return word.unicodeScalars.map {
-            guard $0.value <= UInt8.max else { return SpellCheck.unknownMatrixIndex }
-            return indexMap[Int($0.value)]
-        }
-    }
-
-    private static func getMatrixIndexMap(locale: Locale) -> [MatrixIndex] {
-        let alphabet = locale.topRow + locale.middleRow + locale.bottomRow
-        var map = Array(repeating: SpellCheck.unknownMatrixIndex, count: 256)
-        for (index, key) in alphabet.enumerated() {
-            guard let scalar = key.unicodeScalars.first, scalar.value <= UInt8.max else { continue }
-            map[Int(scalar.value)] = MatrixIndex(index)
-        }
-        return map 
-    }
-
-    // A N x N matrix, where N is the number of character keys in the keyboard, that contains the proximity score between each pair of keys.
-    private static func getProximityMatrix(locale: Locale, indexMap: [MatrixIndex]) -> (scores: [Float], size: Int) {
-        func score(forDistance distance: Float) -> Float {
-            if distance == 0 { return Scores.matchBonus }
-            if distance < 0.13 { return Scores.matchBonus * 0.5 }
-            if distance < 0.2 { return Scores.matchBonus * 0.25 }
-            return Scores.wrongCharacter
-        }
-
-        let rows = [locale.topRow, locale.middleRow, locale.bottomRow]
-        let alphabetCount = rows.reduce(0) { $0 + $1.count }
-
-        // First, calculate coordinates of each key button. X: range from 0 to 1, Y: range from 0 to ~0.22.
-        // Y is scaled down from 0 to 1 towards 0 to ~0.22, to reflect the aspect ratio of the keyboard. This way X and Y represent the same real physical distance between the keys.
-
-        var buttonCoordinates: [(UInt8, (x: Float, y: Float))] = []
-        buttonCoordinates.reserveCapacity(rows.reduce(0) { $0 + $1.count }) // Reserve capacity to improve performance.
-        
-        let scaleY = Float(rows.count) * Float(FinaleKeyboard.rowHeight) * 0.5 / Float(UIScreen.main.bounds.width)
-
-        for (rowIndex, row) in rows.enumerated() {
-            for (colIndex, key) in row.enumerated() {
-                // Third row has two extra buttons that are not character keys (shift and backspace). Our distances need to account for that.
-                let isBottomRow = rowIndex == 2                
-                let x = Float(colIndex + (isBottomRow ? 1 : 0)) / Float(row.count - 1 + (isBottomRow ? 2 : 0))
-                let y = scaleY * Float(rowIndex) / Float(rows.count - 1)
-                
-                guard let scalar = key.unicodeScalars.first, scalar.value <= UInt8.max else { continue }
-                buttonCoordinates.append((UInt8(scalar.value), (x: x, y: y)))
-            }
-        }
-
-        var matrix = Array(repeating: Scores.wrongCharacter, count: alphabetCount * alphabetCount)
-
-        for i in buttonCoordinates.indices {
-            let (code1, coord1) = buttonCoordinates[i]
-            let i1 = indexMap[Int(code1)]
-            guard i1 != SpellCheck.unknownMatrixIndex else { continue }
-            matrix[Int(i1) * alphabetCount + Int(i1)] = Scores.matchBonus
-
-            for j in (i + 1)..<buttonCoordinates.count {
-                let (code2, coord2) = buttonCoordinates[j]
-                let i2 = indexMap[Int(code2)]
-                guard i2 != SpellCheck.unknownMatrixIndex else { continue }
-
-                let dx = coord1.x - coord2.x
-                let dy = coord1.y - coord2.y
-                let distance = sqrt(dx * dx + dy * dy)
-                let proximityScore = score(forDistance: distance)
-
-                matrix[Int(i1) * alphabetCount + Int(i2)] = proximityScore
-                matrix[Int(i2) * alphabetCount + Int(i1)] = proximityScore
-            }
-        }
-        
-        return (matrix, alphabetCount)
-    }
 }
 
 // Types
@@ -214,6 +132,100 @@ extension SpellCheck {
         static let nRefinedCandidates = 16
         static let maxStructuralEdits = 1
         static let maxWrongSubstitutions = 1
+    }
+}
+
+// Keyboard Matrix
+extension SpellCheck {
+    private struct KeyboardMatrix {
+        let proximityMatrix: [Float]
+        let proximityMatrixSize: Int
+
+        private let indexMap: [MatrixIndex]
+
+        init(locale: Locale) {
+            self.indexMap = KeyboardMatrix.getMatrixIndexMap(locale: locale)
+
+            let proximityMatrix = KeyboardMatrix.getProximityMatrix(locale: locale, indexMap: self.indexMap)
+            
+            self.proximityMatrix = proximityMatrix.scores
+            self.proximityMatrixSize = proximityMatrix.size
+        }
+
+        func matrixIndexes(forWord word: String) -> [MatrixIndex] {
+            return word.unicodeScalars.map {
+                guard $0.value <= UInt8.max else { return SpellCheck.unknownMatrixIndex }
+                return indexMap[Int($0.value)]
+            }
+        }
+
+        private static func getMatrixIndexMap(locale: Locale) -> [MatrixIndex] {
+            let alphabet = locale.topRow + locale.middleRow + locale.bottomRow
+            var map = Array(repeating: SpellCheck.unknownMatrixIndex, count: 256)
+            for (index, key) in alphabet.enumerated() {
+                guard let scalar = key.unicodeScalars.first, scalar.value <= UInt8.max else { continue }
+                map[Int(scalar.value)] = MatrixIndex(index)
+            }
+            return map
+        }
+
+        // A N x N matrix, where N is the number of character keys in the keyboard, that contains the proximity score between each pair of keys.
+        private static func getProximityMatrix(locale: Locale, indexMap: [MatrixIndex]) -> (scores: [Float], size: Int) {
+            func score(forDistance distance: Float) -> Float {
+                if distance == 0 { return Scores.matchBonus }
+                if distance < 0.13 { return Scores.matchBonus * 0.5 }
+                if distance < 0.2 { return Scores.matchBonus * 0.25 }
+                return Scores.wrongCharacter
+            }
+
+            let rows = [locale.topRow, locale.middleRow, locale.bottomRow]
+            let alphabetCount = rows.reduce(0) { $0 + $1.count }
+
+            // First, calculate coordinates of each key button. X: range from 0 to 1, Y: range from 0 to ~0.22.
+            // Y is scaled down from 0 to 1 towards 0 to ~0.22, to reflect the aspect ratio of the keyboard. This way X and Y represent the same real physical distance between the keys.
+
+            var buttonCoordinates: [(UInt8, (x: Float, y: Float))] = []
+            buttonCoordinates.reserveCapacity(rows.reduce(0) { $0 + $1.count }) // Reserve capacity to improve performance.
+
+            let scaleY = Float(rows.count) * Float(FinaleKeyboard.rowHeight) * 0.5 / Float(UIScreen.main.bounds.width)
+
+            for (rowIndex, row) in rows.enumerated() {
+                for (colIndex, key) in row.enumerated() {
+                    // Third row has two extra buttons that are not character keys (shift and backspace). Our distances need to account for that.
+                    let isBottomRow = rowIndex == 2
+                    let x = Float(colIndex + (isBottomRow ? 1 : 0)) / Float(row.count - 1 + (isBottomRow ? 2 : 0))
+                    let y = scaleY * Float(rowIndex) / Float(rows.count - 1)
+
+                    guard let scalar = key.unicodeScalars.first, scalar.value <= UInt8.max else { continue }
+                    buttonCoordinates.append((UInt8(scalar.value), (x: x, y: y)))
+                }
+            }
+
+            var matrix = Array(repeating: Scores.wrongCharacter, count: alphabetCount * alphabetCount)
+
+            for i in buttonCoordinates.indices {
+                let (code1, coord1) = buttonCoordinates[i]
+                let i1 = indexMap[Int(code1)]
+                guard i1 != SpellCheck.unknownMatrixIndex else { continue }
+                matrix[Int(i1) * alphabetCount + Int(i1)] = Scores.matchBonus
+
+                for j in (i + 1)..<buttonCoordinates.count {
+                    let (code2, coord2) = buttonCoordinates[j]
+                    let i2 = indexMap[Int(code2)]
+                    guard i2 != SpellCheck.unknownMatrixIndex else { continue }
+
+                    let dx = coord1.x - coord2.x
+                    let dy = coord1.y - coord2.y
+                    let distance = sqrt(dx * dx + dy * dy)
+                    let proximityScore = score(forDistance: distance)
+
+                    matrix[Int(i1) * alphabetCount + Int(i2)] = proximityScore
+                    matrix[Int(i2) * alphabetCount + Int(i1)] = proximityScore
+                }
+            }
+
+            return (matrix, alphabetCount)
+        }
     }
 }
 
