@@ -12,31 +12,38 @@ class SpellCheck {
     
     let locale: Locale
     let dictionary: WordDictionary
-    let proximityMatrix: [[Float]]
-    let matrixIndexMap: [Character: Int]
+    let proximityMatrix: [Float]
+    let proximityMatrixSize: Int
+    let matrixIndexMap: [MatrixIndex]
+    private let candidateFilter: CandidateBitsetFilter
 
     init (locale: Locale) {
         self.locale = locale
-        self.dictionary = SpellCheck.loadDictionary(forLocale: locale)
-        self.matrixIndexMap = SpellCheck.getMatrixIndexMap(locale: locale)
-        self.proximityMatrix = SpellCheck.getProximityMatrix(locale: locale, indexMap: self.matrixIndexMap)
+        let matrixIndexMap = SpellCheck.getMatrixIndexMap(locale: locale)
+        self.matrixIndexMap = matrixIndexMap
+        let dictionary = SpellCheck.loadDictionary(forLocale: locale, indexMap: matrixIndexMap)
+        self.dictionary = dictionary
+        let proximityMatrix = SpellCheck.getProximityMatrix(locale: locale, indexMap: matrixIndexMap)
+        self.proximityMatrix = proximityMatrix.scores
+        self.proximityMatrixSize = proximityMatrix.size
+        self.candidateFilter = CandidateBitsetFilter(dictionary: dictionary, proximityMatrix: proximityMatrix.scores, proximityMatrixSize: proximityMatrix.size)
     }
 
     func correct(word: String) -> [String] {
         let cleanedWord = cleanWord(word)
         if cleanedWord.isEmpty { return [] }
         
-        let candidates = getCandidates(forWord: cleanedWord)
+        let wordMatrixIndexes = getMatrixIndexes(forWord: cleanedWord)
+        let candidates = candidateFilter.candidates(for: wordMatrixIndexes)
         
         var scored: [ScoredCandidate] = []
+        scored.reserveCapacity(candidates.count)
         
-        let lock = NSLock()
-        DispatchQueue.concurrentPerform(iterations: candidates.count) { i in
-            let scores: [ScoredCandidate] = candidates[i].map { (word: $0.key, score: scoreCandidate(forWord: cleanedWord, candidate: ($0.key, $0.value))) }
-            
-            lock.lock()
-            scored.append(contentsOf: scores)
-            lock.unlock()
+        for candidate in candidates {
+            let score = scoreCandidate(forWord: cleanedWord, candidate: candidate)
+            if score.isFinite {
+                scored.append((word: candidate.word, score: score))
+            }
         }
         
         return scored.sorted(by: { $0.score > $1.score }).map { $0.word }.prefix(5).map { String($0) }
@@ -66,8 +73,22 @@ class SpellCheck {
             return Scores.wrongCharacter
         }
         
-        let distance = proximityMatrix[index1][index2]
-        
+        return getProximityScore(index1: index1, index2: index2)
+    }
+
+    func getProximityScore(index1: MatrixIndex, index2: MatrixIndex) -> Float {
+        return SpellCheck.getProximityScore(index1: index1, index2: index2, proximityMatrix: proximityMatrix, proximityMatrixSize: proximityMatrixSize)
+    }
+
+    private static func getProximityScore(index1: MatrixIndex, index2: MatrixIndex, proximityMatrix: [Float], proximityMatrixSize: Int) -> Float {
+        guard index1 != SpellCheck.unknownMatrixIndex, index2 != SpellCheck.unknownMatrixIndex else {
+            return Scores.wrongCharacter
+        }
+
+        return proximityMatrix[Int(index1) * proximityMatrixSize + Int(index2)]
+    }
+
+    private static func getProximityScore(forDistance distance: Float) -> Float {
         if distance == 0 { return Scores.matchBonus }
         if distance < 0.13 { return Scores.matchBonus * 0.5 }
         if distance < 0.2 { return Scores.matchBonus * 0.25 }
@@ -146,48 +167,63 @@ class SpellCheck {
         return normalizedScore
     }
 
-    private func getCandidates(forWord: String) -> [WordFrequencyDictionary] {
-        return [self.dictionary[forWord.count - 1], self.dictionary[forWord.count], self.dictionary[forWord.count + 1]].compactMap { $0 }
-    }
-    
     private func cleanWord(_ word: String) -> String {
         return word.lowercased().filter { $0.isLetter }
     }
 
-    private static func loadDictionary(forLocale: Locale) -> WordDictionary {
+    private static func loadDictionary(forLocale: Locale, indexMap: [MatrixIndex]) -> WordDictionary {
         let jsonFileName: String
         switch forLocale {
         case .en_US: jsonFileName = "english"
         default: return [:]
         }
         
-        guard let file = Bundle.main.url(forResource: jsonFileName, withExtension: "json"), let data = try? Data(contentsOf: file), let entries = try? JSONDecoder().decode(WordDictionary.self, from: data) else {
+        guard let file = Bundle.main.url(forResource: jsonFileName, withExtension: "json"), let data = try? Data(contentsOf: file), let entries = try? JSONDecoder().decode(RawWordDictionary.self, from: data) else {
             return [:]
         }
-        return entries
+        return entries.mapValues { words in
+            words.map { entry in
+                return (word: entry.key, frequency: entry.value, matrixIndexes: SpellCheck.getMatrixIndexes(forWord: entry.key, indexMap: indexMap))
+            }
+        }
     } 
 
-    private func getMatrixIndex(_ char: Character) -> Int? {
-        return matrixIndexMap[char]
+    private func getMatrixIndex(_ char: Character) -> MatrixIndex? {
+        guard let scalar = char.unicodeScalars.first, scalar.value <= UInt8.max else { return nil }
+        let index = matrixIndexMap[Int(scalar.value)]
+        return index == SpellCheck.unknownMatrixIndex ? nil : index
     }
 
-    private static func getMatrixIndexMap(locale: Locale) -> [Character: Int] {
-        var map: [Character: Int] = [:]
-        for (index, char) in locale.alphabet.enumerated() {
-            map[char] = index
+    private func getMatrixIndexes(forWord word: String) -> [MatrixIndex] {
+        return SpellCheck.getMatrixIndexes(forWord: word, indexMap: matrixIndexMap)
+    }
+
+    private static func getMatrixIndexes(forWord word: String, indexMap: [MatrixIndex]) -> [MatrixIndex] {
+        return word.unicodeScalars.map {
+            guard $0.value <= UInt8.max else { return SpellCheck.unknownMatrixIndex }
+            return indexMap[Int($0.value)]
+        }
+    }
+
+    private static func getMatrixIndexMap(locale: Locale) -> [MatrixIndex] {
+        let alphabet = locale.topRow + locale.middleRow + locale.bottomRow
+        var map = Array(repeating: SpellCheck.unknownMatrixIndex, count: 256)
+        for (index, key) in alphabet.enumerated() {
+            guard let scalar = key.unicodeScalars.first, scalar.value <= UInt8.max else { continue }
+            map[Int(scalar.value)] = MatrixIndex(index)
         }
         return map 
     }
 
-    // A N x N matrix, where N is the number of character keys in the keyboard, that contains the distances between each pair of keys.
-    private static func getProximityMatrix(locale: Locale, indexMap: [Character: Int]) -> [[Float]] {
-        let alphabet = locale.alphabet 
+    // A N x N matrix, where N is the number of character keys in the keyboard, that contains the proximity score between each pair of keys.
+    private static func getProximityMatrix(locale: Locale, indexMap: [MatrixIndex]) -> (scores: [Float], size: Int) {
         let rows = [locale.topRow, locale.middleRow, locale.bottomRow]
+        let alphabetCount = rows.reduce(0) { $0 + $1.count }
 
         // First, calculate coordinates of each key button. X: range from 0 to 1, Y: range from 0 to ~0.22.
         // Y is scaled down from 0 to 1 towards 0 to ~0.22, to reflect the aspect ratio of the keyboard. This way X and Y represent the same real physical distance between the keys.
 
-        var buttonCoordinates: [(Character, (x: Float, y: Float))] = []
+        var buttonCoordinates: [(UInt8, (x: Float, y: Float))] = []
         buttonCoordinates.reserveCapacity(rows.reduce(0) { $0 + $1.count }) // Reserve capacity to improve performance.
         
         let scaleY = Float(rows.count) * Float(FinaleKeyboard.rowHeight) * 0.5 / Float(UIScreen.main.bounds.width)
@@ -199,44 +235,48 @@ class SpellCheck {
                 let x = Float(colIndex + (isBottomRow ? 1 : 0)) / Float(row.count - 1 + (isBottomRow ? 2 : 0))
                 let y = scaleY * Float(rowIndex) / Float(rows.count - 1)
                 
-                buttonCoordinates.append((Character(key), (x: x, y: y)))
+                guard let scalar = key.unicodeScalars.first, scalar.value <= UInt8.max else { continue }
+                buttonCoordinates.append((UInt8(scalar.value), (x: x, y: y)))
             }
         }
 
-        var matrix = Array(repeating: Array(repeating: Float(0.0), count: alphabet.count), count: alphabet.count)
+        var matrix = Array(repeating: Scores.wrongCharacter, count: alphabetCount * alphabetCount)
 
         for i in buttonCoordinates.indices {
-            let (char1, coord1) = buttonCoordinates[i]
-            let i1 = indexMap[char1]!
+            let (code1, coord1) = buttonCoordinates[i]
+            let i1 = indexMap[Int(code1)]
+            guard i1 != SpellCheck.unknownMatrixIndex else { continue }
+            matrix[Int(i1) * alphabetCount + Int(i1)] = Scores.matchBonus
 
             for j in (i + 1)..<buttonCoordinates.count {
-                let (char2, coord2) = buttonCoordinates[j]
-                let i2 = indexMap[char2]!
+                let (code2, coord2) = buttonCoordinates[j]
+                let i2 = indexMap[Int(code2)]
+                guard i2 != SpellCheck.unknownMatrixIndex else { continue }
 
                 let dx = coord1.x - coord2.x
                 let dy = coord1.y - coord2.y
                 let distance = sqrt(dx * dx + dy * dy)
+                let proximityScore = getProximityScore(forDistance: distance)
 
-                matrix[i1][i2] = distance
-                matrix[i2][i1] = distance
+                matrix[Int(i1) * alphabetCount + Int(i2)] = proximityScore
+                matrix[Int(i2) * alphabetCount + Int(i1)] = proximityScore
             }
         }
         
-        return matrix
+        return (matrix, alphabetCount)
     }
 }
 
 // Types
 extension SpellCheck {
+    typealias MatrixIndex = UInt8
     typealias WordDictionary = [Int: WordFrequencyDictionary]
-    typealias WordFrequencyDictionary = [String: Float]
-    typealias CorrectionCandidate = (word: String, frequency: Float)
+    typealias RawWordDictionary = [Int: [String: Float]]
+    typealias WordFrequencyDictionary = [CorrectionCandidate]
+    typealias CorrectionCandidate = (word: String, frequency: Float, matrixIndexes: [MatrixIndex])
     typealias ScoredCandidate = (word: String, score: Float)
-    
-    struct CharacterProximity {
-        let character: Character
-        let proximityScore: Float
-    }
+
+    static let unknownMatrixIndex = MatrixIndex.max
 
     enum Weights {
         static let frequency: Float = 0.11
@@ -250,6 +290,214 @@ extension SpellCheck {
         static let characterSkipPenalty: Float = 0.75
         static let transpositionPenalty: Float = 0.5
         static let lowFrequencyPenalty: Float = 0.25
+    }
+
+    enum Search {
+        static let maxStructuralEdits = 1
+        static let maxWrongSubstitutions = 1
+    }
+}
+
+// Candidate Filtering
+extension SpellCheck {
+    private struct CandidateBitsetFilter {
+        private struct LengthIndex {
+            let candidates: [CorrectionCandidate]
+            let wordBits: Int
+            let allWords: [UInt64]
+            let nearBitsets: [UInt64]
+
+            init(candidates: [CorrectionCandidate], proximityMatrix: [Float], proximityMatrixSize: Int) {
+                self.candidates = candidates
+                self.wordBits = max(1, (candidates.count + 63) / 64)
+
+                var allWords = Array(repeating: UInt64.max, count: wordBits)
+                let remainder = candidates.count & 63
+                if remainder != 0 {
+                    allWords[wordBits - 1] = (UInt64(1) << UInt64(remainder)) - 1
+                }
+                self.allWords = allWords
+
+                let wordLength = candidates.first?.matrixIndexes.count ?? 0
+                var nearBitsets = Array(repeating: UInt64(0), count: wordLength * proximityMatrixSize * wordBits)
+
+                for candidateIndex in candidates.indices {
+                    let bitWord = candidateIndex >> 6
+                    let bit = UInt64(1) << UInt64(candidateIndex & 63)
+
+                    for position in candidates[candidateIndex].matrixIndexes.indices {
+                        let candidateMatrixIndex = candidates[candidateIndex].matrixIndexes[position]
+                        guard candidateMatrixIndex != SpellCheck.unknownMatrixIndex else { continue }
+
+                        for typedIndex in 0..<proximityMatrixSize {
+                            let proximityScore = proximityMatrix[typedIndex * proximityMatrixSize + Int(candidateMatrixIndex)]
+                            guard proximityScore != Scores.wrongCharacter else { continue }
+                            nearBitsets[(position * proximityMatrixSize + typedIndex) * wordBits + bitWord] |= bit
+                        }
+                    }
+                }
+
+                self.nearBitsets = nearBitsets
+            }
+
+            func bitsetOffset(position: Int, typedIndex: MatrixIndex, proximityMatrixSize: Int) -> Int? {
+                guard typedIndex != SpellCheck.unknownMatrixIndex else { return nil }
+                let offset = (position * proximityMatrixSize + Int(typedIndex)) * wordBits
+                guard nearBitsets.indices.contains(offset) else { return nil }
+                return offset
+            }
+        }
+
+        private let lengthIndexes: [Int: LengthIndex]
+        private let proximityMatrixSize: Int
+
+        init(dictionary: WordDictionary, proximityMatrix: [Float], proximityMatrixSize: Int) {
+            var lengthIndexes: [Int: LengthIndex] = [:]
+            lengthIndexes.reserveCapacity(dictionary.count)
+
+            for (length, candidates) in dictionary {
+                let sortedCandidates = candidates.sorted { $0.word < $1.word }
+                lengthIndexes[length] = LengthIndex(candidates: sortedCandidates, proximityMatrix: proximityMatrix, proximityMatrixSize: proximityMatrixSize)
+            }
+
+            self.lengthIndexes = lengthIndexes
+            self.proximityMatrixSize = proximityMatrixSize
+        }
+
+        func candidates(for wordMatrixIndexes: [MatrixIndex]) -> [CorrectionCandidate] {
+            let wordLength = wordMatrixIndexes.count
+            var candidates: [CorrectionCandidate] = []
+
+            func fill(_ target: inout [UInt64], with source: [UInt64]) {
+                for index in target.indices {
+                    target[index] = source[index]
+                }
+            }
+
+            func clear(_ target: inout [UInt64]) {
+                for index in target.indices {
+                    target[index] = 0
+                }
+            }
+
+            func union(_ source: [UInt64], into target: inout [UInt64]) {
+                for index in target.indices {
+                    target[index] |= source[index]
+                }
+            }
+
+            func intersect(position: Int, typedPosition: Int, in lengthIndex: LengthIndex, into target: inout [UInt64]) -> Bool {
+                guard let bitsetOffset = lengthIndex.bitsetOffset(position: position, typedIndex: wordMatrixIndexes[typedPosition], proximityMatrixSize: proximityMatrixSize) else {
+                    clear(&target)
+                    return false
+                }
+
+                var hasAnyMatch = false
+                for index in target.indices {
+                    let value = target[index] & lengthIndex.nearBitsets[bitsetOffset + index]
+                    target[index] = value
+                    hasAnyMatch = hasAnyMatch || value != 0
+                }
+                return hasAnyMatch
+            }
+
+            func addSameLengthMatches(from lengthIndex: LengthIndex, resultBits: inout [UInt64], workBits: inout [UInt64]) {
+                guard wordLength > 0 else { return }
+
+                fill(&workBits, with: lengthIndex.allWords)
+                for position in 0..<wordLength {
+                    guard intersect(position: position, typedPosition: position, in: lengthIndex, into: &workBits) else { break }
+                }
+                union(workBits, into: &resultBits)
+
+                if Search.maxWrongSubstitutions > 0 {
+                    for wildcardPosition in 0..<wordLength {
+                        fill(&workBits, with: lengthIndex.allWords)
+                        for position in 0..<wordLength where position != wildcardPosition {
+                            guard intersect(position: position, typedPosition: position, in: lengthIndex, into: &workBits) else { break }
+                        }
+                        union(workBits, into: &resultBits)
+                    }
+                }
+
+                guard Search.maxStructuralEdits > 0, wordLength > 1 else { return }
+
+                for transpositionPosition in 0..<(wordLength - 1) {
+                    fill(&workBits, with: lengthIndex.allWords)
+                    for position in 0..<wordLength {
+                        let typedPosition: Int
+                        if position == transpositionPosition {
+                            typedPosition = position + 1
+                        } else if position == transpositionPosition + 1 {
+                            typedPosition = position - 1
+                        } else {
+                            typedPosition = position
+                        }
+
+                        guard intersect(position: position, typedPosition: typedPosition, in: lengthIndex, into: &workBits) else { break }
+                    }
+                    union(workBits, into: &resultBits)
+                }
+            }
+
+            func addShorterMatches(from lengthIndex: LengthIndex, resultBits: inout [UInt64], workBits: inout [UInt64]) {
+                guard Search.maxStructuralEdits > 0, wordLength > 1 else { return }
+                let candidateLength = wordLength - 1
+
+                for skippedWordPosition in 0..<wordLength {
+                    fill(&workBits, with: lengthIndex.allWords)
+                    for candidatePosition in 0..<candidateLength {
+                        let typedPosition = candidatePosition < skippedWordPosition ? candidatePosition : candidatePosition + 1
+                        guard intersect(position: candidatePosition, typedPosition: typedPosition, in: lengthIndex, into: &workBits) else { break }
+                    }
+                    union(workBits, into: &resultBits)
+                }
+            }
+
+            func addLongerMatches(from lengthIndex: LengthIndex, resultBits: inout [UInt64], workBits: inout [UInt64]) {
+                guard Search.maxStructuralEdits > 0 else { return }
+                let candidateLength = wordLength + 1
+
+                for skippedCandidatePosition in 0..<candidateLength {
+                    fill(&workBits, with: lengthIndex.allWords)
+                    for candidatePosition in 0..<candidateLength where candidatePosition != skippedCandidatePosition {
+                        let typedPosition = candidatePosition < skippedCandidatePosition ? candidatePosition : candidatePosition - 1
+                        guard intersect(position: candidatePosition, typedPosition: typedPosition, in: lengthIndex, into: &workBits) else { break }
+                    }
+                    union(workBits, into: &resultBits)
+                }
+            }
+
+            func appendMatches(from lengthIndex: LengthIndex, resultBits: [UInt64]) {
+                for wordBitIndex in resultBits.indices {
+                    var bits = resultBits[wordBitIndex]
+
+                    while bits != 0 {
+                        let bit = bits & (0 &- bits)
+                        let candidateIndex = wordBitIndex * 64 + bit.trailingZeroBitCount
+                        bits &= bits - 1
+
+                        guard lengthIndex.candidates.indices.contains(candidateIndex) else { continue }
+                        candidates.append(lengthIndex.candidates[candidateIndex])
+                    }
+                }
+            }
+
+            func visitLength(_ candidateLength: Int, collector: (LengthIndex, inout [UInt64], inout [UInt64]) -> Void) {
+                guard let lengthIndex = lengthIndexes[candidateLength] else { return }
+
+                var resultBits = Array(repeating: UInt64(0), count: lengthIndex.wordBits)
+                var workBits = Array(repeating: UInt64(0), count: lengthIndex.wordBits)
+                collector(lengthIndex, &resultBits, &workBits)
+                appendMatches(from: lengthIndex, resultBits: resultBits)
+            }
+
+            visitLength(wordLength, collector: addSameLengthMatches)
+            visitLength(wordLength - 1, collector: addShorterMatches)
+            visitLength(wordLength + 1, collector: addLongerMatches)
+
+            return candidates
+        }
     }
 }
 
@@ -357,4 +605,4 @@ extension SpellCheck {
 // Score each length candidates in parallel: avg. 88ms, total 4.5s
 // Reject bad candidates early: avg. 42ms, total 2.1s
 // Reject candidates who can't reach minimum useful score: avg. 28ms, total 1.3s
-
+// Filter candidates with a bitset: avg. 1.8ms, total: 90ms.
