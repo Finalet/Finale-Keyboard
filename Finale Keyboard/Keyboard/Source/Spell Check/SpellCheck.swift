@@ -29,24 +29,45 @@ class SpellCheck {
         self.candidateFilter = CandidateBitsetFilter(dictionary: dictionary, proximityMatrix: proximityMatrix.scores, proximityMatrixSize: proximityMatrix.size)
     }
 
-    func correct(word: String) -> [String] {
+    func correct(word: String, nSuggestions: Int = 5) -> [String] {
+        guard nSuggestions > 0 else { return [] }
+
         let cleanedWord = cleanWord(word)
         if cleanedWord.isEmpty { return [] }
         
         let wordMatrixIndexes = getMatrixIndexes(forWord: cleanedWord)
         let candidates = candidateFilter.candidates(for: wordMatrixIndexes)
         
-        var scored: [ScoredCandidate] = []
-        scored.reserveCapacity(candidates.count)
+        var topCandidates: [ScoredCandidate] = []
+        topCandidates.reserveCapacity(nSuggestions)
         
         for candidate in candidates {
             let score = scoreCandidate(forWord: cleanedWord, candidate: candidate)
             if score.isFinite {
-                scored.append((word: candidate.word, score: score))
+                insertScoredCandidate((word: candidate.word, score: score), into: &topCandidates, maxCount: nSuggestions)
             }
         }
         
-        return scored.sorted(by: { $0.score > $1.score }).map { $0.word }.prefix(5).map { String($0) }
+        return topCandidates.map { $0.word }
+    }
+
+    private func insertScoredCandidate(_ candidate: ScoredCandidate, into topCandidates: inout [ScoredCandidate], maxCount: Int) {
+        guard maxCount > 0 else { return }
+
+        var insertIndex: Int
+        if topCandidates.count < maxCount {
+            topCandidates.append(candidate)
+            insertIndex = topCandidates.count - 1
+        } else {
+            guard let last = topCandidates.last, candidate.score > last.score else { return }
+            topCandidates[topCandidates.count - 1] = candidate
+            insertIndex = topCandidates.count - 1
+        }
+
+        while insertIndex > 0, topCandidates[insertIndex].score > topCandidates[insertIndex - 1].score {
+            topCandidates.swapAt(insertIndex, insertIndex - 1)
+            insertIndex -= 1
+        }
     }
 
     func scoreCandidate(forWord: String, candidate: CorrectionCandidate) -> Float {
