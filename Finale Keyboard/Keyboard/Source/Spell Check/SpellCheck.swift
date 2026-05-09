@@ -793,3 +793,4 @@ extension SpellCheck {
 // Filter candidates with a bitset: avg. 1.8ms, total: 90ms.
 // Faster / less RAM getAlignmentScore: avg. 1.6ms, total: 80ms.
 // Pass word matrixes into getAlignmentScore: avg. 1.5ms, total: 77ms.
+// Two stage scoring of candidates with fast scorrer and slow scorrer.: avg. 1.2ms, total: 60ms.
