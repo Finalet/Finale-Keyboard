@@ -18,7 +18,6 @@ class SpellCheck {
     private let candidateFilter: CandidateBitsetFilter
 
     init (locale: Locale) {
-        let startTime = Date()
         self.locale = locale
         let matrixIndexMap = SpellCheck.getMatrixIndexMap(locale: locale)
         self.matrixIndexMap = matrixIndexMap
@@ -28,7 +27,6 @@ class SpellCheck {
         self.proximityMatrix = proximityMatrix.scores
         self.proximityMatrixSize = proximityMatrix.size
         self.candidateFilter = CandidateBitsetFilter(dictionary: dictionary, proximityMatrix: proximityMatrix.scores, proximityMatrixSize: proximityMatrix.size)
-        print("Initializing Spell Checker took \(Date().timeIntervalSince(startTime) * 1000)ms")
     }
 
     func correct(word: String, nSuggestions: Int = 5) -> [String] {
@@ -133,17 +131,6 @@ class SpellCheck {
         let wordCharacters = Array(word)
         let candidateCharacters = Array(candidate)
 
-        // Reject obviosuly wrong candidates early.
-        // If the first two characters don't match, its the wrong candidate.
-        if wordCharacters.count >= 2, candidateCharacters.count >= 2 {
-            let firstScore = getProximityScore(char1: wordCharacters[0], char2: candidateCharacters[0])
-            let secondScore = getProximityScore(char1: wordCharacters[1], char2: candidateCharacters[1])
-
-            if firstScore == Scores.wrongCharacter, secondScore == Scores.wrongCharacter {
-                return -Float.infinity
-            }
-        }
-        
         workspace.prepare(rowLength: candidateCharacters.count + 1)
         var hasPreviousPreviousRow = false
         workspace.previousRow[0] = 0
@@ -638,12 +625,17 @@ extension SpellCheck {
         let totalCorrect = results.filter { $0.ACresult.first == $0.correct }.count
         let totalTime = results.reduce(0) { $0 + $1.timeTook }
         let averageTime = totalTime / Double(results.count)
+        let sortedTimes = results.map { $0.timeTook }.sorted()
+        let p50Time = percentile(sortedTimes, percentile: 0.50)
+        let p95Time = percentile(sortedTimes, percentile: 0.95)
         
         print ("📝 Autocorrect results 📝")
         print ("")
         print ("- Correct: \((totalCorrect * 100) / results.count)% (\(totalCorrect)/\(results.count))")
         print ("- Average time: \(round(averageTime * roundTimeTo * 1000) / roundTimeTo) ms")
         print ("- Total time: \(round(totalTime * roundTimeTo * 1000) / roundTimeTo) ms")
+        print ("- P50 time: \(round(p50Time * roundTimeTo * 1000) / roundTimeTo) ms")
+        print ("- P95 time: \(round(p95Time * roundTimeTo * 1000) / roundTimeTo) ms")
         print ("")
         
         print ("❌ Wrong")
@@ -655,6 +647,12 @@ extension SpellCheck {
         for result in results.filter({ $0.ACresult.first == $0.correct }) {
             print("\t- \(result.misspelled) -> \(result.ACresult.first!) | Best candidates: \(result.ACresult) | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
         }
+    }
+    
+    private func percentile(_ sortedValues: [TimeInterval], percentile: Double) -> TimeInterval {
+        guard !sortedValues.isEmpty else { return 0 }
+        let index = min(sortedValues.count - 1, max(0, Int(Double(sortedValues.count - 1) * percentile)))
+        return sortedValues[index]
     }
 }
 
