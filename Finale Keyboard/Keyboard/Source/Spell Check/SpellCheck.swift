@@ -20,20 +20,22 @@ class SpellCheck {
         let startTime = Date()
         self.locale = locale
         
-        guard let keyboardMatrix = BinaryReader.shared.loadKeyboardMatrix(for: locale),
+        guard let keyboardMatrixSnapshot = BinaryReader.shared.loadKeyboardMatrix(for: locale),
               let dictionary = BinaryReader.shared.loadDictionary(for: locale),
               let candidateBitsets = BinaryReader.shared.loadCandidateBitsets(for: locale) else {
+            self.validWords = []
             self.keyboardMatrix = nil
             self.candidateFilter = nil
             self.candidateScorer = nil
-            self.validWords = []
             return
         }
         
+        let keyboardMatrix = KeyboardMatrix(snapshot: keyboardMatrixSnapshot)
+        
         self.validWords = dictionary.validWords
-        self.keyboardMatrix = KeyboardMatrix(snapshot: keyboardMatrix)
+        self.keyboardMatrix = keyboardMatrix
         self.candidateFilter = CandidateBitsetFilter(dictionary: dictionary.words, snapshot: candidateBitsets, proximityMatrixSize: keyboardMatrix.proximityMatrixSize)
-        self.candidateScorer = CandidateScorer(proximityMatrix: keyboardMatrix.proximityMatrix, proximityMatrixSize: keyboardMatrix.proximityMatrixSize)
+        self.candidateScorer = CandidateScorer(keyboardMatrix: keyboardMatrix)
 
         print("Loaded in \(Date().timeIntervalSince(startTime)) seconds")
     }
@@ -44,7 +46,7 @@ class SpellCheck {
         let cleanedWord = cleanWordForSearch(forWord)
         if cleanedWord.isEmpty { return [] }
         
-        let wordMatrixIndexes = SpellCheck.matrixIndexes(forWord: cleanedWord, indexMap: keyboardMatrix.indexMap)
+        let wordMatrixIndexes = keyboardMatrix.matrixIndexes(forWord: cleanedWord)
         let candidates = candidateFilter.candidates(for: wordMatrixIndexes)
         
         let refinedCandidateCount = max(Search.nRefinedCandidates, nSuggestions)
@@ -128,7 +130,7 @@ class SpellCheck {
             for entry in words {
                 let validWord = normalizedWordForValidation(entry.key, locale: forLocale)
                 let matchWord = normalizedWordForSearch(entry.key, locale: forLocale)
-                let matrixIndexes = SpellCheck.matrixIndexes(forWord: matchWord, indexMap: indexMap)
+                let matrixIndexes = SpellCheck.KeyboardMatrix.matrixIndexes(forWord: matchWord, indexMap: indexMap)
 
                 guard !validWord.isEmpty, !matrixIndexes.isEmpty, !matrixIndexes.contains(SpellCheck.unknownMatrixIndex) else { continue }
 
@@ -145,12 +147,6 @@ class SpellCheck {
         case .ru_RU: return "russian"
         case .es_ES: return "spanish"
         case .de_DE: return "german"
-        }
-    }
-
-    private static func matrixIndexes(forWord word: String, indexMap: [Character: MatrixIndex]) -> [MatrixIndex] {
-        return word.map {
-            return indexMap[$0] ?? SpellCheck.unknownMatrixIndex
         }
     }
 
@@ -279,6 +275,16 @@ extension SpellCheck {
             self.proximityMatrixSize = snapshot.proximityMatrixSize
         }
 
+        func matrixIndexes(forWord word: String) -> [MatrixIndex] {
+            return SpellCheck.KeyboardMatrix.matrixIndexes(forWord: word, indexMap: self.indexMap)
+        }
+        
+        fileprivate static func matrixIndexes(forWord word: String, indexMap: [Character: MatrixIndex]) -> [MatrixIndex] {
+            return word.map {
+                return indexMap[$0] ?? SpellCheck.unknownMatrixIndex
+            }
+        }
+        
         static func generateSnapshot(locale: Locale) -> KeyboardMatrixSnapshot {
             let indexMap = getMatrixIndexMap(locale: locale)
             let proximityMatrix = getProximityMatrix(locale: locale, indexMap: indexMap)
@@ -381,12 +387,10 @@ extension SpellCheck {
             }
         }
 
-        private let proximityMatrix: [Float]
-        private let proximityMatrixSize: Int
-
-        init(proximityMatrix: [Float], proximityMatrixSize: Int) {
-            self.proximityMatrix = proximityMatrix
-            self.proximityMatrixSize = proximityMatrixSize
+        private let keyboardMatrix: KeyboardMatrix
+        
+        init(keyboardMatrix: KeyboardMatrix) {
+            self.keyboardMatrix = keyboardMatrix
         }
 
         func scoreCandidate(wordMatrixIndexes: [MatrixIndex], candidate: CorrectionCandidate, workspace: inout AlignmentWorkspace) -> Float {
@@ -569,16 +573,16 @@ extension SpellCheck {
 
             let row = Int(index1)
             let column = Int(index2)
-            guard row < proximityMatrixSize, column < proximityMatrixSize else {
+            guard row < keyboardMatrix.proximityMatrixSize, column < keyboardMatrix.proximityMatrixSize else {
                 return Scores.wrongCharacter
             }
 
-            let offset = row * proximityMatrixSize + column
-            guard proximityMatrix.indices.contains(offset) else {
+            let offset = row * keyboardMatrix.proximityMatrixSize + column
+            guard keyboardMatrix.proximityMatrix.indices.contains(offset) else {
                 return Scores.wrongCharacter
             }
 
-            return proximityMatrix[offset]
+            return keyboardMatrix.proximityMatrix[offset]
         }
     }
 }
