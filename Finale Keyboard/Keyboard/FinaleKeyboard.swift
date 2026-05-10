@@ -590,7 +590,7 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func SwipeRight () {
-//        spellChecker.RunTest()
+        spellChecker.RunTest()
         
         if let emojiSearchRow = emojiSearchRow {
             emojiSearchRow.SwipeRight()

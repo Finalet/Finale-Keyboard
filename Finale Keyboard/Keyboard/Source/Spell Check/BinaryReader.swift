@@ -10,13 +10,7 @@ import Foundation
 final class BinaryReader {
     static let shared = BinaryReader()
 
-    struct KeyboardMatrixData {
-        let indexMap: [Character: UInt8]
-        let proximityMatrix: [Float]
-        let proximityMatrixSize: Int
-    }
-
-    func loadKeyboardMatrix(for locale: Locale, bundle: Bundle = .main) -> KeyboardMatrixData? {
+    func loadKeyboardMatrix(for locale: Locale, bundle: Bundle = .main) -> SpellCheck.KeyboardMatrix.KeyboardMatrixSnapshot? {
         guard let file = loadFile(for: locale, bundle: bundle),
               let payload = file.sectionPayload(for: .keyboardMatrix) else {
             return nil
@@ -34,13 +28,13 @@ final class BinaryReader {
         return DictionarySectionReader.decode(payload: payload)
     }
 
-    func loadCandidateBitsets(for locale: Locale, dictionary: SpellCheck.WordDictionary, proximityMatrixSize: Int, bundle: Bundle = .main) -> SpellCheck.CandidateBitsetFilter.Snapshot? {
+    func loadCandidateBitsets(for locale: Locale, bundle: Bundle = .main) -> SpellCheck.CandidateBitsetFilter.Snapshot? {
         guard let file = loadFile(for: locale, bundle: bundle),
               let payload = file.sectionPayload(for: .candidateBitsets) else {
             return nil
         }
 
-        return CandidateBitsetSectionReader.decode(payload: payload, dictionary: dictionary, proximityMatrixSize: proximityMatrixSize)
+        return CandidateBitsetSectionReader.decode(payload: payload)
     }
 
     private func loadFile(for locale: Locale, bundle: Bundle) -> FSCBinaryFile? {
@@ -123,12 +117,12 @@ private struct FSCBinaryFile {
 }
 
 private struct KeyboardMatrixSectionReader {
-    static func decode(payload: Data) -> BinaryReader.KeyboardMatrixData? {
+    static func decode(payload: Data) -> SpellCheck.KeyboardMatrix.KeyboardMatrixSnapshot? {
         var reader = BinaryPayloadReader(data: payload)
 
         guard let indexMapCount = reader.readUInt16() else { return nil }
 
-        var indexMap: [Character: UInt8] = [:]
+        var indexMap: [Character: SpellCheck.MatrixIndex] = [:]
         indexMap.reserveCapacity(Int(indexMapCount))
 
         for _ in 0..<indexMapCount {
@@ -171,7 +165,7 @@ private struct KeyboardMatrixSectionReader {
 
         guard reader.isAtEnd else { return nil }
 
-        return BinaryReader.KeyboardMatrixData(indexMap: indexMap, proximityMatrix: proximityMatrix, proximityMatrixSize: proximityMatrixSize)
+        return SpellCheck.KeyboardMatrix.KeyboardMatrixSnapshot(indexMap: indexMap, proximityMatrix: proximityMatrix, proximityMatrixSize: proximityMatrixSize)
     }
 }
 
@@ -256,15 +250,13 @@ private struct DictionarySectionReader {
 }
 
 private struct CandidateBitsetSectionReader {
-    static func decode(payload: Data, dictionary: SpellCheck.WordDictionary, proximityMatrixSize: Int) -> SpellCheck.CandidateBitsetFilter.Snapshot? {
+    static func decode(payload: Data) -> SpellCheck.CandidateBitsetFilter.Snapshot? {
         var reader = BinaryPayloadReader(data: payload)
 
-        guard let groupCount = reader.readUInt16(),
-              Int(groupCount) == dictionary.count else {
+        guard let groupCount = reader.readUInt16() else {
             return nil
         }
 
-        let expectedLengths = Set(dictionary.keys)
         var lengthIndexes: [Int: SpellCheck.CandidateBitsetFilter.LengthIndexSnapshot] = [:]
         lengthIndexes.reserveCapacity(Int(groupCount))
 
@@ -280,15 +272,6 @@ private struct CandidateBitsetSectionReader {
 
             let length = Int(lengthValue)
             let wordBits = Int(wordBitsValue)
-            guard length > 0,
-                  lengthIndexes[length] == nil,
-                  expectedLengths.contains(length),
-                  let candidates = dictionary[length],
-                  candidateCount == candidates.sorted(by: { $0.word < $1.word }).count,
-                  wordBits == SpellCheck.CandidateBitsetFilter.wordBits(forCandidateCount: candidateCount),
-                  allWordsCount == wordBits else {
-                return nil
-            }
 
             var allWords: [UInt64] = []
             allWords.reserveCapacity(allWordsCount)
@@ -297,11 +280,8 @@ private struct CandidateBitsetSectionReader {
                 allWords.append(word)
             }
 
-            guard allWords == SpellCheck.CandidateBitsetFilter.allWords(forCandidateCount: candidateCount, wordBits: wordBits),
-                  let nearBitsetCountValue = reader.readUInt32(),
-                  let nearBitsetCount = Int(exactly: nearBitsetCountValue),
-                  let expectedNearBitsetCount = expectedNearBitsetCount(length: length, proximityMatrixSize: proximityMatrixSize, wordBits: wordBits),
-                  nearBitsetCount == expectedNearBitsetCount else {
+            guard let nearBitsetCountValue = reader.readUInt32(),
+                  let nearBitsetCount = Int(exactly: nearBitsetCountValue) else {
                 return nil
             }
 
@@ -315,24 +295,11 @@ private struct CandidateBitsetSectionReader {
             lengthIndexes[length] = SpellCheck.CandidateBitsetFilter.LengthIndexSnapshot(length: length, candidateCount: candidateCount, wordBits: wordBits, allWords: allWords, nearBitsets: nearBitsets)
         }
 
-        guard reader.isAtEnd,
-              Set(lengthIndexes.keys) == expectedLengths else {
+        guard reader.isAtEnd else {
             return nil
         }
 
         return SpellCheck.CandidateBitsetFilter.Snapshot(lengthIndexes: lengthIndexes)
-    }
-
-    private static func expectedNearBitsetCount(length: Int, proximityMatrixSize: Int, wordBits: Int) -> Int? {
-        guard length >= 0, proximityMatrixSize >= 0, wordBits >= 0 else { return nil }
-
-        let (positionCount, positionOverflow) = length.multipliedReportingOverflow(by: proximityMatrixSize)
-        guard !positionOverflow else { return nil }
-
-        let (count, countOverflow) = positionCount.multipliedReportingOverflow(by: wordBits)
-        guard !countOverflow else { return nil }
-
-        return count
     }
 }
 

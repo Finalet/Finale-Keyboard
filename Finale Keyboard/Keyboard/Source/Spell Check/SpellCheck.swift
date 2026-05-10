@@ -11,31 +11,35 @@ class SpellCheck {
     
     let locale: Locale
     
-    private let keyboardMatrix: KeyboardMatrix
     private let validWords: Set<String>
-    private let candidateFilter: CandidateBitsetFilter
-    private let candidateScorer: CandidateScorer
+    private let keyboardMatrix: KeyboardMatrix?
+    private let candidateFilter: CandidateBitsetFilter?
+    private let candidateScorer: CandidateScorer?
 
     init (locale: Locale) {
         let startTime = Date()
         self.locale = locale
-        self.keyboardMatrix = KeyboardMatrix(locale: locale)
         
-        let loadedDictionary = BinaryReader.shared.loadDictionary(for: locale) ?? (words: [:], validWords: [])
-        self.validWords = loadedDictionary.validWords
-
-        let proximityMatrixSize = self.keyboardMatrix.proximityMatrixSize
-        if let candidateBitsets = BinaryReader.shared.loadCandidateBitsets(for: locale, dictionary: loadedDictionary.words, proximityMatrixSize: proximityMatrixSize) {
-            self.candidateFilter = CandidateBitsetFilter(dictionary: loadedDictionary.words, snapshot: candidateBitsets, proximityMatrixSize: proximityMatrixSize)
-        } else {
-            self.candidateFilter = CandidateBitsetFilter()
+        guard let keyboardMatrix = BinaryReader.shared.loadKeyboardMatrix(for: locale),
+              let dictionary = BinaryReader.shared.loadDictionary(for: locale),
+              let candidateBitsets = BinaryReader.shared.loadCandidateBitsets(for: locale) else {
+            self.keyboardMatrix = nil
+            self.candidateFilter = nil
+            self.candidateScorer = nil
+            self.validWords = []
+            return
         }
-        self.candidateScorer = CandidateScorer(proximityMatrix: self.keyboardMatrix.proximityMatrix, proximityMatrixSize: self.keyboardMatrix.proximityMatrixSize)
+        
+        self.validWords = dictionary.validWords
+        self.keyboardMatrix = KeyboardMatrix(snapshot: keyboardMatrix)
+        self.candidateFilter = CandidateBitsetFilter(dictionary: dictionary.words, snapshot: candidateBitsets, proximityMatrixSize: keyboardMatrix.proximityMatrixSize)
+        self.candidateScorer = CandidateScorer(proximityMatrix: keyboardMatrix.proximityMatrix, proximityMatrixSize: keyboardMatrix.proximityMatrixSize)
+
         print("Loaded in \(Date().timeIntervalSince(startTime)) seconds")
     }
 
     func suggestions(forWord: String, nSuggestions: Int = 5) -> [String] {
-        guard nSuggestions > 0 else { return [] }
+        guard nSuggestions > 0, let keyboardMatrix, let candidateFilter, let candidateScorer else { return [] }
 
         let cleanedWord = cleanWordForSearch(forWord)
         if cleanedWord.isEmpty { return [] }
@@ -269,17 +273,10 @@ extension SpellCheck {
         let proximityMatrixSize: Int
         let indexMap: [Character: MatrixIndex]
 
-        init(locale: Locale) {
-            guard let keyboardMatrix = BinaryReader.shared.loadKeyboardMatrix(for: locale) else {
-                self.indexMap = [:]
-                self.proximityMatrix = []
-                self.proximityMatrixSize = 0
-                return
-            }
-
-            self.indexMap = keyboardMatrix.indexMap
-            self.proximityMatrix = keyboardMatrix.proximityMatrix
-            self.proximityMatrixSize = keyboardMatrix.proximityMatrixSize
+        init(snapshot: KeyboardMatrixSnapshot) {
+            self.indexMap = snapshot.indexMap
+            self.proximityMatrix = snapshot.proximityMatrix
+            self.proximityMatrixSize = snapshot.proximityMatrixSize
         }
 
         static func generateSnapshot(locale: Locale) -> KeyboardMatrixSnapshot {
@@ -669,14 +666,6 @@ extension SpellCheck {
                 guard let lengthSnapshot = snapshot.lengthIndexes[length] else { continue }
 
                 let sortedCandidates = candidates.sorted { $0.word < $1.word }
-                guard lengthSnapshot.length == length,
-                      lengthSnapshot.candidateCount == sortedCandidates.count,
-                      lengthSnapshot.wordBits == Self.wordBits(forCandidateCount: sortedCandidates.count),
-                      lengthSnapshot.allWords == Self.allWords(forCandidateCount: sortedCandidates.count, wordBits: lengthSnapshot.wordBits),
-                      lengthSnapshot.nearBitsets.count == length * proximityMatrixSize * lengthSnapshot.wordBits else {
-                    continue
-                }
-
                 lengthIndexes[length] = LengthIndex(candidates: sortedCandidates, snapshot: lengthSnapshot)
             }
 
