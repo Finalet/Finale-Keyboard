@@ -291,7 +291,8 @@ extension SpellCheck {
             var buttonCoordinates: [(Character, (x: Float, y: Float))] = []
             buttonCoordinates.reserveCapacity(rows.reduce(0) { $0 + $1.count }) // Reserve capacity to improve performance.
 
-            let scaleY = Float(rows.count) * Float(FinaleKeyboard.rowHeight) * 0.5 / Float(UIScreen.main.bounds.width)
+//            let scaleY = Float(rows.count) * Float(FinaleKeyboard.rowHeight) * 0.5 / Float(UIScreen.main.bounds.width)
+            let scaleY: Float = 0.22 // I used to calculate this at run-time with the devices screen size, but I moved this into a custom binary loaded at build-time, so now its hardcoded.
 
             for (rowIndex, row) in rows.enumerated() {
                 for (colIndex, key) in row.enumerated() {
