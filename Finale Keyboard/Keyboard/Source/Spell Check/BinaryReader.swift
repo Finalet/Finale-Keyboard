@@ -18,11 +18,11 @@ final class BinaryReader {
 
     func loadKeyboardMatrix(for locale: Locale, bundle: Bundle = .main) -> KeyboardMatrixData? {
         guard let file = loadFile(for: locale, bundle: bundle),
-              file.sectionPayload(for: .keyboardMatrix) != nil else {
+              let payload = file.sectionPayload(for: .keyboardMatrix) else {
             return nil
         }
 
-        return nil
+        return KeyboardMatrixSectionReader.decode(payload: payload)
     }
 
     private func loadFile(for locale: Locale, bundle: Bundle) -> FSCBinaryFile? {
@@ -104,6 +104,59 @@ private struct FSCBinaryFile {
     }
 }
 
+private struct KeyboardMatrixSectionReader {
+    static func decode(payload: Data) -> BinaryReader.KeyboardMatrixData? {
+        var reader = BinaryPayloadReader(data: payload)
+
+        guard let indexMapCount = reader.readUInt16() else { return nil }
+
+        var indexMap: [Character: UInt8] = [:]
+        indexMap.reserveCapacity(Int(indexMapCount))
+
+        for _ in 0..<indexMapCount {
+            guard let characterString = reader.readString(),
+                  characterString.count == 1,
+                  let character = characterString.first,
+                  let matrixIndex = reader.readUInt8(),
+                  indexMap[character] == nil else {
+                return nil
+            }
+
+            indexMap[character] = matrixIndex
+        }
+
+        guard let proximityMatrixSizeValue = reader.readUInt16(),
+              let proximityScoreCountValue = reader.readUInt32(),
+              let proximityScoreCount = Int(exactly: proximityScoreCountValue) else {
+            return nil
+        }
+
+        let proximityMatrixSize = Int(proximityMatrixSizeValue)
+        guard proximityMatrixSize > 0,
+              indexMap.count == proximityMatrixSize,
+              proximityScoreCount == proximityMatrixSize * proximityMatrixSize,
+              Set(indexMap.values).count == indexMap.count,
+              indexMap.values.allSatisfy({ Int($0) < proximityMatrixSize }) else {
+            return nil
+        }
+
+        var proximityMatrix: [Float] = []
+        proximityMatrix.reserveCapacity(proximityScoreCount)
+
+        for _ in 0..<proximityScoreCount {
+            guard let score = reader.readFloat32(), score.isFinite else {
+                return nil
+            }
+
+            proximityMatrix.append(score)
+        }
+
+        guard reader.isAtEnd else { return nil }
+
+        return BinaryReader.KeyboardMatrixData(indexMap: indexMap, proximityMatrix: proximityMatrix, proximityMatrixSize: proximityMatrixSize)
+    }
+}
+
 private struct SectionRange {
     let range: Range<Int>
 
@@ -127,6 +180,10 @@ private struct BinaryPayloadReader {
 
     var currentOffset: Int {
         offset
+    }
+
+    var isAtEnd: Bool {
+        offset == data.count
     }
 
     init(data: Data) {

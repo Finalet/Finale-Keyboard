@@ -17,6 +17,7 @@ class SpellCheck {
     private let candidateScorer: CandidateScorer
 
     init (locale: Locale) {
+        let startTime = Date()
         self.locale = locale
         self.keyboardMatrix = KeyboardMatrix(locale: locale)
         
@@ -25,6 +26,7 @@ class SpellCheck {
         self.validWords = loadedDictionary.validWords
         self.candidateFilter = CandidateBitsetFilter(dictionary: loadedDictionary.words, proximityMatrix: self.keyboardMatrix.proximityMatrix, proximityMatrixSize: self.keyboardMatrix.proximityMatrixSize)
         self.candidateScorer = CandidateScorer(proximityMatrix: self.keyboardMatrix.proximityMatrix, proximityMatrixSize: self.keyboardMatrix.proximityMatrixSize)
+        print("Loaded in \(Date().timeIntervalSince(startTime)) seconds")
     }
 
     func suggestions(forWord: String, nSuggestions: Int = 5) -> [String] {
@@ -239,25 +241,42 @@ extension SpellCheck {
 
 // Keyboard Matrix
 extension SpellCheck {
-    private struct KeyboardMatrix {
+    struct KeyboardMatrix {
+        struct KeyboardMatrixSnapshot {
+            let indexMap: [Character: MatrixIndex]
+            let proximityMatrix: [Float]
+            let proximityMatrixSize: Int
+        }
+
         let proximityMatrix: [Float]
         let proximityMatrixSize: Int
 
         private let indexMap: [Character: MatrixIndex]
 
         init(locale: Locale) {
-            self.indexMap = KeyboardMatrix.getMatrixIndexMap(locale: locale)
+            guard let keyboardMatrix = BinaryReader.shared.loadKeyboardMatrix(for: locale) else {
+                self.indexMap = [:]
+                self.proximityMatrix = []
+                self.proximityMatrixSize = 0
+                return
+            }
 
-            let proximityMatrix = KeyboardMatrix.getProximityMatrix(locale: locale, indexMap: self.indexMap)
-            
-            self.proximityMatrix = proximityMatrix.scores
-            self.proximityMatrixSize = proximityMatrix.size
+            self.indexMap = keyboardMatrix.indexMap
+            self.proximityMatrix = keyboardMatrix.proximityMatrix
+            self.proximityMatrixSize = keyboardMatrix.proximityMatrixSize
         }
 
         func matrixIndexes(forWord word: String) -> [MatrixIndex] {
             return word.map {
                 return indexMap[$0] ?? SpellCheck.unknownMatrixIndex
             }
+        }
+
+        static func generateSnapshot(locale: Locale) -> KeyboardMatrixSnapshot {
+            let indexMap = getMatrixIndexMap(locale: locale)
+            let proximityMatrix = getProximityMatrix(locale: locale, indexMap: indexMap)
+
+            return KeyboardMatrixSnapshot(indexMap: indexMap, proximityMatrix: proximityMatrix.scores, proximityMatrixSize: proximityMatrix.size)
         }
 
         private static func getMatrixIndexMap(locale: Locale) -> [Character: MatrixIndex] {
@@ -541,7 +560,18 @@ extension SpellCheck {
                 return Scores.wrongCharacter
             }
 
-            return proximityMatrix[Int(index1) * proximityMatrixSize + Int(index2)]
+            let row = Int(index1)
+            let column = Int(index2)
+            guard row < proximityMatrixSize, column < proximityMatrixSize else {
+                return Scores.wrongCharacter
+            }
+
+            let offset = row * proximityMatrixSize + column
+            guard proximityMatrix.indices.contains(offset) else {
+                return Scores.wrongCharacter
+            }
+
+            return proximityMatrix[offset]
         }
     }
 }

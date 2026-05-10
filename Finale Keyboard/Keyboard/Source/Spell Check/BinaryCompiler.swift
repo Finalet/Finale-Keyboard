@@ -16,7 +16,10 @@ enum BinaryCompiler {
         for locale in Locale.allCases {
             guard locale == .en_US else { continue }
 
-            let data = try FSCBinaryFileWriter.compile(localeIdentifier: locale.languageCode, sections: [])
+            let sections = try [
+                FSCBinarySection.keyboardMatrix(for: locale)
+            ]
+            let data = try FSCBinaryFileWriter.compile(localeIdentifier: locale.languageCode, sections: sections)
             let outputURL = configuration.outputDirectory.appendingPathComponent(locale.languageCode).appendingPathExtension(FSCBinaryFormat.fileExtension)
 
             try data.write(to: outputURL, options: .atomic)
@@ -69,6 +72,27 @@ private enum FSCBinaryFormat {
 private struct FSCBinarySection {
     let id: FSCBinaryFormat.SectionID
     let payload: Data
+
+    static func keyboardMatrix(for locale: Locale) throws -> FSCBinarySection {
+        let snapshot = SpellCheck.KeyboardMatrix.generateSnapshot(locale: locale)
+        var writer = BinaryPayloadWriter()
+
+        try writer.writeUInt16(UInt16(exactly: snapshot.indexMap.count, context: "keyboard index map count"))
+
+        for entry in snapshot.indexMap.sorted(by: { $0.value < $1.value }) {
+            try writer.writeString(String(entry.key))
+            writer.writeUInt8(entry.value)
+        }
+
+        try writer.writeUInt16(UInt16(exactly: snapshot.proximityMatrixSize, context: "keyboard matrix size"))
+        try writer.writeUInt32(UInt32(exactly: snapshot.proximityMatrix.count, context: "keyboard proximity score count"))
+
+        for score in snapshot.proximityMatrix {
+            writer.writeFloat32(score)
+        }
+
+        return FSCBinarySection(id: .keyboardMatrix, payload: writer.data)
+    }
 }
 
 private struct FSCBinaryFileWriter {
