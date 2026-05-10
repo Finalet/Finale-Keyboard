@@ -65,6 +65,7 @@
 		861119EF2F88838200F6F7EB /* PunctuationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861119EE2F88837B00F6F7EB /* PunctuationView.swift */; };
 		861119F12F8883BA00F6F7EB /* AdvancedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861119F02F8883B800F6F7EB /* AdvancedView.swift */; };
 		861119F32F88872200F6F7EB /* SpacebarPurchaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861119F22F88871200F6F7EB /* SpacebarPurchaseView.swift */; };
+		86267BAA2FB00E8A00F27B79 /* DictionaryCompiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86267BA92FB00E8400F27B79 /* DictionaryCompiler.swift */; };
 		863606252F8EC0B6005C1106 /* ToolbarInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863606242F8EC0B2005C1106 /* ToolbarInputField.swift */; };
 		863AF0DE2F8B46F600FA036E /* ReturnButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863AF0DD2F8B46F400FA036E /* ReturnButton.swift */; };
 		863BBCCA2F89C4BC00D828B4 /* StoreKit.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */; };
@@ -174,6 +175,7 @@
 		861119EE2F88837B00F6F7EB /* PunctuationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PunctuationView.swift; sourceTree = "<group>"; };
 		861119F02F8883B800F6F7EB /* AdvancedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedView.swift; sourceTree = "<group>"; };
 		861119F22F88871200F6F7EB /* SpacebarPurchaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacebarPurchaseView.swift; sourceTree = "<group>"; };
+		86267BA92FB00E8400F27B79 /* DictionaryCompiler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryCompiler.swift; sourceTree = "<group>"; };
 		863606242F8EC0B2005C1106 /* ToolbarInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarInputField.swift; sourceTree = "<group>"; };
 		863AF0DD2F8B46F400FA036E /* ReturnButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnButton.swift; sourceTree = "<group>"; };
 		863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKit.storekit; sourceTree = "<group>"; };
@@ -447,6 +449,7 @@
 		86CEFBA12FACEA7A00BA5904 /* Spell Check */ = {
 			isa = PBXGroup;
 			children = (
+				86267BA92FB00E8400F27B79 /* DictionaryCompiler.swift */,
 				86CEFBA42FACEA9900BA5904 /* Dictionaries */,
 				86CEFBA22FACEA8C00BA5904 /* SpellCheck.swift */,
 			);
@@ -663,6 +666,7 @@
 				37991F3029E9963C00900BC9 /* CharacterButton.swift in Sources */,
 				3791F22F29E7750E005F39B4 /* AutoLayout.swift in Sources */,
 				370B056A28B3F0EF0062000A /* Defaults.swift in Sources */,
+				86267BAA2FB00E8A00F27B79 /* DictionaryCompiler.swift in Sources */,
 				37D686752B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift in Sources */,
 				37A0AD0727A869BA00578290 /* FinaleKeyboard.swift in Sources */,
 				37991F3229E9964400900BC9 /* FunctionButton.swift in Sources */,
