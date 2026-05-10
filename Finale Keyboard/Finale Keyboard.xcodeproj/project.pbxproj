@@ -517,6 +517,7 @@
 				37A0AD0027A869BA00578290 /* Sources */,
 				37A0AD0127A869BA00578290 /* Frameworks */,
 				37A0AD0227A869BA00578290 /* Resources */,
+				86E4A2AE2FB0D0EF00CF4603 /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -616,6 +617,32 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		86E4A2AE2FB0D0EF00CF4603 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Keyboard/Source/Spell Check/BinaryCompiler.swift",
+				"$(SRCROOT)/Keyboard/Source/Spell Check/BinaryReader.swift",
+				"$(SRCROOT)/Keyboard/Source/Spell Check/SpellCheck.swift",
+				"$(SRCROOT)/Keyboard/Source/Locales.swift",
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/en_US.fscdict",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nCOMPILER=\"$DERIVED_FILE_DIR/BinaryCompiler\"\nOUTPUT_DIR=\"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\"\nMACOS_SDK=\"$(xcrun --sdk macosx --show-sdk-path)\"\n\nxcrun --sdk macosx swiftc \\\n  -sdk \"$MACOS_SDK\" \\\n  \"$SRCROOT/Keyboard/Source/Spell Check/BinaryCompiler.swift\" \\\n  \"$SRCROOT/Keyboard/Source/Spell Check/BinaryReader.swift\" \\\n  \"$SRCROOT/Keyboard/Source/Spell Check/SpellCheck.swift\" \\\n  \"$SRCROOT/Keyboard/Source/Locales.swift\" \\\n  -o \"$COMPILER\"\n\nmkdir -p \"$OUTPUT_DIR\"\n\n\"$COMPILER\" --output-dir \"$OUTPUT_DIR\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		37A0ACEB27A8694100578290 /* Sources */ = {
