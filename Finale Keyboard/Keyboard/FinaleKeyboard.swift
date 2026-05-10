@@ -140,12 +140,12 @@ class FinaleKeyboard: UIInputViewController {
                 self.defaultDictionary[l.entries[i].userInput] = [l.entries[i].documentText]
             }
             
-            let data = (try? Data(contentsOf: Bundle.main.url(forResource: "DefaultDictionary", withExtension: "json")!))!
-            let entries = try! JSONDecoder().decode([DictionaryItem].self, from: data)
-            
-            for i in entries {
-                self.defaultDictionary[i.input.lowercased()] = i.suggestions
-            }
+//            let data = (try? Data(contentsOf: Bundle.main.url(forResource: "DefaultDictionary", withExtension: "json")!))!
+//            let entries = try! JSONDecoder().decode([DictionaryItem].self, from: data)
+//            
+//            for i in entries {
+//                self.defaultDictionary[i.input.lowercased()] = i.suggestions
+//            }
         })
         
         userDictionary = userDefaults?.value(forKey: "FINALE_DEV_APP_userDictionary") as? [String] ?? [String]()
@@ -590,49 +590,49 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func SwipeRight () {
-        spellChecker.RunTest()
+//        spellChecker.RunTest()
         
-//        if let emojiSearchRow = emojiSearchRow {
-//            emojiSearchRow.SwipeRight()
-//            return
-//        }
-//        
-//        let context = self.textDocumentProxy.documentContextBeforeInput
-//        if context == nil {
-//            ResetSuggestionsLabels()
-//            pickedPunctuationIndex = 0
-//            InsertPunctuation(index: pickedPunctuationIndex)
-//        } else if context?.last != " " {
-//            ResetSuggestionsLabels()
-//            if (FinaleKeyboard.isAutoCorrectOn) {
-//                GenerateAutocorrections()
-//                CheckUserDictionary()
-//                ReplaceWithSuggestion(ignoreSpace: false, instant: true)
-//            } else {
-//                self.textDocumentProxy.insertText(" ")
-//            }
-//            canEditPrevPunctuation = false
-//        } else {
-//            if ((context?.count ?? 0) < 2) {
-//                ResetSuggestionsLabels()
-//                SwipeRightSpacebar()
-//                canEditPrevPunctuation = false
-//                return
-//            }
-//            
-//            var index = 1
-//            let oneBeforeLastChar = getOneBeforeLastChar()
-//            if isPunctuation(char: oneBeforeLastChar) {
-//                index = punctuationArray.firstIndex(of: oneBeforeLastChar) ?? 1
-//            } else {
-//                ResetSuggestionsLabels()
-//            }
-//            
-//            InsertPunctuation(index: index)
-//        }
-//        CheckAutoCapitalization()
-//        ResetDynamicTouchZones()
-//        if FinaleKeyboard.currentViewType != .Characters { BuildKeyboardView(viewType: .Characters) }
+        if let emojiSearchRow = emojiSearchRow {
+            emojiSearchRow.SwipeRight()
+            return
+        }
+        
+        let context = self.textDocumentProxy.documentContextBeforeInput
+        if context == nil {
+            ResetSuggestionsLabels()
+            pickedPunctuationIndex = 0
+            InsertPunctuation(index: pickedPunctuationIndex)
+        } else if context?.last != " " {
+            ResetSuggestionsLabels()
+            if (FinaleKeyboard.isAutoCorrectOn) {
+                GenerateAutocorrections()
+                CheckUserDictionary()
+                ReplaceWithSuggestion(ignoreSpace: false, instant: true)
+            } else {
+                self.textDocumentProxy.insertText(" ")
+            }
+            canEditPrevPunctuation = false
+        } else {
+            if ((context?.count ?? 0) < 2) {
+                ResetSuggestionsLabels()
+                SwipeRightSpacebar()
+                canEditPrevPunctuation = false
+                return
+            }
+            
+            var index = 1
+            let oneBeforeLastChar = getOneBeforeLastChar()
+            if isPunctuation(char: oneBeforeLastChar) {
+                index = punctuationArray.firstIndex(of: oneBeforeLastChar) ?? 1
+            } else {
+                ResetSuggestionsLabels()
+            }
+            
+            InsertPunctuation(index: index)
+        }
+        CheckAutoCapitalization()
+        ResetDynamicTouchZones()
+        if FinaleKeyboard.currentViewType != .Characters { BuildKeyboardView(viewType: .Characters) }
     }
     func SwipeDown () {
         if FinaleKeyboard.currentViewType == .SearchEmoji { return }
