@@ -278,6 +278,25 @@ extension SpellCheck {
         func matrixIndexes(forWord word: String) -> [MatrixIndex] {
             return SpellCheck.KeyboardMatrix.matrixIndexes(forWord: word, indexMap: self.indexMap)
         }
+
+        func proximityScore(index1: MatrixIndex, index2: MatrixIndex) -> Float {
+            guard index1 != SpellCheck.unknownMatrixIndex, index2 != SpellCheck.unknownMatrixIndex else {
+                return Scores.wrongCharacter
+            }
+
+            let row = Int(index1)
+            let column = Int(index2)
+            guard row < proximityMatrixSize, column < proximityMatrixSize else {
+                return Scores.wrongCharacter
+            }
+
+            let offset = row * proximityMatrixSize + column
+            guard proximityMatrix.indices.contains(offset) else {
+                return Scores.wrongCharacter
+            }
+
+            return proximityMatrix[offset]
+        }
         
         fileprivate static func matrixIndexes(forWord word: String, indexMap: [Character: MatrixIndex]) -> [MatrixIndex] {
             return word.map {
@@ -443,7 +462,7 @@ extension SpellCheck {
             var directScore: Float = 0
 
             for index in wordMatrixIndexes.indices {
-                directScore += getProximityScore(index1: wordMatrixIndexes[index], index2: candidateMatrixIndexes[index])
+                directScore += keyboardMatrix.proximityScore(index1: wordMatrixIndexes[index], index2: candidateMatrixIndexes[index])
             }
 
             var bestScore = directScore
@@ -452,8 +471,8 @@ extension SpellCheck {
             for index in 0..<(wordMatrixIndexes.count - 1) {
                 guard wordMatrixIndexes[index] == candidateMatrixIndexes[index + 1], wordMatrixIndexes[index + 1] == candidateMatrixIndexes[index] else { continue }
 
-                let directPairScore = getProximityScore(index1: wordMatrixIndexes[index], index2: candidateMatrixIndexes[index])
-                    + getProximityScore(index1: wordMatrixIndexes[index + 1], index2: candidateMatrixIndexes[index + 1])
+                let directPairScore = keyboardMatrix.proximityScore(index1: wordMatrixIndexes[index], index2: candidateMatrixIndexes[index])
+                    + keyboardMatrix.proximityScore(index1: wordMatrixIndexes[index + 1], index2: candidateMatrixIndexes[index + 1])
                 let transpositionScore = directScore - directPairScore + Scores.matchBonus * 2 - Scores.transpositionPenalty
                 bestScore = max(bestScore, transpositionScore)
             }
@@ -469,7 +488,7 @@ extension SpellCheck {
                 var candidatePosition = 0
 
                 for wordPosition in wordMatrixIndexes.indices where wordPosition != skippedWordPosition {
-                    rawScore += getProximityScore(index1: wordMatrixIndexes[wordPosition], index2: candidateMatrixIndexes[candidatePosition])
+                    rawScore += keyboardMatrix.proximityScore(index1: wordMatrixIndexes[wordPosition], index2: candidateMatrixIndexes[candidatePosition])
                     candidatePosition += 1
                 }
 
@@ -487,7 +506,7 @@ extension SpellCheck {
                 var wordPosition = 0
 
                 for candidatePosition in candidateMatrixIndexes.indices where candidatePosition != skippedCandidatePosition {
-                    rawScore += getProximityScore(index1: wordMatrixIndexes[wordPosition], index2: candidateMatrixIndexes[candidatePosition])
+                    rawScore += keyboardMatrix.proximityScore(index1: wordMatrixIndexes[wordPosition], index2: candidateMatrixIndexes[candidatePosition])
                     wordPosition += 1
                 }
 
@@ -524,7 +543,7 @@ extension SpellCheck {
                             let candidateIndex = candidateMatrixIndexes[j - 1]
 
                             // Align the two current letters.
-                            let substitutionScore = workspace.previousRow[j - 1] + getProximityScore(index1: wordIndex, index2: candidateIndex)
+                            let substitutionScore = workspace.previousRow[j - 1] + keyboardMatrix.proximityScore(index1: wordIndex, index2: candidateIndex)
 
                             // Skip one typed letter.
                             let skippedWordScore = workspace.previousRow[j] - Scores.characterSkipPenalty
@@ -566,24 +585,6 @@ extension SpellCheck {
             return normalizedScore
         }
         
-        private func getProximityScore(index1: MatrixIndex, index2: MatrixIndex) -> Float {
-            guard index1 != SpellCheck.unknownMatrixIndex, index2 != SpellCheck.unknownMatrixIndex else {
-                return Scores.wrongCharacter
-            }
-
-            let row = Int(index1)
-            let column = Int(index2)
-            guard row < keyboardMatrix.proximityMatrixSize, column < keyboardMatrix.proximityMatrixSize else {
-                return Scores.wrongCharacter
-            }
-
-            let offset = row * keyboardMatrix.proximityMatrixSize + column
-            guard keyboardMatrix.proximityMatrix.indices.contains(offset) else {
-                return Scores.wrongCharacter
-            }
-
-            return keyboardMatrix.proximityMatrix[offset]
-        }
     }
 }
 
