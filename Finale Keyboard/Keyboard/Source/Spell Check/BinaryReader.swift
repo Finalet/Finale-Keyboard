@@ -34,6 +34,15 @@ final class BinaryReader {
         return DictionarySectionReader.decode(payload: payload)
     }
 
+    func loadCandidateBitsets(for locale: Locale, dictionary: SpellCheck.WordDictionary, proximityMatrixSize: Int, bundle: Bundle = .main) -> SpellCheck.CandidateBitsetFilter.Snapshot? {
+        guard let file = loadFile(for: locale, bundle: bundle),
+              let payload = file.sectionPayload(for: .candidateBitsets) else {
+            return nil
+        }
+
+        return CandidateBitsetSectionReader.decode(payload: payload, dictionary: dictionary, proximityMatrixSize: proximityMatrixSize)
+    }
+
     private func loadFile(for locale: Locale, bundle: Bundle) -> FSCBinaryFile? {
         guard let url = bundle.url(forResource: locale.languageCode, withExtension: FSCBinaryFormat.fileExtension),
               let data = try? Data(contentsOf: url),
@@ -243,6 +252,87 @@ private struct DictionarySectionReader {
         guard reader.isAtEnd else { return nil }
 
         return (words: words, validWords: validWords)
+    }
+}
+
+private struct CandidateBitsetSectionReader {
+    static func decode(payload: Data, dictionary: SpellCheck.WordDictionary, proximityMatrixSize: Int) -> SpellCheck.CandidateBitsetFilter.Snapshot? {
+        var reader = BinaryPayloadReader(data: payload)
+
+        guard let groupCount = reader.readUInt16(),
+              Int(groupCount) == dictionary.count else {
+            return nil
+        }
+
+        let expectedLengths = Set(dictionary.keys)
+        var lengthIndexes: [Int: SpellCheck.CandidateBitsetFilter.LengthIndexSnapshot] = [:]
+        lengthIndexes.reserveCapacity(Int(groupCount))
+
+        for _ in 0..<groupCount {
+            guard let lengthValue = reader.readUInt16(),
+                  let candidateCountValue = reader.readUInt32(),
+                  let candidateCount = Int(exactly: candidateCountValue),
+                  let wordBitsValue = reader.readUInt16(),
+                  let allWordsCountValue = reader.readUInt32(),
+                  let allWordsCount = Int(exactly: allWordsCountValue) else {
+                return nil
+            }
+
+            let length = Int(lengthValue)
+            let wordBits = Int(wordBitsValue)
+            guard length > 0,
+                  lengthIndexes[length] == nil,
+                  expectedLengths.contains(length),
+                  let candidates = dictionary[length],
+                  candidateCount == candidates.sorted(by: { $0.word < $1.word }).count,
+                  wordBits == SpellCheck.CandidateBitsetFilter.wordBits(forCandidateCount: candidateCount),
+                  allWordsCount == wordBits else {
+                return nil
+            }
+
+            var allWords: [UInt64] = []
+            allWords.reserveCapacity(allWordsCount)
+            for _ in 0..<allWordsCount {
+                guard let word = reader.readUInt64() else { return nil }
+                allWords.append(word)
+            }
+
+            guard allWords == SpellCheck.CandidateBitsetFilter.allWords(forCandidateCount: candidateCount, wordBits: wordBits),
+                  let nearBitsetCountValue = reader.readUInt32(),
+                  let nearBitsetCount = Int(exactly: nearBitsetCountValue),
+                  let expectedNearBitsetCount = expectedNearBitsetCount(length: length, proximityMatrixSize: proximityMatrixSize, wordBits: wordBits),
+                  nearBitsetCount == expectedNearBitsetCount else {
+                return nil
+            }
+
+            var nearBitsets: [UInt64] = []
+            nearBitsets.reserveCapacity(nearBitsetCount)
+            for _ in 0..<nearBitsetCount {
+                guard let word = reader.readUInt64() else { return nil }
+                nearBitsets.append(word)
+            }
+
+            lengthIndexes[length] = SpellCheck.CandidateBitsetFilter.LengthIndexSnapshot(length: length, candidateCount: candidateCount, wordBits: wordBits, allWords: allWords, nearBitsets: nearBitsets)
+        }
+
+        guard reader.isAtEnd,
+              Set(lengthIndexes.keys) == expectedLengths else {
+            return nil
+        }
+
+        return SpellCheck.CandidateBitsetFilter.Snapshot(lengthIndexes: lengthIndexes)
+    }
+
+    private static func expectedNearBitsetCount(length: Int, proximityMatrixSize: Int, wordBits: Int) -> Int? {
+        guard length >= 0, proximityMatrixSize >= 0, wordBits >= 0 else { return nil }
+
+        let (positionCount, positionOverflow) = length.multipliedReportingOverflow(by: proximityMatrixSize)
+        guard !positionOverflow else { return nil }
+
+        let (count, countOverflow) = positionCount.multipliedReportingOverflow(by: wordBits)
+        guard !countOverflow else { return nil }
+
+        return count
     }
 }
 

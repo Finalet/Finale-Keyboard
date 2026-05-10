@@ -23,8 +23,13 @@ class SpellCheck {
         
         let loadedDictionary = BinaryReader.shared.loadDictionary(for: locale) ?? (words: [:], validWords: [])
         self.validWords = loadedDictionary.validWords
-        
-        self.candidateFilter = CandidateBitsetFilter(dictionary: loadedDictionary.words, proximityMatrix: self.keyboardMatrix.proximityMatrix, proximityMatrixSize: self.keyboardMatrix.proximityMatrixSize)
+
+        let proximityMatrixSize = self.keyboardMatrix.proximityMatrixSize
+        if let candidateBitsets = BinaryReader.shared.loadCandidateBitsets(for: locale, dictionary: loadedDictionary.words, proximityMatrixSize: proximityMatrixSize) {
+            self.candidateFilter = CandidateBitsetFilter(dictionary: loadedDictionary.words, snapshot: candidateBitsets, proximityMatrixSize: proximityMatrixSize)
+        } else {
+            self.candidateFilter = CandidateBitsetFilter()
+        }
         self.candidateScorer = CandidateScorer(proximityMatrix: self.keyboardMatrix.proximityMatrix, proximityMatrixSize: self.keyboardMatrix.proximityMatrixSize)
         print("Loaded in \(Date().timeIntervalSince(startTime)) seconds")
     }
@@ -583,7 +588,19 @@ extension SpellCheck {
 
 // Candidate Filtering
 extension SpellCheck {
-    private struct CandidateBitsetFilter {
+    struct CandidateBitsetFilter {
+        struct Snapshot {
+            let lengthIndexes: [Int: LengthIndexSnapshot]
+        }
+
+        struct LengthIndexSnapshot {
+            let length: Int
+            let candidateCount: Int
+            let wordBits: Int
+            let allWords: [UInt64]
+            let nearBitsets: [UInt64]
+        }
+
         private struct LengthIndex {
             let candidates: [CorrectionCandidate]
             let wordBits: Int
@@ -592,14 +609,8 @@ extension SpellCheck {
 
             init(candidates: [CorrectionCandidate], proximityMatrix: [Float], proximityMatrixSize: Int) {
                 self.candidates = candidates
-                self.wordBits = max(1, (candidates.count + 63) / 64)
-
-                var allWords = Array(repeating: UInt64.max, count: wordBits)
-                let remainder = candidates.count & 63
-                if remainder != 0 {
-                    allWords[wordBits - 1] = (UInt64(1) << UInt64(remainder)) - 1
-                }
-                self.allWords = allWords
+                self.wordBits = CandidateBitsetFilter.wordBits(forCandidateCount: candidates.count)
+                self.allWords = CandidateBitsetFilter.allWords(forCandidateCount: candidates.count, wordBits: wordBits)
 
                 let wordLength = candidates.first?.matrixIndexes.count ?? 0
                 var nearBitsets = Array(repeating: UInt64(0), count: wordLength * proximityMatrixSize * wordBits)
@@ -623,6 +634,17 @@ extension SpellCheck {
                 self.nearBitsets = nearBitsets
             }
 
+            init(candidates: [CorrectionCandidate], snapshot: LengthIndexSnapshot) {
+                self.candidates = candidates
+                self.wordBits = snapshot.wordBits
+                self.allWords = snapshot.allWords
+                self.nearBitsets = snapshot.nearBitsets
+            }
+
+            func snapshot(length: Int) -> LengthIndexSnapshot {
+                return LengthIndexSnapshot(length: length, candidateCount: candidates.count, wordBits: wordBits, allWords: allWords, nearBitsets: nearBitsets)
+            }
+
             func bitsetOffset(position: Int, typedIndex: MatrixIndex, proximityMatrixSize: Int) -> Int? {
                 guard typedIndex != SpellCheck.unknownMatrixIndex else { return nil }
                 let offset = (position * proximityMatrixSize + Int(typedIndex)) * wordBits
@@ -634,17 +656,58 @@ extension SpellCheck {
         private let lengthIndexes: [Int: LengthIndex]
         private let proximityMatrixSize: Int
 
-        init(dictionary: WordDictionary, proximityMatrix: [Float], proximityMatrixSize: Int) {
+        init() {
+            self.lengthIndexes = [:]
+            self.proximityMatrixSize = 0
+        }
+
+        init(dictionary: WordDictionary, snapshot: Snapshot, proximityMatrixSize: Int) {
             var lengthIndexes: [Int: LengthIndex] = [:]
             lengthIndexes.reserveCapacity(dictionary.count)
 
             for (length, candidates) in dictionary {
+                guard let lengthSnapshot = snapshot.lengthIndexes[length] else { continue }
+
                 let sortedCandidates = candidates.sorted { $0.word < $1.word }
-                lengthIndexes[length] = LengthIndex(candidates: sortedCandidates, proximityMatrix: proximityMatrix, proximityMatrixSize: proximityMatrixSize)
+                guard lengthSnapshot.length == length,
+                      lengthSnapshot.candidateCount == sortedCandidates.count,
+                      lengthSnapshot.wordBits == Self.wordBits(forCandidateCount: sortedCandidates.count),
+                      lengthSnapshot.allWords == Self.allWords(forCandidateCount: sortedCandidates.count, wordBits: lengthSnapshot.wordBits),
+                      lengthSnapshot.nearBitsets.count == length * proximityMatrixSize * lengthSnapshot.wordBits else {
+                    continue
+                }
+
+                lengthIndexes[length] = LengthIndex(candidates: sortedCandidates, snapshot: lengthSnapshot)
             }
 
             self.lengthIndexes = lengthIndexes
             self.proximityMatrixSize = proximityMatrixSize
+        }
+
+        static func generateSnapshot(dictionary: WordDictionary, proximityMatrix: [Float], proximityMatrixSize: Int) -> Snapshot {
+            var lengthIndexes: [Int: LengthIndexSnapshot] = [:]
+            lengthIndexes.reserveCapacity(dictionary.count)
+
+            for (length, candidates) in dictionary {
+                let sortedCandidates = candidates.sorted { $0.word < $1.word }
+                let lengthIndex = LengthIndex(candidates: sortedCandidates, proximityMatrix: proximityMatrix, proximityMatrixSize: proximityMatrixSize)
+                lengthIndexes[length] = lengthIndex.snapshot(length: length)
+            }
+
+            return Snapshot(lengthIndexes: lengthIndexes)
+        }
+
+        static func wordBits(forCandidateCount candidateCount: Int) -> Int {
+            return max(1, (candidateCount + 63) / 64)
+        }
+
+        static func allWords(forCandidateCount candidateCount: Int, wordBits: Int) -> [UInt64] {
+            var allWords = Array(repeating: UInt64.max, count: wordBits)
+            let remainder = candidateCount & 63
+            if remainder != 0 {
+                allWords[wordBits - 1] = (UInt64(1) << UInt64(remainder)) - 1
+            }
+            return allWords
         }
 
         func candidates(for wordMatrixIndexes: [MatrixIndex]) -> [CorrectionCandidate] {

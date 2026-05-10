@@ -21,9 +21,11 @@ enum BinaryCompiler {
                 .appendingPathComponent(SpellCheck.dictionaryFileName(for: locale))
                 .appendingPathExtension("json")
             let dictionary = SpellCheck.loadDictionary(forLocale: locale, indexMap: keyboardMatrixSnapshot.indexMap, dictionaryURL: dictionaryURL)
+            let candidateBitsets = SpellCheck.CandidateBitsetFilter.generateSnapshot(dictionary: dictionary.words, proximityMatrix: keyboardMatrixSnapshot.proximityMatrix, proximityMatrixSize: keyboardMatrixSnapshot.proximityMatrixSize)
             let sections = try [
                 FSCBinarySection.keyboardMatrix(from: keyboardMatrixSnapshot),
-                FSCBinarySection.dictionary(dictionary)
+                FSCBinarySection.dictionary(dictionary),
+                FSCBinarySection.candidateBitsets(candidateBitsets)
             ]
             let data = try FSCBinaryFileWriter.compile(localeIdentifier: locale.languageCode, sections: sections)
             let outputURL = configuration.outputDirectory.appendingPathComponent(locale.languageCode).appendingPathExtension(FSCBinaryFormat.fileExtension)
@@ -152,6 +154,31 @@ private struct FSCBinarySection {
         }
 
         return FSCBinarySection(id: .dictionary, payload: writer.data)
+    }
+
+    static func candidateBitsets(_ snapshot: SpellCheck.CandidateBitsetFilter.Snapshot) throws -> FSCBinarySection {
+        var writer = BinaryPayloadWriter()
+
+        try writer.writeUInt16(UInt16(exactly: snapshot.lengthIndexes.count, context: "candidate bitset length group count"))
+        for length in snapshot.lengthIndexes.keys.sorted() {
+            guard let lengthIndex = snapshot.lengthIndexes[length] else { continue }
+
+            try writer.writeUInt16(UInt16(exactly: lengthIndex.length, context: "candidate bitset word length"))
+            try writer.writeUInt32(UInt32(exactly: lengthIndex.candidateCount, context: "candidate bitset candidate count"))
+            try writer.writeUInt16(UInt16(exactly: lengthIndex.wordBits, context: "candidate bitset word bits"))
+
+            try writer.writeUInt32(UInt32(exactly: lengthIndex.allWords.count, context: "candidate bitset all words count"))
+            for word in lengthIndex.allWords {
+                writer.writeUInt64(word)
+            }
+
+            try writer.writeUInt32(UInt32(exactly: lengthIndex.nearBitsets.count, context: "candidate bitset near bitsets count"))
+            for word in lengthIndex.nearBitsets {
+                writer.writeUInt64(word)
+            }
+        }
+
+        return FSCBinarySection(id: .candidateBitsets, payload: writer.data)
     }
 }
 
