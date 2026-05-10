@@ -194,6 +194,7 @@ class SpellCheck {
             case "í": return "i"
             case "ó": return "o"
             case "ú": return "u"
+            case "ü": return "u"
             default: return character
             }
         case .de_DE:
