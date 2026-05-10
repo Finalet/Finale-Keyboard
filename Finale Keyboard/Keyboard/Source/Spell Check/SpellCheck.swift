@@ -13,6 +13,7 @@ class SpellCheck {
     let locale: Locale
     
     private let keyboardMatrix: KeyboardMatrix
+    private let validWords: Set<String>
     private let candidateFilter: CandidateBitsetFilter
     private let candidateScorer: CandidateScorer
 
@@ -20,16 +21,17 @@ class SpellCheck {
         self.locale = locale
         self.keyboardMatrix = KeyboardMatrix(locale: locale)
         
-        let dictionary = SpellCheck.loadDictionary(forLocale: locale, keyboardMatrix: self.keyboardMatrix)
+        let loadedDictionary = SpellCheck.loadDictionary(forLocale: locale, keyboardMatrix: self.keyboardMatrix)
         
-        self.candidateFilter = CandidateBitsetFilter(dictionary: dictionary, proximityMatrix: self.keyboardMatrix.proximityMatrix, proximityMatrixSize: self.keyboardMatrix.proximityMatrixSize)
+        self.validWords = loadedDictionary.validWords
+        self.candidateFilter = CandidateBitsetFilter(dictionary: loadedDictionary.words, proximityMatrix: self.keyboardMatrix.proximityMatrix, proximityMatrixSize: self.keyboardMatrix.proximityMatrixSize)
         self.candidateScorer = CandidateScorer(proximityMatrix: self.keyboardMatrix.proximityMatrix, proximityMatrixSize: self.keyboardMatrix.proximityMatrixSize)
     }
 
     func suggestions(forWord: String, nSuggestions: Int = 5) -> [String] {
         guard nSuggestions > 0 else { return [] }
 
-        let cleanedWord = cleanWord(forWord)
+        let cleanedWord = cleanWordForSearch(forWord)
         if cleanedWord.isEmpty { return [] }
         
         let wordMatrixIndexes = keyboardMatrix.matrixIndexes(forWord: cleanedWord)
@@ -61,14 +63,20 @@ class SpellCheck {
     }
 
     func isMisspelled(word: String) -> Bool {
-        let cleanedWord = cleanWord(word)
+        guard !validWords.isEmpty else { return false }
+
+        let cleanedWord = cleanWordForValidation(word)
         if cleanedWord.isEmpty { return false }
 
-        return !candidateFilter.containsWord(cleanedWord)
+        return !validWords.contains(cleanedWord)
     }
 
-    private func cleanWord(_ word: String) -> String {
-        return word.lowercased().filter { $0.isLetter }
+    private func cleanWordForSearch(_ word: String) -> String {
+        return SpellCheck.normalizedWordForSearch(word, locale: locale)
+    }
+
+    private func cleanWordForValidation(_ word: String) -> String {
+        return SpellCheck.normalizedWordForValidation(word, locale: locale)
     }
     
     private func insertTopCandidate<T>(_ candidate: T, into topCandidates: inout [T], maxCount: Int, score: (T) -> Float) {
@@ -91,29 +99,115 @@ class SpellCheck {
         }
     }
 
-    private static func loadDictionary(forLocale: Locale, keyboardMatrix: KeyboardMatrix) -> WordDictionary {
-        let jsonFileName: String
-        switch forLocale {
-        case .en_US: jsonFileName = "english"
-        default: return [:]
-        }
-        
+    private static func loadDictionary(forLocale: Locale, keyboardMatrix: KeyboardMatrix) -> LoadedDictionary {
+        let jsonFileName = dictionaryFileName(for: forLocale)
+
         guard let file = Bundle.main.url(forResource: jsonFileName, withExtension: "json"), let data = try? Data(contentsOf: file), let entries = try? JSONDecoder().decode(RawWordDictionary.self, from: data) else {
-            return [:]
+            return (words: [:], validWords: [])
         }
-        return entries.mapValues { words in
-            words.map { entry in
-                return (word: entry.key, frequency: entry.value, matrixIndexes: keyboardMatrix.matrixIndexes(forWord: entry.key))
+
+        var dictionary: WordDictionary = [:]
+        var validWords: Set<String> = []
+        for words in entries.values {
+            for entry in words {
+                let validWord = normalizedWordForValidation(entry.key, locale: forLocale)
+                let matchWord = normalizedWordForSearch(entry.key, locale: forLocale)
+                let matrixIndexes = keyboardMatrix.matrixIndexes(forWord: matchWord)
+
+                guard !validWord.isEmpty, !matrixIndexes.isEmpty, !matrixIndexes.contains(SpellCheck.unknownMatrixIndex) else { continue }
+
+                validWords.insert(validWord)
+                dictionary[matrixIndexes.count, default: []].append((word: entry.key, frequency: entry.value, matrixIndexes: matrixIndexes))
             }
         }
-    } 
+        return (words: dictionary, validWords: validWords)
+    }
+
+    private static func dictionaryFileName(for locale: Locale) -> String {
+        switch locale {
+        case .en_US: return "english"
+        case .ru_RU: return "russian"
+        case .es_ES: return "spanish"
+        case .de_DE: return "german"
+        }
+    }
+
+    private static func normalizedWordForSearch(_ word: String, locale: Locale) -> String {
+        let foundationLocale = Foundation.Locale(identifier: locale.languageCode)
+        let lowercaseWord = word.lowercased(with: foundationLocale).precomposedStringWithCanonicalMapping
+        var normalizedWord = ""
+
+        for character in lowercaseWord {
+            guard character.isLetter else { continue }
+            normalizedWord.append(alias(for: character, locale: locale))
+        }
+
+        return normalizedWord
+    }
+
+    private static func normalizedWordForValidation(_ word: String, locale: Locale) -> String {
+        let foundationLocale = Foundation.Locale(identifier: locale.languageCode)
+        let lowercaseWord = word.lowercased(with: foundationLocale).precomposedStringWithCanonicalMapping
+        var normalizedWord = ""
+
+        for index in lowercaseWord.indices {
+            let character = lowercaseWord[index]
+            if character.isLetter {
+                normalizedWord.append(character)
+            } else if isApostrophe(character), hasLetter(before: index, in: lowercaseWord), hasLetter(after: index, in: lowercaseWord) {
+                normalizedWord.append("'")
+            }
+        }
+
+        return normalizedWord
+    }
+
+    private static func isApostrophe(_ character: Character) -> Bool {
+        return character == "'" || character == "’"
+    }
+
+    private static func hasLetter(before index: String.Index, in word: String) -> Bool {
+        guard index > word.startIndex else { return false }
+        return word[word.index(before: index)].isLetter
+    }
+
+    private static func hasLetter(after index: String.Index, in word: String) -> Bool {
+        let nextIndex = word.index(after: index)
+        guard nextIndex < word.endIndex else { return false }
+        return word[nextIndex].isLetter
+    }
+
+    private static func alias(for character: Character, locale: Locale) -> Character {
+        switch locale {
+        case .en_US:
+            return character
+        case .ru_RU:
+            switch character {
+            case "ё": return "е"
+            case "ъ": return "ь"
+            default: return character
+            }
+        case .es_ES:
+            switch character {
+            case "á": return "a"
+            case "é": return "e"
+            case "í": return "i"
+            case "ó": return "o"
+            case "ú": return "u"
+            default: return character
+            }
+        case .de_DE:
+            return character == "ß" ? "s" : character
+        }
+    }
 }
 
 // Types
 extension SpellCheck {
     typealias MatrixIndex = UInt8
-    typealias WordDictionary = [Int: WordFrequencyDictionary]
     typealias RawWordDictionary = [Int: [String: Float]]
+    typealias LoadedDictionary = (words: WordDictionary, validWords: Set<String>)
+    typealias WordDictionary = [Int: WordFrequencyDictionary]
     typealias WordFrequencyDictionary = [CorrectionCandidate]
     typealias CorrectionCandidate = (word: String, frequency: Float, matrixIndexes: [MatrixIndex])
     typealias ScoredCandidate = (word: String, score: Float)
@@ -149,7 +243,7 @@ extension SpellCheck {
         let proximityMatrix: [Float]
         let proximityMatrixSize: Int
 
-        private let indexMap: [MatrixIndex]
+        private let indexMap: [Character: MatrixIndex]
 
         init(locale: Locale) {
             self.indexMap = KeyboardMatrix.getMatrixIndexMap(locale: locale)
@@ -161,24 +255,25 @@ extension SpellCheck {
         }
 
         func matrixIndexes(forWord word: String) -> [MatrixIndex] {
-            return word.unicodeScalars.map {
-                guard $0.value <= UInt8.max else { return SpellCheck.unknownMatrixIndex }
-                return indexMap[Int($0.value)]
+            return word.map {
+                return indexMap[$0] ?? SpellCheck.unknownMatrixIndex
             }
         }
 
-        private static func getMatrixIndexMap(locale: Locale) -> [MatrixIndex] {
+        private static func getMatrixIndexMap(locale: Locale) -> [Character: MatrixIndex] {
             let alphabet = locale.topRow + locale.middleRow + locale.bottomRow
-            var map = Array(repeating: SpellCheck.unknownMatrixIndex, count: 256)
+            var map: [Character: MatrixIndex] = [:]
+            map.reserveCapacity(alphabet.count)
+
             for (index, key) in alphabet.enumerated() {
-                guard let scalar = key.unicodeScalars.first, scalar.value <= UInt8.max else { continue }
-                map[Int(scalar.value)] = MatrixIndex(index)
+                guard let character = key.first, index < Int(SpellCheck.unknownMatrixIndex) else { continue }
+                map[character] = MatrixIndex(index)
             }
             return map
         }
 
         // A N x N matrix, where N is the number of character keys in the keyboard, that contains the proximity score between each pair of keys.
-        private static func getProximityMatrix(locale: Locale, indexMap: [MatrixIndex]) -> (scores: [Float], size: Int) {
+        private static func getProximityMatrix(locale: Locale, indexMap: [Character: MatrixIndex]) -> (scores: [Float], size: Int) {
             func score(forDistance distance: Float) -> Float {
                 if distance == 0 { return Scores.matchBonus }
                 if distance < 0.13 { return Scores.matchBonus * 0.5 }
@@ -192,7 +287,7 @@ extension SpellCheck {
             // First, calculate coordinates of each key button. X: range from 0 to 1, Y: range from 0 to ~0.22.
             // Y is scaled down from 0 to 1 towards 0 to ~0.22, to reflect the aspect ratio of the keyboard. This way X and Y represent the same real physical distance between the keys.
 
-            var buttonCoordinates: [(UInt8, (x: Float, y: Float))] = []
+            var buttonCoordinates: [(Character, (x: Float, y: Float))] = []
             buttonCoordinates.reserveCapacity(rows.reduce(0) { $0 + $1.count }) // Reserve capacity to improve performance.
 
             let scaleY = Float(rows.count) * Float(FinaleKeyboard.rowHeight) * 0.5 / Float(UIScreen.main.bounds.width)
@@ -204,22 +299,22 @@ extension SpellCheck {
                     let x = Float(colIndex + (isBottomRow ? 1 : 0)) / Float(row.count - 1 + (isBottomRow ? 2 : 0))
                     let y = scaleY * Float(rowIndex) / Float(rows.count - 1)
 
-                    guard let scalar = key.unicodeScalars.first, scalar.value <= UInt8.max else { continue }
-                    buttonCoordinates.append((UInt8(scalar.value), (x: x, y: y)))
+                    guard let character = key.first else { continue }
+                    buttonCoordinates.append((character, (x: x, y: y)))
                 }
             }
 
             var matrix = Array(repeating: Scores.wrongCharacter, count: alphabetCount * alphabetCount)
 
             for i in buttonCoordinates.indices {
-                let (code1, coord1) = buttonCoordinates[i]
-                let i1 = indexMap[Int(code1)]
+                let (character1, coord1) = buttonCoordinates[i]
+                let i1 = indexMap[character1] ?? SpellCheck.unknownMatrixIndex
                 guard i1 != SpellCheck.unknownMatrixIndex else { continue }
                 matrix[Int(i1) * alphabetCount + Int(i1)] = Scores.matchBonus
 
                 for j in (i + 1)..<buttonCoordinates.count {
-                    let (code2, coord2) = buttonCoordinates[j]
-                    let i2 = indexMap[Int(code2)]
+                    let (character2, coord2) = buttonCoordinates[j]
+                    let i2 = indexMap[character2] ?? SpellCheck.unknownMatrixIndex
                     guard i2 != SpellCheck.unknownMatrixIndex else { continue }
 
                     let dx = coord1.x - coord2.x
@@ -650,28 +745,6 @@ extension SpellCheck {
 
             return candidates
         }
-
-        func containsWord(_ word: String) -> Bool {
-            guard let lengthIndex = lengthIndexes[word.count] else { return false }
-
-            var low = lengthIndex.candidates.startIndex
-            var high = lengthIndex.candidates.endIndex
-
-            while low < high {
-                let mid = low + (high - low) / 2
-                let candidateWord = lengthIndex.candidates[mid].word
-
-                if candidateWord == word {
-                    return true
-                } else if candidateWord < word {
-                    low = mid + 1
-                } else {
-                    high = mid
-                }
-            }
-
-            return false
-        }
     }
 }
 
@@ -731,13 +804,17 @@ extension SpellCheck {
             ("fucntion", "function"),
             ("strign", "string"),
             ("modle", "model"),
-            ("compuer", "computer")
+            ("compuer", "computer"),
+            ("dont", "don't"),
+            ("wont", "won't"),
+            ("cant", "can't")
         ].sorted(by: { $0.correct.count < $1.correct.count })
 
-        
-//        let testSubjects: [(misspelled: String, correct: String)] = [
-//            ("ti", "to")
-//        ].sorted(by: { $0.correct.count < $1.correct.count })
+        let isMisspelledTestSubjects : [(word: String, isMisspelled: Bool)] = [
+            ("dont", true),
+            ("don’t", false),
+            ("don't", false),
+        ]
         
         var results: [(misspelled: String, correct: String, ACresult: [String], timeTook: TimeInterval)] = []
         
@@ -767,13 +844,44 @@ extension SpellCheck {
         
         print ("❌ Wrong")
         for result in results.filter({ $0.ACresult.first != $0.correct }) {
-            print("\t- \(result.misspelled) -> \(result.ACresult.first ?? "-") (correct: \(result.correct)) | Best candidates: \(result.ACresult) | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
+            print("\t- \(result.misspelled) → \(result.ACresult.first ?? "-") (correct: \(result.correct)) | Best candidates: \(result.ACresult) | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
         }
         
         print ("✅ Correct")
         for result in results.filter({ $0.ACresult.first == $0.correct }) {
-            print("\t- \(result.misspelled) -> \(result.ACresult.first!) | Best candidates: \(result.ACresult) | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
+            print("\t- \(result.misspelled) → \(result.ACresult.first!) | Best candidates: \(result.ACresult) | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
         }
+        
+        var isMisspelledResults: [(word: String, correct: Bool, result: Bool, timeTook: TimeInterval)] = []
+        
+        for subject in isMisspelledTestSubjects {
+            let startTime = Date()
+            
+            let isMisspelledResult = isMisspelled(word: subject.word)
+            
+            isMisspelledResults.append((subject.word, subject.isMisspelled, isMisspelledResult, Date().timeIntervalSince(startTime)))
+        }
+        
+        print("")
+        print ("📝 Is misspelled results 📝")
+        print ("")
+        
+        print ("❌ Wrong")
+        for result in isMisspelledResults.filter({ $0.correct != $0.result }) {
+            print("\t- \(result.word) → '\(result.result ? "misspelled" : "Not misspelled")' (should be '\(result.correct ? "misspelled" : "not misspelled")') | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
+        }
+        if isMisspelledResults.filter({ $0.correct != $0.result }).count == 0 {
+            print ("\t- None")
+        }
+        
+        print ("✅ Correct")
+        for result in isMisspelledResults.filter({ $0.correct == $0.result }) {
+            print("\t- \(result.word) → '\(result.result ? "misspelled" : "Not misspelled")' | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
+        }
+        if isMisspelledResults.filter({ $0.correct == $0.result }).count == 0 {
+            print ("\t- None")
+        }
+        
     }
     
     private func percentile(_ sortedValues: [TimeInterval], percentile: Double) -> TimeInterval {
