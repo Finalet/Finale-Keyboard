@@ -21,9 +21,9 @@ class SpellCheck {
         self.locale = locale
         self.keyboardMatrix = KeyboardMatrix(locale: locale)
         
-        let loadedDictionary = SpellCheck.loadDictionary(forLocale: locale, keyboardMatrix: self.keyboardMatrix)
-        
+        let loadedDictionary = BinaryReader.shared.loadDictionary(for: locale) ?? (words: [:], validWords: [])
         self.validWords = loadedDictionary.validWords
+        
         self.candidateFilter = CandidateBitsetFilter(dictionary: loadedDictionary.words, proximityMatrix: self.keyboardMatrix.proximityMatrix, proximityMatrixSize: self.keyboardMatrix.proximityMatrixSize)
         self.candidateScorer = CandidateScorer(proximityMatrix: self.keyboardMatrix.proximityMatrix, proximityMatrixSize: self.keyboardMatrix.proximityMatrixSize)
         print("Loaded in \(Date().timeIntervalSince(startTime)) seconds")
@@ -35,7 +35,7 @@ class SpellCheck {
         let cleanedWord = cleanWordForSearch(forWord)
         if cleanedWord.isEmpty { return [] }
         
-        let wordMatrixIndexes = keyboardMatrix.matrixIndexes(forWord: cleanedWord)
+        let wordMatrixIndexes = SpellCheck.matrixIndexes(forWord: cleanedWord, indexMap: keyboardMatrix.indexMap)
         let candidates = candidateFilter.candidates(for: wordMatrixIndexes)
         
         let refinedCandidateCount = max(Search.nRefinedCandidates, nSuggestions)
@@ -100,20 +100,26 @@ class SpellCheck {
         }
     }
 
-    private static func loadDictionary(forLocale: Locale, keyboardMatrix: KeyboardMatrix) -> LoadedDictionary {
-        let jsonFileName = dictionaryFileName(for: forLocale)
-
-        guard let file = Bundle.main.url(forResource: jsonFileName, withExtension: "json"), let data = try? Data(contentsOf: file), let entries = try? JSONDecoder().decode(RawWordDictionary.self, from: data) else {
+    static func loadDictionary(forLocale: Locale, indexMap: [Character: MatrixIndex], dictionaryURL: URL) -> LoadedDictionary {
+        guard let data = try? Data(contentsOf: dictionaryURL) else {
             return (words: [:], validWords: [])
         }
 
+        guard let entries = try? JSONDecoder().decode(RawWordDictionary.self, from: data) else {
+            return (words: [:], validWords: [])
+        }
+
+        return buildDictionary(forLocale: forLocale, indexMap: indexMap, entries: entries)
+    }
+
+    private static func buildDictionary(forLocale: Locale, indexMap: [Character: MatrixIndex], entries: RawWordDictionary) -> LoadedDictionary {
         var dictionary: WordDictionary = [:]
         var validWords: Set<String> = []
         for words in entries.values {
             for entry in words {
                 let validWord = normalizedWordForValidation(entry.key, locale: forLocale)
                 let matchWord = normalizedWordForSearch(entry.key, locale: forLocale)
-                let matrixIndexes = keyboardMatrix.matrixIndexes(forWord: matchWord)
+                let matrixIndexes = SpellCheck.matrixIndexes(forWord: matchWord, indexMap: indexMap)
 
                 guard !validWord.isEmpty, !matrixIndexes.isEmpty, !matrixIndexes.contains(SpellCheck.unknownMatrixIndex) else { continue }
 
@@ -124,12 +130,18 @@ class SpellCheck {
         return (words: dictionary, validWords: validWords)
     }
 
-    private static func dictionaryFileName(for locale: Locale) -> String {
+    static func dictionaryFileName(for locale: Locale) -> String {
         switch locale {
         case .en_US: return "english"
         case .ru_RU: return "russian"
         case .es_ES: return "spanish"
         case .de_DE: return "german"
+        }
+    }
+
+    private static func matrixIndexes(forWord word: String, indexMap: [Character: MatrixIndex]) -> [MatrixIndex] {
+        return word.map {
+            return indexMap[$0] ?? SpellCheck.unknownMatrixIndex
         }
     }
 
@@ -250,8 +262,7 @@ extension SpellCheck {
 
         let proximityMatrix: [Float]
         let proximityMatrixSize: Int
-
-        private let indexMap: [Character: MatrixIndex]
+        let indexMap: [Character: MatrixIndex]
 
         init(locale: Locale) {
             guard let keyboardMatrix = BinaryReader.shared.loadKeyboardMatrix(for: locale) else {
@@ -264,12 +275,6 @@ extension SpellCheck {
             self.indexMap = keyboardMatrix.indexMap
             self.proximityMatrix = keyboardMatrix.proximityMatrix
             self.proximityMatrixSize = keyboardMatrix.proximityMatrixSize
-        }
-
-        func matrixIndexes(forWord word: String) -> [MatrixIndex] {
-            return word.map {
-                return indexMap[$0] ?? SpellCheck.unknownMatrixIndex
-            }
         }
 
         static func generateSnapshot(locale: Locale) -> KeyboardMatrixSnapshot {

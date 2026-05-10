@@ -25,6 +25,15 @@ final class BinaryReader {
         return KeyboardMatrixSectionReader.decode(payload: payload)
     }
 
+    func loadDictionary(for locale: Locale, bundle: Bundle = .main) -> SpellCheck.LoadedDictionary? {
+        guard let file = loadFile(for: locale, bundle: bundle),
+              let payload = file.sectionPayload(for: .dictionary) else {
+            return nil
+        }
+
+        return DictionarySectionReader.decode(payload: payload)
+    }
+
     private func loadFile(for locale: Locale, bundle: Bundle) -> FSCBinaryFile? {
         guard let url = bundle.url(forResource: locale.languageCode, withExtension: FSCBinaryFormat.fileExtension),
               let data = try? Data(contentsOf: url),
@@ -154,6 +163,86 @@ private struct KeyboardMatrixSectionReader {
         guard reader.isAtEnd else { return nil }
 
         return BinaryReader.KeyboardMatrixData(indexMap: indexMap, proximityMatrix: proximityMatrix, proximityMatrixSize: proximityMatrixSize)
+    }
+}
+
+private struct DictionarySectionReader {
+    static func decode(payload: Data) -> SpellCheck.LoadedDictionary? {
+        var reader = BinaryPayloadReader(data: payload)
+
+        guard let validWordCountValue = reader.readUInt32(),
+              let validWordCount = Int(exactly: validWordCountValue) else {
+            return nil
+        }
+
+        var validWords = Set<String>()
+        validWords.reserveCapacity(validWordCount)
+
+        for _ in 0..<validWordCount {
+            guard let word = reader.readString(),
+                  !word.isEmpty,
+                  validWords.insert(word).inserted else {
+                return nil
+            }
+        }
+
+        guard let groupCount = reader.readUInt16() else {
+            return nil
+        }
+
+        var words: SpellCheck.WordDictionary = [:]
+        words.reserveCapacity(Int(groupCount))
+
+        for _ in 0..<groupCount {
+            guard let lengthValue = reader.readUInt16(),
+                  let candidateCountValue = reader.readUInt32(),
+                  let candidateCount = Int(exactly: candidateCountValue) else {
+                return nil
+            }
+
+            let length = Int(lengthValue)
+            guard length > 0, words[length] == nil else {
+                return nil
+            }
+
+            var candidates: SpellCheck.WordFrequencyDictionary = []
+            candidates.reserveCapacity(candidateCount)
+
+            for _ in 0..<candidateCount {
+                guard let word = reader.readString(),
+                      !word.isEmpty,
+                      let frequency = reader.readFloat32(),
+                      frequency.isFinite,
+                      let matrixIndexCountValue = reader.readUInt16() else {
+                    return nil
+                }
+
+                let matrixIndexCount = Int(matrixIndexCountValue)
+                guard matrixIndexCount == length else {
+                    return nil
+                }
+
+                var matrixIndexes: [SpellCheck.MatrixIndex] = []
+                matrixIndexes.reserveCapacity(matrixIndexCount)
+
+                for _ in 0..<matrixIndexCount {
+                    guard let matrixIndex = reader.readUInt8(),
+                          matrixIndex != SpellCheck.unknownMatrixIndex else {
+                        return nil
+                    }
+
+                    matrixIndexes.append(matrixIndex)
+                }
+
+                candidates.append((word: word, frequency: frequency, matrixIndexes: matrixIndexes))
+            }
+
+            words[length] = candidates
+        }
+
+        guard reader.isAtEnd else { return nil }
+
+        return (words: words, validWords: validWords)
     }
 }
 

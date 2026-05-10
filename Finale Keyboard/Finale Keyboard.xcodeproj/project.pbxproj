@@ -631,6 +631,7 @@
 				"$(SRCROOT)/Keyboard/Source/Spell Check/BinaryReader.swift",
 				"$(SRCROOT)/Keyboard/Source/Spell Check/SpellCheck.swift",
 				"$(SRCROOT)/Keyboard/Source/Locales.swift",
+				"$(SRCROOT)/Keyboard/Source/Spell Check/Dictionaries/english.json",
 			);
 			name = "Run Script";
 			outputFileListPaths = (
@@ -640,7 +641,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "set -e\n\nCOMPILER=\"$DERIVED_FILE_DIR/BinaryCompiler\"\nOUTPUT_DIR=\"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\"\nMACOS_SDK=\"$(xcrun --sdk macosx --show-sdk-path)\"\n\nxcrun --sdk macosx swiftc \\\n  -sdk \"$MACOS_SDK\" \\\n  \"$SRCROOT/Keyboard/Source/Spell Check/BinaryCompiler.swift\" \\\n  \"$SRCROOT/Keyboard/Source/Spell Check/BinaryReader.swift\" \\\n  \"$SRCROOT/Keyboard/Source/Spell Check/SpellCheck.swift\" \\\n  \"$SRCROOT/Keyboard/Source/Locales.swift\" \\\n  -o \"$COMPILER\"\n\nmkdir -p \"$OUTPUT_DIR\"\n\n\"$COMPILER\" --output-dir \"$OUTPUT_DIR\"\n";
+			shellScript = "set -e\n\nCOMPILER=\"$DERIVED_FILE_DIR/BinaryCompiler\"\nOUTPUT_DIR=\"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\"\nDICTIONARY_DIR=\"$SRCROOT/Keyboard/Source/Spell Check/Dictionaries\"\nMACOS_SDK=\"$(xcrun --sdk macosx --show-sdk-path)\"\n\nxcrun --sdk macosx swiftc \\\n  -sdk \"$MACOS_SDK\" \\\n  \"$SRCROOT/Keyboard/Source/Spell Check/BinaryCompiler.swift\" \\\n  \"$SRCROOT/Keyboard/Source/Spell Check/BinaryReader.swift\" \\\n  \"$SRCROOT/Keyboard/Source/Spell Check/SpellCheck.swift\" \\\n  \"$SRCROOT/Keyboard/Source/Locales.swift\" \\\n  -o \"$COMPILER\"\n\nmkdir -p \"$OUTPUT_DIR\"\n\n\"$COMPILER\" \\\n  --output-dir \"$OUTPUT_DIR\" \\\n  --dictionary-dir \"$DICTIONARY_DIR\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

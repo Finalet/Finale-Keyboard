@@ -16,8 +16,14 @@ enum BinaryCompiler {
         for locale in Locale.allCases {
             guard locale == .en_US else { continue }
 
+            let keyboardMatrixSnapshot = SpellCheck.KeyboardMatrix.generateSnapshot(locale: locale)
+            let dictionaryURL = configuration.dictionaryDirectory
+                .appendingPathComponent(SpellCheck.dictionaryFileName(for: locale))
+                .appendingPathExtension("json")
+            let dictionary = SpellCheck.loadDictionary(forLocale: locale, indexMap: keyboardMatrixSnapshot.indexMap, dictionaryURL: dictionaryURL)
             let sections = try [
-                FSCBinarySection.keyboardMatrix(for: locale)
+                FSCBinarySection.keyboardMatrix(from: keyboardMatrixSnapshot),
+                FSCBinarySection.dictionary(dictionary)
             ]
             let data = try FSCBinaryFileWriter.compile(localeIdentifier: locale.languageCode, sections: sections)
             let outputURL = configuration.outputDirectory.appendingPathComponent(locale.languageCode).appendingPathExtension(FSCBinaryFormat.fileExtension)
@@ -30,14 +36,40 @@ enum BinaryCompiler {
 
 private struct CompilerConfiguration {
     let outputDirectory: URL
+    let dictionaryDirectory: URL
 
     init(arguments: [String]) throws {
-        guard arguments.count == 3, arguments[1] == "--output-dir", !arguments[2].isEmpty else {
-            throw CompilerError.invalidArguments("Usage: BinaryCompiler --output-dir <path>")
+        var outputDirectory: URL?
+        var dictionaryDirectory: URL?
+
+        var index = 1
+        while index < arguments.count {
+            guard index + 1 < arguments.count else {
+                throw CompilerError.invalidArguments(Self.usage)
+            }
+
+            let value = arguments[index + 1]
+            switch arguments[index] {
+            case "--output-dir":
+                outputDirectory = URL(fileURLWithPath: value, isDirectory: true)
+            case "--dictionary-dir":
+                dictionaryDirectory = URL(fileURLWithPath: value, isDirectory: true)
+            default:
+                throw CompilerError.invalidArguments(Self.usage)
+            }
+
+            index += 2
         }
 
-        self.outputDirectory = URL(fileURLWithPath: arguments[2], isDirectory: true)
+        guard let outputDirectory, let dictionaryDirectory else {
+            throw CompilerError.invalidArguments(Self.usage)
+        }
+
+        self.outputDirectory = outputDirectory
+        self.dictionaryDirectory = dictionaryDirectory
     }
+
+    private static let usage = "Usage: BinaryCompiler --output-dir <path> --dictionary-dir <path>"
 }
 
 private enum CompilerError: LocalizedError {
@@ -73,8 +105,7 @@ private struct FSCBinarySection {
     let id: FSCBinaryFormat.SectionID
     let payload: Data
 
-    static func keyboardMatrix(for locale: Locale) throws -> FSCBinarySection {
-        let snapshot = SpellCheck.KeyboardMatrix.generateSnapshot(locale: locale)
+    static func keyboardMatrix(from snapshot: SpellCheck.KeyboardMatrix.KeyboardMatrixSnapshot) throws -> FSCBinarySection {
         var writer = BinaryPayloadWriter()
 
         try writer.writeUInt16(UInt16(exactly: snapshot.indexMap.count, context: "keyboard index map count"))
@@ -92,6 +123,35 @@ private struct FSCBinarySection {
         }
 
         return FSCBinarySection(id: .keyboardMatrix, payload: writer.data)
+    }
+
+    static func dictionary(_ dictionary: SpellCheck.LoadedDictionary) throws -> FSCBinarySection {
+        var writer = BinaryPayloadWriter()
+
+        try writer.writeUInt32(UInt32(exactly: dictionary.validWords.count, context: "valid word count"))
+        for word in dictionary.validWords.sorted() {
+            try writer.writeString(word)
+        }
+
+        try writer.writeUInt16(UInt16(exactly: dictionary.words.count, context: "dictionary length group count"))
+        for length in dictionary.words.keys.sorted() {
+            guard let candidates = dictionary.words[length] else { continue }
+
+            try writer.writeUInt16(UInt16(exactly: length, context: "dictionary word length"))
+            try writer.writeUInt32(UInt32(exactly: candidates.count, context: "dictionary candidate count"))
+
+            for candidate in candidates.sorted(by: { $0.word < $1.word }) {
+                try writer.writeString(candidate.word)
+                writer.writeFloat32(candidate.frequency)
+                try writer.writeUInt16(UInt16(exactly: candidate.matrixIndexes.count, context: "candidate matrix index count"))
+
+                for matrixIndex in candidate.matrixIndexes {
+                    writer.writeUInt8(matrixIndex)
+                }
+            }
+        }
+
+        return FSCBinarySection(id: .dictionary, payload: writer.data)
     }
 }
 
