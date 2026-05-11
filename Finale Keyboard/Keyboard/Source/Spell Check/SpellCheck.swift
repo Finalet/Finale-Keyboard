@@ -17,7 +17,7 @@ class SpellCheck {
     private let candidateScorer: CandidateScorer?
 
     init (locale: Locale) {
-//        let startTime = Date()
+        let startTime = Date()
         self.locale = locale
         
         guard let spellCheckData = BinaryReader.shared.loadSpellCheckData(for: locale) else {
@@ -35,7 +35,7 @@ class SpellCheck {
         self.candidateFilter = CandidateBitsetFilter(dictionary: spellCheckData.dictionary.words, snapshot: spellCheckData.candidateBitsets, proximityMatrixSize: keyboardMatrix.proximityMatrixSize)
         self.candidateScorer = CandidateScorer(keyboardMatrix: keyboardMatrix)
 
-//        print("Loaded in \(Date().timeIntervalSince(startTime) * 1000) ms")
+        print("Loaded in \(Date().timeIntervalSince(startTime) * 1000) ms")
     }
 
     func suggestions(forWord: String, nSuggestions: Int = 5) -> [String]? {
@@ -889,7 +889,8 @@ extension SpellCheck {
             ("compuer", "computer"),
             ("dont", "don't"),
             ("wont", "won't"),
-            ("cant", "can't")
+            ("cant", "can't"),
+            ("weve", "we've")
         ].sorted(by: { $0.correct.count < $1.correct.count })
 
         let isMisspelledTestSubjects : [(word: String, isMisspelled: Bool)] = [
