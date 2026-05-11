@@ -13,7 +13,8 @@ class SpellCheck {
     
     private let validWords: Set<String>
     private let keyboardMatrix: KeyboardMatrix?
-    private let candidateFilter: CandidateBitsetFilter?
+    private let userCandidateFilter: CandidateBitsetFilter?
+    private let defaultCandidateFilter: CandidateBitsetFilter?
     private let candidateScorer: CandidateScorer?
 
     init (locale: Locale) {
@@ -23,30 +24,50 @@ class SpellCheck {
         guard let spellCheckData = BinaryReader.shared.loadSpellCheckData(for: locale) else {
             self.validWords = []
             self.keyboardMatrix = nil
-            self.candidateFilter = nil
+            self.userCandidateFilter = nil
+            self.defaultCandidateFilter = nil
             self.candidateScorer = nil
             return
         }
         
         let keyboardMatrix = KeyboardMatrix(snapshot: spellCheckData.keyboardMatrix)
+        let userDictionary = Self.loadUserDictionary(forLocale: locale, indexMap: keyboardMatrix.indexMap)
         
-        self.validWords = spellCheckData.dictionary.validWords
+        self.validWords = spellCheckData.dictionary.validWords.union(userDictionary.validWords)
         self.keyboardMatrix = keyboardMatrix
-        self.candidateFilter = CandidateBitsetFilter(dictionary: spellCheckData.dictionary.words, snapshot: spellCheckData.candidateBitsets, proximityMatrixSize: keyboardMatrix.proximityMatrixSize)
+        self.defaultCandidateFilter = CandidateBitsetFilter(dictionary: spellCheckData.dictionary.words, snapshot: spellCheckData.candidateBitsets, proximityMatrixSize: keyboardMatrix.proximityMatrixSize)
+        
+        if !userDictionary.words.isEmpty {
+            self.userCandidateFilter = CandidateBitsetFilter(dictionary: userDictionary.words, proximityMatrix: keyboardMatrix.proximityMatrix, proximityMatrixSize: keyboardMatrix.proximityMatrixSize)
+        } else {
+            self.userCandidateFilter = nil
+        }
+        
         self.candidateScorer = CandidateScorer(keyboardMatrix: keyboardMatrix)
 
         print("Loaded in \(Date().timeIntervalSince(startTime) * 1000) ms")
     }
 
     func suggestions(forWord: String, nSuggestions: Int = 5) -> [String]? {
-        guard nSuggestions > 0, let keyboardMatrix, let candidateFilter, let candidateScorer else { return nil }
+        guard nSuggestions > 0, let keyboardMatrix, let defaultCandidateFilter, let candidateScorer else { return nil }
 
         let cleanedWord = cleanWordForSearch(forWord)
         if cleanedWord.isEmpty { return [] }
         
         let wordMatrixIndexes = keyboardMatrix.matrixIndexes(forWord: cleanedWord)
-        let candidates = candidateFilter.candidates(for: wordMatrixIndexes)
         
+        let userCandidates = (userCandidateFilter?.candidates(for: wordMatrixIndexes) ?? [])
+        let userCandidateWords = Set(userCandidates.map {
+            SpellCheck.normalizedWordForValidation($0.word, locale: locale)
+        })
+
+        let defaultCandidates = defaultCandidateFilter.candidates(for: wordMatrixIndexes).filter { candidate in
+            let word = SpellCheck.normalizedWordForValidation(candidate.word, locale: locale)
+            return !userCandidateWords.contains(word)
+        }
+        
+        let candidates = userCandidates + defaultCandidates
+
         let refinedCandidateCount = max(Search.nRefinedCandidates, nSuggestions)
         var refinedCandidates: [RankedCandidate] = []
         refinedCandidates.reserveCapacity(refinedCandidateCount)
@@ -119,6 +140,19 @@ class SpellCheck {
         }
 
         return buildDictionary(forLocale: forLocale, indexMap: indexMap, entries: entries)
+    }
+    
+    private static func loadUserDictionary(forLocale: Locale, indexMap: [Character: MatrixIndex]) -> LoadedDictionary {
+        let userWords = UserDefaults(suiteName: "group.finale-keyboard-cache")?.value(forKey: "FINALE_DEV_APP_userDictionary") as? [String] ?? []
+        var entries: [String: Float] = [:]
+
+        for word in userWords {
+            let trimmedWord = word.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard !trimmedWord.isEmpty else { continue }
+            entries[trimmedWord] = userWordFrequency
+        }
+
+        return buildDictionary(forLocale: forLocale, indexMap: indexMap, entries: [0: entries])
     }
 
     private static func buildDictionary(forLocale: Locale, indexMap: [Character: MatrixIndex], entries: RawWordDictionary) -> LoadedDictionary {
@@ -222,6 +256,8 @@ extension SpellCheck {
     typealias RankedCandidate = (candidate: CorrectionCandidate, score: Float)
 
     static let unknownMatrixIndex = MatrixIndex.max
+    
+    private static let userWordFrequency: Float = 1
 
     enum Weights {
         static let frequency: Float = 0.11
@@ -653,14 +689,26 @@ extension SpellCheck {
         }
 
         init(dictionary: WordDictionary, snapshot: Snapshot, proximityMatrixSize: Int) {
+            self.init(dictionary: dictionary, proximityMatrixSize: proximityMatrixSize) { length, candidates in
+                guard let lengthSnapshot = snapshot.lengthIndexes[length] else { return nil }
+                return LengthIndex(candidates: candidates, snapshot: lengthSnapshot)
+            }
+        }
+
+        init(dictionary: WordDictionary, proximityMatrix: [Float], proximityMatrixSize: Int) {
+            self.init(dictionary: dictionary, proximityMatrixSize: proximityMatrixSize) { _, candidates in
+                return LengthIndex(candidates: candidates, proximityMatrix: proximityMatrix, proximityMatrixSize: proximityMatrixSize)
+            }
+        }
+
+        private init(dictionary: WordDictionary, proximityMatrixSize: Int, makeLengthIndex: (Int, [CorrectionCandidate]) -> LengthIndex?) {
             var lengthIndexes: [Int: LengthIndex] = [:]
             lengthIndexes.reserveCapacity(dictionary.count)
 
             for (length, candidates) in dictionary {
-                guard let lengthSnapshot = snapshot.lengthIndexes[length] else { continue }
-
                 let sortedCandidates = candidates.sorted { $0.word < $1.word }
-                lengthIndexes[length] = LengthIndex(candidates: sortedCandidates, snapshot: lengthSnapshot)
+                guard let lengthIndex = makeLengthIndex(length, sortedCandidates) else { continue }
+                lengthIndexes[length] = lengthIndex
             }
 
             self.lengthIndexes = lengthIndexes
