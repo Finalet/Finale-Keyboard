@@ -17,7 +17,7 @@ class SpellCheck {
     private let candidateScorer: CandidateScorer?
 
     init (locale: Locale) {
-        let startTime = Date()
+//        let startTime = Date()
         self.locale = locale
         
         guard let spellCheckData = BinaryReader.shared.loadSpellCheckData(for: locale) else {
@@ -35,7 +35,7 @@ class SpellCheck {
         self.candidateFilter = CandidateBitsetFilter(dictionary: spellCheckData.dictionary.words, snapshot: spellCheckData.candidateBitsets, proximityMatrixSize: keyboardMatrix.proximityMatrixSize)
         self.candidateScorer = CandidateScorer(keyboardMatrix: keyboardMatrix)
 
-        print("Loaded in \(Date().timeIntervalSince(startTime) * 1000) ms")
+//        print("Loaded in \(Date().timeIntervalSince(startTime) * 1000) ms")
     }
 
     func suggestions(forWord: String, nSuggestions: Int = 5) -> [String]? {
@@ -137,15 +137,6 @@ class SpellCheck {
             }
         }
         return (words: dictionary, validWords: validWords)
-    }
-
-    static func dictionaryFileName(for locale: Locale) -> String {
-        switch locale {
-        case .en_US: return "english"
-        case .ru_RU: return "russian"
-        case .es_ES: return "spanish"
-        case .de_DE: return "german"
-        }
     }
 
     private static func normalizedWordForSearch(_ word: String, locale: Locale) -> String {

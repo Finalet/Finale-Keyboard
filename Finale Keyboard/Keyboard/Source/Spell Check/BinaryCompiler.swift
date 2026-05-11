@@ -14,11 +14,11 @@ enum BinaryCompiler {
         try FileManager.default.createDirectory(at: configuration.outputDirectory, withIntermediateDirectories: true, attributes: nil)
 
         for locale in Locale.allCases {
-            guard locale == .en_US else { continue }
+            guard [Locale.en_US, Locale.ru_RU].contains(locale) else { continue }
 
             let keyboardMatrixSnapshot = SpellCheck.KeyboardMatrix.generateSnapshot(locale: locale)
             let dictionaryURL = configuration.dictionaryDirectory
-                .appendingPathComponent(SpellCheck.dictionaryFileName(for: locale))
+                .appendingPathComponent(BinaryCompiler.dictionaryFileName(for: locale))
                 .appendingPathExtension("json")
             let dictionary = SpellCheck.loadDictionary(forLocale: locale, indexMap: keyboardMatrixSnapshot.indexMap, dictionaryURL: dictionaryURL)
             let candidateBitsets = SpellCheck.CandidateBitsetFilter.generateSnapshot(dictionary: dictionary.words, proximityMatrix: keyboardMatrixSnapshot.proximityMatrix, proximityMatrixSize: keyboardMatrixSnapshot.proximityMatrixSize)
@@ -32,6 +32,15 @@ enum BinaryCompiler {
 
             try data.write(to: outputURL, options: .atomic)
             print("Compiled \(outputURL.path)")
+        }
+    }
+    
+    static func dictionaryFileName(for locale: Locale) -> String {
+        switch locale {
+        case .en_US: return "english"
+        case .ru_RU: return "russian"
+        case .es_ES: return "spanish"
+        case .de_DE: return "german"
         }
     }
 }

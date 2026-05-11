@@ -140,6 +140,7 @@ class FinaleKeyboard: UIInputViewController {
                 self.defaultDictionary[l.entries[i].userInput] = [l.entries[i].documentText]
             }
             
+//            TO-DO: Integrate somee of these into the dictionaries
 //            let data = (try? Data(contentsOf: Bundle.main.url(forResource: "DefaultDictionary", withExtension: "json")!))!
 //            let entries = try! JSONDecoder().decode([DictionaryItem].self, from: data)
 //            

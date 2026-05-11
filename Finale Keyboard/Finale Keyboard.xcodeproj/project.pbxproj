@@ -82,6 +82,7 @@
 		86C4FD442F8C1A6A0086F12F /* DefaultButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C4FD432F8C1A670086F12F /* DefaultButton.swift */; };
 		86C4FD462F8C3F590086F12F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C4FD452F8C3F570086F12F /* OnboardingView.swift */; };
 		86F3ED162FB3B61000573CBD /* KeyboardSizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F3ED152FB3B60D00573CBD /* KeyboardSizeView.swift */; };
+		86C9612C2FB16B1E00987204 /* russian.json in Resources */ = {isa = PBXBuildFile; fileRef = 86C9612B2FB16B1E00987204 /* russian.json */; };
 		86CEFBA32FACEA8E00BA5904 /* SpellCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CEFBA22FACEA8C00BA5904 /* SpellCheck.swift */; };
 		86CEFBA62FACEAAC00BA5904 /* english.json in Resources */ = {isa = PBXBuildFile; fileRef = 86CEFBA52FACEAAC00BA5904 /* english.json */; };
 		86F96E6D2FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F96E692FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json */; };
@@ -192,6 +193,7 @@
 		86C4FD432F8C1A670086F12F /* DefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultButton.swift; sourceTree = "<group>"; };
 		86C4FD452F8C3F570086F12F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		86F3ED152FB3B60D00573CBD /* KeyboardSizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSizeView.swift; sourceTree = "<group>"; };
+		86C9612B2FB16B1E00987204 /* russian.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = russian.json; sourceTree = "<group>"; };
 		86CEFBA22FACEA8C00BA5904 /* SpellCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellCheck.swift; sourceTree = "<group>"; };
 		86CEFBA52FACEAAC00BA5904 /* english.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = english.json; sourceTree = "<group>"; };
 		86F96E672FAA7FDC007BF1CA /* spanish-30000-n1-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "spanish-30000-n1-probabilities.json"; sourceTree = "<group>"; };
@@ -462,6 +464,7 @@
 			isa = PBXGroup;
 			children = (
 				86CEFBA52FACEAAC00BA5904 /* english.json */,
+				86C9612B2FB16B1E00987204 /* russian.json */,
 			);
 			path = Dictionaries;
 			sourceTree = "<group>";
@@ -612,6 +615,7 @@
 				86CEFBA62FACEAAC00BA5904 /* english.json in Resources */,
 				3709029627B2F54000213BDD /* DefaultDictionary.json in Resources */,
 				37FAF7012B4F9F25002C361C /* Localizable.strings in Resources */,
+				86C9612C2FB16B1E00987204 /* russian.json in Resources */,
 				3720638627AACEC100964120 /* Gilroy-Medium.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
