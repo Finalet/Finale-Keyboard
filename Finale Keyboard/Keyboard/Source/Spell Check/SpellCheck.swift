@@ -20,9 +20,7 @@ class SpellCheck {
         let startTime = Date()
         self.locale = locale
         
-        guard let keyboardMatrixSnapshot = BinaryReader.shared.loadKeyboardMatrix(for: locale),
-              let dictionary = BinaryReader.shared.loadDictionary(for: locale),
-              let candidateBitsets = BinaryReader.shared.loadCandidateBitsets(for: locale) else {
+        guard let spellCheckData = BinaryReader.shared.loadSpellCheckData(for: locale) else {
             self.validWords = []
             self.keyboardMatrix = nil
             self.candidateFilter = nil
@@ -30,14 +28,14 @@ class SpellCheck {
             return
         }
         
-        let keyboardMatrix = KeyboardMatrix(snapshot: keyboardMatrixSnapshot)
+        let keyboardMatrix = KeyboardMatrix(snapshot: spellCheckData.keyboardMatrix)
         
-        self.validWords = dictionary.validWords
+        self.validWords = spellCheckData.dictionary.validWords
         self.keyboardMatrix = keyboardMatrix
-        self.candidateFilter = CandidateBitsetFilter(dictionary: dictionary.words, snapshot: candidateBitsets, proximityMatrixSize: keyboardMatrix.proximityMatrixSize)
+        self.candidateFilter = CandidateBitsetFilter(dictionary: spellCheckData.dictionary.words, snapshot: spellCheckData.candidateBitsets, proximityMatrixSize: keyboardMatrix.proximityMatrixSize)
         self.candidateScorer = CandidateScorer(keyboardMatrix: keyboardMatrix)
 
-        print("Loaded in \(Date().timeIntervalSince(startTime)) seconds")
+        print("Loaded in \(Date().timeIntervalSince(startTime) * 1000) ms")
     }
 
     func suggestions(forWord: String, nSuggestions: Int = 5) -> [String]? {

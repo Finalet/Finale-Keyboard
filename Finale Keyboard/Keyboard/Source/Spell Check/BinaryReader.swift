@@ -10,35 +10,40 @@ import Foundation
 final class BinaryReader {
     static let shared = BinaryReader()
 
-    func loadKeyboardMatrix(for locale: Locale, bundle: Bundle = .main) -> SpellCheck.KeyboardMatrix.KeyboardMatrixSnapshot? {
-        guard let file = loadFile(for: locale, bundle: bundle),
-              let payload = file.sectionPayload(for: .keyboardMatrix) else {
+    struct SpellCheckData {
+        let keyboardMatrix: SpellCheck.KeyboardMatrix.KeyboardMatrixSnapshot
+        let dictionary: SpellCheck.LoadedDictionary
+        let candidateBitsets: SpellCheck.CandidateBitsetFilter.Snapshot
+    }
+
+    func loadSpellCheckData(for locale: Locale) -> SpellCheckData? {
+        guard let file = loadFile(for: locale),
+              let keyboardMatrix = decodeKeyboardMatrix(from: file),
+              let dictionary = decodeDictionary(from: file),
+              let candidateBitsets = decodeCandidateBitsets(from: file) else {
             return nil
         }
 
+        return SpellCheckData(keyboardMatrix: keyboardMatrix, dictionary: dictionary, candidateBitsets: candidateBitsets)
+    }
+
+    private func decodeKeyboardMatrix(from file: FSCBinaryFile) -> SpellCheck.KeyboardMatrix.KeyboardMatrixSnapshot? {
+        guard let payload = file.sectionPayload(for: .keyboardMatrix) else { return nil }
         return KeyboardMatrixSectionReader.decode(payload: payload)
     }
 
-    func loadDictionary(for locale: Locale, bundle: Bundle = .main) -> SpellCheck.LoadedDictionary? {
-        guard let file = loadFile(for: locale, bundle: bundle),
-              let payload = file.sectionPayload(for: .dictionary) else {
-            return nil
-        }
-
+    private func decodeDictionary(from file: FSCBinaryFile) -> SpellCheck.LoadedDictionary? {
+        guard let payload = file.sectionPayload(for: .dictionary) else { return nil }
         return DictionarySectionReader.decode(payload: payload)
     }
 
-    func loadCandidateBitsets(for locale: Locale, bundle: Bundle = .main) -> SpellCheck.CandidateBitsetFilter.Snapshot? {
-        guard let file = loadFile(for: locale, bundle: bundle),
-              let payload = file.sectionPayload(for: .candidateBitsets) else {
-            return nil
-        }
-
+    private func decodeCandidateBitsets(from file: FSCBinaryFile) -> SpellCheck.CandidateBitsetFilter.Snapshot? {
+        guard let payload = file.sectionPayload(for: .candidateBitsets) else { return nil }
         return CandidateBitsetSectionReader.decode(payload: payload)
     }
 
-    private func loadFile(for locale: Locale, bundle: Bundle) -> FSCBinaryFile? {
-        guard let url = bundle.url(forResource: locale.languageCode, withExtension: FSCBinaryFormat.fileExtension),
+    private func loadFile(for locale: Locale) -> FSCBinaryFile? {
+        guard let url = Bundle.main.url(forResource: locale.languageCode, withExtension: FSCBinaryFormat.fileExtension),
               let data = try? Data(contentsOf: url),
               let file = FSCBinaryFile(data: data),
               file.localeIdentifier == locale.languageCode else {
