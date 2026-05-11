@@ -76,6 +76,8 @@
 		863F29812FABD6EF00A08D3F /* german-30000-n1-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 863F29792FABD6EF00A08D3F /* german-30000-n1-probabilities.json */; };
 		863F29822FABD6EF00A08D3F /* german-30000-n2-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 863F297A2FABD6EF00A08D3F /* german-30000-n2-probabilities.json */; };
 		864948182F918AEE0002CAC0 /* Icon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 864948172F918AEE0002CAC0 /* Icon.icon */; };
+		8653E6B12FB24CFE005D2069 /* english.json in Resources */ = {isa = PBXBuildFile; fileRef = 8653E6AF2FB24CFE005D2069 /* english.json */; };
+		8653E6B22FB24CFE005D2069 /* russian.json in Resources */ = {isa = PBXBuildFile; fileRef = 8653E6B02FB24CFE005D2069 /* russian.json */; };
 		867CCCFA2FAABDBB002EDD1B /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 867CCCF82FAABDBB002EDD1B /* CoreDataModel.xcdatamodeld */; };
 		867CCCFB2FAABDBB002EDD1B /* CoreDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 867CCCF82FAABDBB002EDD1B /* CoreDataModel.xcdatamodeld */; };
 		86B6EC642F8D466A00828DE0 /* GesturesGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B6EC632F8D466100828DE0 /* GesturesGuideView.swift */; };
@@ -84,7 +86,6 @@
 		86F3ED162FB3B61000573CBD /* KeyboardSizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F3ED152FB3B60D00573CBD /* KeyboardSizeView.swift */; };
 		86C9612C2FB16B1E00987204 /* russian.json in Resources */ = {isa = PBXBuildFile; fileRef = 86C9612B2FB16B1E00987204 /* russian.json */; };
 		86CEFBA32FACEA8E00BA5904 /* SpellCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CEFBA22FACEA8C00BA5904 /* SpellCheck.swift */; };
-		86CEFBA62FACEAAC00BA5904 /* english.json in Resources */ = {isa = PBXBuildFile; fileRef = 86CEFBA52FACEAAC00BA5904 /* english.json */; };
 		86F96E6D2FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F96E692FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json */; };
 		86F96E6E2FAA7FDC007BF1CA /* spanish-30000-n4-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F96E6A2FAA7FDC007BF1CA /* spanish-30000-n4-probabilities.json */; };
 		86F96E6F2FAA7FDC007BF1CA /* spanish-30000-n1-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F96E672FAA7FDC007BF1CA /* spanish-30000-n1-probabilities.json */; };
@@ -188,6 +189,8 @@
 		863F297C2FABD6EF00A08D3F /* german-30000-n4-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "german-30000-n4-probabilities.json"; sourceTree = "<group>"; };
 		863F297D2FABD6EF00A08D3F /* german-30000-n5-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "german-30000-n5-probabilities.json"; sourceTree = "<group>"; };
 		864948172F918AEE0002CAC0 /* Icon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = Icon.icon; sourceTree = "<group>"; };
+		8653E6AF2FB24CFE005D2069 /* english.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = english.json; sourceTree = "<group>"; };
+		8653E6B02FB24CFE005D2069 /* russian.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = russian.json; sourceTree = "<group>"; };
 		867CCCF92FAABDBB002EDD1B /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
 		86B6EC632F8D466100828DE0 /* GesturesGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GesturesGuideView.swift; sourceTree = "<group>"; };
 		86C4FD432F8C1A670086F12F /* DefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultButton.swift; sourceTree = "<group>"; };
@@ -195,7 +198,6 @@
 		86F3ED152FB3B60D00573CBD /* KeyboardSizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSizeView.swift; sourceTree = "<group>"; };
 		86C9612B2FB16B1E00987204 /* russian.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = russian.json; sourceTree = "<group>"; };
 		86CEFBA22FACEA8C00BA5904 /* SpellCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellCheck.swift; sourceTree = "<group>"; };
-		86CEFBA52FACEAAC00BA5904 /* english.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = english.json; sourceTree = "<group>"; };
 		86F96E672FAA7FDC007BF1CA /* spanish-30000-n1-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "spanish-30000-n1-probabilities.json"; sourceTree = "<group>"; };
 		86F96E682FAA7FDC007BF1CA /* spanish-30000-n2-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "spanish-30000-n2-probabilities.json"; sourceTree = "<group>"; };
 		86F96E692FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "spanish-30000-n3-probabilities.json"; sourceTree = "<group>"; };
@@ -463,8 +465,8 @@
 		86CEFBA42FACEA9900BA5904 /* Dictionaries */ = {
 			isa = PBXGroup;
 			children = (
-				86CEFBA52FACEAAC00BA5904 /* english.json */,
-				86C9612B2FB16B1E00987204 /* russian.json */,
+				8653E6AF2FB24CFE005D2069 /* english.json */,
+				8653E6B02FB24CFE005D2069 /* russian.json */,
 			);
 			path = Dictionaries;
 			sourceTree = "<group>";
@@ -612,11 +614,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				86CEFBA62FACEAAC00BA5904 /* english.json in Resources */,
 				3709029627B2F54000213BDD /* DefaultDictionary.json in Resources */,
 				37FAF7012B4F9F25002C361C /* Localizable.strings in Resources */,
-				86C9612C2FB16B1E00987204 /* russian.json in Resources */,
 				3720638627AACEC100964120 /* Gilroy-Medium.ttf in Resources */,
+				8653E6B12FB24CFE005D2069 /* english.json in Resources */,
+				8653E6B22FB24CFE005D2069 /* russian.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
