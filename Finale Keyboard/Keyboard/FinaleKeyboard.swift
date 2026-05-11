@@ -115,7 +115,7 @@ class FinaleKeyboard: UIInputViewController {
     let maxNgram = 5
     
     let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
-    var spellChecker = SpellCheck(locale: .en_US)
+    var spellChecker: SpellCheck?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -189,11 +189,13 @@ class FinaleKeyboard: UIInputViewController {
         
         punctuationArray = userDefaults?.value(forKey: "FINALE_DEV_APP_punctuationArray") as? [String] ?? Defaults.punctuation
         shortcuts = userDefaults?.value(forKey: "FINALE_DEV_APP_shortcuts") as? [String : String] ?? Defaults.shortcuts
-        FinaleKeyboard.currentLocale = Locale(rawValue: UserDefaults.standard.integer(forKey: "FINALE_DEV_APP_CurrentLocale")) ?? .en_US
+        var currentLocale = Locale(rawValue: UserDefaults.standard.integer(forKey: "FINALE_DEV_APP_CurrentLocale")) ?? .en_US
         
-        if !FinaleKeyboard.enabledLocales.contains(FinaleKeyboard.currentLocale) {
-            FinaleKeyboard.currentLocale = FinaleKeyboard.enabledLocales[0]
+        if !FinaleKeyboard.enabledLocales.contains(currentLocale) {
+            currentLocale = FinaleKeyboard.enabledLocales[0]
         }
+        
+        SetLocale(currentLocale)
     }
     
     func InitSuggestionsArray () {
@@ -590,7 +592,7 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func SwipeRight () {
-        spellChecker.RunTest()
+//        spellChecker?.RunTest()
         
         if let emojiSearchRow = emojiSearchRow {
             emojiSearchRow.SwipeRight()
@@ -715,7 +717,6 @@ class FinaleKeyboard: UIInputViewController {
         if (!self.textDocumentProxy.hasText) { return }
         
         let lastWord = getLastWord()
-        let isCaps = lastWord.uppercased() == lastWord
         
         if (suggestionsArrays[nextSuggestionArray].suggestions.count != 0) {
             suggestionsArrays[nextSuggestionArray].suggestions.removeAll()
@@ -728,8 +729,24 @@ class FinaleKeyboard: UIInputViewController {
         
         AppendSuggestionFromDictionary(dict: defaultDictionary, lastWord: lastWord)
         
-        if spellChecker.isMisspelled(word: lastWord) {
-            suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: spellChecker.suggestions(forWord: lastWord))
+        if let spellChecker = spellChecker {
+            var suggestions = spellChecker.suggestions(forWord: lastWord).map { suggestion in
+                if lastWord == lastWord.capitalized {
+                    return suggestion.capitalized
+                } else if lastWord == lastWord.uppercased() {
+                    return suggestion.uppercased()
+                }
+                return suggestion
+            }
+            
+            if suggestions.first == lastWord.lowercased() {
+                suggestions.removeFirst()
+                pickedSuggestionIndex = 0
+            } else {
+                pickedSuggestionIndex = 1
+            }
+            
+            suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: suggestions)
             while suggestionsArrays[nextSuggestionArray].suggestions.count > maxSuggestions { suggestionsArrays[nextSuggestionArray].suggestions.removeLast() }
         }
         
@@ -751,7 +768,6 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func CheckUserDictionary () {
-        pickedSuggestionIndex = 1
         let x = getCorrectSuggestionArrayIndex()
         if x < 0 { return }
         
@@ -776,9 +792,14 @@ class FinaleKeyboard: UIInputViewController {
                 self.textDocumentProxy.deleteBackward()
             }
             let isCaps = originalInput.uppercased() == originalInput
-            self.textDocumentProxy.insertText(!isCaps ? suggestionsArrays[x].suggestions[pickedSuggestionIndex] : suggestionsArrays[x].suggestions[pickedSuggestionIndex].uppercased())
-            if tryLearnNewWord { TryLearnNewWord(word: suggestionsArrays[x].suggestions[pickedSuggestionIndex].lowercased()) }
-        } else { pickedSuggestionIndex = 0 }
+            
+            let suggestion = suggestionsArrays[x].suggestions[pickedSuggestionIndex]
+            self.textDocumentProxy.insertText(!isCaps ? suggestion : suggestion.uppercased())
+            
+            if tryLearnNewWord { TryLearnNewWord(word: suggestion.lowercased()) }
+        } else {
+            pickedSuggestionIndex = 0
+        }
         
         self.textDocumentProxy.insertText(" ")
         
@@ -1157,14 +1178,28 @@ class FinaleKeyboard: UIInputViewController {
     func ToggleLocale (backwards: Bool = false) {
         var index = ((FinaleKeyboard.enabledLocales.firstIndex(of: FinaleKeyboard.currentLocale) ?? 0) + (backwards ? -1 : 1)) % FinaleKeyboard.enabledLocales.count
         if index < 0 { index += FinaleKeyboard.enabledLocales.count }
-        FinaleKeyboard.currentLocale = FinaleKeyboard.enabledLocales[index]
-        spellChecker = SpellCheck(locale: FinaleKeyboard.currentLocale)
+        SetLocale(FinaleKeyboard.enabledLocales[index])
         
         BuildKeyboardView(viewType: .Characters, updateViewType: FinaleKeyboard.currentViewType != .SearchEmoji)
         ResetSuggestions()
         
         UserDefaults.standard.set(FinaleKeyboard.currentLocale.rawValue, forKey: "FINALE_DEV_APP_CurrentLocale")
     }
+    
+    func SetLocale (_ locale: Locale) {
+        FinaleKeyboard.currentLocale = locale
+        self.spellChecker = nil
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            let newSpellCheck = SpellCheck(locale: locale)
+            
+            DispatchQueue.main.async {
+                guard locale == FinaleKeyboard.currentLocale else { return }
+                self.spellChecker = newSpellCheck
+            }
+        }
+    }
+    
     func ToggleSymbolsView () {
         if FinaleKeyboard.currentViewType == .Characters { BuildKeyboardView(viewType: .Symbols) }
         else if FinaleKeyboard.currentViewType == .Symbols || FinaleKeyboard.currentViewType == .ExtraSymbols { BuildKeyboardView(viewType: .Characters) }
