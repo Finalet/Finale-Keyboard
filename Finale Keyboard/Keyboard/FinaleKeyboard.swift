@@ -729,28 +729,35 @@ class FinaleKeyboard: UIInputViewController {
         
         AppendSuggestionFromDictionary(dict: defaultDictionary, lastWord: lastWord)
         
-        if let spellChecker = spellChecker {
-            var suggestions = spellChecker.suggestions(forWord: lastWord).map { suggestion in
-                if lastWord == lastWord.capitalized {
-                    return suggestion.capitalized
-                } else if lastWord == lastWord.uppercased() {
-                    return suggestion.uppercased()
-                }
-                return suggestion
-            }
-            
-            if suggestions.first == lastWord.lowercased() {
-                suggestions.removeFirst()
-                pickedSuggestionIndex = 0
-            } else {
-                pickedSuggestionIndex = 1
-            }
-            
-            suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: suggestions)
-            while suggestionsArrays[nextSuggestionArray].suggestions.count > maxSuggestions { suggestionsArrays[nextSuggestionArray].suggestions.removeLast() }
+        var suggestions: [String] = spellChecker?.suggestions(forWord: lastWord) ?? getFallbackSpellCheckSuggestions(for: lastWord)
+        
+        if suggestions.first?.lowercased() == lastWord.lowercased() {
+            suggestions.removeFirst()
+            pickedSuggestionIndex = 0
+        } else {
+            pickedSuggestionIndex = 1
         }
         
+        suggestions = suggestions.map { suggestion in
+            if lastWord == lastWord.capitalized { return suggestion.capitalized }
+            else if lastWord == lastWord.uppercased() { return suggestion.uppercased() }
+            return suggestion
+        }
+        
+        suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: suggestions)
+        while suggestionsArrays[nextSuggestionArray].suggestions.count > maxSuggestions { suggestionsArrays[nextSuggestionArray].suggestions.removeLast() }
+        
         nextSuggestionArray = (nextSuggestionArray+1) % maxSuggestionHistory
+    }
+    
+    func getFallbackSpellCheckSuggestions (for word: String) -> [String] {
+        let spellChecker = UITextChecker()
+        
+        let misspelledRange = spellChecker.rangeOfMisspelledWord(in: word.lowercased(), range: NSMakeRange(0, word.count), startingAt: 0, wrap: true, language: FinaleKeyboard.currentLocale.languageCode)
+        var suggestions = spellChecker.guesses(forWordRange: NSRange(location: 0, length: word.count), in: word, language: FinaleKeyboard.currentLocale.languageCode) ?? []
+        
+        if misspelledRange.location == NSNotFound { suggestions.insert(word, at: 0) }
+        return suggestions
     }
     
     func AppendSuggestionFromDictionary (dict: Dictionary<String, [String]>, lastWord: String) {

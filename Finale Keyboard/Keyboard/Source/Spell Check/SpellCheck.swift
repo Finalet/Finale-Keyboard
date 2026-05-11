@@ -40,8 +40,8 @@ class SpellCheck {
         print("Loaded in \(Date().timeIntervalSince(startTime)) seconds")
     }
 
-    func suggestions(forWord: String, nSuggestions: Int = 5) -> [String] {
-        guard nSuggestions > 0, let keyboardMatrix, let candidateFilter, let candidateScorer else { return [] }
+    func suggestions(forWord: String, nSuggestions: Int = 5) -> [String]? {
+        guard nSuggestions > 0, let keyboardMatrix, let candidateFilter, let candidateScorer else { return nil }
 
         let cleanedWord = cleanWordForSearch(forWord)
         if cleanedWord.isEmpty { return [] }
@@ -914,7 +914,7 @@ extension SpellCheck {
         for subject in testSubjects {
             let startTime = Date()
             
-            let corrections = suggestions(forWord: subject.misspelled)
+            let corrections = suggestions(forWord: subject.misspelled) ?? []
             
             results.append((subject.misspelled, subject.correct, corrections, Date().timeIntervalSince(startTime)))
         }
