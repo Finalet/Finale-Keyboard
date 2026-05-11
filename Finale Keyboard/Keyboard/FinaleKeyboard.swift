@@ -140,13 +140,12 @@ class FinaleKeyboard: UIInputViewController {
                 self.defaultDictionary[l.entries[i].userInput] = [l.entries[i].documentText]
             }
             
-//            TO-DO: Integrate somee of these into the dictionaries
-//            let data = (try? Data(contentsOf: Bundle.main.url(forResource: "DefaultDictionary", withExtension: "json")!))!
-//            let entries = try! JSONDecoder().decode([DictionaryItem].self, from: data)
-//            
-//            for i in entries {
-//                self.defaultDictionary[i.input.lowercased()] = i.suggestions
-//            }
+            let data = (try? Data(contentsOf: Bundle.main.url(forResource: "DefaultDictionary", withExtension: "json")!))!
+            let entries = try! JSONDecoder().decode([DictionaryItem].self, from: data)
+            
+            for i in entries {
+                self.defaultDictionary[i.input.lowercased()] = i.suggestions
+            }
         })
         
         userDictionary = userDefaults?.value(forKey: "FINALE_DEV_APP_userDictionary") as? [String] ?? [String]()
@@ -593,7 +592,7 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func SwipeRight () {
-//        spellChecker?.RunTest()
+        spellChecker?.RunTest()
         
         if let emojiSearchRow = emojiSearchRow {
             emojiSearchRow.SwipeRight()
