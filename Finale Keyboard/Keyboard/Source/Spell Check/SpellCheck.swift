@@ -1103,19 +1103,6 @@ extension SpellCheck {
     }
 }
 
-// Speed testing
-//
-// UITextChecker(): avg. 0.8ms, total: 40ms
-// Baseline, no improvements: avg. 168ms, total 8.6s
-// Score each length candidates in parallel: avg. 88ms, total 4.5s
-// Reject bad candidates early: avg. 42ms, total 2.1s
-// Reject candidates who can't reach minimum useful score: avg. 28ms, total 1.3s
-// Filter candidates with a bitset: avg. 1.8ms, total: 90ms.
-// Faster / less RAM getAlignmentScore: avg. 1.6ms, total: 80ms.
-// Pass word matrixes into getAlignmentScore: avg. 1.5ms, total: 77ms.
-// Two stage scoring of candidates with fast scorrer and slow scorrer.: avg. 1.2ms, total: 60ms.
-
-
 // Duplicating extensions here becase SpellCheck script needs to be independant to run dictionary compilatino on MacOS during build.
 extension StringProtocol {
     fileprivate var capitalizedFirst: String { prefix(1).uppercased() + dropFirst().lowercased() }
