@@ -32,6 +32,13 @@ struct PreferencesView: View {
             }
             SpacebarSection()
             Section {
+                ListNavigationLink(destination: KeyboardSizeView()) {
+                    Label(title: {
+                        Text(Localize.KeyboardSize.pageTitle)
+                    }, icon: {
+                        Image(systemName: "rectangle.expand.vertical")
+                    })
+                }
                 ListNavigationLink(destination: DynamicTouchZonesView()) {
                     Label(title: {
                         Text(Localize.DynamicTouchZones.pageTitle)
@@ -76,7 +83,7 @@ struct SpacebarSection: View {
     
     var body: some View {
         Section {
-            Toggle(isOn: $isSpacebarEnabled) {
+            Toggle(isOn: $isSpacebarEnabled.animation()) {
                 Text(Localize.spacebar)
                     .offset(textOffset)
                     .scaleEffect(textScale)
@@ -219,6 +226,8 @@ struct UserDefault<Value> {
 }
 
 #Preview {
-    PreferencesView()
-        .environmentObject(InAppPurchasesManager())
+    NavigationStack {
+        PreferencesView()
+    }
+    .environmentObject(InAppPurchasesManager())
 }
