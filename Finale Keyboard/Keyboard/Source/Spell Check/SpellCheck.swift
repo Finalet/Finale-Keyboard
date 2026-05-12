@@ -908,9 +908,59 @@ extension SpellCheck {
 // Tests
 extension SpellCheck {
     func RunTest() {
-        let roundTimeTo = 100.0
+        let roundTimeTo: Int = 2
         
         let testSubjects: [(misspelled: String, correct: String)] = [
+//            ("привте", "привет"),
+//            ("спасибл", "спасибо"),
+//            ("пожалуста", "пожалуйста"),
+//            ("сегодян", "сегодня"),
+//            ("завтраа", "завтра"),
+//            ("вчерашнй", "вчерашний"),
+//            ("хоршо", "хорошо"),
+//            ("плохо", "плохо"),
+//            ("человк", "человек"),
+//            ("лююди", "люди"),
+//            ("друк", "друг"),
+//            ("семя", "семья"),
+//            ("работаь", "работать"),
+//            ("учится", "учиться"),
+//            ("школла", "школа"),
+//            ("универстет", "университет"),
+//            ("книага", "книга"),
+//            ("словрь", "словарь"),
+//            ("языкк", "язык"),
+//            ("русскийй", "русский"),
+//            ("англиский", "английский"),
+//            ("переводт", "перевод"),
+//            ("ошипка", "ошибка"),
+//            ("текстт", "текст"),
+//            ("сообщние", "сообщение"),
+//            ("вопрс", "вопрос"),
+//            ("ответт", "ответ"),
+//            ("помщь", "помощь"),
+//            ("можнл", "можно"),
+//            ("нельза", "нельзя"),
+//            ("потмоу", "потому"),
+//            ("почму", "почему"),
+//            ("когад", "когда"),
+//            ("гдк", "где"),
+//            ("кудаа", "куда"),
+//            ("сново", "снова"),
+//            ("сразц", "сразу"),
+//            ("оченб", "очень"),
+//            ("болшой", "большой"),
+//            ("маленкий", "маленький"),
+//            ("красивй", "красивый"),
+//            ("интереснй", "интересный"),
+//            ("важнй", "важный"),
+//            ("нуженй", "нужный"),
+//            ("длинныйй", "длинный"),
+//            ("короткй", "короткий"),
+//            ("правелно", "правильно"),
+//            ("быстрл", "быстро"),
+//            ("медленнл", "медленно"),
+//            ("счасливый", "счастливый"),
             ("hrllo", "hello"),
             ("i", "I"),
             ("jrkkp", "hello"),
@@ -999,20 +1049,20 @@ extension SpellCheck {
         print ("📝 Autocorrect results 📝")
         print ("")
         print ("- Correct: \((totalCorrect * 100) / results.count)% (\(totalCorrect)/\(results.count))")
-        print ("- Average time: \(round(averageTime * roundTimeTo * 1000) / roundTimeTo) ms")
-        print ("- Total time: \(round(totalTime * roundTimeTo * 1000) / roundTimeTo) ms")
-        print ("- P50 time: \(round(p50Time * roundTimeTo * 1000) / roundTimeTo) ms")
-        print ("- P95 time: \(round(p95Time * roundTimeTo * 1000) / roundTimeTo) ms")
+        print ("- Average time: \((averageTime * 1000).roundedTo(roundTimeTo)) / roundTimeTo) ms")
+        print ("- Total time: \((totalTime * 1000).roundedTo(roundTimeTo)) / roundTimeTo) ms")
+        print ("- P50 time: \((p50Time * 1000).roundedTo(roundTimeTo)) / roundTimeTo) ms")
+        print ("- P95 time: \((p95Time * 1000).roundedTo(roundTimeTo)) / roundTimeTo) ms")
         print ("")
         
         print ("❌ Wrong")
         for result in results.filter({ $0.ACresult.first?.word != $0.correct }) {
-            print("\t- \(result.misspelled) → \(result.ACresult.first?.word ?? "-") (correct: \(result.correct)) | Best candidates: \(result.ACresult.map({ "\($0.word) (\(round($0.score * 100)/100))" })) | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
+            print("\t- \(result.misspelled) → \(result.ACresult.first?.word ?? "-") (correct: \(result.correct)) | Best candidates: \(result.ACresult.map({ "\($0.word) (\($0.score.roundedTo(2)))" })) | Took: \((result.timeTook * 1000).roundedTo(roundTimeTo)) ms")
         }
         
         print ("✅ Correct")
         for result in results.filter({ $0.ACresult.first?.word == $0.correct }) {
-            print("\t- \(result.misspelled) → \(result.ACresult.first!.word) | Best candidates: \(result.ACresult.map({ "\($0.word) (\(round($0.score * 100)/100))" })) | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
+            print("\t- \(result.misspelled) → \(result.ACresult.first!.word) | Best candidates: \(result.ACresult.map({ "\($0.word) (\($0.score.roundedTo(2)))" })) | Took: \((result.timeTook * 1000).roundedTo(roundTimeTo)) ms")
         }
         
         var isMisspelledResults: [(word: String, correct: Bool, result: Bool, timeTook: TimeInterval)] = []
@@ -1031,7 +1081,7 @@ extension SpellCheck {
         
         print ("❌ Wrong")
         for result in isMisspelledResults.filter({ $0.correct != $0.result }) {
-            print("\t- \(result.word) → '\(result.result ? "misspelled" : "Not misspelled")' (should be '\(result.correct ? "misspelled" : "not misspelled")') | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
+            print("\t- \(result.word) → '\(result.result ? "misspelled" : "Not misspelled")' (should be '\(result.correct ? "misspelled" : "not misspelled")') | Took: \((result.timeTook * 1000).roundedTo(roundTimeTo)) ms")
         }
         if isMisspelledResults.filter({ $0.correct != $0.result }).count == 0 {
             print ("\t- None")
@@ -1039,12 +1089,11 @@ extension SpellCheck {
         
         print ("✅ Correct")
         for result in isMisspelledResults.filter({ $0.correct == $0.result }) {
-            print("\t- \(result.word) → '\(result.result ? "misspelled" : "Not misspelled")' | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
+            print("\t- \(result.word) → '\(result.result ? "misspelled" : "Not misspelled")' | Took: \((result.timeTook * 1000).roundedTo(roundTimeTo)) ms")
         }
         if isMisspelledResults.filter({ $0.correct == $0.result }).count == 0 {
             print ("\t- None")
         }
-        
     }
     
     private func percentile(_ sortedValues: [TimeInterval], percentile: Double) -> TimeInterval {
@@ -1067,7 +1116,13 @@ extension SpellCheck {
 // Two stage scoring of candidates with fast scorrer and slow scorrer.: avg. 1.2ms, total: 60ms.
 
 
+// Duplicating extensions here becase SpellCheck script needs to be independant to run dictionary compilatino on MacOS during build.
 extension StringProtocol {
-    // Redeclaring this from UIExtensions, becase SpellCheck script needs to be independant to run dictionary compilatino on MacOS during build.
     fileprivate var capitalizedFirst: String { prefix(1).uppercased() + dropFirst().lowercased() }
+}
+extension BinaryFloatingPoint {
+    fileprivate func roundedTo(_ places: Int) -> Self {
+        let factor = Self(NSDecimalNumber(decimal: pow(10, places)).doubleValue)
+        return (self * factor).rounded() / factor
+    }
 }

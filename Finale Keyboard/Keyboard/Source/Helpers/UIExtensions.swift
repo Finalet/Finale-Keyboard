@@ -37,6 +37,12 @@ extension StringProtocol {
     var firstCapitalized: String { prefix(1).uppercased() + dropFirst().lowercased() }
 }
 
+extension BinaryFloatingPoint {
+    func roundTo(_ places: Int) -> Self {
+        let factor = Self(NSDecimalNumber(decimal: pow(10, places)).doubleValue)
+        return (self * factor).rounded() / factor
+    }
+}
 extension Character {
     /// A simple emoji is one scalar and presented to the user as an Emoji
     var isSimpleEmoji: Bool {
