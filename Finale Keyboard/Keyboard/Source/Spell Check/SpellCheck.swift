@@ -105,6 +105,11 @@ class SpellCheck {
     }
     
     private func matchCase (fromWord: String, toWord: String) -> String {
+        // If the correct spelling is uppercased, do not change it (i.e. USSR should always be USSR).
+        if toWord == toWord.uppercased() {
+            return toWord
+        }
+        
         if fromWord == fromWord.capitalizedFirst {
             return toWord.capitalizedFirst
         } else if fromWord == fromWord.uppercased() {

@@ -798,10 +798,9 @@ class FinaleKeyboard: UIInputViewController {
                 originalInput.insert(self.textDocumentProxy.documentContextBeforeInput?.last ?? Character(""), at: originalInput.startIndex)
                 self.textDocumentProxy.deleteBackward()
             }
-            let isCaps = originalInput.uppercased() == originalInput
             
             let suggestion = suggestionsArrays[x].suggestions[pickedSuggestionIndex]
-            self.textDocumentProxy.insertText(!isCaps ? suggestion : suggestion.uppercased())
+            self.textDocumentProxy.insertText(suggestion)
             
             if tryLearnNewWord { TryLearnNewWord(word: suggestion.lowercased()) }
         } else {
