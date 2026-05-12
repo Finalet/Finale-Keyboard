@@ -730,7 +730,7 @@ class FinaleKeyboard: UIInputViewController {
         
         AppendSuggestionFromDictionary(dict: defaultDictionary, lastWord: lastWord)
         
-        var suggestions: [String] = spellChecker?.suggestions(forWord: lastWord) ?? getFallbackSpellCheckSuggestions(for: lastWord)
+        var suggestions: [String] = spellChecker?.suggestions(forWord: lastWord)?.compactMap({ $0.word }) ?? getFallbackSpellCheckSuggestions(for: lastWord)
         
         if suggestions.first?.lowercased() == lastWord.lowercased() {
             suggestions.removeFirst()

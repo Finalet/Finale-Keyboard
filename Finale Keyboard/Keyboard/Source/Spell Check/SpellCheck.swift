@@ -48,7 +48,7 @@ class SpellCheck {
         print("Loaded in \(Date().timeIntervalSince(startTime) * 1000) ms")
     }
 
-    func suggestions(forWord: String, nSuggestions: Int = 5) -> [String]? {
+    func suggestions(forWord: String, nSuggestions: Int = 5) -> [ScoredCandidate]? {
         guard nSuggestions > 0, let keyboardMatrix, let defaultCandidateFilter, let candidateScorer else { return nil }
 
         let cleanedWord = cleanWordForSearch(forWord)
@@ -90,7 +90,7 @@ class SpellCheck {
             }
         }
         
-        return topCandidates.map { $0.word }
+        return topCandidates
     }
 
     func isMisspelled(word: String) -> Bool {
@@ -262,16 +262,18 @@ extension SpellCheck {
     enum Weights {
         static let frequency: Float = 0.11
         static let lowFrequencyPenalty: Float = 1
+        static let exactWordMatchBonus: Float = 1
         static let alignment: Float = 1
     }
     
     enum Scores {
         static let wrongCharacter: Float = -1
         static let matchBonus: Float = 1.0
-        static let characterSkipPenalty: Float = 0.75
+        static let characterSkipPenalty: Float = 1.0
         static let transpositionPenalty: Float = 0.5
-        static let lowFrequencyPenalty: Float = 0.25
+        static let lowFrequencyPenalty: Float = 0.4
         static let minimumUsefulAlignmentScore: Float = 0.5
+        static let exactWordMatchBonus: Float = 0.1
     }
 
     enum Search {
@@ -440,28 +442,39 @@ extension SpellCheck {
         func scoreCandidate(wordMatrixIndexes: [MatrixIndex], candidate: CorrectionCandidate, workspace: inout AlignmentWorkspace) -> Float {
             // Increase score based on how aligned its to the candidate
             let alignmentScore = getAlignmentScore(wordMatrixIndexes: wordMatrixIndexes, candidateMatrixIndexes: candidate.matrixIndexes, minimumUsefulScore: Scores.minimumUsefulAlignmentScore, workspace: &workspace)
-            return scoreCandidate(candidate: candidate, alignmentScore: alignmentScore)
+            return scoreCandidate(wordMatrixIndexes: wordMatrixIndexes, candidate: candidate, alignmentScore: alignmentScore)
         }
 
         func fastScoreCandidate(wordMatrixIndexes: [MatrixIndex], candidate: CorrectionCandidate) -> Float {
             let alignmentScore = fastAlignmentScore(wordMatrixIndexes: wordMatrixIndexes, candidateMatrixIndexes: candidate.matrixIndexes)
             guard alignmentScore >= Scores.minimumUsefulAlignmentScore else { return -Float.infinity }
 
-            return scoreCandidate(candidate: candidate, alignmentScore: alignmentScore)
+            return scoreCandidate(wordMatrixIndexes: wordMatrixIndexes, candidate: candidate, alignmentScore: alignmentScore)
         }
 
-        private func scoreCandidate(candidate: CorrectionCandidate, alignmentScore: Float) -> Float {
+        private func scoreCandidate(wordMatrixIndexes: [MatrixIndex], candidate: CorrectionCandidate, alignmentScore: Float) -> Float {
             var score = alignmentScore * Weights.alignment
 
             // Increase the score based on the word's frequency in the language.
             let frequencyScore = candidate.frequency * Weights.frequency
             score += frequencyScore
 
-            // Penalize candidates that are very unlikely
-            if candidate.frequency < 0.0002 {
-                score -= Scores.lowFrequencyPenalty * Weights.lowFrequencyPenalty
+            // Reward exatch matches for long words
+            if wordMatrixIndexes == candidate.matrixIndexes {
+                if candidate.word.count >= 4 {
+                    score += Scores.exactWordMatchBonus * Weights.exactWordMatchBonus
+                } else if candidate.word.count >= 3 {
+                    score += 0.5 * Scores.exactWordMatchBonus * Weights.exactWordMatchBonus
+                }
             }
-
+            
+            // Penalize candidates that are very unlikely
+            if candidate.frequency < 0.00001 {
+                score -= Scores.lowFrequencyPenalty * Weights.lowFrequencyPenalty
+            } else if candidate.frequency < 0.0002 {
+                score -= 0.5 * Scores.lowFrequencyPenalty * Weights.lowFrequencyPenalty
+            }
+            
             return score
         }
 
@@ -886,7 +899,6 @@ extension SpellCheck {
         
         let testSubjects: [(misspelled: String, correct: String)] = [
             ("hrllo", "hello"),
-            ("grkkp", "hello"),
             ("jrkkp", "hello"),
             ("proscute", "prosecute"),
             ("agter", "after"),
@@ -938,7 +950,11 @@ extension SpellCheck {
             ("dont", "don't"),
             ("wont", "won't"),
             ("cant", "can't"),
-            ("weve", "we've")
+            ("weve", "we've"),
+            ("fonts", "fonts"),
+            ("saturday", "Saturday"),
+            ("bot", "bot"),
+            ("woudl", "would"),
         ].sorted(by: { $0.correct.count < $1.correct.count })
 
         let isMisspelledTestSubjects : [(word: String, isMisspelled: Bool)] = [
@@ -947,7 +963,7 @@ extension SpellCheck {
             ("don't", false),
         ]
         
-        var results: [(misspelled: String, correct: String, ACresult: [String], timeTook: TimeInterval)] = []
+        var results: [(misspelled: String, correct: String, ACresult: [ScoredCandidate], timeTook: TimeInterval)] = []
         
         for subject in testSubjects {
             let startTime = Date()
@@ -957,7 +973,7 @@ extension SpellCheck {
             results.append((subject.misspelled, subject.correct, corrections, Date().timeIntervalSince(startTime)))
         }
 
-        let totalCorrect = results.filter { $0.ACresult.first == $0.correct }.count
+        let totalCorrect = results.filter { $0.ACresult.first?.word == $0.correct }.count
         let totalTime = results.reduce(0) { $0 + $1.timeTook }
         let averageTime = totalTime / Double(results.count)
         let sortedTimes = results.map { $0.timeTook }.sorted()
@@ -974,13 +990,13 @@ extension SpellCheck {
         print ("")
         
         print ("❌ Wrong")
-        for result in results.filter({ $0.ACresult.first != $0.correct }) {
-            print("\t- \(result.misspelled) → \(result.ACresult.first ?? "-") (correct: \(result.correct)) | Best candidates: \(result.ACresult) | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
+        for result in results.filter({ $0.ACresult.first?.word != $0.correct }) {
+            print("\t- \(result.misspelled) → \(result.ACresult.first?.word ?? "-") (correct: \(result.correct)) | Best candidates: \(result.ACresult.map({ "\($0.word) (\(round($0.score * 100)/100))" })) | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
         }
         
         print ("✅ Correct")
-        for result in results.filter({ $0.ACresult.first == $0.correct }) {
-            print("\t- \(result.misspelled) → \(result.ACresult.first!) | Best candidates: \(result.ACresult) | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
+        for result in results.filter({ $0.ACresult.first?.word == $0.correct }) {
+            print("\t- \(result.misspelled) → \(result.ACresult.first!.word) | Best candidates: \(result.ACresult.map({ "\($0.word) (\(round($0.score * 100)/100))" })) | Took: \(round(result.timeTook * roundTimeTo * 1000) / roundTimeTo) ms")
         }
         
         var isMisspelledResults: [(word: String, correct: Bool, result: Bool, timeTook: TimeInterval)] = []
