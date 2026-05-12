@@ -899,6 +899,7 @@ extension SpellCheck {
         
         let testSubjects: [(misspelled: String, correct: String)] = [
             ("hrllo", "hello"),
+            ("i", "I"),
             ("jrkkp", "hello"),
             ("proscute", "prosecute"),
             ("agter", "after"),

@@ -734,7 +734,7 @@ class FinaleKeyboard: UIInputViewController {
         
         var suggestions: [String] = !FinaleKeyboard.isExperimentalAutocorrectOn ? getStandardSpellcheckSuggestions(for: lastWord) : (spellChecker?.suggestions(forWord: lastWord)?.compactMap({ $0.word }) ?? getStandardSpellcheckSuggestions(for: lastWord))
         
-        if suggestions.first?.lowercased() == lastWord.lowercased() {
+        if suggestions.first == lastWord {
             suggestions.removeFirst()
             pickedSuggestionIndex = 0
         } else {
@@ -742,7 +742,7 @@ class FinaleKeyboard: UIInputViewController {
         }
         
         suggestions = suggestions.compactMap { suggestion in
-            if lastWord.lowercased() == suggestion.lowercased() { return nil }
+            if lastWord == suggestion { return nil }
             else if lastWord == lastWord.capitalized { return suggestion.capitalized }
             else if lastWord == lastWord.uppercased() { return suggestion.uppercased() }
             return suggestion
