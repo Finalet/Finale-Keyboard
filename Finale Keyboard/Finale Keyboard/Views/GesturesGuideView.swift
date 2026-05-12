@@ -130,7 +130,7 @@ struct GesturesDetailedView: View {
                                 .aspectRatio(1, contentMode: .fit)
                                 .tag(i)
                             
-                            Text(String(format: Localize.gestureExplanationFormat, currentGesture.swipeGesture.label.firstUppercased, currentGesture.gestureActionLabel.lowercased()))
+                            Text(String(format: Localize.gestureExplanationFormat, currentGesture.swipeGesture.label.firstCapitalized, currentGesture.gestureActionLabel.lowercased()))
                                 .multilineTextAlignment(.center)
                                 .fontWeight(.semibold)
                                 .font(.title2)

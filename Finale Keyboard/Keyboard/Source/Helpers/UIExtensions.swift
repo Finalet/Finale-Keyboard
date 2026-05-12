@@ -34,7 +34,7 @@ extension Dictionary where Value: Equatable {
 }
 
 extension StringProtocol {
-    var firstUppercased: String { prefix(1).uppercased() + dropFirst() }
+    var firstCapitalized: String { prefix(1).uppercased() + dropFirst().lowercased() }
 }
 
 extension Character {

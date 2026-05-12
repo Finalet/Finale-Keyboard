@@ -57,7 +57,7 @@ extension UIApplication: @retroactive UIGestureRecognizerDelegate {
 }
 
 extension StringProtocol {
-    var firstUppercased: String { prefix(1).uppercased() + dropFirst() }
+    var firstCapitalized: String { prefix(1).uppercased() + dropFirst().lowercased() }
 }
 
 extension Color {

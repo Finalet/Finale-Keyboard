@@ -90,7 +90,9 @@ class SpellCheck {
             }
         }
         
-        return topCandidates
+        return topCandidates.map {
+            (word: matchCase(fromWord: forWord, toWord: $0.word), score: $0.score)
+        }
     }
 
     func isMisspelled(word: String) -> Bool {
@@ -100,6 +102,15 @@ class SpellCheck {
         if cleanedWord.isEmpty { return false }
 
         return !validWords.contains(cleanedWord)
+    }
+    
+    private func matchCase (fromWord: String, toWord: String) -> String {
+        if fromWord == fromWord.capitalizedFirst {
+            return toWord.capitalizedFirst
+        } else if fromWord == fromWord.uppercased() {
+            return toWord.uppercased()
+        }
+        return toWord
     }
 
     private func cleanWordForSearch(_ word: String) -> String {
@@ -932,7 +943,6 @@ extension SpellCheck {
             ("thier", "their"),
             ("realy", "really"),
             ("adresss", "address"),
-            ("enviornment", "environment"),
             ("wierdo", "weirdo"),
             ("algorihtm", "algorithm"),
             ("mesage", "message"),
@@ -956,6 +966,9 @@ extension SpellCheck {
             ("saturday", "Saturday"),
             ("bot", "bot"),
             ("woudl", "would"),
+            ("Runnin", "Running"),
+            ("SPELING", "SPELLING"),
+            ("olivia", "Olivia"),
         ].sorted(by: { $0.correct.count < $1.correct.count })
 
         let isMisspelledTestSubjects : [(word: String, isMisspelled: Bool)] = [
@@ -1050,3 +1063,9 @@ extension SpellCheck {
 // Faster / less RAM getAlignmentScore: avg. 1.6ms, total: 80ms.
 // Pass word matrixes into getAlignmentScore: avg. 1.5ms, total: 77ms.
 // Two stage scoring of candidates with fast scorrer and slow scorrer.: avg. 1.2ms, total: 60ms.
+
+
+extension StringProtocol {
+    // Redeclaring this from UIExtensions, becase SpellCheck script needs to be independant to run dictionary compilatino on MacOS during build.
+    fileprivate var capitalizedFirst: String { prefix(1).uppercased() + dropFirst().lowercased() }
+}
