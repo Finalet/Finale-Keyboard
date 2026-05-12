@@ -18,7 +18,6 @@ class SpellCheck {
     private let candidateScorer: CandidateScorer?
 
     init (locale: Locale) {
-        let startTime = Date()
         self.locale = locale
         
         guard let spellCheckData = BinaryReader.shared.loadSpellCheckData(for: locale) else {
@@ -44,8 +43,6 @@ class SpellCheck {
         }
         
         self.candidateScorer = CandidateScorer(keyboardMatrix: keyboardMatrix)
-
-        print("Loaded in \(Date().timeIntervalSince(startTime) * 1000) ms")
     }
 
     func suggestions(forWord: String, nSuggestions: Int = 5) -> [ScoredCandidate]? {
