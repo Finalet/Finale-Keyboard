@@ -69,6 +69,7 @@ class FinaleKeyboard: UIInputViewController {
     static var isSpacebarEnabled = false
     static var isSpacebarAutocorrectOn = false
     static var keyboardHeightMultiplier: CGFloat = 1
+    static var isExperimentalAutocorrectOn = false
     
     static var currentLocale = Locale.en_US
     static var enabledLocales = [Locale.en_US]
@@ -180,6 +181,7 @@ class FinaleKeyboard: UIInputViewController {
         FinaleKeyboard.isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
         FinaleKeyboard.isSpacebarEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isSpacebarEnabled") as? Bool ?? false
         FinaleKeyboard.isSpacebarAutocorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_spacebarAutocorrect") as? Bool ?? false
+        FinaleKeyboard.isExperimentalAutocorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_experimentalAutocorrect") as? Bool ?? false
         FinaleKeyboard.isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
         FinaleKeyboard.showTouchZones = userDefaults?.value(forKey: "FINALE_DEV_APP_showTouchZones") as? Bool ?? false
         FinaleKeyboard.maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? CGFloat ?? 0.6
@@ -730,7 +732,7 @@ class FinaleKeyboard: UIInputViewController {
         
         AppendSuggestionFromDictionary(dict: defaultDictionary, lastWord: lastWord)
         
-        var suggestions: [String] = spellChecker?.suggestions(forWord: lastWord)?.compactMap({ $0.word }) ?? getFallbackSpellCheckSuggestions(for: lastWord)
+        var suggestions: [String] = !FinaleKeyboard.isExperimentalAutocorrectOn ? getStandardSpellcheckSuggestions(for: lastWord) : (spellChecker?.suggestions(forWord: lastWord)?.compactMap({ $0.word }) ?? getStandardSpellcheckSuggestions(for: lastWord))
         
         if suggestions.first?.lowercased() == lastWord.lowercased() {
             suggestions.removeFirst()
@@ -755,7 +757,7 @@ class FinaleKeyboard: UIInputViewController {
         CheckUserDictionary()
     }
     
-    func getFallbackSpellCheckSuggestions (for word: String) -> [String] {
+    func getStandardSpellcheckSuggestions (for word: String) -> [String] {
         let spellChecker = UITextChecker()
         
         let misspelledRange = spellChecker.rangeOfMisspelledWord(in: word.lowercased(), range: NSMakeRange(0, word.count), startingAt: 0, wrap: true, language: FinaleKeyboard.currentLocale.languageCode)

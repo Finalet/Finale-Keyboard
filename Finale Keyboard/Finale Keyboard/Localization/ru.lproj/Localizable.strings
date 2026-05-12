@@ -314,6 +314,9 @@
 "onboarding_welcome_title" = "Добро пожаловать в\nFinale Keyboard";
 
 /* No comment provided by engineer. */
+"preferences_advanced_experimental_autocorrect" = "Экспериментальная автокоррекция";
+
+/* No comment provided by engineer. */
 "preferences_advanced_clean_words_one_use" = "Удалить слова с 1 исп.";
 
 /* No comment provided by engineer. */
@@ -323,7 +326,7 @@
 "preferences_advanced_page_title" = "Продвинутое";
 
 /* No comment provided by engineer. */
-"preferences_advanced_section_header" = "Автообучаемый словарь";
+"preferences_advanced_autolearn_dictionary_header" = "Автообучаемый словарь";
 
 /* No comment provided by engineer. */
 "preferences_advanced_total_words" = "Всего слов";
