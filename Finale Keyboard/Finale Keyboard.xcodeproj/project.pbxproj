@@ -80,7 +80,7 @@
 		86B6EC642F8D466A00828DE0 /* GesturesGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B6EC632F8D466100828DE0 /* GesturesGuideView.swift */; };
 		86C4FD442F8C1A6A0086F12F /* DefaultButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C4FD432F8C1A670086F12F /* DefaultButton.swift */; };
 		86C4FD462F8C3F590086F12F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C4FD452F8C3F570086F12F /* OnboardingView.swift */; };
-		86F3ED162FB3B61000573CBD /* KeyboardHeightView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F3ED152FB3B60D00573CBD /* KeyboardHeightView.swift */; };
+		86F3ED162FB3B61000573CBD /* KeyboardSizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F3ED152FB3B60D00573CBD /* KeyboardSizeView.swift */; };
 		86F96E6D2FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F96E692FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json */; };
 		86F96E6E2FAA7FDC007BF1CA /* spanish-30000-n4-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F96E6A2FAA7FDC007BF1CA /* spanish-30000-n4-probabilities.json */; };
 		86F96E6F2FAA7FDC007BF1CA /* spanish-30000-n1-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F96E672FAA7FDC007BF1CA /* spanish-30000-n1-probabilities.json */; };
@@ -186,7 +186,7 @@
 		86B6EC632F8D466100828DE0 /* GesturesGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GesturesGuideView.swift; sourceTree = "<group>"; };
 		86C4FD432F8C1A670086F12F /* DefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultButton.swift; sourceTree = "<group>"; };
 		86C4FD452F8C3F570086F12F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		86F3ED152FB3B60D00573CBD /* KeyboardHeightView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardHeightView.swift; sourceTree = "<group>"; };
+		86F3ED152FB3B60D00573CBD /* KeyboardSizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSizeView.swift; sourceTree = "<group>"; };
 		86F96E672FAA7FDC007BF1CA /* spanish-30000-n1-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "spanish-30000-n1-probabilities.json"; sourceTree = "<group>"; };
 		86F96E682FAA7FDC007BF1CA /* spanish-30000-n2-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "spanish-30000-n2-probabilities.json"; sourceTree = "<group>"; };
 		86F96E692FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "spanish-30000-n3-probabilities.json"; sourceTree = "<group>"; };
@@ -407,7 +407,7 @@
 		861119EB2F8882CE00F6F7EB /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
-				86F3ED152FB3B60D00573CBD /* KeyboardHeightView.swift */,
+				86F3ED152FB3B60D00573CBD /* KeyboardSizeView.swift */,
 				8610184A2F897D1E007CA8F5 /* SpacebarLootboxView.swift */,
 				861119F02F8883B800F6F7EB /* AdvancedView.swift */,
 				861119EE2F88837B00F6F7EB /* PunctuationView.swift */,
@@ -605,7 +605,7 @@
 				37A0ACF527A8694100578290 /* ContentView.swift in Sources */,
 				86C4FD442F8C1A6A0086F12F /* DefaultButton.swift in Sources */,
 				375D075029EA400B00EA2980 /* Locales.swift in Sources */,
-				86F3ED162FB3B61000573CBD /* KeyboardHeightView.swift in Sources */,
+				86F3ED162FB3B61000573CBD /* KeyboardSizeView.swift in Sources */,
 				863BBCCC2F89C58A00D828B4 /* InAppPurchaseManager.swift in Sources */,
 				861119EF2F88838200F6F7EB /* PunctuationView.swift in Sources */,
 				867CCCFB2FAABDBB002EDD1B /* CoreDataModel.xcdatamodeld in Sources */,

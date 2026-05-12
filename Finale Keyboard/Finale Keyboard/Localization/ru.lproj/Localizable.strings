@@ -227,6 +227,9 @@
 "misc_loading" = "Загрузка";
 
 /* No comment provided by engineer. */
+"misc_other" = "Другое";
+
+/* No comment provided by engineer. */
 "status_loaded" = "Загружен";
 
 /* No comment provided by engineer. */
@@ -375,6 +378,24 @@
 
 /* No comment provided by engineer. */
 "preferences_gestures_haptic" = "Тактильная отдача для жестов";
+
+/* No comment provided by engineer. */
+"preferences_keyboard_size_huge" = "Огромная";
+
+/* No comment provided by engineer. */
+"preferences_keyboard_size_large" = "Большая";
+
+/* No comment provided by engineer. */
+"preferences_keyboard_size_normal" = "Обычная";
+
+/* No comment provided by engineer. */
+"preferences_keyboard_size_page_title" = "Размер клавиатуры";
+
+/* No comment provided by engineer. */
+"preferences_keyboard_size_small" = "Маленькая";
+
+/* No comment provided by engineer. */
+"preferences_keyboard_size_tiny" = "Крошечная";
 
 /* No comment provided by engineer. */
 "preferences_punctuation_fifth" = "Пятый";

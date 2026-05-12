@@ -53,6 +53,7 @@ struct Localization {
         static var Default = NSLocalizedString("misc_default", value: "Default", comment: "")
         static var loading = NSLocalizedString("misc_loading", value: "Loading", comment: "")
         static var deleting = NSLocalizedString("misc_deleting", value: "Deleting", comment: "")
+        static var other = NSLocalizedString("misc_other", value: "Other", comment: "")
     }
     
     struct Status {
@@ -102,6 +103,15 @@ struct Localization {
         static var gesturesHapticFeedback = NSLocalizedString("preferences_gestures_haptic", value: "Gestures Haptic Feedback", comment: "")
         static var spacebar = NSLocalizedString("preferences_spacebar", value: "Spacebar", comment: "")
         static var spacebarAutocorrect = NSLocalizedString("preferences_spacebar_autocorrect", value: "Spacebar Autocorrect", comment: "")
+        
+        struct KeyboardSize {
+            static var pageTitle = NSLocalizedString("preferences_keyboard_size_page_title", value: "Keyboard size", comment: "")
+            static var tiny = NSLocalizedString("preferences_keyboard_size_tiny", value: "Tiny", comment: "")
+            static var small = NSLocalizedString("preferences_keyboard_size_small", value: "Small", comment: "")
+            static var normal = NSLocalizedString("preferences_keyboard_size_normal", value: "Normal", comment: "")
+            static var large = NSLocalizedString("preferences_keyboard_size_large", value: "Large", comment: "")
+            static var huge = NSLocalizedString("preferences_keyboard_size_huge", value: "Huge", comment: "")
+        }
         
         struct Punctuation {
             static var pageTitle = NSLocalizedString("preferences_punctuation_page_title", value: "Quick Punctuation", comment: "")

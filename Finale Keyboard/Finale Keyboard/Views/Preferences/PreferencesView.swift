@@ -32,9 +32,9 @@ struct PreferencesView: View {
             }
             SpacebarSection()
             Section {
-                ListNavigationLink(destination: KeyboardHeightView()) {
+                ListNavigationLink(destination: KeyboardSizeView()) {
                     Label(title: {
-                        Text("Keyboard height")
+                        Text(Localize.KeyboardSize.pageTitle)
                     }, icon: {
                         Image(systemName: "rectangle.expand.vertical")
                     })

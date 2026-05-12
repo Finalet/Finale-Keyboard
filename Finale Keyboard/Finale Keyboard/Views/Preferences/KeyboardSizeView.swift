@@ -1,5 +1,5 @@
 //
-//  KeyboardHeightView.swift
+//  KeyboardSizeView.swift
 //  Finale Keyboard
 //
 //  Created by Grant Oganyan on 5/12/26.
@@ -8,10 +8,12 @@
 import SwiftUI
 import Foundation
 
-struct KeyboardHeightView: View {
+struct KeyboardSizeView: View {
     
     @State var sliderValue: CGFloat = 0
     @UserDefaultState("FINALE_DEV_APP_keyboardHeightMultiplier", 1.0) var keyboardHeightMultiplier: CGFloat
+    
+    typealias Localize = Localization.PreferencesScreen.KeyboardSize
     
     let min: CGFloat = 0.8
     let max: CGFloat = 1.2
@@ -69,15 +71,15 @@ struct KeyboardHeightView: View {
             let index: Int = steps.firstIndex(of: keyboardHeightMultiplier) ?? Int(floor(Float(nSteps) / 2.0))
             sliderValue = CGFloat(index)
         }
-        .navigationTitle("Keyboard height")
+        .navigationTitle(Localize.pageTitle)
     }
      
     func labelForStep(_ step: CGFloat) -> String {
-        let names = ["Tiny", "Small", "Normal", "Large", "Huge"]
+        let names = [Localize.tiny, Localize.small, Localize.normal, Localize.large, Localize.huge]
         if let index = steps.firstIndex(of: step), names.indices.contains(index) {
             return names[index]
         }
-        return "Other"
+        return Localization.Misc.other
     }
     
     struct Keyboard: View {
@@ -163,6 +165,6 @@ struct KeyboardHeightView: View {
 
 #Preview() {
     NavigationStack {
-        KeyboardHeightView()
+        KeyboardSizeView()
     }
 }
