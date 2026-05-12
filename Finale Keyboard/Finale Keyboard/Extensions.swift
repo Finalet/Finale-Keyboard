@@ -75,3 +75,10 @@ extension Color {
         return Color(red: red, green: green, blue: blue, opacity: alpha)
     }
 }
+
+extension BinaryFloatingPoint {
+    func roundTo(_ places: Int) -> Self {
+        let factor = Self(NSDecimalNumber(decimal: pow(10, places)).doubleValue)
+        return (self * factor).rounded() / factor
+    }
+}

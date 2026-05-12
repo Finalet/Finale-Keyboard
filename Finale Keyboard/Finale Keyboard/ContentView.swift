@@ -15,15 +15,13 @@ struct ContentView: View {
     @StateObject private var iapManager = InAppPurchasesManager()
     @StateObject private var keyboardState = KeyboardEnabledState(bundleId: "com.Grant151.Finale-Keyboard.Keyboard")
     
-    @State var testText = ""
-    
     typealias Localize = Localization.HomeScreen
     
     var body: some View {
         NavigationView {
             List {
                 Section(header: Text(Localize.inputFieldTitle)) {
-                    TextField(Localize.inputFieldPlaceholder, text: $testText)
+                    TestInputField()
                 }
                 Section(header: Text(Localize.preferencesTitle)) {
                     ListNavigationLink(destination: FavoriteEmojiView()) {
@@ -120,6 +118,14 @@ struct ContentView: View {
     }
     func ContactDeveloper() {
         if let url = URL(string: "mailto:grant@finaletodo.com") { UIApplication.shared.open(url) }
+    }
+}
+
+struct TestInputField: View {
+    @State private var text: String = ""
+    
+    var body: some View {
+        TextField(Localization.HomeScreen.inputFieldPlaceholder, text: $text)
     }
 }
 

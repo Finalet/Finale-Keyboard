@@ -38,7 +38,7 @@ class FinaleKeyboard: UIInputViewController {
     
     static var instance: FinaleKeyboard!
     
-    static var rowHeight: CGFloat { return (UIScreen.main.bounds.width < UIScreen.main.bounds.height ? 60 : 40) * (FinaleKeyboard.isSpacebarEnabled ? 0.9 : 1) }
+    static var rowHeight: CGFloat { return (UIScreen.main.bounds.width < UIScreen.main.bounds.height ? 60 : 40) * (FinaleKeyboard.isSpacebarEnabled ? 0.9 : 1) * keyboardHeightMultiplier }
     static var rowsNumber: CGFloat { return FinaleKeyboard.isSpacebarEnabled ? 4 : 3 }
     static let emojiRowHeight = 38.0
     
@@ -68,6 +68,7 @@ class FinaleKeyboard: UIInputViewController {
     static var isGesturesHapticEnabled = true
     static var isSpacebarEnabled = false
     static var isSpacebarAutocorrectOn = false
+    static var keyboardHeightMultiplier: CGFloat = 1
     
     static var currentLocale = Locale.en_US
     static var enabledLocales = [Locale.en_US]
@@ -183,6 +184,7 @@ class FinaleKeyboard: UIInputViewController {
         FinaleKeyboard.maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? CGFloat ?? 0.6
         FinaleKeyboard.dynamicTapZoneProbabilityMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier") as? CGFloat ?? 1.5
         FinaleKeyboard.dynamicKeyHighlighting = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicKeyHighlighting") as? Bool ?? false
+        FinaleKeyboard.keyboardHeightMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_keyboardHeightMultiplier") as? CGFloat ?? 1.0
         
         punctuationArray = userDefaults?.value(forKey: "FINALE_DEV_APP_punctuationArray") as? [String] ?? Defaults.punctuation
         shortcuts = userDefaults?.value(forKey: "FINALE_DEV_APP_shortcuts") as? [String : String] ?? Defaults.shortcuts
