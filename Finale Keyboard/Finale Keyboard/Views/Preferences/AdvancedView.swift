@@ -12,7 +12,7 @@ struct AdvancedView: View {
     typealias Localize = Localization.PreferencesScreen.Advanced
     
     @UserDefaultState("FINALE_DEV_APP_learningWordsDictionary", [String:Int]()) var dictionary: [String:Int]
-    let suiteName = "group.finale-keyboard-cache"
+    @UserDefaultState("FINALE_DEV_APP_isExperimentalAutocorrectOn", false) var isExperimentalAutocorrectOn: Bool
     
     var wordsOneTimeUse: Int { dictionary.count(where: { $0.value == 1 }) }
     var wordsTwoTimeUse: Int { dictionary.count(where: { $0.value == 2 }) }
@@ -20,7 +20,10 @@ struct AdvancedView: View {
     
     var body: some View {
         Form {
-            Section (header: Text(Localize.sectionHeader), footer: Text("\(Localize.totalWords): \(totalWords)")) {
+            Section() {
+                Toggle(Localize.experimentalAutocorrect, isOn: $isExperimentalAutocorrectOn)
+            }
+            Section (header: Text(Localize.autolearnDictionaryHeader), footer: Text("\(Localize.totalWords): \(totalWords)")) {
                 HStack {
                     Text(Localize.wordsOneUse)
                     Spacer()
@@ -55,3 +58,6 @@ struct AdvancedView: View {
     }
 }
 
+#Preview {
+    AdvancedView()
+}

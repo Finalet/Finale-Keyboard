@@ -145,7 +145,8 @@ struct Localization {
         struct Advanced {
             static var pageTitle = NSLocalizedString("preferences_advanced_page_title", value: "Advanced", comment: "")
             
-            static var sectionHeader = NSLocalizedString("preferences_advanced_section_header", value: "Auto-learn dictionary", comment: "")
+            static var experimentalAutocorrect = NSLocalizedString("preferences_advanced_experimental_autocorrect", value: "Experimental autocorrect", comment: "")
+            static var autolearnDictionaryHeader = NSLocalizedString("preferences_advanced_autolearn_dictionary_header", value: "Auto-learn dictionary", comment: "")
             static var totalWords = NSLocalizedString("preferences_advanced_total_words", value: "Total words", comment: "")
             static var wordsOneUse = NSLocalizedString("preferences_advanced_words_one_use", value: "Words 1 use", comment: "")
             static var wordsTwoUse = NSLocalizedString("preferences_advanced_words_two_use", value: "Words 2 use", comment: "")

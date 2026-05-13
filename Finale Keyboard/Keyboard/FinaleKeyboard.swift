@@ -41,6 +41,7 @@ class FinaleKeyboard: UIInputViewController {
     static var rowHeight: CGFloat { return (UIScreen.main.bounds.width < UIScreen.main.bounds.height ? 60 : 40) * (FinaleKeyboard.isSpacebarEnabled ? 0.9 : 1) * keyboardHeightMultiplier }
     static var rowsNumber: CGFloat { return FinaleKeyboard.isSpacebarEnabled ? 4 : 3 }
     static let emojiRowHeight = 38.0
+    static var keyboardHeightMultiplier: CGFloat = 1.0
     
     var emojiSearchRow: EmojiSearchRow?
     var keysView = UIView()
@@ -68,7 +69,7 @@ class FinaleKeyboard: UIInputViewController {
     static var isGesturesHapticEnabled = true
     static var isSpacebarEnabled = false
     static var isSpacebarAutocorrectOn = false
-    static var keyboardHeightMultiplier: CGFloat = 1
+    static var isExperimentalAutocorrectOn = false
     
     static var currentLocale = Locale.en_US
     static var enabledLocales = [Locale.en_US]
@@ -115,6 +116,7 @@ class FinaleKeyboard: UIInputViewController {
     let maxNgram = 5
     
     let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
+    var spellChecker: SpellCheck?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -127,7 +129,7 @@ class FinaleKeyboard: UIInputViewController {
         InitSuggestionsArray()
         InitDictionary()
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         SaveLearningWordsDictionary()
@@ -140,7 +142,11 @@ class FinaleKeyboard: UIInputViewController {
             }
             
             let data = (try? Data(contentsOf: Bundle.main.url(forResource: "DefaultDictionary", withExtension: "json")!))!
-            let entries = try! JSONDecoder().decode([DictionaryItem].self, from: data)
+            var entries = try! JSONDecoder().decode([DictionaryItem].self, from: data)
+            
+            if FinaleKeyboard.isExperimentalAutocorrectOn {
+                entries = entries.suffix(4)
+            }
             
             for i in entries {
                 self.defaultDictionary[i.input.lowercased()] = i.suggestions
@@ -179,6 +185,7 @@ class FinaleKeyboard: UIInputViewController {
         FinaleKeyboard.isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
         FinaleKeyboard.isSpacebarEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isSpacebarEnabled") as? Bool ?? false
         FinaleKeyboard.isSpacebarAutocorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_spacebarAutocorrect") as? Bool ?? false
+        FinaleKeyboard.isExperimentalAutocorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_isExperimentalAutocorrectOn") as? Bool ?? false
         FinaleKeyboard.isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
         FinaleKeyboard.showTouchZones = userDefaults?.value(forKey: "FINALE_DEV_APP_showTouchZones") as? Bool ?? false
         FinaleKeyboard.maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? CGFloat ?? 0.6
@@ -188,11 +195,13 @@ class FinaleKeyboard: UIInputViewController {
         
         punctuationArray = userDefaults?.value(forKey: "FINALE_DEV_APP_punctuationArray") as? [String] ?? Defaults.punctuation
         shortcuts = userDefaults?.value(forKey: "FINALE_DEV_APP_shortcuts") as? [String : String] ?? Defaults.shortcuts
-        FinaleKeyboard.currentLocale = Locale(rawValue: UserDefaults.standard.integer(forKey: "FINALE_DEV_APP_CurrentLocale")) ?? .en_US
+        var currentLocale = Locale(rawValue: UserDefaults.standard.integer(forKey: "FINALE_DEV_APP_CurrentLocale")) ?? .en_US
         
-        if !FinaleKeyboard.enabledLocales.contains(FinaleKeyboard.currentLocale) {
-            FinaleKeyboard.currentLocale = FinaleKeyboard.enabledLocales[0]
+        if !FinaleKeyboard.enabledLocales.contains(currentLocale) {
+            currentLocale = FinaleKeyboard.enabledLocales[0]
         }
+        
+        SetLocale(currentLocale)
     }
     
     func InitSuggestionsArray () {
@@ -581,6 +590,10 @@ class FinaleKeyboard: UIInputViewController {
         ResetSuggestions()
         CheckAutoCapitalization()
         ResetDynamicTouchZones()
+        
+        if [ViewType.Symbols, ViewType.ExtraSymbols].contains(FinaleKeyboard.currentViewType) {
+            ToggleSymbolsView()
+        }
     }
     func ReturnAction () {
         self.textDocumentProxy.insertText("\n")
@@ -603,7 +616,6 @@ class FinaleKeyboard: UIInputViewController {
             ResetSuggestionsLabels()
             if (FinaleKeyboard.isAutoCorrectOn) {
                 GenerateAutocorrections()
-                CheckUserDictionary()
                 ReplaceWithSuggestion(ignoreSpace: false, instant: true)
             } else {
                 self.textDocumentProxy.insertText(" ")
@@ -697,6 +709,7 @@ class FinaleKeyboard: UIInputViewController {
     func LearnWord (word: String, showNotification: Bool = true) {
         userDictionary.append(word)
         SaveUserDictionary()
+        ReloadSpellChecker()
         if showNotification { ShowNotification(text: "Learned \"" + word + "\"") }
         if learningWordsDictionary[word] != nil { learningWordsDictionary.removeValue(forKey: word) }
     }
@@ -705,6 +718,7 @@ class FinaleKeyboard: UIInputViewController {
             userDictionary.remove(at: userDictionary.firstIndex(of: word)!)
         }
         SaveUserDictionary()
+        ReloadSpellChecker()
         if showNotification { ShowNotification(text: "Forgot \"" + word + "\"") }
     }
     
@@ -712,11 +726,7 @@ class FinaleKeyboard: UIInputViewController {
         if (!self.textDocumentProxy.hasText) { return }
         
         let lastWord = getLastWord()
-        let isCaps = lastWord.uppercased() == lastWord
         
-        let checker = UITextChecker()
-        let misspelledRange = checker.rangeOfMisspelledWord(in: !isCaps ? lastWord : lastWord.lowercased(), range: NSMakeRange(0, lastWord.count), startingAt: 0, wrap: true, language: "\(FinaleKeyboard.currentLocale)")
-       
         if (suggestionsArrays[nextSuggestionArray].suggestions.count != 0) {
             suggestionsArrays[nextSuggestionArray].suggestions.removeAll()
             suggestionsArrays[nextSuggestionArray].lastPickedSuggestionIndex = 1
@@ -728,30 +738,59 @@ class FinaleKeyboard: UIInputViewController {
         
         AppendSuggestionFromDictionary(dict: defaultDictionary, lastWord: lastWord)
         
-        if misspelledRange.location != NSNotFound {
-            suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: checker.guesses(forWordRange: misspelledRange, in: lastWord, language: "\(FinaleKeyboard.currentLocale)") ?? [String]())
-            while suggestionsArrays[nextSuggestionArray].suggestions.count > maxSuggestions { suggestionsArrays[nextSuggestionArray].suggestions.removeLast() }
+        var suggestions: [String] = !FinaleKeyboard.isExperimentalAutocorrectOn ? getStandardSpellcheckSuggestions(for: lastWord) : (spellChecker?.suggestions(forWord: lastWord)?.compactMap({ $0.word }) ?? getStandardSpellcheckSuggestions(for: lastWord))
+        
+        if lastWord.contains(where: \.isNumber) {
+            pickedSuggestionIndex = 0
+        } else if suggestions.contains(lastWord) && defaultDictionary[lastWord.lowercased()] == nil { // defaultDictionary[lastWord.lowercased()] == nil is a patch for old autocorrect. Once we move away from it, we should remove this.
+            suggestions.removeAll(where: { $0 == lastWord })
+            pickedSuggestionIndex = 0
+        } else {
+            pickedSuggestionIndex = 1
         }
         
+        suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: suggestions)
+        while suggestionsArrays[nextSuggestionArray].suggestions.count > maxSuggestions { suggestionsArrays[nextSuggestionArray].suggestions.removeLast() }
+        
         nextSuggestionArray = (nextSuggestionArray+1) % maxSuggestionHistory
+        
+        // This is redundant when using our new SpellCheck. However, when its not used, we still need to enforce user dictionary
+        CheckUserDictionary()
+    }
+    
+    func getStandardSpellcheckSuggestions (for word: String) -> [String] {
+        let spellChecker = UITextChecker()
+        
+        let misspelledRange = spellChecker.rangeOfMisspelledWord(in: word.lowercased(), range: NSMakeRange(0, word.count), startingAt: 0, wrap: true, language: FinaleKeyboard.currentLocale.languageCode)
+        var suggestions = spellChecker.guesses(forWordRange: NSRange(location: 0, length: word.count), in: word, language: FinaleKeyboard.currentLocale.languageCode) ?? []
+        
+        if misspelledRange.location == NSNotFound { suggestions.insert(word, at: 0) }
+        return suggestions.map { matchCase(fromWord: word, toWord: $0) }
+    }
+    func matchCase (fromWord: String, toWord: String) -> String {
+        // If the correct spelling is uppercased, do not change it (i.e. USSR should always be USSR).
+        if toWord == toWord.uppercased() {
+            return toWord
+        }
+        
+        if fromWord == fromWord.firstCapitalized {
+            return toWord.firstCapitalized
+        } else if fromWord == fromWord.uppercased() {
+            return toWord.uppercased()
+        }
+        return toWord
     }
     
     func AppendSuggestionFromDictionary (dict: Dictionary<String, [String]>, lastWord: String) {
         if !FinaleKeyboard.isAutoCorrectGrammarOn { return }
         
         if (dict[lastWord.lowercased()] != nil) {
-            if lastWord.first!.isUppercase {
-                for i in dict[lastWord.lowercased()]! {
-                    suggestionsArrays[nextSuggestionArray].suggestions.append(i.firstUppercased)
-                }
-            } else {
-                suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: dict[lastWord.lowercased()]!)
-            }
+            let suggestions = dict[lastWord.lowercased()]!.map { matchCase(fromWord: lastWord, toWord: $0) }
+            suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: suggestions)
         }
     }
     
     func CheckUserDictionary () {
-        pickedSuggestionIndex = 1
         let x = getCorrectSuggestionArrayIndex()
         if x < 0 { return }
         
@@ -769,16 +808,18 @@ class FinaleKeyboard: UIInputViewController {
         if ignoreSpace{ self.textDocumentProxy.deleteBackward() }
         
         if (suggestionsArrays[x].suggestions.count > 1) {
-            var originalInput = ""
             while !isAtWordStart() {
                 if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.last == nil) { break }
-                originalInput.insert(self.textDocumentProxy.documentContextBeforeInput?.last ?? Character(""), at: originalInput.startIndex)
                 self.textDocumentProxy.deleteBackward()
             }
-            let isCaps = originalInput.uppercased() == originalInput
-            self.textDocumentProxy.insertText(!isCaps ? suggestionsArrays[x].suggestions[pickedSuggestionIndex] : suggestionsArrays[x].suggestions[pickedSuggestionIndex].uppercased())
-            if tryLearnNewWord { TryLearnNewWord(word: suggestionsArrays[x].suggestions[pickedSuggestionIndex].lowercased()) }
-        } else { pickedSuggestionIndex = 0 }
+            
+            let suggestion = suggestionsArrays[x].suggestions[pickedSuggestionIndex]
+            self.textDocumentProxy.insertText(suggestion)
+            
+            if tryLearnNewWord { TryLearnNewWord(word: suggestion.lowercased()) }
+        } else {
+            pickedSuggestionIndex = 0
+        }
         
         self.textDocumentProxy.insertText(" ")
         
@@ -1157,13 +1198,35 @@ class FinaleKeyboard: UIInputViewController {
     func ToggleLocale (backwards: Bool = false) {
         var index = ((FinaleKeyboard.enabledLocales.firstIndex(of: FinaleKeyboard.currentLocale) ?? 0) + (backwards ? -1 : 1)) % FinaleKeyboard.enabledLocales.count
         if index < 0 { index += FinaleKeyboard.enabledLocales.count }
-        FinaleKeyboard.currentLocale = FinaleKeyboard.enabledLocales[index]
+        SetLocale(FinaleKeyboard.enabledLocales[index])
         
         BuildKeyboardView(viewType: .Characters, updateViewType: FinaleKeyboard.currentViewType != .SearchEmoji)
         ResetSuggestions()
         
         UserDefaults.standard.set(FinaleKeyboard.currentLocale.rawValue, forKey: "FINALE_DEV_APP_CurrentLocale")
     }
+    
+    func SetLocale (_ locale: Locale) {
+        FinaleKeyboard.currentLocale = locale
+        ReloadSpellChecker(clearCurrent: true)
+    }
+
+    func ReloadSpellChecker(clearCurrent: Bool = false) {
+        guard FinaleKeyboard.isExperimentalAutocorrectOn else { return }
+        
+        let locale = FinaleKeyboard.currentLocale
+        if clearCurrent { self.spellChecker = nil }
+
+        DispatchQueue.global(qos: .userInitiated).async {
+            let newSpellCheck = SpellCheck(locale: locale)
+            
+            DispatchQueue.main.async {
+                guard locale == FinaleKeyboard.currentLocale else { return }
+                self.spellChecker = newSpellCheck
+            }
+        }
+    }
+    
     func ToggleSymbolsView () {
         if FinaleKeyboard.currentViewType == .Characters { BuildKeyboardView(viewType: .Symbols) }
         else if FinaleKeyboard.currentViewType == .Symbols || FinaleKeyboard.currentViewType == .ExtraSymbols { BuildKeyboardView(viewType: .Characters) }

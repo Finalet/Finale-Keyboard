@@ -65,6 +65,7 @@
 		861119EF2F88838200F6F7EB /* PunctuationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861119EE2F88837B00F6F7EB /* PunctuationView.swift */; };
 		861119F12F8883BA00F6F7EB /* AdvancedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861119F02F8883B800F6F7EB /* AdvancedView.swift */; };
 		861119F32F88872200F6F7EB /* SpacebarPurchaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861119F22F88871200F6F7EB /* SpacebarPurchaseView.swift */; };
+		86267BB02FB01EB600F27B79 /* BinaryReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86267BAF2FB01EB300F27B79 /* BinaryReader.swift */; };
 		863606252F8EC0B6005C1106 /* ToolbarInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863606242F8EC0B2005C1106 /* ToolbarInputField.swift */; };
 		863AF0DE2F8B46F600FA036E /* ReturnButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863AF0DD2F8B46F400FA036E /* ReturnButton.swift */; };
 		863BBCCA2F89C4BC00D828B4 /* StoreKit.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */; };
@@ -80,6 +81,7 @@
 		86B6EC642F8D466A00828DE0 /* GesturesGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B6EC632F8D466100828DE0 /* GesturesGuideView.swift */; };
 		86C4FD442F8C1A6A0086F12F /* DefaultButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C4FD432F8C1A670086F12F /* DefaultButton.swift */; };
 		86C4FD462F8C3F590086F12F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C4FD452F8C3F570086F12F /* OnboardingView.swift */; };
+		86CEFBA32FACEA8E00BA5904 /* SpellCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CEFBA22FACEA8C00BA5904 /* SpellCheck.swift */; };
 		86F3ED162FB3B61000573CBD /* KeyboardSizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F3ED152FB3B60D00573CBD /* KeyboardSizeView.swift */; };
 		86F96E6D2FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F96E692FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json */; };
 		86F96E6E2FAA7FDC007BF1CA /* spanish-30000-n4-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F96E6A2FAA7FDC007BF1CA /* spanish-30000-n4-probabilities.json */; };
@@ -172,6 +174,10 @@
 		861119EE2F88837B00F6F7EB /* PunctuationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PunctuationView.swift; sourceTree = "<group>"; };
 		861119F02F8883B800F6F7EB /* AdvancedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdvancedView.swift; sourceTree = "<group>"; };
 		861119F22F88871200F6F7EB /* SpacebarPurchaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacebarPurchaseView.swift; sourceTree = "<group>"; };
+		86267BA92FB00E8400F27B79 /* BinaryCompiler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryCompiler.swift; sourceTree = "<group>"; };
+		86267BAF2FB01EB300F27B79 /* BinaryReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryReader.swift; sourceTree = "<group>"; };
+		862E8F022FB414BF00B9656B /* english.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = english.json; sourceTree = "<group>"; };
+		862E8F032FB414BF00B9656B /* russian.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = russian.json; sourceTree = "<group>"; };
 		863606242F8EC0B2005C1106 /* ToolbarInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarInputField.swift; sourceTree = "<group>"; };
 		863AF0DD2F8B46F400FA036E /* ReturnButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnButton.swift; sourceTree = "<group>"; };
 		863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKit.storekit; sourceTree = "<group>"; };
@@ -186,6 +192,7 @@
 		86B6EC632F8D466100828DE0 /* GesturesGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GesturesGuideView.swift; sourceTree = "<group>"; };
 		86C4FD432F8C1A670086F12F /* DefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultButton.swift; sourceTree = "<group>"; };
 		86C4FD452F8C3F570086F12F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		86CEFBA22FACEA8C00BA5904 /* SpellCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellCheck.swift; sourceTree = "<group>"; };
 		86F3ED152FB3B60D00573CBD /* KeyboardSizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSizeView.swift; sourceTree = "<group>"; };
 		86F96E672FAA7FDC007BF1CA /* spanish-30000-n1-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "spanish-30000-n1-probabilities.json"; sourceTree = "<group>"; };
 		86F96E682FAA7FDC007BF1CA /* spanish-30000-n2-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "spanish-30000-n2-probabilities.json"; sourceTree = "<group>"; };
@@ -240,6 +247,7 @@
 		3791F23329E77F22005F39B4 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				86CEFBA12FACEA7A00BA5904 /* Spell Check */,
 				3791F23529E77F7B005F39B4 /* Helpers */,
 				3791F23429E77F70005F39B4 /* Elements */,
 				370B056928B3F0EF0062000A /* Defaults.swift */,
@@ -439,6 +447,26 @@
 			path = Components;
 			sourceTree = "<group>";
 		};
+		86CEFBA12FACEA7A00BA5904 /* Spell Check */ = {
+			isa = PBXGroup;
+			children = (
+				86CEFBA42FACEA9900BA5904 /* Dictionaries */,
+				86267BA92FB00E8400F27B79 /* BinaryCompiler.swift */,
+				86267BAF2FB01EB300F27B79 /* BinaryReader.swift */,
+				86CEFBA22FACEA8C00BA5904 /* SpellCheck.swift */,
+			);
+			path = "Spell Check";
+			sourceTree = "<group>";
+		};
+		86CEFBA42FACEA9900BA5904 /* Dictionaries */ = {
+			isa = PBXGroup;
+			children = (
+				862E8F022FB414BF00B9656B /* english.json */,
+				862E8F032FB414BF00B9656B /* russian.json */,
+			);
+			path = Dictionaries;
+			sourceTree = "<group>";
+		};
 		86F96E6C2FAA7FDC007BF1CA /* Spanish */ = {
 			isa = PBXGroup;
 			children = (
@@ -490,6 +518,7 @@
 				37A0AD0027A869BA00578290 /* Sources */,
 				37A0AD0127A869BA00578290 /* Frameworks */,
 				37A0AD0227A869BA00578290 /* Resources */,
+				86E4A2AE2FB0D0EF00CF4603 /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -589,6 +618,35 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		86E4A2AE2FB0D0EF00CF4603 /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Keyboard/Source/Spell Check/BinaryCompiler.swift",
+				"$(SRCROOT)/Keyboard/Source/Spell Check/BinaryReader.swift",
+				"$(SRCROOT)/Keyboard/Source/Spell Check/SpellCheck.swift",
+				"$(SRCROOT)/Keyboard/Source/Locales.swift",
+				"$(SRCROOT)/Keyboard/Source/Spell Check/Dictionaries/english.json",
+				"$(SRCROOT)/Keyboard/Source/Spell Check/Dictionaries/russian.json",
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/en_US.fscdict",
+				"$(TARGET_BUILD_DIR)/$(UNLOCALIZED_RESOURCES_FOLDER_PATH)/ru_RU.fscdict",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\n\nCOMPILER=\"$DERIVED_FILE_DIR/BinaryCompiler\"\nOUTPUT_DIR=\"$TARGET_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\"\nDICTIONARY_DIR=\"$SRCROOT/Keyboard/Source/Spell Check/Dictionaries\"\nMACOS_SDK=\"$(xcrun --sdk macosx --show-sdk-path)\"\n\nxcrun --sdk macosx swiftc \\\n  -sdk \"$MACOS_SDK\" \\\n  \"$SRCROOT/Keyboard/Source/Spell Check/BinaryCompiler.swift\" \\\n  \"$SRCROOT/Keyboard/Source/Spell Check/BinaryReader.swift\" \\\n  \"$SRCROOT/Keyboard/Source/Spell Check/SpellCheck.swift\" \\\n  \"$SRCROOT/Keyboard/Source/Locales.swift\" \\\n  -o \"$COMPILER\"\n\nmkdir -p \"$OUTPUT_DIR\"\n\n\"$COMPILER\" \\\n  --output-dir \"$OUTPUT_DIR\" \\\n  --dictionary-dir \"$DICTIONARY_DIR\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		37A0ACEB27A8694100578290 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -643,12 +701,14 @@
 				37D686752B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift in Sources */,
 				37A0AD0727A869BA00578290 /* FinaleKeyboard.swift in Sources */,
 				37991F3229E9964400900BC9 /* FunctionButton.swift in Sources */,
+				86267BB02FB01EB600F27B79 /* BinaryReader.swift in Sources */,
 				375A62CF29E8E80F007E6065 /* PageControl.swift in Sources */,
 				867CCCFA2FAABDBB002EDD1B /* CoreDataModel.xcdatamodeld in Sources */,
 				375A62D129E8F3E4007E6065 /* EmojiSearchRow.swift in Sources */,
 				3720638827AB2CAF00964120 /* Locales.swift in Sources */,
 				863AF0DE2F8B46F600FA036E /* ReturnButton.swift in Sources */,
 				379865362851176B00A66716 /* HapticFeedback.swift in Sources */,
+				86CEFBA32FACEA8E00BA5904 /* SpellCheck.swift in Sources */,
 				37178A832B4DC50600748DD0 /* Ngrams.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -811,7 +871,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 52;
+				CURRENT_PROJECT_VERSION = 53;
 				DEVELOPMENT_ASSET_PATHS = "\"Finale Keyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = AYPPAXMRMG;
 				ENABLE_PREVIEWS = YES;
@@ -828,7 +888,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Grant151.Finale-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -850,7 +910,7 @@
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_ENTITLEMENTS = "Finale Keyboard/Finale Keyboard.entitlements";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 52;
+				CURRENT_PROJECT_VERSION = 53;
 				DEVELOPMENT_ASSET_PATHS = "\"Finale Keyboard/Preview Content\"";
 				DEVELOPMENT_TEAM = AYPPAXMRMG;
 				ENABLE_PREVIEWS = YES;
@@ -867,7 +927,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 2.1.0;
+				MARKETING_VERSION = 2.2.0;
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.Grant151.Finale-Keyboard";
 				PRODUCT_NAME = "$(TARGET_NAME)";

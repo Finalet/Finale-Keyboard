@@ -46,6 +46,10 @@ enum Locale: Int, CaseIterable {
         case .de_DE: return ["y", "x", "c", "v", "b", "n", "m"]
         }
     }
+    
+    var alphabet: [Character] {
+        return (topRow + middleRow + bottomRow).map { Character($0) }
+    }
 }
 
 class Symbols {

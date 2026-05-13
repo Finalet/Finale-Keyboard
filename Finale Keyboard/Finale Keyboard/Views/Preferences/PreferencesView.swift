@@ -83,7 +83,7 @@ struct SpacebarSection: View {
     
     var body: some View {
         Section {
-            Toggle(isOn: $isSpacebarEnabled.animation()) {
+            Toggle(isOn: iapManager.isSpacebarUnlocked ? $isSpacebarEnabled.animation() : $isSpacebarEnabled) {
                 Text(Localize.spacebar)
                     .offset(textOffset)
                     .scaleEffect(textScale)
