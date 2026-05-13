@@ -41,6 +41,7 @@ class FinaleKeyboard: UIInputViewController {
     static var rowHeight: CGFloat { return (UIScreen.main.bounds.width < UIScreen.main.bounds.height ? 60 : 40) * (FinaleKeyboard.isSpacebarEnabled ? 0.9 : 1) * keyboardHeightMultiplier }
     static var rowsNumber: CGFloat { return FinaleKeyboard.isSpacebarEnabled ? 4 : 3 }
     static let emojiRowHeight = 38.0
+    static var keyboardHeightMultiplier: CGFloat = 1.0
     
     var emojiSearchRow: EmojiSearchRow?
     var keysView = UIView()
@@ -68,7 +69,6 @@ class FinaleKeyboard: UIInputViewController {
     static var isGesturesHapticEnabled = true
     static var isSpacebarEnabled = false
     static var isSpacebarAutocorrectOn = false
-    static var keyboardHeightMultiplier: CGFloat = 1
     static var isExperimentalAutocorrectOn = false
     
     static var currentLocale = Locale.en_US
