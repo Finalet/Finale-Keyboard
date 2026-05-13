@@ -66,6 +66,8 @@
 		861119F12F8883BA00F6F7EB /* AdvancedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861119F02F8883B800F6F7EB /* AdvancedView.swift */; };
 		861119F32F88872200F6F7EB /* SpacebarPurchaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861119F22F88871200F6F7EB /* SpacebarPurchaseView.swift */; };
 		86267BB02FB01EB600F27B79 /* BinaryReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86267BAF2FB01EB300F27B79 /* BinaryReader.swift */; };
+		862E8F042FB414BF00B9656B /* russian.json in Resources */ = {isa = PBXBuildFile; fileRef = 862E8F032FB414BF00B9656B /* russian.json */; };
+		862E8F052FB414BF00B9656B /* english.json in Resources */ = {isa = PBXBuildFile; fileRef = 862E8F022FB414BF00B9656B /* english.json */; };
 		863606252F8EC0B6005C1106 /* ToolbarInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863606242F8EC0B2005C1106 /* ToolbarInputField.swift */; };
 		863AF0DE2F8B46F600FA036E /* ReturnButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863AF0DD2F8B46F400FA036E /* ReturnButton.swift */; };
 		863BBCCA2F89C4BC00D828B4 /* StoreKit.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */; };
@@ -81,11 +83,8 @@
 		86B6EC642F8D466A00828DE0 /* GesturesGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B6EC632F8D466100828DE0 /* GesturesGuideView.swift */; };
 		86C4FD442F8C1A6A0086F12F /* DefaultButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C4FD432F8C1A670086F12F /* DefaultButton.swift */; };
 		86C4FD462F8C3F590086F12F /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C4FD452F8C3F570086F12F /* OnboardingView.swift */; };
-		86F3ED162FB3B61000573CBD /* KeyboardSizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F3ED152FB3B60D00573CBD /* KeyboardSizeView.swift */; };
-		86C9612C2FB16B1E00987204 /* russian.json in Resources */ = {isa = PBXBuildFile; fileRef = 86C9612B2FB16B1E00987204 /* russian.json */; };
 		86CEFBA32FACEA8E00BA5904 /* SpellCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86CEFBA22FACEA8C00BA5904 /* SpellCheck.swift */; };
-		86F3ED132FB3968300573CBD /* english.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F3ED112FB3968300573CBD /* english.json */; };
-		86F3ED142FB3968300573CBD /* russian.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F3ED122FB3968300573CBD /* russian.json */; };
+		86F3ED162FB3B61000573CBD /* KeyboardSizeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86F3ED152FB3B60D00573CBD /* KeyboardSizeView.swift */; };
 		86F96E6D2FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F96E692FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json */; };
 		86F96E6E2FAA7FDC007BF1CA /* spanish-30000-n4-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F96E6A2FAA7FDC007BF1CA /* spanish-30000-n4-probabilities.json */; };
 		86F96E6F2FAA7FDC007BF1CA /* spanish-30000-n1-probabilities.json in Resources */ = {isa = PBXBuildFile; fileRef = 86F96E672FAA7FDC007BF1CA /* spanish-30000-n1-probabilities.json */; };
@@ -179,6 +178,8 @@
 		861119F22F88871200F6F7EB /* SpacebarPurchaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacebarPurchaseView.swift; sourceTree = "<group>"; };
 		86267BA92FB00E8400F27B79 /* BinaryCompiler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryCompiler.swift; sourceTree = "<group>"; };
 		86267BAF2FB01EB300F27B79 /* BinaryReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryReader.swift; sourceTree = "<group>"; };
+		862E8F022FB414BF00B9656B /* english.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = english.json; sourceTree = "<group>"; };
+		862E8F032FB414BF00B9656B /* russian.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = russian.json; sourceTree = "<group>"; };
 		863606242F8EC0B2005C1106 /* ToolbarInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarInputField.swift; sourceTree = "<group>"; };
 		863AF0DD2F8B46F400FA036E /* ReturnButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnButton.swift; sourceTree = "<group>"; };
 		863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKit.storekit; sourceTree = "<group>"; };
@@ -193,11 +194,8 @@
 		86B6EC632F8D466100828DE0 /* GesturesGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GesturesGuideView.swift; sourceTree = "<group>"; };
 		86C4FD432F8C1A670086F12F /* DefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultButton.swift; sourceTree = "<group>"; };
 		86C4FD452F8C3F570086F12F /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		86F3ED152FB3B60D00573CBD /* KeyboardSizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSizeView.swift; sourceTree = "<group>"; };
-		86C9612B2FB16B1E00987204 /* russian.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = russian.json; sourceTree = "<group>"; };
 		86CEFBA22FACEA8C00BA5904 /* SpellCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpellCheck.swift; sourceTree = "<group>"; };
-		86F3ED112FB3968300573CBD /* english.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = english.json; sourceTree = "<group>"; };
-		86F3ED122FB3968300573CBD /* russian.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = russian.json; sourceTree = "<group>"; };
+		86F3ED152FB3B60D00573CBD /* KeyboardSizeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardSizeView.swift; sourceTree = "<group>"; };
 		86F96E672FAA7FDC007BF1CA /* spanish-30000-n1-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "spanish-30000-n1-probabilities.json"; sourceTree = "<group>"; };
 		86F96E682FAA7FDC007BF1CA /* spanish-30000-n2-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "spanish-30000-n2-probabilities.json"; sourceTree = "<group>"; };
 		86F96E692FAA7FDC007BF1CA /* spanish-30000-n3-probabilities.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "spanish-30000-n3-probabilities.json"; sourceTree = "<group>"; };
@@ -465,8 +463,8 @@
 		86CEFBA42FACEA9900BA5904 /* Dictionaries */ = {
 			isa = PBXGroup;
 			children = (
-				86F3ED112FB3968300573CBD /* english.json */,
-				86F3ED122FB3968300573CBD /* russian.json */,
+				862E8F022FB414BF00B9656B /* english.json */,
+				862E8F032FB414BF00B9656B /* russian.json */,
 			);
 			path = Dictionaries;
 			sourceTree = "<group>";
@@ -617,8 +615,8 @@
 				3709029627B2F54000213BDD /* DefaultDictionary.json in Resources */,
 				37FAF7012B4F9F25002C361C /* Localizable.strings in Resources */,
 				3720638627AACEC100964120 /* Gilroy-Medium.ttf in Resources */,
-				86F3ED132FB3968300573CBD /* english.json in Resources */,
-				86F3ED142FB3968300573CBD /* russian.json in Resources */,
+				862E8F042FB414BF00B9656B /* russian.json in Resources */,
+				862E8F052FB414BF00B9656B /* english.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

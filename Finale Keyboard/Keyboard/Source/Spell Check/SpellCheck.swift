@@ -257,7 +257,7 @@ class SpellCheck {
     }
 }
 
-// Types
+// Configuration
 extension SpellCheck {
     typealias MatrixIndex = UInt8
     typealias RawWordDictionary = [Int: [String: Float]]
@@ -280,13 +280,21 @@ extension SpellCheck {
     }
     
     enum Scores {
-        static let wrongCharacter: Float = -1
-        static let matchBonus: Float = 1.0
+        static let minimumUsefulAlignmentScore: Float = 0.5
+        
+        static let exactWordMatchBonus: Float = 0.1
+        
         static let characterSkipPenalty: Float = 1.0
         static let transpositionPenalty: Float = 0.5
         static let lowFrequencyPenalty: Float = 0.4
-        static let minimumUsefulAlignmentScore: Float = 0.5
-        static let exactWordMatchBonus: Float = 0.1
+        
+        static let wrongCharacter: Float = -1.0
+        static let matchBonus: Float = 1.0
+        static var neighbourBonus: Float { matchBonus * 0.5 }
+        static func distantNeighbourBonus (locale: Locale) -> Float {
+            if locale == .ru_RU { return wrongCharacter }
+            return matchBonus * 0.25
+        }
     }
 
     enum Search {
@@ -367,8 +375,8 @@ extension SpellCheck {
         private static func getProximityMatrix(locale: Locale, indexMap: [Character: MatrixIndex]) -> (scores: [Float], size: Int) {
             func score(forDistance distance: Float) -> Float {
                 if distance == 0 { return Scores.matchBonus }
-                if distance < 0.13 { return Scores.matchBonus * 0.5 }
-                if distance < 0.2 { return Scores.matchBonus * 0.25 }
+                if distance < 0.13 { return Scores.neighbourBonus }
+                if distance < 0.2 { return Scores.distantNeighbourBonus(locale: locale) }
                 return Scores.wrongCharacter
             }
 
@@ -454,7 +462,7 @@ extension SpellCheck {
 
         func scoreCandidate(wordMatrixIndexes: [MatrixIndex], candidate: CorrectionCandidate, workspace: inout AlignmentWorkspace) -> Float {
             // Increase score based on how aligned its to the candidate
-            let alignmentScore = getAlignmentScore(wordMatrixIndexes: wordMatrixIndexes, candidateMatrixIndexes: candidate.matrixIndexes, minimumUsefulScore: Scores.minimumUsefulAlignmentScore, workspace: &workspace)
+            let alignmentScore = getAlignmentScore(wordMatrixIndexes: wordMatrixIndexes, candidateMatrixIndexes: candidate.matrixIndexes, workspace: &workspace)
             return scoreCandidate(wordMatrixIndexes: wordMatrixIndexes, candidate: candidate, alignmentScore: alignmentScore)
         }
 
@@ -567,7 +575,7 @@ extension SpellCheck {
             return bestScore
         }
 
-        private func getAlignmentScore(wordMatrixIndexes: [MatrixIndex], candidateMatrixIndexes: [MatrixIndex], minimumUsefulScore: Float? = nil, workspace: inout AlignmentWorkspace) -> Float {
+        private func getAlignmentScore(wordMatrixIndexes: [MatrixIndex], candidateMatrixIndexes: [MatrixIndex], workspace: inout AlignmentWorkspace) -> Float {
             let wordLength = wordMatrixIndexes.count
             let candidateLength = candidateMatrixIndexes.count
 
@@ -611,17 +619,14 @@ extension SpellCheck {
                         }
                     }
 
-                    if let minimumUsefulScore {
-                        let bestScoreInRow = workspace.currentRow.max() ?? -Float.infinity
-                        let remainingCharacters = wordLength - i
+                    let bestScoreInRow = workspace.currentRow.max() ?? -Float.infinity
+                    let remainingCharacters = wordLength - i
 
-                        let bestPossibleRawScore = bestScoreInRow + Float(remainingCharacters) * Scores.matchBonus
+                    let bestPossibleRawScore = bestScoreInRow + Float(remainingCharacters) * Scores.matchBonus
+                    let bestPossibleNormalizedScore = bestPossibleRawScore / max(Float(wordLength) * Scores.matchBonus, 1)
 
-                        let bestPossibleNormalizedScore = bestPossibleRawScore / max(Float(wordLength) * Scores.matchBonus, 1)
-
-                        if bestPossibleNormalizedScore < minimumUsefulScore {
-                            return -Float.infinity
-                        }
+                    if bestPossibleNormalizedScore < Scores.minimumUsefulAlignmentScore {
+                        return -Float.infinity
                     }
 
                     swap(&workspace.previousPreviousRow, &workspace.previousRow)
@@ -911,116 +916,116 @@ extension SpellCheck {
         let roundTimeTo: Int = 2
         
         let testSubjects: [(misspelled: String, correct: String)] = [
-            ("привте", "привет"),
-            ("спасибл", "спасибо"),
-            ("пожалуста", "пожалуйста"),
-            ("сегодян", "сегодня"),
-            ("завтраа", "завтра"),
-            ("вчерашнй", "вчерашний"),
-            ("хоршо", "хорошо"),
-            ("плохо", "плохо"),
-            ("человк", "человек"),
-            ("лююди", "люди"),
-            ("друк", "друг"),
-            ("семя", "семья"),
-            ("работаь", "работать"),
-            ("учится", "учиться"),
-            ("школла", "школа"),
-            ("универстет", "университет"),
-            ("книага", "книга"),
-            ("словрь", "словарь"),
-            ("языкк", "язык"),
-            ("русскийй", "русский"),
-            ("англиский", "английский"),
-            ("переводт", "перевод"),
-            ("ошипка", "ошибка"),
-            ("текстт", "текст"),
-            ("сообщние", "сообщение"),
-            ("вопрс", "вопрос"),
-            ("ответт", "ответ"),
-            ("помщь", "помощь"),
-            ("можнл", "можно"),
-            ("нельза", "нельзя"),
-            ("потмоу", "потому"),
-            ("почму", "почему"),
-            ("когад", "когда"),
-            ("гдк", "где"),
-            ("кудаа", "куда"),
-            ("сново", "снова"),
-            ("сразц", "сразу"),
-            ("оченб", "очень"),
-            ("болшой", "большой"),
-            ("маленкий", "маленький"),
-            ("красивй", "красивый"),
-            ("интереснй", "интересный"),
-            ("важнй", "важный"),
-            ("нуженй", "нужный"),
-            ("длинныйй", "длинный"),
-            ("короткй", "короткий"),
-            ("правелно", "правильно"),
-            ("быстрл", "быстро"),
-            ("медленнл", "медленно"),
-            ("счасливый", "счастливый"),
-//            ("hrllo", "hello"),
-//            ("i", "I"),
-//            ("jrkkp", "hello"),
-//            ("proscute", "prosecute"),
-//            ("agter", "after"),
-//            ("afyer", "after"),
-//            ("improvig", "improving"),
-//            ("bexause", "because"),
-//            ("allpcations", "allocations"),
-//            ("surgave", "surface"),
-//            ("praxticing", "practicing"),
-//            ("rithm", "rhythm"),
-//            ("adjist", "adjust"),
-//            ("ti", "to"),
-//            ("nit", "not"),
-//            ("recieve", "receive"),
-//            ("adress", "address"),
-//            ("wich", "which"),
-//            ("becuase", "because"),
-//            ("freind", "friend"),
-//            ("goverment", "government"),
-//            ("enviroment", "environment"),
-//            ("langauge", "language"),
-//            ("acheive", "achieve"),
-//            ("acommodate", "accommodate"),
-//            ("watre", "water"),
-//            ("tabel", "table"),
-//            ("famliy", "family"),
-//            ("littel", "little"),
-//            ("succesful", "successful"),
-//            ("begining", "beginning"),
-//            ("thier", "their"),
-//            ("realy", "really"),
-//            ("adresss", "address"),
-//            ("wierdo", "weirdo"),
-//            ("algorihtm", "algorithm"),
-//            ("mesage", "message"),
-//            ("messgae", "message"),
-//            ("nuber", "number"),
-//            ("qestion", "question"),
-//            ("quikc", "quick"),
-//            ("anser", "answer"),
-//            ("chekc", "check"),
-//            ("retrun", "return"),
-//            ("pritn", "print"),
-//            ("fucntion", "function"),
-//            ("strign", "string"),
-//            ("modle", "model"),
-//            ("compuer", "computer"),
-//            ("dont", "don't"),
-//            ("wont", "won't"),
-//            ("cant", "can't"),
-//            ("weve", "we've"),
-//            ("fonts", "fonts"),
-//            ("saturday", "Saturday"),
-//            ("bot", "bot"),
-//            ("woudl", "would"),
-//            ("Runnin", "Running"),
-//            ("SPELING", "SPELLING"),
-//            ("olivia", "Olivia"),
+//            ("привте", "привет"),
+//            ("спасибл", "спасибо"),
+//            ("пожалуста", "пожалуйста"),
+//            ("сегодян", "сегодня"),
+//            ("завтраа", "завтра"),
+//            ("вчерашнй", "вчерашний"),
+//            ("хоршо", "хорошо"),
+//            ("плохо", "плохо"),
+//            ("человк", "человек"),
+//            ("лююди", "люди"),
+//            ("друк", "друг"),
+//            ("семя", "семья"),
+//            ("работаь", "работать"),
+//            ("учится", "учиться"),
+//            ("школла", "школа"),
+//            ("универстет", "университет"),
+//            ("книага", "книга"),
+//            ("словрь", "словарь"),
+//            ("языкк", "язык"),
+//            ("русскийй", "русский"),
+//            ("англиский", "английский"),
+//            ("переводт", "перевод"),
+//            ("ошипка", "ошибка"),
+//            ("текстт", "текст"),
+//            ("сообщние", "сообщение"),
+//            ("вопрс", "вопрос"),
+//            ("ответт", "ответ"),
+//            ("помщь", "помощь"),
+//            ("можнл", "можно"),
+//            ("нельза", "нельзя"),
+//            ("потмоу", "потому"),
+//            ("почму", "почему"),
+//            ("когад", "когда"),
+//            ("гдк", "где"),
+//            ("кудаа", "куда"),
+//            ("сново", "снова"),
+//            ("сразц", "сразу"),
+//            ("оченб", "очень"),
+//            ("болшой", "большой"),
+//            ("маленкий", "маленький"),
+//            ("красивй", "красивый"),
+//            ("интереснй", "интересный"),
+//            ("важнй", "важный"),
+//            ("нуженй", "нужный"),
+//            ("длинныйй", "длинный"),
+//            ("короткй", "короткий"),
+//            ("правелно", "правильно"),
+//            ("быстрл", "быстро"),
+//            ("медленнл", "медленно"),
+//            ("счасливый", "счастливый"),
+            ("hrllo", "hello"),
+            ("i", "I"),
+            ("jrkkp", "hello"),
+            ("proscute", "prosecute"),
+            ("agter", "after"),
+            ("afyer", "after"),
+            ("improvig", "improving"),
+            ("bexause", "because"),
+            ("allpcations", "allocations"),
+            ("surgave", "surface"),
+            ("praxticing", "practicing"),
+            ("rithm", "rhythm"),
+            ("adjist", "adjust"),
+            ("ti", "to"),
+            ("nit", "not"),
+            ("recieve", "receive"),
+            ("adress", "address"),
+            ("wich", "which"),
+            ("becuase", "because"),
+            ("freind", "friend"),
+            ("goverment", "government"),
+            ("enviroment", "environment"),
+            ("langauge", "language"),
+            ("acheive", "achieve"),
+            ("acommodate", "accommodate"),
+            ("watre", "water"),
+            ("tabel", "table"),
+            ("famliy", "family"),
+            ("littel", "little"),
+            ("succesful", "successful"),
+            ("begining", "beginning"),
+            ("thier", "their"),
+            ("realy", "really"),
+            ("adresss", "address"),
+            ("wierdo", "weirdo"),
+            ("algorihtm", "algorithm"),
+            ("mesage", "message"),
+            ("messgae", "message"),
+            ("nuber", "number"),
+            ("qestion", "question"),
+            ("quikc", "quick"),
+            ("anser", "answer"),
+            ("chekc", "check"),
+            ("retrun", "return"),
+            ("pritn", "print"),
+            ("fucntion", "function"),
+            ("strign", "string"),
+            ("modle", "model"),
+            ("compuer", "computer"),
+            ("dont", "don't"),
+            ("wont", "won't"),
+            ("cant", "can't"),
+            ("weve", "we've"),
+            ("fonts", "fonts"),
+            ("saturday", "Saturday"),
+            ("bot", "bot"),
+            ("woudl", "would"),
+            ("Runnin", "Running"),
+            ("SPELING", "SPELLING"),
+            ("olivia", "Olivia"),
         ].sorted(by: { $0.correct.count < $1.correct.count })
 
         let isMisspelledTestSubjects : [(word: String, isMisspelled: Bool)] = [
