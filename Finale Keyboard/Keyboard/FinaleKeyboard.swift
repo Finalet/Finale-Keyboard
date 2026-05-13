@@ -742,9 +742,12 @@ class FinaleKeyboard: UIInputViewController {
         
         if lastWord.contains(where: \.isNumber) {
             pickedSuggestionIndex = 0
+        } else if lastWord == suggestions.first {
+            suggestions.removeFirst()
+            pickedSuggestionIndex = 0
         } else if suggestions.contains(lastWord) && defaultDictionary[lastWord.lowercased()] == nil { // defaultDictionary[lastWord.lowercased()] == nil is a patch for old autocorrect. Once we move away from it, we should remove this.
             suggestions.removeAll(where: { $0 == lastWord })
-            pickedSuggestionIndex = 0
+            pickedSuggestionIndex = 1
         } else {
             pickedSuggestionIndex = 1
         }
