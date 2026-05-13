@@ -1,5 +1,85 @@
 [
   {
+  "input": "i",
+  "suggestions": ["I"]
+  },
+  {
+  "input": "im",
+  "suggestions": ["I'm"]
+  },
+  {
+  "input": "ive",
+  "suggestions": ["I've"]
+  },
+  {
+  "input": "id",
+  "suggestions": ["I'd"]
+  },
+  {
+  "input": "ill",
+  "suggestions": ["I'll"]
+  },
+  {
+  "input": "hed",
+  "suggestions": ["he'd"]
+  },
+  {
+  "input": "hes",
+  "suggestions": ["he's"]
+  },
+  {
+  "input": "shes",
+  "suggestions": ["she's"]
+  },
+  {
+  "input": "shed",
+  "suggestions": ["she'd"]
+  },
+  {
+  "input": "wed",
+  "suggestions": ["we'd"]
+  },
+  {
+  "input": "well",
+  "suggestions": ["we'll"]
+  },
+  {
+  "input": "wasnt",
+  "suggestions": ["wasn't"]
+  },
+  {
+  "input": "whats",
+  "suggestions": ["what's"]
+  },
+  {
+  "input": "thats",
+  "suggestions": ["that's"]
+  },
+  {
+  "input": "youd",
+  "suggestions": ["you'd"]
+  },
+  {
+  "input": "lets",
+  "suggestions": ["let's"]
+  },
+  {
+  "input": "cant",
+  "suggestions": ["can't", "cannot"]
+  },
+  {
+  "input": "cmon",
+  "suggestions": ["c'mon"]
+  },
+  {
+  "input": "ы",
+  "suggestions": ["в", "а", "я", "у"]
+  },
+  {
+  "input": "м",
+  "suggestions": ["и", "с"]
+  },
+  {
   "input": "->",
   "suggestions": ["→"]
   },

@@ -142,7 +142,11 @@ class FinaleKeyboard: UIInputViewController {
             }
             
             let data = (try? Data(contentsOf: Bundle.main.url(forResource: "DefaultDictionary", withExtension: "json")!))!
-            let entries = try! JSONDecoder().decode([DictionaryItem].self, from: data)
+            var entries = try! JSONDecoder().decode([DictionaryItem].self, from: data)
+            
+            if FinaleKeyboard.isExperimentalAutocorrectOn {
+                entries = entries.suffix(4)
+            }
             
             for i in entries {
                 self.defaultDictionary[i.input.lowercased()] = i.suggestions
@@ -738,7 +742,7 @@ class FinaleKeyboard: UIInputViewController {
         
         if lastWord.contains(where: \.isNumber) {
             pickedSuggestionIndex = 0
-        } else if suggestions.contains(lastWord) {
+        } else if suggestions.contains(lastWord) && defaultDictionary[lastWord.lowercased()] == nil { // defaultDictionary[lastWord.lowercased()] == nil is a patch for old autocorrect. Once we move away from it, we should remove this.
             suggestions.removeAll(where: { $0 == lastWord })
             pickedSuggestionIndex = 0
         } else {
@@ -750,7 +754,7 @@ class FinaleKeyboard: UIInputViewController {
         
         nextSuggestionArray = (nextSuggestionArray+1) % maxSuggestionHistory
         
-        // This is redundant when using our new SpellCheck. However, if that failed (for isntance for unsuported locales), we still need to enforce user dictionary
+        // This is redundant when using our new SpellCheck. However, when its not used, we still need to enforce user dictionary
         CheckUserDictionary()
     }
     
@@ -761,20 +765,28 @@ class FinaleKeyboard: UIInputViewController {
         var suggestions = spellChecker.guesses(forWordRange: NSRange(location: 0, length: word.count), in: word, language: FinaleKeyboard.currentLocale.languageCode) ?? []
         
         if misspelledRange.location == NSNotFound { suggestions.insert(word, at: 0) }
-        return suggestions
+        return suggestions.map { matchCase(fromWord: word, toWord: $0) }
+    }
+    func matchCase (fromWord: String, toWord: String) -> String {
+        // If the correct spelling is uppercased, do not change it (i.e. USSR should always be USSR).
+        if toWord == toWord.uppercased() {
+            return toWord
+        }
+        
+        if fromWord == fromWord.firstCapitalized {
+            return toWord.firstCapitalized
+        } else if fromWord == fromWord.uppercased() {
+            return toWord.uppercased()
+        }
+        return toWord
     }
     
     func AppendSuggestionFromDictionary (dict: Dictionary<String, [String]>, lastWord: String) {
         if !FinaleKeyboard.isAutoCorrectGrammarOn { return }
         
         if (dict[lastWord.lowercased()] != nil) {
-            if lastWord.first!.isUppercase {
-                for i in dict[lastWord.lowercased()]! {
-                    suggestionsArrays[nextSuggestionArray].suggestions.append(i.firstCapitalized)
-                }
-            } else {
-                suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: dict[lastWord.lowercased()]!)
-            }
+            let suggestions = dict[lastWord.lowercased()]!.map { matchCase(fromWord: lastWord, toWord: $0) }
+            suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: suggestions)
         }
     }
     
@@ -1200,6 +1212,8 @@ class FinaleKeyboard: UIInputViewController {
     }
 
     func ReloadSpellChecker(clearCurrent: Bool = false) {
+        guard FinaleKeyboard.isExperimentalAutocorrectOn else { return }
+        
         let locale = FinaleKeyboard.currentLocale
         if clearCurrent { self.spellChecker = nil }
 
