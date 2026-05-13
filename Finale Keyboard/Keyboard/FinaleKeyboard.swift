@@ -732,7 +732,9 @@ class FinaleKeyboard: UIInputViewController {
         
         var suggestions: [String] = !FinaleKeyboard.isExperimentalAutocorrectOn ? getStandardSpellcheckSuggestions(for: lastWord) : (spellChecker?.suggestions(forWord: lastWord)?.compactMap({ $0.word }) ?? getStandardSpellcheckSuggestions(for: lastWord))
         
-        if suggestions.contains(lastWord) {
+        if lastWord.contains(where: \.isNumber) {
+            pickedSuggestionIndex = 0
+        } else if suggestions.contains(lastWord) {
             suggestions.removeAll(where: { $0 == lastWord })
             pickedSuggestionIndex = 0
         } else {
@@ -790,10 +792,8 @@ class FinaleKeyboard: UIInputViewController {
         if ignoreSpace{ self.textDocumentProxy.deleteBackward() }
         
         if (suggestionsArrays[x].suggestions.count > 1) {
-            var originalInput = ""
             while !isAtWordStart() {
                 if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.last == nil) { break }
-                originalInput.insert(self.textDocumentProxy.documentContextBeforeInput?.last ?? Character(""), at: originalInput.startIndex)
                 self.textDocumentProxy.deleteBackward()
             }
             
