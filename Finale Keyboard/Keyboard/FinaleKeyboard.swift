@@ -181,7 +181,7 @@ class FinaleKeyboard: UIInputViewController {
         FinaleKeyboard.isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
         FinaleKeyboard.isSpacebarEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isSpacebarEnabled") as? Bool ?? false
         FinaleKeyboard.isSpacebarAutocorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_spacebarAutocorrect") as? Bool ?? false
-        FinaleKeyboard.isExperimentalAutocorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_experimentalAutocorrect") as? Bool ?? false
+        FinaleKeyboard.isExperimentalAutocorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_isExperimentalAutocorrectOn") as? Bool ?? false
         FinaleKeyboard.isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
         FinaleKeyboard.showTouchZones = userDefaults?.value(forKey: "FINALE_DEV_APP_showTouchZones") as? Bool ?? false
         FinaleKeyboard.maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? CGFloat ?? 0.6

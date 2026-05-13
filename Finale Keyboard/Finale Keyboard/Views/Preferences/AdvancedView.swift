@@ -12,7 +12,7 @@ struct AdvancedView: View {
     typealias Localize = Localization.PreferencesScreen.Advanced
     
     @UserDefaultState("FINALE_DEV_APP_learningWordsDictionary", [String:Int]()) var dictionary: [String:Int]
-    @UserDefaultState("FINALE_DEV_APP_experimentalAutocorrect", false) var useExperimentalAutocorrect: Bool
+    @UserDefaultState("FINALE_DEV_APP_isExperimentalAutocorrectOn", false) var isExperimentalAutocorrectOn: Bool
     
     var wordsOneTimeUse: Int { dictionary.count(where: { $0.value == 1 }) }
     var wordsTwoTimeUse: Int { dictionary.count(where: { $0.value == 2 }) }
@@ -21,7 +21,7 @@ struct AdvancedView: View {
     var body: some View {
         Form {
             Section() {
-                Toggle(Localize.experimentalAutocorrect, isOn: $useExperimentalAutocorrect)
+                Toggle(Localize.experimentalAutocorrect, isOn: $isExperimentalAutocorrectOn)
             }
             Section (header: Text(Localize.autolearnDictionaryHeader), footer: Text("\(Localize.totalWords): \(totalWords)")) {
                 HStack {
