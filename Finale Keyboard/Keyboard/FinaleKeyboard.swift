@@ -586,6 +586,10 @@ class FinaleKeyboard: UIInputViewController {
         ResetSuggestions()
         CheckAutoCapitalization()
         ResetDynamicTouchZones()
+        
+        if [ViewType.Symbols, ViewType.ExtraSymbols].contains(FinaleKeyboard.currentViewType) {
+            ToggleSymbolsView()
+        }
     }
     func ReturnAction () {
         self.textDocumentProxy.insertText("\n")
