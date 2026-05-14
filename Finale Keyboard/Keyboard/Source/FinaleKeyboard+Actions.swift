@@ -139,14 +139,12 @@ extension FinaleKeyboard {
         self.textDocumentProxy.deleteBackward()
         
         //DeletePunctuation
-        if let lastChar = self.textDocumentProxy.documentContextBeforeInput?.last {
-            if isPunctuation(char: String(lastChar)) {
-                self.textDocumentProxy.deleteBackward()
-                if self.textDocumentProxy.hasText { self.textDocumentProxy.insertText(" ") }
-                RedrawSuggestionsLabels()
-                canEditPrevPunctuation = false
-                return
-            }
+        if let lastChar = getLastChar(), isPunctuation(char: lastChar) {
+            self.textDocumentProxy.deleteBackward()
+            if self.textDocumentProxy.hasText { self.textDocumentProxy.insertText(" ") }
+            RedrawSuggestionsLabels()
+            canEditPrevPunctuation = false
+            return
         }
         
         //Delete Words
