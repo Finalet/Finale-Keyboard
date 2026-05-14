@@ -66,6 +66,7 @@
 		861119F32F88872200F6F7EB /* SpacebarPurchaseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 861119F22F88871200F6F7EB /* SpacebarPurchaseView.swift */; };
 		86267BB02FB01EB600F27B79 /* BinaryReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86267BAF2FB01EB300F27B79 /* BinaryReader.swift */; };
 		863606252F8EC0B6005C1106 /* ToolbarInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863606242F8EC0B2005C1106 /* ToolbarInputField.swift */; };
+		863AD2B42FB56D6800AB8844 /* FinaleKeyboard+Context.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863AD2B32FB56D6200AB8844 /* FinaleKeyboard+Context.swift */; };
 		863AF0DE2F8B46F600FA036E /* ReturnButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863AF0DD2F8B46F400FA036E /* ReturnButton.swift */; };
 		863BBCCA2F89C4BC00D828B4 /* StoreKit.storekit in Resources */ = {isa = PBXBuildFile; fileRef = 863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */; };
 		863BBCCC2F89C58A00D828B4 /* InAppPurchaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 863BBCCB2F89C58700D828B4 /* InAppPurchaseManager.swift */; };
@@ -177,6 +178,7 @@
 		862E8F022FB414BF00B9656B /* english.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = english.json; sourceTree = "<group>"; };
 		862E8F032FB414BF00B9656B /* russian.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = russian.json; sourceTree = "<group>"; };
 		863606242F8EC0B2005C1106 /* ToolbarInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarInputField.swift; sourceTree = "<group>"; };
+		863AD2B32FB56D6200AB8844 /* FinaleKeyboard+Context.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FinaleKeyboard+Context.swift"; sourceTree = "<group>"; };
 		863AF0DD2F8B46F400FA036E /* ReturnButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReturnButton.swift; sourceTree = "<group>"; };
 		863BBCC92F89C4BC00D828B4 /* StoreKit.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = StoreKit.storekit; sourceTree = "<group>"; };
 		863BBCCB2F89C58700D828B4 /* InAppPurchaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchaseManager.swift; sourceTree = "<group>"; };
@@ -252,6 +254,7 @@
 				3791F23029E77F17005F39B4 /* Definitions.swift */,
 				3720638727AB2CAF00964120 /* Locales.swift */,
 				37D686742B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift */,
+				863AD2B32FB56D6200AB8844 /* FinaleKeyboard+Context.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -692,6 +695,7 @@
 				37D686732B4B3CA600833DCA /* NoClipTouchUIView.swift in Sources */,
 				375A62CD29E8E7D6007E6065 /* EmojiCollectionCell.swift in Sources */,
 				37991F3029E9963C00900BC9 /* CharacterButton.swift in Sources */,
+				863AD2B42FB56D6800AB8844 /* FinaleKeyboard+Context.swift in Sources */,
 				3791F22F29E7750E005F39B4 /* AutoLayout.swift in Sources */,
 				370B056A28B3F0EF0062000A /* Defaults.swift in Sources */,
 				37D686752B4B41A800833DCA /* FinaleKeyboard+DynamicTouchZones.swift in Sources */,

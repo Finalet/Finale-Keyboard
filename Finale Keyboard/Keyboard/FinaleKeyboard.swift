@@ -430,7 +430,7 @@ class FinaleKeyboard: UIInputViewController {
         ProcessDynamicTouchZones()
     }
     func TypeEmoji (emoji: String) {
-        if (getOneBeforeLastChar() != "" && Character(getOneBeforeLastChar()).isEmoji && getLastChar() == " ") {
+        if let oneBeforeLastChar = getOneBeforeLastChar(), oneBeforeLastChar.isEmoji, getLastChar() == " " {
             self.textDocumentProxy.deleteBackward()
         }
         self.textDocumentProxy.insertText(emoji)
@@ -630,9 +630,9 @@ class FinaleKeyboard: UIInputViewController {
             }
             
             var index = 1
-            let oneBeforeLastChar = getOneBeforeLastChar()
-            if isPunctuation(char: oneBeforeLastChar) {
-                index = punctuationArray.firstIndex(of: oneBeforeLastChar) ?? 1
+            
+            if let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: oneBeforeLastChar) {
+                index = punctuationArray.firstIndex(of: String(oneBeforeLastChar)) ?? 1
             } else {
                 ResetSuggestionsLabels()
             }
@@ -655,7 +655,7 @@ class FinaleKeyboard: UIInputViewController {
             return
         }
         
-        if isPunctuation(char: getOneBeforeLastChar()) && isPunctuation(char: getLastChar()) {
+        if let lastChar = getLastChar(), let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: lastChar), isPunctuation(char: oneBeforeLastChar) {
             if (pickedPunctuationIndex < punctuationArray.count-1) {
                 pickedPunctuationIndex += 1
                 ReplacePunctiation()
@@ -677,7 +677,7 @@ class FinaleKeyboard: UIInputViewController {
             return
         }
         
-        if isPunctuation(char: getOneBeforeLastChar()) && isPunctuation(char: getLastChar()) {
+        if let lastChar = getLastChar(), let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: lastChar), isPunctuation(char: oneBeforeLastChar) {
             if (pickedPunctuationIndex > 0) {
                 pickedPunctuationIndex -= 1
                 ReplacePunctiation()
@@ -723,9 +723,7 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func GenerateAutocorrections() {
-        if (!self.textDocumentProxy.hasText) { return }
-        
-        let lastWord = getLastWord()
+        guard let lastWord = getLastWord() else { return }
         
         if (suggestionsArrays[nextSuggestionArray].suggestions.count != 0) {
             suggestionsArrays[nextSuggestionArray].suggestions.removeAll()
@@ -887,32 +885,6 @@ class FinaleKeyboard: UIInputViewController {
         canEditPrevPunctuation = true
     }
     
-    func getLastWord () -> String {
-        guard let startContext = self.textDocumentProxy.documentContextBeforeInput, startContext.count > 0 else { return "" }
-        
-        var lastSpace = false
-        if getLastChar() == " " {
-            self.textDocumentProxy.deleteBackward()
-            lastSpace = true
-        }
-        
-        let output: String
-        if let context = self.textDocumentProxy.documentContextBeforeInput {
-            let breakingCharacters = CharacterSet.whitespacesAndNewlines.union(["\"", "(", "[", "{", "<", "#"])
-            var startIndex = context.startIndex
-            if let lastDelimiterIndex = context.lastIndex(where: { breakingCharacters.contains($0.unicodeScalars.first ?? " ".unicodeScalars.first!) }) {
-                startIndex = context.index(after: lastDelimiterIndex)
-            }
-            output = String(context[startIndex...])
-        } else {
-            output = ""
-        }
-
-        if lastSpace { self.textDocumentProxy.insertText(" ") }
-        
-        return output
-    }
-    
     func Delete() {
         HapticFeedback.GestureImpactOccurred()
         
@@ -966,7 +938,8 @@ class FinaleKeyboard: UIInputViewController {
     
     func EditPreviousPunctuation () {
         var dis = 0
-        while let contextBeforeInput = self.textDocumentProxy.documentContextBeforeInput, contextBeforeInput != "" && !isPunctuation(char: getLastChar()) {
+        
+        while let contextBeforeInput = self.textDocumentProxy.documentContextBeforeInput, contextBeforeInput != "", let lastChar = getLastChar(), !isPunctuation(char: lastChar) {
             self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
             dis += 1
         }
@@ -1001,8 +974,8 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func RedrawSuggestionsLabels () {
-        if isPunctuation(char: getOneBeforeLastChar()) {
-            pickedPunctuationIndex = punctuationArray.firstIndex(of: getOneBeforeLastChar())!
+        if let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: oneBeforeLastChar) {
+            pickedPunctuationIndex = punctuationArray.firstIndex(of: String(oneBeforeLastChar))!
             UpdateSuggestionsLabelsPunctuation()
             AnimateSuggestionLabels(index: pickedPunctuationIndex, instant: true)
         } else {
@@ -1103,7 +1076,7 @@ class FinaleKeyboard: UIInputViewController {
             return true
         }
         
-        if (Character(getLastChar()).isNewline) {
+        if (getLastChar()?.isNewline == true) {
             ForceShift()
             return true
         }
@@ -1113,12 +1086,11 @@ class FinaleKeyboard: UIInputViewController {
             return false
         }
         
-        if isPunctuation(char: getOneBeforeLastChar(), ignoreCharacters: [" ", ",", ":", ";"]) {
-            if (getLastChar() == " ") {
-                ForceShift()
-                return true
-            }
+        if let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: String(oneBeforeLastChar), ignoreCharacters: [" ", ",", ":", ";"]), getLastChar() == " " {
+            ForceShift()
+            return true
         }
+        
         RemoveShift()
         return false
     }
@@ -1151,12 +1123,12 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func getCorrectSuggestionArrayIndex() -> Int {
-        guard let context = self.textDocumentProxy.documentContextBeforeInput else { return -1 }
+        guard let context = self.textDocumentProxy.documentContextBeforeInput, let lastWord = getLastWord() else { return -1 }
         
         for i in 0..<suggestionsArrays.count {
             if suggestionsArrays[i].positionIndex == context.endIndex {
                 for i1 in 0..<suggestionsArrays[i].suggestions.count {
-                    if suggestionsArrays[i].suggestions[i1] == getLastWord() {
+                    if suggestionsArrays[i].suggestions[i1] == lastWord {
                         return i
                     }
                 }
@@ -1164,38 +1136,16 @@ class FinaleKeyboard: UIInputViewController {
         }
         return -1
     }
-
+    
     func isPunctuation(char: String) -> Bool {
         return punctuationArray.contains(char)
     }
-    func isPunctuation (char: String, ignoreCharacters: [String]) -> Bool {
+    func isPunctuation(char: Character) -> Bool {
+        return isPunctuation(char: String(char))
+    }
+    func isPunctuation(char: String, ignoreCharacters: [String]) -> Bool {
         if ignoreCharacters.contains(char) { return false }
         else { return isPunctuation(char: char) }
-    }
-    
-    func getLastChar() -> String {
-        guard let context = self.textDocumentProxy.documentContextBeforeInput, !context.isEmpty else { return "" }
-        return String(context.last ?? Character(""))
-    }
-    func getOneBeforeLastChar() -> String {
-        guard let context = self.textDocumentProxy.documentContextBeforeInput, context.count >= 2 else { return "" }
-        return String(context[context.index(context.endIndex, offsetBy: -2)])
-    }
-    func getTwoBeforeLastChar() -> String {
-        guard let context = self.textDocumentProxy.documentContextBeforeInput, context.count >= 3 else { return "" }
-        return String(context[context.index(context.endIndex, offsetBy: -3)])
-    }
-    func getStringBeforeCursor(length: Int) -> String? {
-        guard let context = self.textDocumentProxy.documentContextBeforeInput, !context.isEmpty else { return nil }
-        return String(context[context.index(context.endIndex, offsetBy: -min(length, context.count))..<context.endIndex])
-    }
-    func isAtWordStart() -> Bool {
-        if !self.textDocumentProxy.hasText { return true }
-        let breakingCharacters = CharacterSet.whitespacesAndNewlines.union(["\"", "(", "[", "{", "<", "#"])
-        if let lastUnicodeChar = self.textDocumentProxy.documentContextBeforeInput?.last?.unicodeScalars.first {
-            return breakingCharacters.contains(lastUnicodeChar)
-        }
-        return true
     }
     
     func ToggleLocale (backwards: Bool = false) {
