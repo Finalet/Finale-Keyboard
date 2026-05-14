@@ -183,7 +183,7 @@ extension FinaleKeyboard {
             return
         }
         
-        CycleSuggestionsForLastWord(dir: 1)
+        CycleSuggestionsForLastWord(.next)
     }
     
     func SwipeUp () {
@@ -206,7 +206,7 @@ extension FinaleKeyboard {
             return
         }
         
-        CycleSuggestionsForLastWord(dir: -1)
+        CycleSuggestionsForLastWord(.previous)
     }
     
     func SwipeRightSpacebar () {
@@ -436,47 +436,41 @@ extension FinaleKeyboard {
         }
     }
     
-    func TryLearnNewWord (word: String) {
-        if userDictionary.contains(word.lowercased()) { return }
+    func RecordNewWord (_ word: String) {
+        guard FinaleKeyboard.autoLearnWords else { return }
         
-        if learningWordsDictionary[word] == nil {
-            learningWordsDictionary[word] = 1
+        let cleanWord = word.lowercased()
+        if userDictionary.contains(cleanWord) { return }
+        
+        let newValue = (learningWordsDictionary[cleanWord] ?? 0) + 1
+        
+        if newValue >= learningWordsRepeateThreashold {
+            learningWordsDictionary.removeValue(forKey: cleanWord)
+            LearnWord(word: cleanWord, showNotification: false)
         } else {
-            learningWordsDictionary[word]! += 1
-            if learningWordsDictionary[word]! >= learningWordsRepeateThreashold {
-                learningWordsDictionary.removeValue(forKey: word)
-                LearnWord(word: word, showNotification: false)
-            }
+            learningWordsDictionary[cleanWord] = newValue
         }
     }
     
-    func UseUserDictionary () {
-        let x = getCorrectSuggestionArrayIndex()
-        if x < 0 { return }
+    func ToggleUserDictionary (forWord: String) {
+        let cleanWord = forWord.lowercased()
         
-        if suggestionsArrays[x].suggestions.count < 2 { return }
-        
-        if userDictionary.contains(suggestionsArrays[x].suggestions[0].lowercased()) {
-            ForgetWord(word: suggestionsArrays[x].suggestions[0].lowercased())
-        } else {
-            LearnWord(word: suggestionsArrays[x].suggestions[0].lowercased())
-        }
+        if userDictionary.contains(cleanWord) { ForgetWord(word: cleanWord) }
+        else { LearnWord(word: cleanWord) }
     }
     
     func LearnWord (word: String, showNotification: Bool = true) {
         userDictionary.append(word)
         SaveUserDictionary()
         ReloadSpellChecker()
-        if showNotification { ShowNotification(text: "Learned \"" + word + "\"") }
-        if learningWordsDictionary[word] != nil { learningWordsDictionary.removeValue(forKey: word) }
+        if showNotification { ShowNotification(text: "Learned \"\(word)\"") }
+        learningWordsDictionary.removeValue(forKey: word)
     }
     
     func ForgetWord (word: String, showNotification: Bool = true) {
-        while userDictionary.contains(word) {
-            userDictionary.remove(at: userDictionary.firstIndex(of: word)!)
-        }
+        userDictionary.removeAll { $0 == word }
         SaveUserDictionary()
         ReloadSpellChecker()
-        if showNotification { ShowNotification(text: "Forgot \"" + word + "\"") }
+        if showNotification { ShowNotification(text: "Forgot \"\(word)\"") }
     }
 }

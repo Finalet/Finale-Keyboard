@@ -21,7 +21,7 @@ extension FinaleKeyboard {
         let pickedInex: Int
         
         // Suggestions should stay on the typed word if:
-        if lastWord.contains(where: \.isNumber) || lastWord == allSuggestions.first || (!FinaleKeyboard.isExperimentalAutocorrectOn && userDictionary.contains(lastWord.lowercased())) {
+        if lastWord.contains(where: \.isNumber) || lastWord == allSuggestions.first || allSuggestions.count == 0 || (!FinaleKeyboard.isExperimentalAutocorrectOn && userDictionary.contains(lastWord.lowercased())) {
             pickedInex = 0
         } else {
             pickedInex = 1
@@ -75,21 +75,31 @@ extension FinaleKeyboard {
         self.textDocumentProxy.insertText("\(withWord) ")
     }
     
-    func CycleSuggestionsForLastWord (dir: Int) {
-        guard (dir == -1 || dir == 1) else { return }
-        
+    func CycleSuggestionsForLastWord (_ direction: SuggestionCycleDirection) {
         var dis = 0
         while let context = self.textDocumentProxy.documentContextBeforeInput, !context.isEmpty, let lastChar = getLastChar()?.unicodeScalars.first, !CharacterSet.whitespacesAndNewlines.contains(lastChar) {
             self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
             dis += 1
         }
         
-        if let suggestionStorage = SuggestionManager.getCurrentSuggestions(), let newSuggestion = dir == 1 ? suggestionStorage.pickNextSuggestion() : suggestionStorage.pickPrevSuggestion() {
-            ReplaceLastWord(withWord: newSuggestion)
-            SetSuggestionLabels(suggestions: suggestionStorage, animated: true)
+        if let suggestionStorage = SuggestionManager.getCurrentSuggestions() {
+            if let newSuggestion = direction == .next ? suggestionStorage.pickNextSuggestion() : suggestionStorage.pickPrevSuggestion() {
+                ReplaceLastWord(withWord: newSuggestion)
+                SetSuggestionLabels(suggestions: suggestionStorage, animated: true)
+                
+                if suggestionStorage.pickedSuggestionIndex == 0 {
+                    RecordNewWord(suggestionStorage.pickedSuggestion)
+                }
+            } else if direction == .previous { // If SuggestionStorage returned no prevSuggestion, it means we reached the end (index 0) and should try to learn this word.
+                ToggleUserDictionary(forWord: suggestionStorage.pickedSuggestion)
+            }
         }
         
         self.textDocumentProxy.adjustTextPosition(byCharacterOffset: dis)
+    }
+    
+    enum SuggestionCycleDirection {
+        case next, previous
     }
 }
 
@@ -110,8 +120,10 @@ extension FinaleKeyboard {
             suggestionLabels[i].textColor = i == selectedIndex ? .label : .gray
         }
         
+        self.view.layoutIfNeeded()
+        
         if let selectedIndex = selectedIndex, suggestionLabels.indices.contains(selectedIndex) {
-            let deltaX = self.suggestionLabels[selectedIndex].frame.origin.x + self.suggestionLabels[selectedIndex].frame.width*0.5 - UIScreen.main.bounds.width*0.5
+            let deltaX = self.suggestionLabels[selectedIndex].frame.origin.x + self.suggestionLabels[selectedIndex].frame.width*0.5 - self.view.frame.width*0.5
             centerXConstraint.constant -= deltaX
         } else {
             centerXConstraint.constant = 0
@@ -131,8 +143,10 @@ extension FinaleKeyboard {
         guard self.suggestionLabels.indices.contains(index) else { return }
         
         self.view.layoutIfNeeded()
-        let deltaX = self.suggestionLabels[index].frame.origin.x + self.suggestionLabels[index].frame.width*0.5 - UIScreen.main.bounds.width*0.5
+        
+        let deltaX = self.suggestionLabels[index].frame.origin.x + self.suggestionLabels[index].frame.width * 0.5 - UIScreen.main.bounds.width*0.5
         centerXConstraint.constant -= deltaX
+        
         UIView.animate(withDuration: instant ? 0 : 0.5, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
             self.view.layoutIfNeeded()
         }

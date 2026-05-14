@@ -106,7 +106,7 @@ class FinaleKeyboard: UIInputViewController {
     
     var learningWordsDictionary: Dictionary<String, Int> = [String:Int]()
     let learningWordsRepeateThreashold = 3
-    var autoLearnWords = true
+    static var autoLearnWords = true
     
     // Dynamic tap zones
     static var isDynamicTapZonesEnabled: Bool = false
@@ -156,8 +156,7 @@ class FinaleKeyboard: UIInputViewController {
         })
         
         userDictionary = userDefaults?.value(forKey: "FINALE_DEV_APP_userDictionary") as? [String] ?? [String]()
-        autoLearnWords = userDefaults?.value(forKey: "FINALE_DEV_APP_autoLearnWords") as? Bool ?? true
-        if autoLearnWords {
+        if FinaleKeyboard.autoLearnWords {
             learningWordsDictionary = userDefaults?.value(forKey: "FINALE_DEV_APP_learningWordsDictionary") as?  Dictionary<String, Int> ?? [String:Int]()
         }
     }
@@ -180,6 +179,7 @@ class FinaleKeyboard: UIInputViewController {
         if ES_enabled { FinaleKeyboard.enabledLocales.append(Locale.es_ES) }
         if DE_enabled { FinaleKeyboard.enabledLocales.append(Locale.de_DE) }
         
+        FinaleKeyboard.autoLearnWords = userDefaults?.value(forKey: "FINALE_DEV_APP_autoLearnWords") as? Bool ?? true
         FinaleKeyboard.isAutoCorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectWords") as? Bool ?? true
         FinaleKeyboard.isAutoCorrectGrammarOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectGrammar") as? Bool ?? true
         FinaleKeyboard.isAutoCapitalizeOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocapitalizeWords") as? Bool ?? true
@@ -324,7 +324,7 @@ class FinaleKeyboard: UIInputViewController {
             suggestionLabels.append(BuildSuggestionView())
         }
         
-        centerXConstraint = suggestionLabels[1].centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0)
+        centerXConstraint = suggestionLabels[0].centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0)
         centerXConstraint.isActive = true
         for i in 1...maxSuggestions-1 {
             suggestionLabels[i].leadingAnchor.constraint(equalTo: suggestionLabels[i-1].trailingAnchor, constant: UIScreen.main.bounds.width*0.2).isActive = true
@@ -395,25 +395,26 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func ShowNotification (text: String) {
-        UIView.animate(withDuration: 0.15) {
-            for i in self.suggestionLabels {
-                i.alpha = 0
-            }
+        let animDuration = 0.15
+        let notificationDuration = 0.7
+        
+        UIView.animate(withDuration: animDuration) {
+            self.suggestionLabels.forEach({ $0.alpha = 0 })
         } completion: { [self] _ in
             ClearSuggestionLabels()
-            suggestionLabels[1].text = text
-            suggestionLabels[1].textColor = .label
-            UIView.animate(withDuration: 0.3) {
-                self.suggestionLabels[1].alpha = 1
+            
+            suggestionLabels[0].text = text
+            suggestionLabels[0].textColor = .label
+            
+            UIView.animate(withDuration: animDuration) {
+                self.suggestionLabels[0].alpha = 1
             } completion: { _ in
-                UIView.animate(withDuration: 0.3, delay: 0.7) {
-                    self.suggestionLabels[1].alpha = 0
+                UIView.animate(withDuration: animDuration, delay: notificationDuration) {
+                    self.suggestionLabels[0].alpha = 0
                 } completion: { _ in
                     self.RedrawSuggestionsLabels()
-                    UIView.animate(withDuration: 0.15) {
-                        for i in self.suggestionLabels {
-                            i.alpha = 1
-                        }
+                    UIView.animate(withDuration: animDuration) {
+                        self.suggestionLabels.forEach({ $0.alpha = 1 })
                     }
                 }
             }
