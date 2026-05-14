@@ -70,7 +70,7 @@ class CharacterButton: KeyboardButton {
         if direction == .Right {
             FinaleKeyboard.instance.SwipeRight()
         } else if direction == .Left {
-            FinaleKeyboard.instance.Delete()
+            FinaleKeyboard.instance.SwipeLeft()
         } else if direction == .Up {
             FinaleKeyboard.instance.SwipeUp()
         } else if direction == .Down {
@@ -80,7 +80,7 @@ class CharacterButton: KeyboardButton {
     
     override func OnSwipeHoldRepeating(direction: KeyboardButton.SwipeDirection) {
         if direction == .Left {
-            FinaleKeyboard.instance.Delete()
+            FinaleKeyboard.instance.SwipeLeft()
             FinaleKeyboard.instance.MiddleRowReactAnimation()
             HapticFeedback.GestureImpactOccurred()
         } else if direction == .Down {

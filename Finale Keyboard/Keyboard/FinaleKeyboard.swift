@@ -85,6 +85,8 @@ class FinaleKeyboard: UIInputViewController {
     var maxSuggestions = 7
     var pickedSuggestionIndex = 0
     
+    let SuggestionManager = SuggestionsManager()
+    
     var canEditPrevPunctuation = false
     
     var centerXConstraint = NSLayoutConstraint()
@@ -109,7 +111,7 @@ class FinaleKeyboard: UIInputViewController {
     // Dynamic tap zones
     static var isDynamicTapZonesEnabled: Bool = false
     static var showTouchZones: Bool = false
-    static var maxTouchZoneScale = 0.6
+    static var maxTouchZoneScale = 0.3
     static var dynamicTapZoneProbabilityMultiplier = 1.5
     static var dynamicKeyHighlighting = false
     let minNgram = 1
@@ -125,7 +127,7 @@ class FinaleKeyboard: UIInputViewController {
         InitKeysView()
         BuildKeyboardView(viewType: .Characters)
         BuildEmojiView()
-        SuggestionsView()
+        BuildSuggestionViews()
         InitSuggestionsArray()
         InitDictionary()
     }
@@ -317,9 +319,9 @@ class FinaleKeyboard: UIInputViewController {
         keysView.addSubview(returnButton!, anchors: [.leadingToTrailing(spaceButton!, 0), .widthToWidthMultiplier(toggleSymbolsButton!, 2), .topToBottom(trailingBottomButton, 0), .trailing(0)] + sharedAnchors)
     }
     
-    func SuggestionsView () {
+    func BuildSuggestionViews () {
         for _ in 0...maxSuggestions-1 {
-            suggestionLabels.append(SuggestionView())
+            suggestionLabels.append(BuildSuggestionView())
         }
         
         centerXConstraint = suggestionLabels[1].centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0)
@@ -329,7 +331,7 @@ class FinaleKeyboard: UIInputViewController {
         }
     }
     
-    func SuggestionView () -> UILabel {
+    func BuildSuggestionView () -> UILabel {
         let label = UILabel(frame: .zero)
         label.textColor = .gray
         label.textAlignment = .center
@@ -346,531 +348,6 @@ class FinaleKeyboard: UIInputViewController {
         self.view.addSubview(emojiView, anchors: [.topToBottom(keysView, 0), .leading(0), .trailing(0), .heightToHeight(self.view, 0)])
     }
     
-    func OpenEmoji () {
-        FinaleKeyboard.currentViewType = .Emoji
-        emojiView.PrepareView()
-        ResetSuggestionsLabels()
-        keysViewTopConstraint?.constant = -self.view.frame.height
-        keysViewBottomConstraint?.constant = -self.view.frame.height
-        UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.4, options: .curveEaseIn) {
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    func CloseEmoji (hideEmojiSearchRow: Bool = false) {
-        keysViewTopConstraint?.constant = (emojiSearchRow == nil || hideEmojiSearchRow) ? 0 : FinaleKeyboard.emojiRowHeight
-        keysViewBottomConstraint?.constant = 0
-        UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
-            self.view.layoutIfNeeded()
-        } completion: { _ in
-            if hideEmojiSearchRow {
-                self.emojiSearchRow?.removeFromSuperview()
-                self.emojiSearchRow = nil
-            }
-        }
-        if FinaleKeyboard.currentViewType != .SearchEmoji {
-            FinaleKeyboard.currentViewType = .Characters
-            RedrawSuggestionsLabels()
-        }
-    }
-    
-    func ToggleSearchEmojiView () {
-        var hideEmojiSearchRow = false
-        if FinaleKeyboard.currentViewType != .SearchEmoji {
-            FinaleKeyboard.currentViewType = .SearchEmoji
-            
-            emojiSearchRow?.removeFromSuperview()
-            emojiSearchRow = EmojiSearchRow()
-            
-            self.view.addSubview(emojiSearchRow!, anchors: [.safeAreaLeading(0), .safeAreaTrailing(0), .bottomToTop(keysView, 0), .height(FinaleKeyboard.emojiRowHeight)])
-            
-            returnButton?.ChangeFunction(new: .Back)
-        } else {
-            hideEmojiSearchRow = true
-            
-            FinaleKeyboard.currentViewType = .Characters
-            
-            returnButton?.ChangeFunction(new: .Return)
-        }
-        
-        CloseEmoji(hideEmojiSearchRow: hideEmojiSearchRow)
-        HapticFeedback.GestureImpactOccurred()
-    }
-    
-    func TypeCharacter (_ character: String) {
-        if let emojiSearchRow = emojiSearchRow {
-            emojiSearchRow.TypeChar(character)
-            return
-        }
-        
-        var shouldPlaceBeforeSpace = false
-        if character == "\"" {
-            let count = self.textDocumentProxy.documentContextBeforeInput?.filter { $0 == Character(character) }.count ?? 0
-            if count % 2 != 0 {
-                shouldPlaceBeforeSpace = true
-            }
-        } else if character == ")" {
-            shouldPlaceBeforeSpace = true
-        }
-        
-        var x = false
-        if (shouldPlaceBeforeSpace) {
-            if (FinaleKeyboard.isAutoCorrectOn && getLastChar() == " ") {
-                self.textDocumentProxy.deleteBackward()
-                x = true
-            }
-        }
-        
-        self.textDocumentProxy.insertText(shouldCapitalize ? character.capitalized : character)
-        FadeoutSuggestions()
-        
-        if (x) { self.textDocumentProxy.insertText(" ") }
-        
-        CheckAutoCapitalization()
-        ProcessDynamicTouchZones()
-    }
-    func TypeEmoji (emoji: String) {
-        if let oneBeforeLastChar = getOneBeforeLastChar(), oneBeforeLastChar.isEmoji, getLastChar() == " " {
-            self.textDocumentProxy.deleteBackward()
-        }
-        self.textDocumentProxy.insertText(emoji)
-        self.textDocumentProxy.insertText(" ")
-    }
-    
-    func Cut () {
-        guard let selection = self.textDocumentProxy.selectedText else { return }
-        
-        UIPasteboard.general.string = selection
-        self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
-        for _ in 1..<selection.count {
-            self.textDocumentProxy.deleteBackward()
-        }
-        self.textDocumentProxy.adjustTextPosition(byCharacterOffset: 1)
-        self.textDocumentProxy.deleteBackward()
-    }
-    
-    func Copy () {
-        guard let selection = self.textDocumentProxy.selectedText else { return }
-        UIPasteboard.general.string = selection
-    }
-    
-    func Paste (text: String? = nil) {
-        guard let pasteText = text ?? UIPasteboard.general.string else { return }
-        self.textDocumentProxy.insertText(pasteText)
-        FadeoutSuggestions()
-        CheckAutoCapitalization()
-        ProcessDynamicTouchZones()
-    }
-    
-    func BackAction() {
-        if FinaleKeyboard.currentViewType == .SearchEmoji {
-            ToggleSearchEmojiView()
-            RedrawSuggestionsLabels()
-        }
-    }
-    
-    func BackspaceAction () {
-        if let emojiSearchRow = emojiSearchRow {
-            emojiSearchRow.BackspaceAction()
-            return
-        }
-        
-        self.textDocumentProxy.deleteBackward()
-        CheckAutoCapitalization()
-        ProcessDynamicTouchZones()
-    }
-    
-    func ShowShortcutPreviews () {
-        characterButtons.forEach {
-            $0.value.ShowShortcutPreview()
-        }
-    }
-    func HideShortcutPreviews () {
-        characterButtons.forEach {
-            $0.value.HideShortcutPreview()
-        }
-    }
-    
-    func ToggleAutoCorrect () {
-        FinaleKeyboard.isAutoCorrectOn.toggle()
-        userDefaults?.setValue(FinaleKeyboard.isAutoCorrectOn, forKey: "FINALE_DEV_APP_autocorrectWords")
-        
-        self.ShowNotification(text: FinaleKeyboard.isAutoCorrectOn ? "Autocorrection on" : "Autocorrection off")
-        
-        HapticFeedback.GestureImpactOccurred()
-    }
-    
-    func StartMoveCursor (touchLocation: CGPoint) {
-        self.lastTouchPosX = touchLocation.x
-        
-        UIView.animate (withDuration: 0.3) {
-            self.keysView.alpha = 0.5
-        }
-        
-        HapticFeedback.GestureImpactOccurred()
-    }
-    
-    func EndMoveCursor () {
-        UIView.animate (withDuration: 0.3) {
-            self.keysView.alpha = 1
-        }
-        ProcessDynamicTouchZones()
-    }
-    
-    func MoveCursor (touchLocation: CGPoint) {
-        if touchLocation.x < UIScreen.main.bounds.width * 0.1 {
-            if leftEdgeTimer == nil {
-                leftEdgeTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { (_) in
-                    self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
-                    self.lastTouchPosX = touchLocation.x
-                }
-                rightEdgeTimer?.invalidate()
-                rightEdgeTimer = nil
-            }
-            return
-        } else if touchLocation.x > UIScreen.main.bounds.width * 0.9 {
-            if (rightEdgeTimer == nil) {
-                rightEdgeTimer = Timer.scheduledTimer(withTimeInterval: 0.05, repeats: true) { (_) in
-                    self.textDocumentProxy.adjustTextPosition(byCharacterOffset: 1)
-                    self.lastTouchPosX = touchLocation.x
-                }
-                leftEdgeTimer?.invalidate()
-                leftEdgeTimer = nil
-            }
-            return
-        }
-        rightEdgeTimer?.invalidate()
-        rightEdgeTimer = nil
-        leftEdgeTimer?.invalidate()
-        leftEdgeTimer = nil
-        if touchLocation.x - lastTouchPosX > 5 {
-            self.textDocumentProxy.adjustTextPosition(byCharacterOffset: 1)
-            lastTouchPosX = touchLocation.x
-        } else if touchLocation.x - lastTouchPosX < -5 {
-            self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
-            lastTouchPosX = touchLocation.x
-        }
-        
-    }
-    
-    func ShiftAction () {
-        if capsTimer != nil {
-            capsTimer?.invalidate()
-            capsTimer = nil
-            CapsAction()
-        } else {
-            capsTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false) { _ in
-                self.capsTimer = nil
-            }
-            
-            if FinaleKeyboard.isCaps {
-                FinaleKeyboard.isCaps = false
-                FinaleKeyboard.isShift = false
-                leadingBottomButton.ChangeFunction(new: .Shift)
-            } else {
-                FinaleKeyboard.isShift.toggle()
-            }
-        }
-        
-        UpdateButtonsTitles()
-    }
-    func CapsAction (){
-        FinaleKeyboard.isShift = false
-        FinaleKeyboard.isCaps = true
-        leadingBottomButton.ChangeFunction(new: .Caps)
-        UpdateButtonsTitles()
-    }
-    func SpacebarAction() {
-        if let emojiSearchRow = emojiSearchRow {
-            emojiSearchRow.SwipeRight()
-            return
-        }
-        
-        self.textDocumentProxy.insertText(" ")
-        ResetSuggestions()
-        CheckAutoCapitalization()
-        ResetDynamicTouchZones()
-        
-        if [ViewType.Symbols, ViewType.ExtraSymbols].contains(FinaleKeyboard.currentViewType) {
-            ToggleSymbolsView()
-        }
-    }
-    func ReturnAction () {
-        self.textDocumentProxy.insertText("\n")
-        ResetSuggestions()
-        CheckAutoCapitalization()
-    }
-    
-    func SwipeRight () {
-        if let emojiSearchRow = emojiSearchRow {
-            emojiSearchRow.SwipeRight()
-            return
-        }
-        
-        let context = self.textDocumentProxy.documentContextBeforeInput
-        if context == nil {
-            ResetSuggestionsLabels()
-            pickedPunctuationIndex = 0
-            InsertPunctuation(index: pickedPunctuationIndex)
-        } else if context?.last != " " {
-            ResetSuggestionsLabels()
-            if (FinaleKeyboard.isAutoCorrectOn) {
-                GenerateAutocorrections()
-                ReplaceWithSuggestion(ignoreSpace: false, instant: true)
-            } else {
-                self.textDocumentProxy.insertText(" ")
-            }
-            canEditPrevPunctuation = false
-        } else {
-            if ((context?.count ?? 0) < 2) {
-                ResetSuggestionsLabels()
-                SwipeRightSpacebar()
-                canEditPrevPunctuation = false
-                return
-            }
-            
-            var index = 1
-            
-            if let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: oneBeforeLastChar) {
-                index = punctuationArray.firstIndex(of: String(oneBeforeLastChar)) ?? 1
-            } else {
-                ResetSuggestionsLabels()
-            }
-            
-            InsertPunctuation(index: index)
-        }
-        CheckAutoCapitalization()
-        ResetDynamicTouchZones()
-        if FinaleKeyboard.currentViewType != .Characters { BuildKeyboardView(viewType: .Characters) }
-    }
-    func SwipeDown () {
-        if FinaleKeyboard.currentViewType == .SearchEmoji { return }
-        if !self.textDocumentProxy.hasText { return }
-        
-        if canEditPrevPunctuation {
-            if (pickedPunctuationIndex < punctuationArray.count-1) {
-                pickedPunctuationIndex += 1
-                EditPreviousPunctuation()
-            }
-            return
-        }
-        
-        if let lastChar = getLastChar(), let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: lastChar), isPunctuation(char: oneBeforeLastChar) {
-            if (pickedPunctuationIndex < punctuationArray.count-1) {
-                pickedPunctuationIndex += 1
-                ReplacePunctiation()
-            }
-            return
-        }
-        
-        EditPreviousWord(upOrDown: -1)
-    }
-    func SwipeUp () {
-        if FinaleKeyboard.currentViewType == .SearchEmoji { return }
-        if !self.textDocumentProxy.hasText { return }
-        
-        if canEditPrevPunctuation {
-            if (pickedPunctuationIndex > 0) {
-                pickedPunctuationIndex -= 1
-                EditPreviousPunctuation()
-            }
-            return
-        }
-        
-        if let lastChar = getLastChar(), let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: lastChar), isPunctuation(char: oneBeforeLastChar) {
-            if (pickedPunctuationIndex > 0) {
-                pickedPunctuationIndex -= 1
-                ReplacePunctiation()
-            }
-            return
-        }
-        
-        EditPreviousWord(upOrDown: 1)
-    }
-    
-    func SwipeRightSpacebar () {
-        pickedSuggestionIndex = 0
-        InsertPunctuation(index: pickedSuggestionIndex)
-    }
-    
-    func UseUserDictionary () {
-        let x = getCorrectSuggestionArrayIndex()
-        if x < 0 { return }
-        
-        if suggestionsArrays[x].suggestions.count < 2 { return }
-        
-        if userDictionary.contains(suggestionsArrays[x].suggestions[0].lowercased()) {
-            ForgetWord(word: suggestionsArrays[x].suggestions[0].lowercased())
-        } else {
-            LearnWord(word: suggestionsArrays[x].suggestions[0].lowercased())
-        }
-    }
-    
-    func LearnWord (word: String, showNotification: Bool = true) {
-        userDictionary.append(word)
-        SaveUserDictionary()
-        ReloadSpellChecker()
-        if showNotification { ShowNotification(text: "Learned \"" + word + "\"") }
-        if learningWordsDictionary[word] != nil { learningWordsDictionary.removeValue(forKey: word) }
-    }
-    func ForgetWord (word: String, showNotification: Bool = true) {
-        while userDictionary.contains(word) {
-            userDictionary.remove(at: userDictionary.firstIndex(of: word)!)
-        }
-        SaveUserDictionary()
-        ReloadSpellChecker()
-        if showNotification { ShowNotification(text: "Forgot \"" + word + "\"") }
-    }
-    
-    func GenerateAutocorrections() {
-        guard let lastWord = getLastWord() else { return }
-        
-        if (suggestionsArrays[nextSuggestionArray].suggestions.count != 0) {
-            suggestionsArrays[nextSuggestionArray].suggestions.removeAll()
-            suggestionsArrays[nextSuggestionArray].lastPickedSuggestionIndex = 1
-            suggestionsArrays[nextSuggestionArray].positionIndex = String().startIndex
-        }
-        suggestionsArrays[nextSuggestionArray].suggestions.append(lastWord)
-        suggestionsArrays[nextSuggestionArray].positionIndex = self.textDocumentProxy.documentContextBeforeInput!.endIndex
-        suggestionsArrays[nextSuggestionArray].lastPickedSuggestionIndex = 0
-        
-        AppendSuggestionFromDictionary(dict: defaultDictionary, lastWord: lastWord)
-        
-        var suggestions: [String] = !FinaleKeyboard.isExperimentalAutocorrectOn ? getStandardSpellcheckSuggestions(for: lastWord) : (spellChecker?.suggestions(forWord: lastWord)?.compactMap({ $0.word }) ?? getStandardSpellcheckSuggestions(for: lastWord))
-        
-        if lastWord.contains(where: \.isNumber) {
-            pickedSuggestionIndex = 0
-        } else if lastWord == suggestions.first {
-            suggestions.removeFirst()
-            pickedSuggestionIndex = 0
-        } else if suggestions.contains(lastWord) && defaultDictionary[lastWord.lowercased()] == nil { // defaultDictionary[lastWord.lowercased()] == nil is a patch for old autocorrect. Once we move away from it, we should remove this.
-            suggestions.removeAll(where: { $0 == lastWord })
-            pickedSuggestionIndex = 1
-        } else {
-            pickedSuggestionIndex = 1
-        }
-        
-        suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: suggestions)
-        while suggestionsArrays[nextSuggestionArray].suggestions.count > maxSuggestions { suggestionsArrays[nextSuggestionArray].suggestions.removeLast() }
-        
-        nextSuggestionArray = (nextSuggestionArray+1) % maxSuggestionHistory
-        
-        // This is redundant when using our new SpellCheck. However, when its not used, we still need to enforce user dictionary
-        CheckUserDictionary()
-    }
-    
-    func getStandardSpellcheckSuggestions (for word: String) -> [String] {
-        let spellChecker = UITextChecker()
-        
-        let misspelledRange = spellChecker.rangeOfMisspelledWord(in: word.lowercased(), range: NSMakeRange(0, word.count), startingAt: 0, wrap: true, language: FinaleKeyboard.currentLocale.languageCode)
-        var suggestions = spellChecker.guesses(forWordRange: NSRange(location: 0, length: word.count), in: word, language: FinaleKeyboard.currentLocale.languageCode) ?? []
-        
-        if misspelledRange.location == NSNotFound { suggestions.insert(word, at: 0) }
-        return suggestions.map { matchCase(fromWord: word, toWord: $0) }
-    }
-    func matchCase (fromWord: String, toWord: String) -> String {
-        // If the correct spelling is uppercased, do not change it (i.e. USSR should always be USSR).
-        if toWord == toWord.uppercased() {
-            return toWord
-        }
-        
-        if fromWord == fromWord.firstCapitalized {
-            return toWord.firstCapitalized
-        } else if fromWord == fromWord.uppercased() {
-            return toWord.uppercased()
-        }
-        return toWord
-    }
-    
-    func AppendSuggestionFromDictionary (dict: Dictionary<String, [String]>, lastWord: String) {
-        if !FinaleKeyboard.isAutoCorrectGrammarOn { return }
-        
-        if (dict[lastWord.lowercased()] != nil) {
-            let suggestions = dict[lastWord.lowercased()]!.map { matchCase(fromWord: lastWord, toWord: $0) }
-            suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: suggestions)
-        }
-    }
-    
-    func CheckUserDictionary () {
-        let x = getCorrectSuggestionArrayIndex()
-        if x < 0 { return }
-        
-        if suggestionsArrays[x].suggestions.count >= 2 {
-            if userDictionary.contains(suggestionsArrays[x].suggestions[0].lowercased()) {
-                pickedSuggestionIndex = 0
-            }
-        }
-    }
-    
-    func ReplaceWithSuggestion (ignoreSpace: Bool = false, instant: Bool = false, tryLearnNewWord: Bool = false) {
-        let x = getCorrectSuggestionArrayIndex()
-        if x < 0 { return }
-        
-        if ignoreSpace{ self.textDocumentProxy.deleteBackward() }
-        
-        if (suggestionsArrays[x].suggestions.count > 1) {
-            while !isAtWordStart() {
-                if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.last == nil) { break }
-                self.textDocumentProxy.deleteBackward()
-            }
-            
-            let suggestion = suggestionsArrays[x].suggestions[pickedSuggestionIndex]
-            self.textDocumentProxy.insertText(suggestion)
-            
-            if tryLearnNewWord { TryLearnNewWord(word: suggestion.lowercased()) }
-        } else {
-            pickedSuggestionIndex = 0
-        }
-        
-        self.textDocumentProxy.insertText(" ")
-        
-        suggestionsArrays[x].positionIndex = self.textDocumentProxy.documentContextBeforeInput!.endIndex
-        suggestionsArrays[x].lastPickedSuggestionIndex = pickedSuggestionIndex
-        
-        UpdateSuggestionsLabels(arrayIndex: x)
-        AnimateSuggestionLabels(index: pickedSuggestionIndex, instant: instant)
-    }
-    
-    func EditPreviousWord (upOrDown: Int) {
-        var dis = 0
-        while self.textDocumentProxy.documentContextBeforeInput != "" && self.textDocumentProxy.documentContextBeforeInput != nil && getLastChar() != " " {
-            self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
-            dis += 1
-        }
-        let x = getCorrectSuggestionArrayIndex()
-        if x >= 0 {
-            if upOrDown == -1 { //down
-                if pickedSuggestionIndex < suggestionsArrays[x].suggestions.count-1 {
-                    pickedSuggestionIndex += 1
-                    ReplaceWithSuggestion(ignoreSpace: true)
-                }
-            } else if upOrDown == 1 { //up
-                if pickedSuggestionIndex > 0 {
-                    pickedSuggestionIndex -= 1
-                    ReplaceWithSuggestion(ignoreSpace: true, tryLearnNewWord: autoLearnWords && pickedSuggestionIndex == 0)
-                } else {
-                    UseUserDictionary ()
-                }
-            }
-        }
-        
-        self.textDocumentProxy.adjustTextPosition(byCharacterOffset: dis)
-    }
-    
-    func TryLearnNewWord (word: String) {
-        if userDictionary.contains(word.lowercased()) { return }
-        
-        if learningWordsDictionary[word] == nil {
-            learningWordsDictionary[word] = 1
-        } else {
-            learningWordsDictionary[word]! += 1
-            if learningWordsDictionary[word]! >= learningWordsRepeateThreashold {
-                learningWordsDictionary.removeValue(forKey: word)
-                LearnWord(word: word, showNotification: false)
-            }
-        }
-    }
-    
     func ReplacePunctiation () {
         for _ in 0...1 {
             self.textDocumentProxy.deleteBackward()
@@ -885,43 +362,6 @@ class FinaleKeyboard: UIInputViewController {
         canEditPrevPunctuation = true
     }
     
-    func Delete() {
-        HapticFeedback.GestureImpactOccurred()
-        
-        if let emojiSearchRow = emojiSearchRow {
-            emojiSearchRow.Delete()
-            return
-        }
-        
-        let x = getCorrectSuggestionArrayIndex()
-        self.textDocumentProxy.deleteBackward()
-        
-        //DeletePunctuation
-        if let lastChar = self.textDocumentProxy.documentContextBeforeInput?.last {
-            if isPunctuation(char: String(lastChar)) {
-                self.textDocumentProxy.deleteBackward()
-                if self.textDocumentProxy.hasText { self.textDocumentProxy.insertText(" ") }
-                RedrawSuggestionsLabels()
-                canEditPrevPunctuation = false
-                return
-            }
-        }
-        //Delete Words
-        while !isAtWordStart() {
-            if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.last == nil) { break }
-            self.textDocumentProxy.deleteBackward()
-        }
-        if (x >= 0) {
-            suggestionsArrays[x].positionIndex = String().endIndex
-            suggestionsArrays[x].suggestions = [String]()
-            suggestionsArrays[x].lastPickedSuggestionIndex = 1
-            nextSuggestionArray = abs((nextSuggestionArray-1) % maxSuggestionHistory)
-        }
-        CheckAutoCapitalization()
-        RedrawSuggestionsLabels()
-        ProcessDynamicTouchZones()
-        canEditPrevPunctuation = false
-    }
     func InsertPunctuation (index: Int) {
         pickedPunctuationIndex = index
         lastPickedPunctuationIndex = index
@@ -954,36 +394,6 @@ class FinaleKeyboard: UIInputViewController {
         }
     }
     
-    func ResetSuggestions () {
-        for i in 0..<suggestionsArrays.count {
-            suggestionsArrays[i].suggestions.count
-            suggestionsArrays[i].suggestions.removeAll()
-            suggestionsArrays[i].lastPickedSuggestionIndex = 0
-            suggestionsArrays[i].positionIndex = String().endIndex
-        }
-        pickedSuggestionIndex = 0
-        ResetSuggestionsLabels()
-    }
-    func ResetSuggestionsLabels () {
-        suggestionLabels.forEach {
-            $0.text = ""
-            $0.textColor = .gray
-        }
-        centerXConstraint.constant = 0
-        self.view.layoutIfNeeded()
-    }
-    
-    func RedrawSuggestionsLabels () {
-        if let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: oneBeforeLastChar) {
-            pickedPunctuationIndex = punctuationArray.firstIndex(of: String(oneBeforeLastChar))!
-            UpdateSuggestionsLabelsPunctuation()
-            AnimateSuggestionLabels(index: pickedPunctuationIndex, instant: true)
-        } else {
-            UpdateSuggestionsLabels()
-            AnimateSuggestionLabels(index: pickedSuggestionIndex, instant: true)
-        }
-    }
-    
     func ShowNotification (text: String) {
         UIView.animate(withDuration: 0.15) {
             for i in self.suggestionLabels {
@@ -1010,33 +420,6 @@ class FinaleKeyboard: UIInputViewController {
         }
     }
     
-    func UpdateSuggestionsLabels (arrayIndex: Int = -1) {
-        let x = arrayIndex == -1 ? getCorrectSuggestionArrayIndex() : arrayIndex
-        if (x < 0) {
-            ResetSuggestionsLabels()
-            return
-        }
-        pickedSuggestionIndex = suggestionsArrays[x].lastPickedSuggestionIndex
-        
-        for i in 0..<suggestionLabels.count {
-            if suggestionsArrays[x].suggestions.count > i {
-                suggestionLabels[i].text = suggestionsArrays[x].suggestions[i]
-            } else {
-                suggestionLabels[i].text = ""
-            }
-        }
-        UpdateSuggestionColor(index: pickedSuggestionIndex)
-    }
-    func AnimateSuggestionLabels (index: Int, instant: Bool = false) {
-        guard self.suggestionLabels.indices.contains(index) else { return }
-        
-        self.view.layoutIfNeeded()
-        let deltaX = self.suggestionLabels[index].frame.origin.x + self.suggestionLabels[index].frame.width*0.5 - UIScreen.main.bounds.width*0.5
-        centerXConstraint.constant -= deltaX
-        UIView.animate(withDuration: instant ? 0 : 0.5, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
-            self.view.layoutIfNeeded()
-        }
-    }
     func UpdateSuggestionsLabelsPunctuation () {
         for i in 0..<suggestionLabels.count {
             if punctuationArray.count > i {
@@ -1046,25 +429,6 @@ class FinaleKeyboard: UIInputViewController {
             }
         }
         UpdateSuggestionColor(index: pickedPunctuationIndex)
-    }
-    func UpdateSuggestionColor(index: Int) {
-        for i in 0..<suggestionLabels.count {
-            if index == i {
-                suggestionLabels[i].textColor = .label
-                continue
-            }
-            suggestionLabels[i].textColor = .gray
-        }
-    }
-    func FadeoutSuggestions () {
-        if (suggestionLabels[0].textColor.cgColor.alpha <= 0) { return }
-        if (suggestionLabels[0].text == "") { return }
-        
-        for i in self.suggestionLabels {
-            UIView.transition(with: i, duration: 0.20, options: .transitionCrossDissolve) {
-                i.textColor = i.textColor.withAlphaComponent(i.textColor.cgColor.alpha-0.334)
-            }
-        }
     }
     
     @discardableResult
@@ -1148,17 +512,6 @@ class FinaleKeyboard: UIInputViewController {
         else { return isPunctuation(char: char) }
     }
     
-    func ToggleLocale (backwards: Bool = false) {
-        var index = ((FinaleKeyboard.enabledLocales.firstIndex(of: FinaleKeyboard.currentLocale) ?? 0) + (backwards ? -1 : 1)) % FinaleKeyboard.enabledLocales.count
-        if index < 0 { index += FinaleKeyboard.enabledLocales.count }
-        SetLocale(FinaleKeyboard.enabledLocales[index])
-        
-        BuildKeyboardView(viewType: .Characters, updateViewType: FinaleKeyboard.currentViewType != .SearchEmoji)
-        ResetSuggestions()
-        
-        UserDefaults.standard.set(FinaleKeyboard.currentLocale.rawValue, forKey: "FINALE_DEV_APP_CurrentLocale")
-    }
-    
     func SetLocale (_ locale: Locale) {
         FinaleKeyboard.currentLocale = locale
         ReloadSpellChecker(clearCurrent: true)
@@ -1178,15 +531,6 @@ class FinaleKeyboard: UIInputViewController {
                 self.spellChecker = newSpellCheck
             }
         }
-    }
-    
-    func ToggleSymbolsView () {
-        if FinaleKeyboard.currentViewType == .Characters { BuildKeyboardView(viewType: .Symbols) }
-        else if FinaleKeyboard.currentViewType == .Symbols || FinaleKeyboard.currentViewType == .ExtraSymbols { BuildKeyboardView(viewType: .Characters) }
-    }
-    func ToggleExtraSymbolsView () {
-        if FinaleKeyboard.currentViewType == .Symbols { BuildKeyboardView(viewType: .ExtraSymbols) }
-        else if FinaleKeyboard.currentViewType == .ExtraSymbols { BuildKeyboardView(viewType: .Symbols) }
     }
     
     var shouldCapitalize: Bool {
