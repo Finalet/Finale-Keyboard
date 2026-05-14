@@ -96,8 +96,9 @@ extension FinaleKeyboard {
         } else if context?.last != " " {
             ResetSuggestionsLabels()
             if (FinaleKeyboard.isAutoCorrectOn) {
-                GenerateAutocorrections()
-                ReplaceWithSuggestion(ignoreSpace: false, instant: true)
+                Autocorrect()
+//                GenerateAutocorrections()
+//                ReplaceWithSuggestion(ignoreSpace: false, instant: true)
             } else {
                 self.textDocumentProxy.insertText(" ")
             }
@@ -133,7 +134,8 @@ extension FinaleKeyboard {
             return
         }
         
-        let x = getCorrectSuggestionArrayIndex()
+        let lastWord = getLastWord()
+        
         self.textDocumentProxy.deleteBackward()
         
         //DeletePunctuation
@@ -149,20 +151,17 @@ extension FinaleKeyboard {
         
         //Delete Words
         while !isAtWordStart() {
-            if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.last == nil) { break }
             self.textDocumentProxy.deleteBackward()
         }
         
-        if (x >= 0) {
-            suggestionsArrays[x].positionIndex = String().endIndex
-            suggestionsArrays[x].suggestions = [String]()
-            suggestionsArrays[x].lastPickedSuggestionIndex = 1
-            nextSuggestionArray = abs((nextSuggestionArray-1) % maxSuggestionHistory)
+        if let lastWord = lastWord {
+            SuggestionManager.deleteSuggestions(forWord: lastWord)
         }
         
         CheckAutoCapitalization()
         RedrawSuggestionsLabels()
         ProcessDynamicTouchZones()
+        
         canEditPrevPunctuation = false
     }
     
@@ -186,7 +185,7 @@ extension FinaleKeyboard {
             return
         }
         
-        EditPreviousWord(upOrDown: -1)
+        CycleSuggestionsForLastWord(dir: 1)
     }
     
     func SwipeUp () {
@@ -209,7 +208,7 @@ extension FinaleKeyboard {
             return
         }
         
-        EditPreviousWord(upOrDown: 1)
+        CycleSuggestionsForLastWord(dir: -1)
     }
     
     func SwipeRightSpacebar () {
@@ -288,7 +287,6 @@ extension FinaleKeyboard {
         SetLocale(FinaleKeyboard.enabledLocales[index])
         
         BuildKeyboardView(viewType: .Characters, updateViewType: FinaleKeyboard.currentViewType != .SearchEmoji)
-        ResetSuggestions()
         
         UserDefaults.standard.set(FinaleKeyboard.currentLocale.rawValue, forKey: "FINALE_DEV_APP_CurrentLocale")
     }
@@ -345,7 +343,8 @@ extension FinaleKeyboard {
         }
         
         self.textDocumentProxy.insertText(" ")
-        ResetSuggestions()
+        
+        ClearSuggestionLabels()
         CheckAutoCapitalization()
         ResetDynamicTouchZones()
         
@@ -356,7 +355,7 @@ extension FinaleKeyboard {
     
     func ReturnAction () {
         self.textDocumentProxy.insertText("\n")
-        ResetSuggestions()
+        ClearSuggestionLabels()
         CheckAutoCapitalization()
     }
  

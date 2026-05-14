@@ -11,41 +11,28 @@ import UIKit
 // MARK: Suggestions Logic
 extension FinaleKeyboard {
     
-    func GenerateAutocorrections() {
+    func Autocorrect() {
         guard let lastWord = getLastWord() else { return }
         
-        if (suggestionsArrays[nextSuggestionArray].suggestions.count != 0) {
-            suggestionsArrays[nextSuggestionArray].suggestions.removeAll()
-            suggestionsArrays[nextSuggestionArray].lastPickedSuggestionIndex = 1
-            suggestionsArrays[nextSuggestionArray].positionIndex = String().startIndex
-        }
-        suggestionsArrays[nextSuggestionArray].suggestions.append(lastWord)
-        suggestionsArrays[nextSuggestionArray].positionIndex = self.textDocumentProxy.documentContextBeforeInput!.endIndex
-        suggestionsArrays[nextSuggestionArray].lastPickedSuggestionIndex = 0
+        let defaultSuggestions: [String] = getDefaultSuggestions(for: lastWord)
+        let suggestions: [String] = !FinaleKeyboard.isExperimentalAutocorrectOn ? getStandardSpellcheckSuggestions(for: lastWord) : (spellChecker?.suggestions(forWord: lastWord)?.compactMap({ $0.word }) ?? getStandardSpellcheckSuggestions(for: lastWord))
+        var allSuggestions = defaultSuggestions + suggestions.filter({ !defaultSuggestions.contains($0) })
         
-        AppendSuggestionFromDictionary(dict: defaultDictionary, lastWord: lastWord)
+        let pickedInex: Int
         
-        var suggestions: [String] = !FinaleKeyboard.isExperimentalAutocorrectOn ? getStandardSpellcheckSuggestions(for: lastWord) : (spellChecker?.suggestions(forWord: lastWord)?.compactMap({ $0.word }) ?? getStandardSpellcheckSuggestions(for: lastWord))
-        
-        if lastWord.contains(where: \.isNumber) {
-            pickedSuggestionIndex = 0
-        } else if lastWord == suggestions.first {
-            suggestions.removeFirst()
-            pickedSuggestionIndex = 0
-        } else if suggestions.contains(lastWord) && defaultDictionary[lastWord.lowercased()] == nil { // defaultDictionary[lastWord.lowercased()] == nil is a patch for old autocorrect. Once we move away from it, we should remove this.
-            suggestions.removeAll(where: { $0 == lastWord })
-            pickedSuggestionIndex = 1
+        // Suggestions should stay on the typed word if:
+        if lastWord.contains(where: \.isNumber) || lastWord == allSuggestions.first || (!FinaleKeyboard.isExperimentalAutocorrectOn && userDictionary.contains(lastWord.lowercased())) {
+            pickedInex = 0
         } else {
-            pickedSuggestionIndex = 1
+            pickedInex = 1
         }
         
-        suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: suggestions)
-        while suggestionsArrays[nextSuggestionArray].suggestions.count > maxSuggestions { suggestionsArrays[nextSuggestionArray].suggestions.removeLast() }
+        allSuggestions.removeAll(where: { $0 == lastWord } )
         
-        nextSuggestionArray = (nextSuggestionArray+1) % maxSuggestionHistory
+        guard let newStorage = SuggestionManager.addSuggestions(suggestions: [lastWord] + allSuggestions, pickedIndex: pickedInex) else { return }
         
-        // This is redundant when using our new SpellCheck. However, when its not used, we still need to enforce user dictionary
-        CheckUserDictionary()
+        ReplaceLastWord(withWord: newStorage.pickedSuggestion)
+        SetSuggestionLabels(suggestions: newStorage, animated: false)
     }
     
     func getStandardSpellcheckSuggestions (for word: String) -> [String] {
@@ -58,13 +45,10 @@ extension FinaleKeyboard {
         return suggestions.map { matchCase(fromWord: word, toWord: $0) }
     }
     
-    func AppendSuggestionFromDictionary (dict: Dictionary<String, [String]>, lastWord: String) {
-        if !FinaleKeyboard.isAutoCorrectGrammarOn { return }
+    func getDefaultSuggestions (for word: String) -> [String] {
+        guard FinaleKeyboard.isAutoCorrectGrammarOn, let suggestions = defaultDictionary[word.lowercased()] else { return [] }
         
-        if (dict[lastWord.lowercased()] != nil) {
-            let suggestions = dict[lastWord.lowercased()]!.map { matchCase(fromWord: lastWord, toWord: $0) }
-            suggestionsArrays[nextSuggestionArray].suggestions.append(contentsOf: suggestions)
-        }
+        return suggestions.map { matchCase(fromWord: word, toWord: $0) }
     }
     
     func matchCase (fromWord: String, toWord: String) -> String {
@@ -81,86 +65,66 @@ extension FinaleKeyboard {
         return toWord
     }
     
-    func ReplaceWithSuggestion (ignoreSpace: Bool = false, instant: Bool = false, tryLearnNewWord: Bool = false) {
-        let x = getCorrectSuggestionArrayIndex()
-        if x < 0 { return }
+    func ReplaceLastWord (withWord: String) {
+        if getLastChar() == " " { self.textDocumentProxy.deleteBackward() }
         
-        if ignoreSpace{ self.textDocumentProxy.deleteBackward() }
-        
-        if (suggestionsArrays[x].suggestions.count > 1) {
-            while !isAtWordStart() {
-                if (self.textDocumentProxy.documentContextBeforeInput == nil || self.textDocumentProxy.documentContextBeforeInput?.last == nil) { break }
-                self.textDocumentProxy.deleteBackward()
-            }
-            
-            let suggestion = suggestionsArrays[x].suggestions[pickedSuggestionIndex]
-            self.textDocumentProxy.insertText(suggestion)
-            
-            if tryLearnNewWord { TryLearnNewWord(word: suggestion.lowercased()) }
-        } else {
-            pickedSuggestionIndex = 0
+        while !isAtWordStart() {
+            self.textDocumentProxy.deleteBackward()
         }
         
-        self.textDocumentProxy.insertText(" ")
-        
-        suggestionsArrays[x].positionIndex = self.textDocumentProxy.documentContextBeforeInput!.endIndex
-        suggestionsArrays[x].lastPickedSuggestionIndex = pickedSuggestionIndex
-        
-        UpdateSuggestionsLabels(arrayIndex: x)
-        AnimateSuggestionLabels(index: pickedSuggestionIndex, instant: instant)
+        self.textDocumentProxy.insertText("\(withWord) ")
     }
     
-    func EditPreviousWord (upOrDown: Int) {
+    func CycleSuggestionsForLastWord (dir: Int) {
+        guard (dir == -1 || dir == 1) else { return }
+        
         var dis = 0
-        while self.textDocumentProxy.documentContextBeforeInput != "" && self.textDocumentProxy.documentContextBeforeInput != nil && getLastChar() != " " {
+        while let context = self.textDocumentProxy.documentContextBeforeInput, !context.isEmpty, let lastChar = getLastChar()?.unicodeScalars.first, !CharacterSet.whitespacesAndNewlines.contains(lastChar) {
             self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
             dis += 1
         }
-        let x = getCorrectSuggestionArrayIndex()
-        if x >= 0 {
-            if upOrDown == -1 { //down
-                if pickedSuggestionIndex < suggestionsArrays[x].suggestions.count-1 {
-                    pickedSuggestionIndex += 1
-                    ReplaceWithSuggestion(ignoreSpace: true)
-                }
-            } else if upOrDown == 1 { //up
-                if pickedSuggestionIndex > 0 {
-                    pickedSuggestionIndex -= 1
-                    ReplaceWithSuggestion(ignoreSpace: true, tryLearnNewWord: autoLearnWords && pickedSuggestionIndex == 0)
-                } else {
-                    UseUserDictionary ()
-                }
-            }
+        
+        if let suggestionStorage = SuggestionManager.getCurrentSuggestions(), let newSuggestion = dir == 1 ? suggestionStorage.pickNextSuggestion() : suggestionStorage.pickPrevSuggestion() {
+            ReplaceLastWord(withWord: newSuggestion)
+            SetSuggestionLabels(suggestions: suggestionStorage, animated: true)
         }
         
         self.textDocumentProxy.adjustTextPosition(byCharacterOffset: dis)
-    }
-    
-    func CheckUserDictionary () {
-        let x = getCorrectSuggestionArrayIndex()
-        if x < 0 { return }
-        
-        if suggestionsArrays[x].suggestions.count >= 2 {
-            if userDictionary.contains(suggestionsArrays[x].suggestions[0].lowercased()) {
-                pickedSuggestionIndex = 0
-            }
-        }
-    }
-    
-    func ResetSuggestions () {
-        for i in 0..<suggestionsArrays.count {
-            suggestionsArrays[i].suggestions.count
-            suggestionsArrays[i].suggestions.removeAll()
-            suggestionsArrays[i].lastPickedSuggestionIndex = 0
-            suggestionsArrays[i].positionIndex = String().endIndex
-        }
-        pickedSuggestionIndex = 0
-        ResetSuggestionsLabels()
     }
 }
 
 // MARK: Suggestions UI
 extension FinaleKeyboard {
+    
+    func ClearSuggestionLabels () {
+        return SetSuggestionLabels(texts: nil, selectedIndex: nil, animated: false)
+    }
+    
+    func SetSuggestionLabels(suggestions: SuggestionsManager.SuggestionsStorage?, animated: Bool = false) {
+        return SetSuggestionLabels(texts: suggestions?.list, selectedIndex: suggestions?.pickedSuggestionIndex, animated: animated)
+    }
+
+    func SetSuggestionLabels (texts: [String]?, selectedIndex: Int?, animated: Bool) {
+        for i in 0..<suggestionLabels.count {
+            suggestionLabels[i].text = texts == nil ? "" : texts!.indices.contains(i) ? texts![i] : ""
+            suggestionLabels[i].textColor = i == selectedIndex ? .label : .gray
+        }
+        
+        if let selectedIndex = selectedIndex, suggestionLabels.indices.contains(selectedIndex) {
+            let deltaX = self.suggestionLabels[selectedIndex].frame.origin.x + self.suggestionLabels[selectedIndex].frame.width*0.5 - UIScreen.main.bounds.width*0.5
+            centerXConstraint.constant -= deltaX
+        } else {
+            centerXConstraint.constant = 0
+        }
+        
+        if animated {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
+                self.view.layoutIfNeeded()
+            }
+        } else {
+            self.view.layoutIfNeeded()
+        }
+    }
     
     func UpdateSuggestionsLabels (arrayIndex: Int = -1) {
         let x = arrayIndex == -1 ? getCorrectSuggestionArrayIndex() : arrayIndex
@@ -177,6 +141,7 @@ extension FinaleKeyboard {
                 suggestionLabels[i].text = ""
             }
         }
+        
         UpdateSuggestionColor(index: pickedSuggestionIndex)
     }
     
@@ -227,8 +192,7 @@ extension FinaleKeyboard {
             UpdateSuggestionsLabelsPunctuation()
             AnimateSuggestionLabels(index: pickedPunctuationIndex, instant: true)
         } else {
-            UpdateSuggestionsLabels()
-            AnimateSuggestionLabels(index: pickedSuggestionIndex, instant: true)
+            SetSuggestionLabels(suggestions: SuggestionManager.getCurrentSuggestions(), animated: false)
         }
     }
 }

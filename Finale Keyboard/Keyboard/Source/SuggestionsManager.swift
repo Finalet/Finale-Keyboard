@@ -9,11 +9,11 @@ class SuggestionsManager {
 
     var storage: [SuggestionsStorage] = []
 
-    private let maxSuggestionHistory: Int = 5
-    private let maxSuggestions: Int = 7
+    private static let maxSuggestionHistory: Int = 5
+    private static let maxSuggestions: Int = 7
 
     func addSuggestions (suggestions: [String], pickedIndex: Int) -> SuggestionsStorage? {
-        if storage.count >= maxSuggestionHistory { storage.removeFirst() }
+        if storage.count >= SuggestionsManager.maxSuggestionHistory { storage.removeFirst() }
 
         guard let newStorage = SuggestionsStorage(list: suggestions, pickedIndex: pickedIndex) else { return nil }
         
@@ -41,11 +41,11 @@ class SuggestionsManager {
     class SuggestionsStorage {
         var list: [String]
         var pickedSuggestionIndex: Int
-
+        
         init? (list: [String], pickedIndex: Int) {
             guard !list.isEmpty, list.indices.contains(pickedIndex) else { return nil }
             
-            self.list = list
+            self.list = Array(list.prefix(SuggestionsManager.maxSuggestions))
             self.pickedSuggestionIndex = pickedIndex
         }
 
