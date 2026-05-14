@@ -12,12 +12,12 @@ class SuggestionsManager {
     private let maxSuggestionHistory: Int = 5
     private let maxSuggestions: Int = 7
 
-    func addSuggestions (suggestions: [String], pickedIndex: Int) -> SuggestionsStorage {
+    func addSuggestions (suggestions: [String], pickedIndex: Int) -> SuggestionsStorage? {
         if storage.count >= maxSuggestionHistory { storage.removeFirst() }
 
-        let newStorage = SuggestionsStorage(list: suggestions, pickedIndex: pickedIndex)
+        guard let newStorage = SuggestionsStorage(list: suggestions, pickedIndex: pickedIndex) else { return nil }
+        
         storage.append(newStorage)
-
         return newStorage
     }
 
@@ -42,7 +42,9 @@ class SuggestionsManager {
         var list: [String]
         var pickedSuggestionIndex: Int
 
-        init(list: [String], pickedIndex: Int) {
+        init? (list: [String], pickedIndex: Int) {
+            guard !list.isEmpty, list.indices.contains(pickedIndex) else { return nil }
+            
             self.list = list
             self.pickedSuggestionIndex = pickedIndex
         }
@@ -52,21 +54,19 @@ class SuggestionsManager {
         }
 
         func pickNextSuggestion() -> String? {
-            let nextIndex = pickedSuggestionIndex + 1
-            if list.indices.contains(nextIndex) {
-                pickedSuggestionIndex = nextIndex
-                return pickedSuggestion
-            }
-            return nil
+            return pickSuggestionWithOffset(1)
         }
 
         func pickPrevSuggestion() -> String? {
-            let prevIndex = pickedSuggestionIndex - 1
-            if list.indices.contains(prevIndex) {
-                pickedSuggestionIndex = prevIndex
-                return pickedSuggestion
-            }
-            return nil
+            return pickSuggestionWithOffset(-1)
+        }
+        
+        private func pickSuggestionWithOffset(_ offset: Int) -> String? {
+            let nextIndex = pickedSuggestionIndex + offset
+            guard list.indices.contains(nextIndex)  else { return nil }
+            
+            pickedSuggestionIndex = nextIndex
+            return pickedSuggestion
         }
     }
 }
