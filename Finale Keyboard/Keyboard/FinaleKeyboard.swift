@@ -400,7 +400,7 @@ class FinaleKeyboard: UIInputViewController {
                 i.alpha = 0
             }
         } completion: { [self] _ in
-            ResetSuggestionsLabels()
+            ClearSuggestionLabels()
             suggestionLabels[1].text = text
             suggestionLabels[1].textColor = .label
             UIView.animate(withDuration: 0.3) {

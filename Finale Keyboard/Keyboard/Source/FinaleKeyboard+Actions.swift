@@ -36,7 +36,8 @@ extension FinaleKeyboard {
         }
         
         self.textDocumentProxy.insertText(shouldCapitalize ? character.capitalized : character)
-        FadeoutSuggestions()
+        
+        FadeSuggestions()
         
         if (x) { self.textDocumentProxy.insertText(" ") }
         
@@ -72,7 +73,8 @@ extension FinaleKeyboard {
     func Paste (text: String? = nil) {
         guard let pasteText = text ?? UIPasteboard.general.string else { return }
         self.textDocumentProxy.insertText(pasteText)
-        FadeoutSuggestions()
+        
+        ClearSuggestionLabels()
         CheckAutoCapitalization()
         ProcessDynamicTouchZones()
     }
@@ -90,22 +92,20 @@ extension FinaleKeyboard {
         
         let context = self.textDocumentProxy.documentContextBeforeInput
         if context == nil {
-            ResetSuggestionsLabels()
+            ClearSuggestionLabels()
             pickedPunctuationIndex = 0
             InsertPunctuation(index: pickedPunctuationIndex)
         } else if context?.last != " " {
-            ResetSuggestionsLabels()
             if (FinaleKeyboard.isAutoCorrectOn) {
                 Autocorrect()
-//                GenerateAutocorrections()
-//                ReplaceWithSuggestion(ignoreSpace: false, instant: true)
             } else {
+                ClearSuggestionLabels()
                 self.textDocumentProxy.insertText(" ")
             }
             canEditPrevPunctuation = false
         } else {
             if ((context?.count ?? 0) < 2) {
-                ResetSuggestionsLabels()
+                ClearSuggestionLabels()
                 SwipeRightSpacebar()
                 canEditPrevPunctuation = false
                 return
@@ -116,7 +116,7 @@ extension FinaleKeyboard {
             if let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: oneBeforeLastChar) {
                 index = punctuationArray.firstIndex(of: String(oneBeforeLastChar)) ?? 1
             } else {
-                ResetSuggestionsLabels()
+                ClearSuggestionLabels()
             }
             
             InsertPunctuation(index: index)
@@ -233,7 +233,7 @@ extension FinaleKeyboard {
     func OpenEmoji () {
         FinaleKeyboard.currentViewType = .Emoji
         emojiView.PrepareView()
-        ResetSuggestionsLabels()
+        ClearSuggestionLabels()
         keysViewTopConstraint?.constant = -self.view.frame.height
         keysViewBottomConstraint?.constant = -self.view.frame.height
         UIView.animate(withDuration: 0.6, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.4, options: .curveEaseIn) {

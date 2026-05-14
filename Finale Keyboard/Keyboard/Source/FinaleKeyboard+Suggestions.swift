@@ -126,25 +126,7 @@ extension FinaleKeyboard {
         }
     }
     
-    func UpdateSuggestionsLabels (arrayIndex: Int = -1) {
-        let x = arrayIndex == -1 ? getCorrectSuggestionArrayIndex() : arrayIndex
-        if (x < 0) {
-            ResetSuggestionsLabels()
-            return
-        }
-        pickedSuggestionIndex = suggestionsArrays[x].lastPickedSuggestionIndex
-        
-        for i in 0..<suggestionLabels.count {
-            if suggestionsArrays[x].suggestions.count > i {
-                suggestionLabels[i].text = suggestionsArrays[x].suggestions[i]
-            } else {
-                suggestionLabels[i].text = ""
-            }
-        }
-        
-        UpdateSuggestionColor(index: pickedSuggestionIndex)
-    }
-    
+    // TO-DO: Fix how punctuations are displayed, and remove this.
     func AnimateSuggestionLabels (index: Int, instant: Bool = false) {
         guard self.suggestionLabels.indices.contains(index) else { return }
         
@@ -156,6 +138,7 @@ extension FinaleKeyboard {
         }
     }
     
+    // TO-DO: Fix how punctuations are displayed, and remove this.
     func UpdateSuggestionColor(index: Int) {
         for i in 0..<suggestionLabels.count {
             if index == i {
@@ -166,24 +149,14 @@ extension FinaleKeyboard {
         }
     }
     
-    func FadeoutSuggestions () {
-        if (suggestionLabels[0].textColor.cgColor.alpha <= 0) { return }
-        if (suggestionLabels[0].text == "") { return }
-        
-        for i in self.suggestionLabels {
-            UIView.transition(with: i, duration: 0.20, options: .transitionCrossDissolve) {
-                i.textColor = i.textColor.withAlphaComponent(i.textColor.cgColor.alpha-0.334)
+    func FadeSuggestions () {
+        for label in self.suggestionLabels {
+            if label.textColor.cgColor.alpha <= 0 { continue }
+            
+            UIView.transition(with: label, duration: 0.20, options: .transitionCrossDissolve) {
+                label.textColor = label.textColor.withAlphaComponent(label.textColor.cgColor.alpha-0.334)
             }
         }
-    }
-    
-    func ResetSuggestionsLabels () {
-        suggestionLabels.forEach {
-            $0.text = ""
-            $0.textColor = .gray
-        }
-        centerXConstraint.constant = 0
-        self.view.layoutIfNeeded()
     }
     
     func RedrawSuggestionsLabels () {
