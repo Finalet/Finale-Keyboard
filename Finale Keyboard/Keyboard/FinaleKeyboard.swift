@@ -75,14 +75,10 @@ class FinaleKeyboard: UIInputViewController {
     static var enabledLocales = [Locale.en_US]
     static var currentViewType = ViewType.Characters
     
-    var pickedPunctuationIndex = 0
-    var lastPickedPunctuationIndex = 0
-    
     var suggestionLabels: [UILabel] = []
     var suggestionLabelCenterXConstraint = NSLayoutConstraint()
     let suggestionsManager = SuggestionsManager()
-    
-    var canEditPrevPunctuation = false
+    let punctuationManager = PunctuationManager()
     
     var capsTimer: Timer?
     
@@ -92,10 +88,11 @@ class FinaleKeyboard: UIInputViewController {
     
     var lastTouchPosX = 0.0
     
-    var punctuationArray: [String] = []
+    var punctuations: [String] = []
     var shortcuts: [String:String] = [:]
     var defaultDictionary: Dictionary<String, [String]> = [String:[String]]()
     var userDictionary: [String] = []
+    var spellChecker: SpellCheck?
     
     var learningWordsDictionary: Dictionary<String, Int> = [String:Int]()
     let learningWordsRepeateThreashold = 3
@@ -110,8 +107,7 @@ class FinaleKeyboard: UIInputViewController {
     let minNgram = 1
     let maxNgram = 5
     
-    let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
-    var spellChecker: SpellCheck?
+    static let userDefaults = UserDefaults(suiteName: "group.finale-keyboard-cache")
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -147,48 +143,48 @@ class FinaleKeyboard: UIInputViewController {
             }
         })
         
-        userDictionary = userDefaults?.value(forKey: "FINALE_DEV_APP_userDictionary") as? [String] ?? [String]()
+        userDictionary = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_userDictionary") as? [String] ?? [String]()
         if FinaleKeyboard.autoLearnWords {
-            learningWordsDictionary = userDefaults?.value(forKey: "FINALE_DEV_APP_learningWordsDictionary") as?  Dictionary<String, Int> ?? [String:Int]()
+            learningWordsDictionary = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_learningWordsDictionary") as?  Dictionary<String, Int> ?? [String:Int]()
         }
     }
     
     func SaveUserDictionary () {
-        userDefaults?.setValue(userDictionary, forKey: "FINALE_DEV_APP_userDictionary")
+        FinaleKeyboard.userDefaults?.setValue(userDictionary, forKey: "FINALE_DEV_APP_userDictionary")
     }
     func SaveLearningWordsDictionary () {
-        userDefaults?.setValue(learningWordsDictionary, forKey: "FINALE_DEV_APP_learningWordsDictionary")
+        FinaleKeyboard.userDefaults?.setValue(learningWordsDictionary, forKey: "FINALE_DEV_APP_learningWordsDictionary")
     }
     
     func LoadPreferences () {
-        let EN_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_en_locale_enabled") as? Bool ?? true
-        let RU_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_ru_locale_enabled") as? Bool ?? false
-        let ES_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_es_locale_enabled") as? Bool ?? false
-        let DE_enabled = userDefaults?.value(forKey: "FINALE_DEV_APP_de_locale_enabled") as? Bool ?? false
+        let EN_enabled = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_en_locale_enabled") as? Bool ?? true
+        let RU_enabled = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_ru_locale_enabled") as? Bool ?? false
+        let ES_enabled = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_es_locale_enabled") as? Bool ?? false
+        let DE_enabled = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_de_locale_enabled") as? Bool ?? false
         FinaleKeyboard.enabledLocales.removeAll()
         if EN_enabled { FinaleKeyboard.enabledLocales.append(Locale.en_US) }
         if RU_enabled { FinaleKeyboard.enabledLocales.append(Locale.ru_RU) }
         if ES_enabled { FinaleKeyboard.enabledLocales.append(Locale.es_ES) }
         if DE_enabled { FinaleKeyboard.enabledLocales.append(Locale.de_DE) }
         
-        FinaleKeyboard.autoLearnWords = userDefaults?.value(forKey: "FINALE_DEV_APP_autoLearnWords") as? Bool ?? true
-        FinaleKeyboard.isAutoCorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectWords") as? Bool ?? true
-        FinaleKeyboard.isAutoCorrectGrammarOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectGrammar") as? Bool ?? true
-        FinaleKeyboard.isAutoCapitalizeOn = userDefaults?.value(forKey: "FINALE_DEV_APP_autocapitalizeWords") as? Bool ?? true
-        FinaleKeyboard.isTypingHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isTypingHapticEnabled") as? Bool ?? true
-        FinaleKeyboard.isGesturesHapticEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
-        FinaleKeyboard.isSpacebarEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isSpacebarEnabled") as? Bool ?? false
-        FinaleKeyboard.isSpacebarAutocorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_spacebarAutocorrect") as? Bool ?? false
-        FinaleKeyboard.isExperimentalAutocorrectOn = userDefaults?.value(forKey: "FINALE_DEV_APP_isExperimentalAutocorrectOn") as? Bool ?? false
-        FinaleKeyboard.isDynamicTapZonesEnabled = userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
-        FinaleKeyboard.showTouchZones = userDefaults?.value(forKey: "FINALE_DEV_APP_showTouchZones") as? Bool ?? false
-        FinaleKeyboard.maxTouchZoneScale = userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? CGFloat ?? 0.6
-        FinaleKeyboard.dynamicTapZoneProbabilityMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier") as? CGFloat ?? 1.5
-        FinaleKeyboard.dynamicKeyHighlighting = userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicKeyHighlighting") as? Bool ?? false
-        FinaleKeyboard.keyboardHeightMultiplier = userDefaults?.value(forKey: "FINALE_DEV_APP_keyboardHeightMultiplier") as? CGFloat ?? 1.0
+        FinaleKeyboard.autoLearnWords = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_autoLearnWords") as? Bool ?? true
+        FinaleKeyboard.isAutoCorrectOn = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectWords") as? Bool ?? true
+        FinaleKeyboard.isAutoCorrectGrammarOn = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_autocorrectGrammar") as? Bool ?? true
+        FinaleKeyboard.isAutoCapitalizeOn = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_autocapitalizeWords") as? Bool ?? true
+        FinaleKeyboard.isTypingHapticEnabled = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_isTypingHapticEnabled") as? Bool ?? true
+        FinaleKeyboard.isGesturesHapticEnabled = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_isGesturesHapticEnabled") as? Bool ?? true
+        FinaleKeyboard.isSpacebarEnabled = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_isSpacebarEnabled") as? Bool ?? false
+        FinaleKeyboard.isSpacebarAutocorrectOn = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_spacebarAutocorrect") as? Bool ?? false
+        FinaleKeyboard.isExperimentalAutocorrectOn = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_isExperimentalAutocorrectOn") as? Bool ?? false
+        FinaleKeyboard.isDynamicTapZonesEnabled = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_isDynamicTapZonesEnabled") as? Bool ?? false
+        FinaleKeyboard.showTouchZones = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_showTouchZones") as? Bool ?? false
+        FinaleKeyboard.maxTouchZoneScale = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_maxTouchZoneScale") as? CGFloat ?? 0.6
+        FinaleKeyboard.dynamicTapZoneProbabilityMultiplier = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicTapZoneProbabilityMultiplier") as? CGFloat ?? 1.5
+        FinaleKeyboard.dynamicKeyHighlighting = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_dynamicKeyHighlighting") as? Bool ?? false
+        FinaleKeyboard.keyboardHeightMultiplier = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_keyboardHeightMultiplier") as? CGFloat ?? 1.0
         
-        punctuationArray = userDefaults?.value(forKey: "FINALE_DEV_APP_punctuationArray") as? [String] ?? Defaults.punctuation
-        shortcuts = userDefaults?.value(forKey: "FINALE_DEV_APP_shortcuts") as? [String : String] ?? Defaults.shortcuts
+        punctuations = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_punctuationArray") as? [String] ?? Defaults.punctuation
+        shortcuts = FinaleKeyboard.userDefaults?.value(forKey: "FINALE_DEV_APP_shortcuts") as? [String : String] ?? Defaults.shortcuts
         var currentLocale = Locale(rawValue: UserDefaults.standard.integer(forKey: "FINALE_DEV_APP_CurrentLocale")) ?? .en_US
         
         if !FinaleKeyboard.enabledLocales.contains(currentLocale) {
@@ -306,7 +302,7 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func BuildSuggestionViews () {
-        for _ in 0..<SuggestionsManager.maxSuggestionHistory {
+        for _ in 0..<SuggestionsManager.maxSuggestions {
             suggestionLabels.append(BuildSuggestionView())
         }
         
@@ -335,45 +331,6 @@ class FinaleKeyboard: UIInputViewController {
         self.view.addSubview(emojiView, anchors: [.topToBottom(keysView, 0), .leading(0), .trailing(0), .heightToHeight(self.view, 0)])
     }
     
-    func ReplacePunctiation () {
-        for _ in 0...1 {
-            self.textDocumentProxy.deleteBackward()
-        }
-        self.textDocumentProxy.insertText(punctuationArray[pickedPunctuationIndex])
-        self.textDocumentProxy.insertText(" ")
-        
-        UpdateSuggestionsLabelsPunctuation()
-        AnimateSuggestionLabels(index: pickedPunctuationIndex)
-        CheckAutoCapitalization()
-        
-        canEditPrevPunctuation = true
-    }
-    
-    func InsertPunctuation (index: Int) {
-        pickedPunctuationIndex = index
-        lastPickedPunctuationIndex = index
-        UpdateSuggestionsLabelsPunctuation()
-        AnimateSuggestionLabels(index: pickedPunctuationIndex, instant: true)
-        
-        self.textDocumentProxy.deleteBackward()
-        self.textDocumentProxy.insertText(String(punctuationArray[index]) + " ")
-        
-        canEditPrevPunctuation = true
-        
-        CheckAutoCapitalization()
-    }
-    
-    func EditPreviousPunctuation () {
-        var dis = 0
-        
-        while let contextBeforeInput = self.textDocumentProxy.documentContextBeforeInput, contextBeforeInput != "", let lastChar = getLastChar(), !isPunctuation(char: lastChar) {
-            self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
-            dis += 1
-        }
-        ReplacePunctiation()
-        self.textDocumentProxy.adjustTextPosition(byCharacterOffset: dis)
-    }
-    
     func UpdateButtonsTitles () {
         characterButtons.forEach { $0.value.ToggleCapitalization(shouldCapitalize) }
         if leadingBottomButton.function == .Shift || leadingBottomButton.function == .Caps {
@@ -399,24 +356,13 @@ class FinaleKeyboard: UIInputViewController {
                 UIView.animate(withDuration: animDuration, delay: notificationDuration) {
                     self.suggestionLabels[0].alpha = 0
                 } completion: { _ in
-                    self.RedrawSuggestionsLabels()
+                    self.RestoreSuggestionsLabels()
                     UIView.animate(withDuration: animDuration) {
                         self.suggestionLabels.forEach({ $0.alpha = 1 })
                     }
                 }
             }
         }
-    }
-    
-    func UpdateSuggestionsLabelsPunctuation () {
-        for i in 0..<suggestionLabels.count {
-            if punctuationArray.count > i {
-                suggestionLabels[i].text = punctuationArray[i]
-            } else {
-                suggestionLabels[i].text = ""
-            }
-        }
-        UpdateSuggestionColor(index: pickedPunctuationIndex)
     }
     
     @discardableResult
@@ -460,7 +406,7 @@ class FinaleKeyboard: UIInputViewController {
         // The app has just changed the document's contents, the document context has been updated.
         CheckAutoCapitalization()
         ProcessDynamicTouchZones()
-        if (!self.textDocumentProxy.hasText) { RedrawSuggestionsLabels() }
+        if (!self.textDocumentProxy.hasText) { RestoreSuggestionsLabels() }
     }
     
     func MiddleRowReactAnimation () {
@@ -472,17 +418,6 @@ class FinaleKeyboard: UIInputViewController {
             }
         }
         
-    }
-    
-    func isPunctuation(char: String) -> Bool {
-        return punctuationArray.contains(char)
-    }
-    func isPunctuation(char: Character) -> Bool {
-        return isPunctuation(char: String(char))
-    }
-    func isPunctuation(char: String, ignoreCharacters: [String]) -> Bool {
-        if ignoreCharacters.contains(char) { return false }
-        else { return isPunctuation(char: char) }
     }
     
     func SetLocale (_ locale: Locale) {

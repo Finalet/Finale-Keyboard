@@ -21,7 +21,7 @@ struct PunctuationView: View {
             Section (footer: Text(Localize.footer)) {
                 ForEach(0..<6) { i in
                     Picker(getOptionTitle(i), selection: $punctuationArray[i+1]) {
-                        ForEach(punctuationOptions, id: \.self) { option in
+                        ForEach(punctuationOptions.filter({ punctuationArray[i+1] == $0 || !punctuationArray.contains($0) }), id: \.self) { option in
                             Text(option).tag(option)
                         }
                     }

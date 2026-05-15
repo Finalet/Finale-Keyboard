@@ -110,6 +110,10 @@ extension FinaleKeyboard {
         return SetSuggestionLabels(texts: nil, selectedIndex: nil, animated: false)
     }
     
+    func SetSuggestionLabels(punctuationIndex: Int, animated: Bool = false) {
+        return SetSuggestionLabels(texts: punctuationManager.punctuations, selectedIndex: punctuationIndex, animated: animated)
+    }
+    
     func SetSuggestionLabels(suggestions: SuggestionsManager.SuggestionsStorage?, animated: Bool = false) {
         return SetSuggestionLabels(texts: suggestions?.list, selectedIndex: suggestions?.pickedSuggestionIndex, animated: animated)
     }
@@ -138,46 +142,19 @@ extension FinaleKeyboard {
         }
     }
     
-    // TO-DO: Fix how punctuations are displayed, and remove this.
-    func AnimateSuggestionLabels (index: Int, instant: Bool = false) {
-        guard self.suggestionLabels.indices.contains(index) else { return }
-        
-        self.view.layoutIfNeeded()
-        
-        let deltaX = self.suggestionLabels[index].frame.origin.x + self.suggestionLabels[index].frame.width * 0.5 - UIScreen.main.bounds.width*0.5
-        suggestionLabelCenterXConstraint.constant -= deltaX
-        
-        UIView.animate(withDuration: instant ? 0 : 0.5, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    // TO-DO: Fix how punctuations are displayed, and remove this.
-    func UpdateSuggestionColor(index: Int) {
-        for i in 0..<suggestionLabels.count {
-            if index == i {
-                suggestionLabels[i].textColor = .label
-                continue
-            }
-            suggestionLabels[i].textColor = .gray
-        }
-    }
-    
     func FadeSuggestions () {
         for label in self.suggestionLabels {
             if label.textColor.cgColor.alpha <= 0 { continue }
             
             UIView.transition(with: label, duration: 0.20, options: .transitionCrossDissolve) {
-                label.textColor = label.textColor.withAlphaComponent(label.textColor.cgColor.alpha-0.334)
+                label.textColor = label.textColor.withAlphaComponent(label.textColor.cgColor.alpha-0.25)
             }
         }
     }
     
-    func RedrawSuggestionsLabels () {
+    func RestoreSuggestionsLabels () {
         if let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: oneBeforeLastChar) {
-            pickedPunctuationIndex = punctuationArray.firstIndex(of: String(oneBeforeLastChar))!
-            UpdateSuggestionsLabelsPunctuation()
-            AnimateSuggestionLabels(index: pickedPunctuationIndex, instant: true)
+            SetSuggestionLabels(texts: punctuations, selectedIndex: punctuations.firstIndex(of: String(oneBeforeLastChar)), animated: false)
         } else {
             SetSuggestionLabels(suggestions: suggestionsManager.getCurrentSuggestions(), animated: false)
         }

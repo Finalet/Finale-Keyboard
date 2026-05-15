@@ -9,7 +9,7 @@ class SuggestionsManager {
 
     var storage: [SuggestionsStorage] = []
 
-    static let maxSuggestionHistory: Int = 5
+    static let maxSuggestionHistory: Int = 10
     static let maxSuggestions: Int = 7
 
     func addSuggestions (suggestions: [String], pickedIndex: Int) -> SuggestionsStorage? {

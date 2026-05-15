@@ -51,6 +51,8 @@ extension FinaleKeyboard {
         }
         self.textDocumentProxy.insertText(emoji)
         self.textDocumentProxy.insertText(" ")
+        
+        punctuationManager.clearLastInsertedPunctuation()
     }
     
     func Cut () {
@@ -77,6 +79,8 @@ extension FinaleKeyboard {
         ClearSuggestionLabels()
         CheckAutoCapitalization()
         ProcessDynamicTouchZones()
+        
+        punctuationManager.clearLastInsertedPunctuation()
     }
     
 }
@@ -93,8 +97,7 @@ extension FinaleKeyboard {
         let context = self.textDocumentProxy.documentContextBeforeInput
         if context == nil {
             ClearSuggestionLabels()
-            pickedPunctuationIndex = 0
-            InsertPunctuation(index: pickedPunctuationIndex)
+            InsertPunctuation()
         } else if context?.last != " " {
             if (FinaleKeyboard.isAutoCorrectOn) {
                 Autocorrect()
@@ -102,19 +105,20 @@ extension FinaleKeyboard {
                 ClearSuggestionLabels()
                 self.textDocumentProxy.insertText(" ")
             }
-            canEditPrevPunctuation = false
+            punctuationManager.clearLastInsertedPunctuation()
         } else {
             if ((context?.count ?? 0) < 2) {
                 ClearSuggestionLabels()
-                InsertPunctuation(index: 0)
-                canEditPrevPunctuation = false
+                InsertPunctuation()
+                CheckAutoCapitalization()
+                punctuationManager.clearLastInsertedPunctuation()
                 return
             }
             
             var index = 1
             
             if let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: oneBeforeLastChar) {
-                index = punctuationArray.firstIndex(of: String(oneBeforeLastChar)) ?? 1
+                index = punctuations.firstIndex(of: String(oneBeforeLastChar)) ?? 1
             } else {
                 ClearSuggestionLabels()
             }
@@ -142,8 +146,8 @@ extension FinaleKeyboard {
         if let lastChar = getLastChar(), isPunctuation(char: lastChar) {
             self.textDocumentProxy.deleteBackward()
             if self.textDocumentProxy.hasText { self.textDocumentProxy.insertText(" ") }
-            RedrawSuggestionsLabels()
-            canEditPrevPunctuation = false
+            RestoreSuggestionsLabels()
+            punctuationManager.clearLastInsertedPunctuation()
             return
         }
         
@@ -157,56 +161,34 @@ extension FinaleKeyboard {
         }
         
         CheckAutoCapitalization()
-        RedrawSuggestionsLabels()
+        RestoreSuggestionsLabels()
         ProcessDynamicTouchZones()
         
-        canEditPrevPunctuation = false
+        punctuationManager.clearLastInsertedPunctuation()
     }
     
     func SwipeDown () {
-        if FinaleKeyboard.currentViewType == .SearchEmoji { return }
-        if !self.textDocumentProxy.hasText { return }
-        
-        if canEditPrevPunctuation {
-            if (pickedPunctuationIndex < punctuationArray.count-1) {
-                pickedPunctuationIndex += 1
-                EditPreviousPunctuation()
-            }
-            return
-        }
+        guard FinaleKeyboard.currentViewType != .SearchEmoji, self.textDocumentProxy.hasText else { return }
         
         if let lastChar = getLastChar(), let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: lastChar), isPunctuation(char: oneBeforeLastChar) {
-            if (pickedPunctuationIndex < punctuationArray.count-1) {
-                pickedPunctuationIndex += 1
-                ReplacePunctiation()
-            }
-            return
+            CyclePunctuations(current: String(oneBeforeLastChar), .next)
+        } else if let lastPlacedPunctuation = punctuationManager.lastPlacedPunctuation {
+            CyclePunctuations(current: lastPlacedPunctuation.character, .next)
+        } else {
+            CycleSuggestionsForLastWord(.next)
         }
-        
-        CycleSuggestionsForLastWord(.next)
     }
     
     func SwipeUp () {
-        if FinaleKeyboard.currentViewType == .SearchEmoji { return }
-        if !self.textDocumentProxy.hasText { return }
-        
-        if canEditPrevPunctuation {
-            if (pickedPunctuationIndex > 0) {
-                pickedPunctuationIndex -= 1
-                EditPreviousPunctuation()
-            }
-            return
-        }
+        guard FinaleKeyboard.currentViewType != .SearchEmoji, self.textDocumentProxy.hasText else { return }
         
         if let lastChar = getLastChar(), let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: lastChar), isPunctuation(char: oneBeforeLastChar) {
-            if (pickedPunctuationIndex > 0) {
-                pickedPunctuationIndex -= 1
-                ReplacePunctiation()
-            }
-            return
+            CyclePunctuations(current: String(oneBeforeLastChar), .previous)
+        } else if let lastPlacedPunctuation = punctuationManager.lastPlacedPunctuation {
+            CyclePunctuations(current: lastPlacedPunctuation.character, .previous)
+        } else {
+            CycleSuggestionsForLastWord(.previous)
         }
-        
-        CycleSuggestionsForLastWord(.previous)
     }
 }
 
@@ -247,7 +229,7 @@ extension FinaleKeyboard {
         }
         if FinaleKeyboard.currentViewType != .SearchEmoji {
             FinaleKeyboard.currentViewType = .Characters
-            RedrawSuggestionsLabels()
+            RestoreSuggestionsLabels()
         }
     }
     
@@ -344,6 +326,8 @@ extension FinaleKeyboard {
         if [ViewType.Symbols, ViewType.ExtraSymbols].contains(FinaleKeyboard.currentViewType) {
             ToggleSymbolsView()
         }
+        
+        punctuationManager.clearLastInsertedPunctuation()
     }
     
     func ReturnAction () {
@@ -355,7 +339,7 @@ extension FinaleKeyboard {
     func BackAction() {
         if FinaleKeyboard.currentViewType == .SearchEmoji {
             ToggleSearchEmojiView()
-            RedrawSuggestionsLabels()
+            RestoreSuggestionsLabels()
         }
     }
     
@@ -372,7 +356,7 @@ extension FinaleKeyboard {
     
     func ToggleAutoCorrect () {
         FinaleKeyboard.isAutoCorrectOn.toggle()
-        userDefaults?.setValue(FinaleKeyboard.isAutoCorrectOn, forKey: "FINALE_DEV_APP_autocorrectWords")
+        FinaleKeyboard.userDefaults?.setValue(FinaleKeyboard.isAutoCorrectOn, forKey: "FINALE_DEV_APP_autocorrectWords")
         
         self.ShowNotification(text: FinaleKeyboard.isAutoCorrectOn ? "Autocorrection on" : "Autocorrection off")
         
