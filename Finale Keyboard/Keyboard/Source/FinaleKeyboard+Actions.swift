@@ -17,32 +17,24 @@ extension FinaleKeyboard {
             return
         }
         
-        var shouldPlaceBeforeSpace = false
-        if character == "\"" {
-            let count = self.textDocumentProxy.documentContextBeforeInput?.filter { $0 == Character(character) }.count ?? 0
-            if count % 2 != 0 {
-                shouldPlaceBeforeSpace = true
-            }
-        } else if character == ")" {
-            shouldPlaceBeforeSpace = true
-        }
-        
-        var x = false
-        if (shouldPlaceBeforeSpace) {
-            if (FinaleKeyboard.isAutoCorrectOn && getLastChar() == " ") {
-                self.textDocumentProxy.deleteBackward()
-                x = true
-            }
-        }
+        let shouldPlaceBeforeSpace = FinaleKeyboard.isAutoCorrectOn && shouldPlaceCharacterBeforeSpace(character: character) && getLastChar() == " "
+        if shouldPlaceBeforeSpace { self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1) }
         
         self.textDocumentProxy.insertText(shouldCapitalize ? character.capitalized : character)
         
-        FadeSuggestions()
-        
-        if (x) { self.textDocumentProxy.insertText(" ") }
+        if (shouldPlaceBeforeSpace) { self.textDocumentProxy.adjustTextPosition(byCharacterOffset: 1) }
         
         CheckAutoCapitalization()
         ProcessDynamicTouchZones()
+        FadeSuggestions()
+    }
+    
+    func shouldPlaceCharacterBeforeSpace (character: String) -> Bool {
+        if character == ")" { return true }
+        if character == "\"", let count = self.textDocumentProxy.documentContextBeforeInput?.filter({ $0 == Character(character) }).count, count % 2 != 0 {
+            return true
+        }
+        return false
     }
     
     func TypeEmoji (emoji: String) {
@@ -94,45 +86,29 @@ extension FinaleKeyboard {
             return
         }
         
-        let context = self.textDocumentProxy.documentContextBeforeInput
-        if context == nil {
+        if self.textDocumentProxy.documentContextBeforeInput == nil {
             ClearSuggestionLabels()
             InsertPunctuation()
-        } else if context?.last != " " {
-            if (FinaleKeyboard.isAutoCorrectOn) {
+        } else if getLastChar() != " " {
+            if FinaleKeyboard.isAutoCorrectOn {
                 Autocorrect()
             } else {
                 ClearSuggestionLabels()
                 self.textDocumentProxy.insertText(" ")
             }
             punctuationManager.clearLastInsertedPunctuation()
+        } else if let oneBeforeLastChar = getOneBeforeLastChar(), let punctuationIndex = punctuationManager.getIndex(forPunctuation: oneBeforeLastChar) {
+            InsertPunctuation(index: punctuationIndex)
         } else {
-            if ((context?.count ?? 0) < 2) {
-                ClearSuggestionLabels()
-                InsertPunctuation()
-                CheckAutoCapitalization()
-                punctuationManager.clearLastInsertedPunctuation()
-                return
-            }
-            
-            var index = 1
-            
-            if let oneBeforeLastChar = getOneBeforeLastChar(), punctuationManager.isPunctuation(char: oneBeforeLastChar) {
-                index = punctuations.firstIndex(of: String(oneBeforeLastChar)) ?? 1
-            } else {
-                ClearSuggestionLabels()
-            }
-            
-            InsertPunctuation(index: index)
+            InsertPunctuation(index: 1)
         }
+        
         CheckAutoCapitalization()
         ResetDynamicTouchZones()
         if FinaleKeyboard.currentViewType != .Characters { BuildKeyboardView(viewType: .Characters) }
     }
     
     func SwipeLeft() {
-        HapticFeedback.GestureImpactOccurred()
-        
         if let emojiSearchRow = emojiSearchRow {
             emojiSearchRow.Delete()
             return
@@ -142,7 +118,7 @@ extension FinaleKeyboard {
         
         self.textDocumentProxy.deleteBackward()
         
-        //DeletePunctuation
+        // Delete punctuation
         if let lastChar = getLastChar(), punctuationManager.isPunctuation(char: lastChar) {
             self.textDocumentProxy.deleteBackward()
             if self.textDocumentProxy.hasText { self.textDocumentProxy.insertText(" ") }
@@ -151,7 +127,7 @@ extension FinaleKeyboard {
             return
         }
         
-        //Delete Words
+        // Delete word
         while !isAtWordStart() {
             self.textDocumentProxy.deleteBackward()
         }

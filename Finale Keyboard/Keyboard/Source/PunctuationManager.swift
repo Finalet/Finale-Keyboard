@@ -51,6 +51,10 @@ class PunctuationManager {
         return punctuations[forIndex]
     }
     
+    func getIndex (forPunctuation: Character) -> Int? {
+        return getIndex(forPunctuation: String(forPunctuation))
+    }
+    
     func getIndex (forPunctuation: String) -> Int? {
         return punctuations.firstIndex(of: forPunctuation)
     }
