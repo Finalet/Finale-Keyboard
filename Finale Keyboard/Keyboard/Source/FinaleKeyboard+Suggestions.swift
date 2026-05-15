@@ -29,7 +29,7 @@ extension FinaleKeyboard {
         
         allSuggestions.removeAll(where: { $0 == lastWord } )
         
-        guard let newStorage = SuggestionManager.addSuggestions(suggestions: [lastWord] + allSuggestions, pickedIndex: pickedInex) else { return }
+        guard let newStorage = suggestionsManager.addSuggestions(suggestions: [lastWord] + allSuggestions, pickedIndex: pickedInex) else { return }
         
         ReplaceLastWord(withWord: newStorage.pickedSuggestion)
         SetSuggestionLabels(suggestions: newStorage, animated: false)
@@ -82,7 +82,7 @@ extension FinaleKeyboard {
             dis += 1
         }
         
-        if let suggestionStorage = SuggestionManager.getCurrentSuggestions() {
+        if let suggestionStorage = suggestionsManager.getCurrentSuggestions() {
             if let newSuggestion = direction == .next ? suggestionStorage.pickNextSuggestion() : suggestionStorage.pickPrevSuggestion() {
                 ReplaceLastWord(withWord: newSuggestion)
                 SetSuggestionLabels(suggestions: suggestionStorage, animated: true)
@@ -124,9 +124,9 @@ extension FinaleKeyboard {
         
         if let selectedIndex = selectedIndex, suggestionLabels.indices.contains(selectedIndex) {
             let deltaX = self.suggestionLabels[selectedIndex].frame.origin.x + self.suggestionLabels[selectedIndex].frame.width*0.5 - self.view.frame.width*0.5
-            centerXConstraint.constant -= deltaX
+            suggestionLabelCenterXConstraint.constant -= deltaX
         } else {
-            centerXConstraint.constant = 0
+            suggestionLabelCenterXConstraint.constant = 0
         }
         
         if animated {
@@ -145,7 +145,7 @@ extension FinaleKeyboard {
         self.view.layoutIfNeeded()
         
         let deltaX = self.suggestionLabels[index].frame.origin.x + self.suggestionLabels[index].frame.width * 0.5 - UIScreen.main.bounds.width*0.5
-        centerXConstraint.constant -= deltaX
+        suggestionLabelCenterXConstraint.constant -= deltaX
         
         UIView.animate(withDuration: instant ? 0 : 0.5, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.2) {
             self.view.layoutIfNeeded()
@@ -179,7 +179,7 @@ extension FinaleKeyboard {
             UpdateSuggestionsLabelsPunctuation()
             AnimateSuggestionLabels(index: pickedPunctuationIndex, instant: true)
         } else {
-            SetSuggestionLabels(suggestions: SuggestionManager.getCurrentSuggestions(), animated: false)
+            SetSuggestionLabels(suggestions: suggestionsManager.getCurrentSuggestions(), animated: false)
         }
     }
 }

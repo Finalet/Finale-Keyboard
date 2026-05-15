@@ -78,18 +78,11 @@ class FinaleKeyboard: UIInputViewController {
     var pickedPunctuationIndex = 0
     var lastPickedPunctuationIndex = 0
     
-    var suggestionsArrays = [SuggestionsArray]()
-    var maxSuggestionHistory = 5
-    var nextSuggestionArray = 0
-    var suggestionLabels = [UILabel]()
-    var maxSuggestions = 7
-    var pickedSuggestionIndex = 0
-    
-    let SuggestionManager = SuggestionsManager()
+    var suggestionLabels: [UILabel] = []
+    var suggestionLabelCenterXConstraint = NSLayoutConstraint()
+    let suggestionsManager = SuggestionsManager()
     
     var canEditPrevPunctuation = false
-    
-    var centerXConstraint = NSLayoutConstraint()
     
     var capsTimer: Timer?
     
@@ -128,7 +121,6 @@ class FinaleKeyboard: UIInputViewController {
         BuildKeyboardView(viewType: .Characters)
         BuildEmojiView()
         BuildSuggestionViews()
-        InitSuggestionsArray()
         InitDictionary()
     }
 
@@ -204,12 +196,6 @@ class FinaleKeyboard: UIInputViewController {
         }
         
         SetLocale(currentLocale)
-    }
-    
-    func InitSuggestionsArray () {
-        for _ in 0..<maxSuggestionHistory {
-            suggestionsArrays.append(SuggestionsArray(suggestions: [String](), lastPickedSuggestionIndex: 1, positionIndex: String().startIndex))
-        }
     }
     
     func InitKeysView () {
@@ -320,13 +306,14 @@ class FinaleKeyboard: UIInputViewController {
     }
     
     func BuildSuggestionViews () {
-        for _ in 0...maxSuggestions-1 {
+        for _ in 0..<SuggestionsManager.maxSuggestionHistory {
             suggestionLabels.append(BuildSuggestionView())
         }
         
-        centerXConstraint = suggestionLabels[0].centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0)
-        centerXConstraint.isActive = true
-        for i in 1...maxSuggestions-1 {
+        suggestionLabelCenterXConstraint = suggestionLabels[0].centerXAnchor.constraint(equalTo: self.view.centerXAnchor, constant: 0)
+        suggestionLabelCenterXConstraint.isActive = true
+        
+        for i in 1..<suggestionLabels.count {
             suggestionLabels[i].leadingAnchor.constraint(equalTo: suggestionLabels[i-1].trailingAnchor, constant: UIScreen.main.bounds.width*0.2).isActive = true
         }
     }
@@ -485,21 +472,6 @@ class FinaleKeyboard: UIInputViewController {
             }
         }
         
-    }
-    
-    func getCorrectSuggestionArrayIndex() -> Int {
-        guard let context = self.textDocumentProxy.documentContextBeforeInput, let lastWord = getLastWord() else { return -1 }
-        
-        for i in 0..<suggestionsArrays.count {
-            if suggestionsArrays[i].positionIndex == context.endIndex {
-                for i1 in 0..<suggestionsArrays[i].suggestions.count {
-                    if suggestionsArrays[i].suggestions[i1] == lastWord {
-                        return i
-                    }
-                }
-            }
-        }
-        return -1
     }
     
     func isPunctuation(char: String) -> Bool {

@@ -106,7 +106,7 @@ extension FinaleKeyboard {
         } else {
             if ((context?.count ?? 0) < 2) {
                 ClearSuggestionLabels()
-                SwipeRightSpacebar()
+                InsertPunctuation(index: 0)
                 canEditPrevPunctuation = false
                 return
             }
@@ -153,7 +153,7 @@ extension FinaleKeyboard {
         }
         
         if let lastWord = lastWord {
-            SuggestionManager.deleteSuggestions(forWord: lastWord)
+            suggestionsManager.deleteSuggestions(forWord: lastWord)
         }
         
         CheckAutoCapitalization()
@@ -207,11 +207,6 @@ extension FinaleKeyboard {
         }
         
         CycleSuggestionsForLastWord(.previous)
-    }
-    
-    func SwipeRightSpacebar () {
-        pickedSuggestionIndex = 0
-        InsertPunctuation(index: pickedSuggestionIndex)
     }
 }
 
