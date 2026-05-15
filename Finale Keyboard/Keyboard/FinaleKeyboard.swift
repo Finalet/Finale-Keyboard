@@ -384,7 +384,7 @@ class FinaleKeyboard: UIInputViewController {
             return false
         }
         
-        if let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: String(oneBeforeLastChar), ignoreCharacters: [" ", ",", ":", ";"]), getLastChar() == " " {
+        if let oneBeforeLastChar = getOneBeforeLastChar(), punctuationManager.isPunctuation(char: String(oneBeforeLastChar), ignoreCharacters: [" ", ",", ":", ";"]), getLastChar() == " " {
             ForceShift()
             return true
         }
@@ -443,22 +443,5 @@ class FinaleKeyboard: UIInputViewController {
     
     var shouldCapitalize: Bool {
         return FinaleKeyboard.isShift || FinaleKeyboard.isCaps
-    }
-    
-    struct SuggestionsArray {
-        var suggestions: [String]
-        var lastPickedSuggestionIndex: Int
-        var positionIndex: String.Index
-        
-        init (suggestions: [String], lastPickedSuggestionIndex: Int, positionIndex: String.Index) {
-            self.suggestions = suggestions
-            self.lastPickedSuggestionIndex = lastPickedSuggestionIndex
-            self.positionIndex = positionIndex
-        }
-        
-        mutating func Reset () {
-            self.suggestions.removeAll()
-            self.lastPickedSuggestionIndex = 1
-        }
     }
 }

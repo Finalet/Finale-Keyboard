@@ -47,16 +47,4 @@ extension FinaleKeyboard {
         return lastWord.isEmpty ? nil : lastWord
     }
     
-    func isPunctuation(char: String) -> Bool {
-        return punctuations.contains(char)
-    }
-    
-    func isPunctuation(char: Character) -> Bool {
-        return isPunctuation(char: String(char))
-    }
-    
-    func isPunctuation(char: String, ignoreCharacters: [String]) -> Bool {
-        if ignoreCharacters.contains(char) { return false }
-        else { return isPunctuation(char: char) }
-    }
 }

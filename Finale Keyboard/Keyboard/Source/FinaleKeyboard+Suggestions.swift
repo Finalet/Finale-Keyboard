@@ -153,7 +153,7 @@ extension FinaleKeyboard {
     }
     
     func RestoreSuggestionsLabels () {
-        if let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: oneBeforeLastChar) {
+        if let oneBeforeLastChar = getOneBeforeLastChar(), punctuationManager.isPunctuation(char: oneBeforeLastChar) {
             SetSuggestionLabels(texts: punctuations, selectedIndex: punctuations.firstIndex(of: String(oneBeforeLastChar)), animated: false)
         } else {
             SetSuggestionLabels(suggestions: suggestionsManager.getCurrentSuggestions(), animated: false)

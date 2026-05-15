@@ -117,7 +117,7 @@ extension FinaleKeyboard {
             
             var index = 1
             
-            if let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: oneBeforeLastChar) {
+            if let oneBeforeLastChar = getOneBeforeLastChar(), punctuationManager.isPunctuation(char: oneBeforeLastChar) {
                 index = punctuations.firstIndex(of: String(oneBeforeLastChar)) ?? 1
             } else {
                 ClearSuggestionLabels()
@@ -143,7 +143,7 @@ extension FinaleKeyboard {
         self.textDocumentProxy.deleteBackward()
         
         //DeletePunctuation
-        if let lastChar = getLastChar(), isPunctuation(char: lastChar) {
+        if let lastChar = getLastChar(), punctuationManager.isPunctuation(char: lastChar) {
             self.textDocumentProxy.deleteBackward()
             if self.textDocumentProxy.hasText { self.textDocumentProxy.insertText(" ") }
             RestoreSuggestionsLabels()
@@ -170,7 +170,7 @@ extension FinaleKeyboard {
     func SwipeDown () {
         guard FinaleKeyboard.currentViewType != .SearchEmoji, self.textDocumentProxy.hasText else { return }
         
-        if let lastChar = getLastChar(), let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: lastChar), isPunctuation(char: oneBeforeLastChar) {
+        if let lastChar = getLastChar(), let oneBeforeLastChar = getOneBeforeLastChar(), punctuationManager.isPunctuation(char: lastChar), punctuationManager.isPunctuation(char: oneBeforeLastChar) {
             CyclePunctuations(current: String(oneBeforeLastChar), .next)
         } else if let lastPlacedPunctuation = punctuationManager.lastPlacedPunctuation {
             CyclePunctuations(current: lastPlacedPunctuation.character, .next)
@@ -182,7 +182,7 @@ extension FinaleKeyboard {
     func SwipeUp () {
         guard FinaleKeyboard.currentViewType != .SearchEmoji, self.textDocumentProxy.hasText else { return }
         
-        if let lastChar = getLastChar(), let oneBeforeLastChar = getOneBeforeLastChar(), isPunctuation(char: lastChar), isPunctuation(char: oneBeforeLastChar) {
+        if let lastChar = getLastChar(), let oneBeforeLastChar = getOneBeforeLastChar(), punctuationManager.isPunctuation(char: lastChar), punctuationManager.isPunctuation(char: oneBeforeLastChar) {
             CyclePunctuations(current: String(oneBeforeLastChar), .previous)
         } else if let lastPlacedPunctuation = punctuationManager.lastPlacedPunctuation {
             CyclePunctuations(current: lastPlacedPunctuation.character, .previous)
