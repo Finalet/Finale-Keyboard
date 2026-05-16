@@ -415,6 +415,7 @@
 		861119EA2F8882C600F6F7EB /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				861119EB2F8882CE00F6F7EB /* Preferences */,
 				86B6EC632F8D466100828DE0 /* GesturesGuideView.swift */,
 				37256A7827DB52ED0071180B /* DictionaryView.swift */,
 				3743FC5627B158AD0043B2A2 /* FavoriteEmojiView.swift */,
@@ -422,7 +423,6 @@
 				37AB663D28876ECB00741889 /* MoreView.swift */,
 				86C4FD452F8C3F570086F12F /* OnboardingView.swift */,
 				375D074A29EA3D2100EA2980 /* ShortcutsView.swift */,
-				861119EB2F8882CE00F6F7EB /* Preferences */,
 			);
 			path = Views;
 			sourceTree = "<group>";
