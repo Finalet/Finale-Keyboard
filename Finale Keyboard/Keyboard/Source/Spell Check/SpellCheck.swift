@@ -45,7 +45,7 @@ class SpellCheck {
         self.candidateScorer = CandidateScorer(keyboardMatrix: keyboardMatrix)
     }
 
-    func suggestions(forWord: String, nSuggestions: Int = 5) -> [ScoredCandidate]? {
+    func suggestions(forWord: String, nSuggestions: Int = 7) -> [ScoredCandidate]? {
         guard nSuggestions > 0, let keyboardMatrix, let defaultCandidateFilter, let candidateScorer else { return nil }
 
         let cleanedWord = cleanWordForSearch(forWord)

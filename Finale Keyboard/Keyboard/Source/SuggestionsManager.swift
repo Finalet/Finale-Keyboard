@@ -10,7 +10,7 @@ class SuggestionsManager {
     var storage: [SuggestionsStorage] = []
 
     static let maxSuggestionHistory: Int = 10
-    static let maxSuggestions: Int = 7
+    static let maxSuggestions: Int = 8
 
     func addSuggestions (suggestions: [String], pickedIndex: Int) -> SuggestionsStorage? {
         if storage.count >= SuggestionsManager.maxSuggestionHistory { storage.removeFirst() }
