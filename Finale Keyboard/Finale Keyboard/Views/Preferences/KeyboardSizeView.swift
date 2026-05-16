@@ -10,7 +10,6 @@ import Foundation
 
 struct KeyboardSizeView: View {
     
-    @State var sliderValue: CGFloat = 0
     @UserDefaultState("FINALE_DEV_APP_keyboardHeightMultiplier", 1.0) var keyboardHeightMultiplier: CGFloat
     
     typealias Localize = Localization.PreferencesScreen.KeyboardSize
@@ -31,12 +30,25 @@ struct KeyboardSizeView: View {
         return array
     }
     
+    var sliderValue: Binding<CGFloat> {
+        Binding {
+            CGFloat(indexForMultiplier(keyboardHeightMultiplier))
+        } set: { newValue in
+            let index = Int(newValue.rounded())
+            guard steps.indices.contains(index) else { return }
+            
+            withAnimation (.spring(duration: 0.5, bounce: 0.2)) {
+                keyboardHeightMultiplier = steps[index]
+            }
+        }
+    }
+    
     var body: some View {
         ZStack {
             List {
                 Section {
                     VStack (alignment: .leading, spacing: 16) {
-                        Slider(value: $sliderValue, in: 0...CGFloat(nSteps - 1), step: 1, label: {})
+                        Slider(value: sliderValue, in: 0...CGFloat(nSteps - 1), step: 1, label: {})
                         HStack {
                             ForEach(steps, id: \.self) { step in
                                 HStack {
@@ -50,14 +62,6 @@ struct KeyboardSizeView: View {
                         .padding(.horizontal, -16)
                     }
                 }
-                .onChange(of: sliderValue) { _, newValue in
-                    let intValue = Int(newValue)
-                    guard steps.indices.contains(intValue) else { return }
-                    
-                    withAnimation (.spring(duration: 0.5, bounce: 0.2)) {
-                        keyboardHeightMultiplier = steps[intValue]
-                    }
-                }
             }
             GeometryReader { geometry in
                 VStack {
@@ -67,11 +71,11 @@ struct KeyboardSizeView: View {
                 .ignoresSafeArea(.all, edges: [.horizontal, .bottom])
             }
         }
-        .onAppear {
-            let index: Int = steps.firstIndex(of: keyboardHeightMultiplier) ?? Int(floor(Float(nSteps) / 2.0))
-            sliderValue = CGFloat(index)
-        }
         .navigationTitle(Localize.pageTitle)
+    }
+    
+    func indexForMultiplier(_ multiplier: CGFloat) -> Int {
+        steps.firstIndex(of: multiplier) ?? Int(floor(Float(nSteps) / 2.0))
     }
      
     func labelForStep(_ step: CGFloat) -> String {
