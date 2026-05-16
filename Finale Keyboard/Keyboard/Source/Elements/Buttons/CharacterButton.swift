@@ -12,14 +12,14 @@ class CharacterButton: KeyboardButton {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
     let titleLabel = UILabel()
-    var titleYConstraint: NSLayoutConstraint?
-    
+    let calloutView = UIView()
     var shortcutPreviewLabel: UILabel?
     
-    let calloutView = UIView()
-    var calloutYConstraint: NSLayoutConstraint?
-    var calloutWidthConstraint: NSLayoutConstraint?
-    var calloutXConstraint: NSLayoutConstraint?
+    lazy var titleYConstraint: NSLayoutConstraint = titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+    lazy var calloutXConstraint: NSLayoutConstraint = calloutView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
+    lazy var calloutYConstraint: NSLayoutConstraint = calloutView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
+    lazy var calloutWidthConstraint: NSLayoutConstraint = calloutView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1.05)
+    lazy var calloutHeightConstraint: NSLayoutConstraint = calloutView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.8)
     
     let character: String
     
@@ -30,21 +30,16 @@ class CharacterButton: KeyboardButton {
         calloutView.backgroundColor = UIColor.gray.withAlphaComponent(0.6)
         calloutView.layer.cornerRadius = 5
         calloutView.alpha = 0
-        self.addSubview(calloutView, anchors: [.heightMultiplier(0.8)])
-        calloutYConstraint = calloutView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
-        calloutYConstraint?.isActive = true
-        calloutXConstraint = calloutView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
-        calloutXConstraint?.isActive = true
-        calloutWidthConstraint = calloutView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: 1.05)
-        calloutWidthConstraint?.isActive = true
+        calloutView.translatesAutoresizingMaskIntoConstraints = false
+        self.addSubview(calloutView)
         
         titleLabel.font = UIFont(name: "Gilroy-Medium", size: 20)
         titleLabel.text = String(character)
         titleLabel.textColor = .label
         titleLabel.textAlignment = .center
         self.addSubview(titleLabel, anchors: [.leading(0), .trailing(0), .centerX(0)])
-        titleYConstraint = titleLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor)
-        titleYConstraint?.isActive = true
+        
+        NSLayoutConstraint.activate([calloutXConstraint, calloutYConstraint, calloutWidthConstraint, calloutHeightConstraint, titleYConstraint])
         
         ToggleCapitalization(FinaleKeyboard.instance.shouldCapitalize)
     }
@@ -99,26 +94,30 @@ class CharacterButton: KeyboardButton {
     override func ShowCallout() {
         calloutView.alpha = 1
         
-        titleYConstraint?.constant = -self.frame.height*0.5
+        titleYConstraint.constant = -self.frame.height*0.5
         
-        calloutYConstraint?.constant = -self.frame.height*0.5
-        calloutXConstraint?.constant = 0
-        calloutWidthConstraint?.constant = 0
+        calloutXConstraint.constant = 0
+        calloutYConstraint.constant = -self.frame.height*0.5
+        calloutWidthConstraint.constant = 0
+        calloutHeightConstraint.constant = 0
         
         HapticFeedback.TypingImpactOccurred()
     }
     
     override func HideCallout(direction: SwipeDirection? = nil) {
-        titleYConstraint?.constant = 0
+        titleYConstraint.constant = 0
         
-        if let direction = direction, direction == .Left || direction == .Right {
-            calloutXConstraint?.constant = self.frame.width*0.7*(direction == .Left ? -1 : 1)
-            calloutWidthConstraint?.constant = self.frame.width
+        if direction == .Left || direction == .Right {
+            calloutXConstraint.constant = self.frame.width * 1.2 * (direction == .Left ? -1 : 1)
+            calloutWidthConstraint.constant = self.frame.width * 1.2
+        } else if direction == .Up || direction == .Down {
+            calloutYConstraint.constant += self.frame.height * (direction == .Up ? -1 : 1)
+            calloutHeightConstraint.constant = self.frame.height
         } else {
-            calloutYConstraint?.constant = 0
+            calloutYConstraint.constant = 0
         }
         
-        UIView.animate(withDuration: 0.7, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0.3, options: .allowUserInteraction) { [self] in
+        UIView.animate(withDuration: 0.25, delay: 0, options: [.allowUserInteraction, .curveEaseOut]) { [self] in
             calloutView.alpha = 0
             self.layoutIfNeeded()
         }

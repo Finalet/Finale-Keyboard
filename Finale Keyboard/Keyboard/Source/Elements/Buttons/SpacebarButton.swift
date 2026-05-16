@@ -22,9 +22,9 @@ class SpacebarButton: CharacterButton {
         iconView.image = UIImage(systemName: "space", withConfiguration: UIImage.SymbolConfiguration(weight: .semibold))
         self.addSubview(iconView, anchors: [.widthMultiplier(1), .widthMultiplier(0.6), .centerX(0)])
         
-        titleYConstraint?.isActive = false
+        titleYConstraint.isActive = false
         titleYConstraint = iconView.centerYAnchor.constraint(equalTo: self.centerYAnchor)
-        titleYConstraint?.isActive = true
+        titleYConstraint.isActive = true
     }
     
     override func OnTapEnded(_ sender: UILongPressGestureRecognizer) {
