@@ -54,7 +54,7 @@ extension FinaleKeyboard {
     func ReplaceLastWord (withWord: String) {
         if getLastChar() == " " { self.textDocumentProxy.deleteBackward() }
         
-        while !isAtWordStart() {
+        for _ in 0..<(getLastWord()?.count ?? 0) {
             self.textDocumentProxy.deleteBackward()
         }
         
@@ -63,7 +63,7 @@ extension FinaleKeyboard {
     
     func CycleSuggestionsForLastWord (_ direction: SuggestionCycleDirection) {
         var dis = 0
-        while let context = self.textDocumentProxy.documentContextBeforeInput, !context.isEmpty, let lastChar = getLastChar()?.unicodeScalars.first, !CharacterSet.whitespacesAndNewlines.contains(lastChar) {
+        while let lastChar = getLastChar()?.unicodeScalars.first, !CharacterSet.whitespacesAndNewlines.contains(lastChar) {
             self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
             dis += 1
         }

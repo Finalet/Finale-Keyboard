@@ -17,20 +17,26 @@ extension FinaleKeyboard {
             return
         }
         
-        let shouldPlaceBeforeSpace = FinaleKeyboard.isAutoCorrectOn && shouldPlaceCharacterBeforeSpace(character: character) && getLastChar() == " "
-        if shouldPlaceBeforeSpace { self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1) }
+        let shouldPlaceBeforeSpace = FinaleKeyboard.isAutoCorrectOn && doesCharacterImplyWordEnd(character: character)
+        if shouldPlaceBeforeSpace {
+            if getLastChar() != " " { SwipeRight() }
+            self.textDocumentProxy.adjustTextPosition(byCharacterOffset: -1)
+        }
         
         self.textDocumentProxy.insertText(shouldCapitalize ? character.capitalized : character)
         
-        if (shouldPlaceBeforeSpace) { self.textDocumentProxy.adjustTextPosition(byCharacterOffset: 1) }
+        if (shouldPlaceBeforeSpace) {
+            self.textDocumentProxy.adjustTextPosition(byCharacterOffset: 1)
+            RestoreSuggestionsLabels()
+        }
         
         CheckAutoCapitalization()
         ProcessDynamicTouchZones()
         FadeSuggestions()
     }
     
-    func shouldPlaceCharacterBeforeSpace (character: String) -> Bool {
-        if character == ")" { return true }
+    func doesCharacterImplyWordEnd (character: String) -> Bool {
+        if [")", ":"].contains(character) { return true }
         if character == "\"", let count = self.textDocumentProxy.documentContextBeforeInput?.filter({ $0 == Character(character) }).count, count % 2 != 0 {
             return true
         }
@@ -114,8 +120,6 @@ extension FinaleKeyboard {
             return
         }
         
-        let lastWord = getLastWord()
-        
         self.textDocumentProxy.deleteBackward()
         
         // Delete punctuation
@@ -128,11 +132,10 @@ extension FinaleKeyboard {
         }
         
         // Delete word
-        while !isAtWordStart() {
-            self.textDocumentProxy.deleteBackward()
-        }
-        
-        if let lastWord = lastWord {
+        if let lastWord = getLastWord() {
+            for _ in 0..<lastWord.count {
+                self.textDocumentProxy.deleteBackward()
+            }
             suggestionsManager.deleteSuggestions(forWord: lastWord)
         }
         

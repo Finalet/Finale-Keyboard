@@ -25,24 +25,13 @@ extension FinaleKeyboard {
         return String(context[context.index(context.endIndex, offsetBy: -min(length, context.count))..<context.endIndex])
     }
     
-    func isAtWordStart() -> Bool {
-        if !self.textDocumentProxy.hasText { return true }
-        let breakingCharacters = CharacterSet.whitespacesAndNewlines.union(["\"", "(", "[", "{", "<", "#", "@"])
-        if let lastUnicodeChar = self.textDocumentProxy.documentContextBeforeInput?.last?.unicodeScalars.first {
-            return breakingCharacters.contains(lastUnicodeChar)
-        }
-        return true
-    }
-    
     func getLastWord() -> String? {
-        guard let context = self.textDocumentProxy.documentContextBeforeInput, context.count > 0 else { return nil }
-        
-        let chunks = context.split(separator: " ")
-        
-        guard let last = chunks.last else { return nil }
+        guard let context = self.textDocumentProxy.documentContextBeforeInput, context.count > 0, let last = context.split(separator: " ").last else { return nil }
         
         let breakingCharacters = CharacterSet.whitespacesAndNewlines.union(["\"", "(", "[", "{", "<", "#", "@"])
-        let lastWord = String(last).trimmingCharacters(in: breakingCharacters)
+        let lastWord = String(last.drop { character in
+            character.unicodeScalars.allSatisfy { breakingCharacters.contains($0) }
+        })
         
         return lastWord.isEmpty ? nil : lastWord
     }
