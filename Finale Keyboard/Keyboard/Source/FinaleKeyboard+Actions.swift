@@ -36,7 +36,7 @@ extension FinaleKeyboard {
     }
     
     func doesCharacterImplyWordEnd (character: String) -> Bool {
-        if [")", ":"].contains(character) { return true }
+        if punctuationManager.isPunctuation(char: character) || character == ")" { return true }
         if character == "\"", let count = self.textDocumentProxy.documentContextBeforeInput?.filter({ $0 == Character(character) }).count, count % 2 != 0 {
             return true
         }
