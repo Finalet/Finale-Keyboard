@@ -233,9 +233,13 @@ extension FinaleKeyboard {
     }
     
     func ToggleLocale (backwards: Bool = false) {
-        var index = ((FinaleKeyboard.enabledLocales.firstIndex(of: FinaleKeyboard.currentLocale) ?? 0) + (backwards ? -1 : 1)) % FinaleKeyboard.enabledLocales.count
-        if index < 0 { index += FinaleKeyboard.enabledLocales.count }
-        SetLocale(FinaleKeyboard.enabledLocales[index])
+        let currentIndex = FinaleKeyboard.enabledLocales.firstIndex(of: FinaleKeyboard.currentLocale) ?? 0
+        var nextIndex = (currentIndex + (backwards ? -1 : 1)) % FinaleKeyboard.enabledLocales.count
+        if nextIndex < 0 { nextIndex += FinaleKeyboard.enabledLocales.count }
+        
+        guard FinaleKeyboard.enabledLocales.indices.contains(nextIndex) else { return }
+        
+        SetLocale(FinaleKeyboard.enabledLocales[nextIndex])
         
         BuildKeyboardView(viewType: .Characters, updateViewType: FinaleKeyboard.currentViewType != .SearchEmoji)
         
