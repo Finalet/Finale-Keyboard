@@ -58,10 +58,10 @@ class KeyboardButton: NoClipTouchUIView {
                     self.OnLongPressRepeating(sender)
                 }
             }
-        } else if sender.state == .ended {
+        } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
             if !registeredSwipe {
                 HideCallout()
-                OnTapEnded(sender)
+                if sender.state == .ended { OnTapEnded(sender) }
             }
             
             CancelLongPress()

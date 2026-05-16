@@ -347,6 +347,7 @@ extension FinaleKeyboard {
     }
     
     func StartMoveCursor (touchLocation: CGPoint) {
+        self.keysView.isUserInteractionEnabled = false
         self.lastTouchPosX = touchLocation.x
         
         UIView.animate (withDuration: 0.3) {
@@ -357,6 +358,12 @@ extension FinaleKeyboard {
     }
     
     func EndMoveCursor () {
+        self.keysView.isUserInteractionEnabled = true
+        rightEdgeTimer?.invalidate()
+        rightEdgeTimer = nil
+        leftEdgeTimer?.invalidate()
+        leftEdgeTimer = nil
+        
         UIView.animate (withDuration: 0.3) {
             self.keysView.alpha = 1
         }
