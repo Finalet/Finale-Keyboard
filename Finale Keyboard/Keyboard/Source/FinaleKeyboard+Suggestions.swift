@@ -42,27 +42,13 @@ extension FinaleKeyboard {
         var suggestions = spellChecker.guesses(forWordRange: NSRange(location: 0, length: word.count), in: word, language: FinaleKeyboard.currentLocale.languageCode) ?? []
         
         if misspelledRange.location == NSNotFound { suggestions.insert(word, at: 0) }
-        return suggestions.map { matchCase(fromWord: word, toWord: $0) }
+        return suggestions.map { SpellCheck.matchCase(fromWord: word, toWord: $0) }
     }
     
     func getDefaultSuggestions (for word: String) -> [String] {
         guard FinaleKeyboard.isAutoCorrectGrammarOn, let suggestions = defaultDictionary[word.lowercased()] else { return [] }
         
-        return suggestions.map { matchCase(fromWord: word, toWord: $0) }
-    }
-    
-    func matchCase (fromWord: String, toWord: String) -> String {
-        // If the correct spelling is uppercased, do not change it (i.e. USSR should always be USSR).
-        if toWord == toWord.uppercased() {
-            return toWord
-        }
-        
-        if fromWord == fromWord.firstCapitalized {
-            return toWord.firstCapitalized
-        } else if fromWord == fromWord.uppercased() {
-            return toWord.uppercased()
-        }
-        return toWord
+        return suggestions.map { SpellCheck.matchCase(fromWord: word, toWord: $0) }
     }
     
     func ReplaceLastWord (withWord: String) {

@@ -82,13 +82,13 @@ class SpellCheck {
         
         for refinedCandidate in refinedCandidates {
             let score = candidateScorer.scoreCandidate(wordMatrixIndexes: wordMatrixIndexes, candidate: refinedCandidate.candidate, workspace: &alignmentWorkspace)
-            if score.isFinite {
+            if score.isFinite && score > Scores.minimumUsefulScore {
                 insertTopCandidate((word: refinedCandidate.candidate.word, score: score), into: &topCandidates, maxCount: nSuggestions) { $0.score }
             }
         }
         
         return topCandidates.map {
-            (word: matchCase(fromWord: forWord, toWord: $0.word), score: $0.score)
+            (word: SpellCheck.matchCase(fromWord: forWord, toWord: $0.word), score: $0.score)
         }
     }
 
@@ -99,20 +99,6 @@ class SpellCheck {
         if cleanedWord.isEmpty { return false }
 
         return !validWords.contains(cleanedWord)
-    }
-    
-    private func matchCase (fromWord: String, toWord: String) -> String {
-        // If the correct spelling is uppercased, do not change it (i.e. USSR should always be USSR).
-        if toWord == toWord.uppercased() {
-            return toWord
-        }
-        
-        if fromWord == fromWord.capitalizedFirst {
-            return toWord.capitalizedFirst
-        } else if fromWord == fromWord.uppercased() {
-            return toWord.uppercased()
-        }
-        return toWord
     }
 
     private func cleanWordForSearch(_ word: String) -> String {
@@ -142,6 +128,20 @@ class SpellCheck {
             insertIndex -= 1
         }
     }
+    
+    static func matchCase (fromWord: String, toWord: String) -> String {
+        // If the correct spelling is uppercased, do not change it (i.e. USSR should always be USSR).
+        if toWord == toWord.uppercased() {
+            return toWord
+        }
+        
+        if fromWord == fromWord.capitalizedFirst {
+            return toWord.capitalizedFirst
+        } else if fromWord == fromWord.uppercased() {
+            return toWord.uppercased()
+        }
+        return toWord
+    }
 
     static func loadDictionary(forLocale: Locale, indexMap: [Character: MatrixIndex], dictionaryURL: URL) -> LoadedDictionary {
         guard let data = try? Data(contentsOf: dictionaryURL) else {
@@ -162,7 +162,7 @@ class SpellCheck {
         for word in userWords {
             let trimmedWord = word.trimmingCharacters(in: .whitespacesAndNewlines)
             guard !trimmedWord.isEmpty else { continue }
-            entries[trimmedWord] = userWordFrequency
+            entries[trimmedWord] = 1 // User words get the highest frequency because we need to priorotize them.
         }
 
         return buildDictionary(forLocale: forLocale, indexMap: indexMap, entries: [0: entries])
@@ -269,8 +269,6 @@ extension SpellCheck {
     typealias RankedCandidate = (candidate: CorrectionCandidate, score: Float)
 
     static let unknownMatrixIndex = MatrixIndex.max
-    
-    private static let userWordFrequency: Float = 1
 
     enum Weights {
         static let frequency: Float = 0.11
@@ -281,6 +279,7 @@ extension SpellCheck {
     
     enum Scores {
         static let minimumUsefulAlignmentScore: Float = 0.5
+        static let minimumUsefulScore: Float = 0.1
         
         static let exactWordMatchBonus: Float = 0.1
         
