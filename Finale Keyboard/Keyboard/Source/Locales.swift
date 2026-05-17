@@ -66,3 +66,62 @@ class Symbols {
         static let bottomRow: [String] = [".", ",", "?", "!", "\'"]
     }
 }
+
+enum NewLocale {
+    case en_US
+    
+    var layout: KeyboardLayout {
+        switch self {
+        case .en_US: return englishLayout
+        }
+    }
+    
+    var allCharacters: [Character] {
+        return self.layout.languageRows.flatMap(\.keys).compactMap { key in
+            guard case let .character(character, _) = key else { return nil }
+            return character
+        }
+    }
+}
+
+let englishLayout: KeyboardLayout = .init(
+    languageRows: [
+        KeyboardRowNew(keys: [ .character("q"), .character("w"), .character("e"), .character("r"), .character("t"), .character("y"), .character("u"), .character("i"), .character("o"), .character("p")]),
+        KeyboardRowNew(keys: [ .character("a"), .character("s"), .character("d"), .character("f"), .character("g"), .character("h"), .character("j"), .character("k"), .character("l")]),
+        KeyboardRowNew(keys: [ .function(.shift), .character("z"), .character("x"), .character("c"), .character("v"), .character("b"), .character("n"), .character("m"), .function(.backspace)])
+    ],
+    symbolsRows: defaultSymbolsRows,
+    extraSymbolsRows: defaultExtraSymbolsRows)
+
+let defaultSymbolsRows: [KeyboardRowNew] = [
+    KeyboardRowNew(keys: [ .character("q"), .character("w"), .character("e"), .character("r"), .character("t"), .character("y"), .character("u"), .character("i"), .character("o"), .character("p")]),
+    KeyboardRowNew(keys: [ .character("a"), .character("s"), .character("d"), .character("f"), .character("g"), .character("h"), .character("j"), .character("k"), .character("l")]),
+    KeyboardRowNew(keys: [ .function(.shift), .character("z"), .character("x"), .character("c"), .character("v"), .character("b"), .character("n"), .character("m"), .function(.backspace)])
+]
+
+let defaultExtraSymbolsRows: [KeyboardRowNew] = [
+    KeyboardRowNew(keys: [ .character("q"), .character("w"), .character("e"), .character("r"), .character("t"), .character("y"), .character("u"), .character("i"), .character("o"), .character("p")]),
+    KeyboardRowNew(keys: [ .character("a"), .character("s"), .character("d"), .character("f"), .character("g"), .character("h"), .character("j"), .character("k"), .character("l")]),
+    KeyboardRowNew(keys: [ .function(.shift), .character("z"), .character("x"), .character("c"), .character("v"), .character("b"), .character("n"), .character("m"), .function(.backspace)])
+]
+
+struct KeyboardLayout {
+    let languageRows: [KeyboardRowNew]
+    let symbolsRows: [KeyboardRowNew]
+    let extraSymbolsRows: [KeyboardRowNew]
+}
+
+struct KeyboardRowNew {
+    let keys: [KeyboardKey]
+}
+
+enum KeyboardKey {
+    case character(_ character: Character, _ secondary: [Character]? = nil)
+    case function(_ function: FunctionKeyType)
+}
+
+enum FunctionKeyType {
+    case shift
+    case backspace
+}
+
