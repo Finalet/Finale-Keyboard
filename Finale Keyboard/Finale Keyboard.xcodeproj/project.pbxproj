@@ -180,7 +180,6 @@
 		861119F22F88871200F6F7EB /* SpacebarPurchaseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpacebarPurchaseView.swift; sourceTree = "<group>"; };
 		86267BA92FB00E8400F27B79 /* BinaryCompiler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryCompiler.swift; sourceTree = "<group>"; };
 		86267BAF2FB01EB300F27B79 /* BinaryReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BinaryReader.swift; sourceTree = "<group>"; };
-		862E8F022FB414BF00B9656B /* english.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = english.json; sourceTree = "<group>"; };
 		862E8F032FB414BF00B9656B /* russian.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = russian.json; sourceTree = "<group>"; };
 		863606242F8EC0B2005C1106 /* ToolbarInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToolbarInputField.swift; sourceTree = "<group>"; };
 		863AD2B32FB56D6200AB8844 /* FinaleKeyboard+Context.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FinaleKeyboard+Context.swift"; sourceTree = "<group>"; };
@@ -196,6 +195,7 @@
 		867CCCF92FAABDBB002EDD1B /* CoreDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoreDataModel.xcdatamodel; sourceTree = "<group>"; };
 		868084D02FB6A1740002AEA7 /* FinaleKeyboard+Punctuation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FinaleKeyboard+Punctuation.swift"; sourceTree = "<group>"; };
 		868084D22FB6B78C0002AEA7 /* PunctuationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PunctuationManager.swift; sourceTree = "<group>"; };
+		86A5843A2FB96C06005C9F89 /* english.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = english.json; sourceTree = "<group>"; };
 		86B6EC632F8D466100828DE0 /* GesturesGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GesturesGuideView.swift; sourceTree = "<group>"; };
 		86C3ECC22FB61E9100A5B0D5 /* FinaleKeyboard+Suggestions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FinaleKeyboard+Suggestions.swift"; sourceTree = "<group>"; };
 		86C3ECC42FB6208700A5B0D5 /* SuggestionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionsManager.swift; sourceTree = "<group>"; };
@@ -476,7 +476,7 @@
 		86CEFBA42FACEA9900BA5904 /* Dictionaries */ = {
 			isa = PBXGroup;
 			children = (
-				862E8F022FB414BF00B9656B /* english.json */,
+				86A5843A2FB96C06005C9F89 /* english.json */,
 				862E8F032FB414BF00B9656B /* russian.json */,
 			);
 			path = Dictionaries;
