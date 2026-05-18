@@ -16,13 +16,13 @@ class KeyboardButton: NoClipTouchUIView {
     
     var touchStartLocation: CGPoint?
     let registerSwipeThreshold = 50.0
-    var registeredSwipe = false
     
     var longPressTimer: Timer?
     var longPressRepeatTimer: Timer?
     let longPressDelay = 0.3
     let longPressRepeatInterval = 0.1
     
+    var didSwipe = false
     var didLongPress = false
     var didHoldSwipe = false
     
@@ -59,14 +59,18 @@ class KeyboardButton: NoClipTouchUIView {
                 }
             }
         } else if sender.state == .ended || sender.state == .cancelled || sender.state == .failed {
-            if !registeredSwipe {
+            if !didSwipe {
+                if didLongPress { OnLongPressEnded(sender) }
+                else if sender.state == .ended { OnTapEnded(sender) }
+                
                 HideCallout()
-                if sender.state == .ended { OnTapEnded(sender) }
             }
             
-            CancelLongPress()
+            CancelLongPressTimer()
             
-            registeredSwipe = false
+            didSwipe = false
+            didLongPress = false
+            didHoldSwipe = false
             touchStartLocation = nil
         } else {
             OnTapChanged(sender)
@@ -77,7 +81,7 @@ class KeyboardButton: NoClipTouchUIView {
     }
     
     func EvaluateSwipe (touchLocation: CGPoint) {
-        guard !registeredSwipe, let touchStartLocation = touchStartLocation else { return }
+        guard !didSwipe, let touchStartLocation = touchStartLocation else { return }
         
         let deltaX = touchLocation.x - touchStartLocation.x
         let detlaY = touchLocation.y - touchStartLocation.y
@@ -89,11 +93,11 @@ class KeyboardButton: NoClipTouchUIView {
     }
     
     private func RegisterSwipe (direction: SwipeDirection) {
-        registeredSwipe = true
+        didSwipe = true
         touchStartLocation = nil
         FinaleKeyboard.instance.MiddleRowReactAnimation()
         HapticFeedback.GestureImpactOccurred()
-        CancelLongPress()
+        CancelLongPressTimer()
         HideCallout(direction: direction)
         OnSwipe(direction: direction)
         
@@ -105,8 +109,7 @@ class KeyboardButton: NoClipTouchUIView {
         }
     }
     
-    private func CancelLongPress () {
-        didLongPress = false
+    private func CancelLongPressTimer () {
         longPressTimer?.invalidate()
         longPressRepeatTimer?.invalidate()
     }
@@ -136,6 +139,7 @@ class KeyboardButton: NoClipTouchUIView {
     
     func OnLongPress (_ sender: UILongPressGestureRecognizer) {}
     func OnLongPressRepeating (_ sender: UILongPressGestureRecognizer) {}
+    func OnLongPressEnded (_ sender: UILongPressGestureRecognizer) {}
     
     func OnSwipeHoldRepeating (direction: SwipeDirection) {}
     

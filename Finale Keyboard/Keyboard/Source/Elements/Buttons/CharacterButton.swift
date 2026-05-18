@@ -53,12 +53,11 @@ class CharacterButton: KeyboardButton {
     }
     
     override func OnTapEnded(_ sender: UILongPressGestureRecognizer) {
-        if didLongPress {
-            FinaleKeyboard.instance.EndMoveCursor()
-            return
-        }
-        
         TypeCharacter()
+    }
+    
+    override func OnLongPressEnded(_ sender: UILongPressGestureRecognizer) {
+        FinaleKeyboard.instance.EndMoveCursor()
     }
     
     override func OnSwipe(direction: KeyboardButton.SwipeDirection) {

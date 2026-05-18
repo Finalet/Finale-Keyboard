@@ -35,6 +35,7 @@ class ReturnButton: CharacterButton {
     override func OnTapChanged(_ sender: UILongPressGestureRecognizer) {}
     override func OnSwipe(direction: KeyboardButton.SwipeDirection) {}
     override func OnLongPress(_ sender: UILongPressGestureRecognizer) {}
+    override func OnLongPressEnded(_ sender: UILongPressGestureRecognizer) {}
 
     override func OnSwipeHoldRepeating(direction: KeyboardButton.SwipeDirection) {
         if (direction == .Up) {
